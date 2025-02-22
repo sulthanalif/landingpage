@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
     $login = function () {
 
         $this->validate([
-            'email' => 'required|exists:users,email',
+            'email' => 'required|email|exists:users,email',
             'password' => 'required|min:6',
         ]);
 
