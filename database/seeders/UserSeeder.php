@@ -43,6 +43,10 @@ class UserSeeder extends Seeder
             'news-create',
             'news-edit',
             'news-delete',
+            'options',
+            'role-page',
+            'permission-page',
+            'log-viewer',
         ];
 
         foreach ($permissions as $permission) {

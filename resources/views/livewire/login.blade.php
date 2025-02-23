@@ -1,8 +1,11 @@
 <?php
 
-use function Livewire\Volt\{state, title, layout, action};
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
+use function Livewire\Volt\{state, title, layout, action, uses};
+
+    uses([LivewireAlert::class]);
 
     title('Login');
 
@@ -35,6 +38,7 @@ use Illuminate\Support\Facades\Log;
             ]);
             return redirect(route('dashboard'));
         } else {
+            $this->alert('error', 'Password salah');
             Log::channel('auth')->error('Login failed', [
                 'email' => $this->email,
                 'ip' => request()->ip(),

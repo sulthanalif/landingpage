@@ -3,7 +3,10 @@
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use function Livewire\Volt\{state, title, usesPagination, with};
+use Jantinnerezo\LivewireAlert\LivewireAlert;
+use function Livewire\Volt\{state, title, usesPagination, with, uses};
+
+uses([LivewireAlert::class]);
 
 usesPagination(theme: 'bootstrap');
 
@@ -76,9 +79,10 @@ $save = function () {
         DB::commit();
         $this->reset(['id', 'name', 'email', 'password', 'status', 'role']);
 
+        $this->alert('success', 'User berhasil disimpan');
         $this->dispatch('save');
     } catch (\Exception $e) {
-        session()->flash('error', 'An error occurred while saving the user.');
+        $this->alert('error', 'An error occurred while saving the user.');
         Log::channel('debug')->error('Error: ' . $e->getMessage(), [
             'exception' => $e,
             'file' => $e->getFile(),
@@ -96,10 +100,13 @@ $delete = function ($id) {
         $user->delete();
         DB::commit();
         $this->reset('id');
+
+        $this->alert('success', 'User berhasil dihapus');
         $this->dispatch('delete');
     } catch (\Exception $e) {
         $this->reset('id');
-        session()->flash('error', 'An error occurred while deleting the user.');
+        $this->alert('error', 'An error occurred while deleting the user.');
+
         Log::channel('debug')->error('Error: ' . $e->getMessage(), [
             'exception' => $e,
             'file' => $e->getFile(),
