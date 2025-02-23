@@ -51,6 +51,30 @@ return [
     */
 
     'channels' => [
+        'model' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/model/model.log'),
+            'level' => 'info',
+            'days' => 14,
+        ],
+        'request' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/request/request.log'),
+            'level' => 'info',
+            'days' => 14,
+        ],
+        'debug' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/debug/debug.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+        'auth' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/auth/auth.log'),
+            'level' => 'info',
+            'days' => 14,
+        ],
 
         'stack' => [
             'driver' => 'stack',

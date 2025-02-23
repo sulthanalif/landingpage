@@ -2,6 +2,7 @@
 
 use function Livewire\Volt\{state, title, layout, action};
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
     title('Login');
 
@@ -26,9 +27,20 @@ use Illuminate\Support\Facades\Auth;
         ];
 
         if (Auth::attempt($credentials)) {
+            Log::channel('auth')->info('User logged in', [
+                'user' => Auth::user(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'url' => request()->url(),
+            ]);
             return redirect(route('dashboard'));
         } else {
-            dd('salah');
+            Log::channel('auth')->error('Login failed', [
+                'email' => $this->email,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'url' => request()->url(),
+            ]);
         }
     };
 
