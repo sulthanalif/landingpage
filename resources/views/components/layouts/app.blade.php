@@ -23,7 +23,7 @@
     <!-- Custom styles for this page -->
     {{-- <link href="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"> --}}
 
-    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @vite(['resources/css/app.css'])
     @livewireStyles
 
 
@@ -122,20 +122,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script>
-
-    <!-- Page level plugins -->
-    <script src="{{ asset('sbadmin/vendor/chart.js/Chart.min.js') }}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('sbadmin/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('sbadmin/js/demo/chart-pie-demo.js') }}"></script>
-
-    <!-- Page level plugins -->
-    {{-- <script src="{{ asset('sbadmin/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('sbadmin/js/demo/datatables-demo.js') }}"></script> --}}
 
     @livewireScripts
 

@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{state, layout, title};
+use function Livewire\Volt\{state, title};
 
 title('Dashboard');
 

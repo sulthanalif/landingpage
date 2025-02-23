@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('dashboard') }}" wire:navigate>
+        <a class="nav-link" href="{{ route('dashboard') }}" >
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -29,23 +29,23 @@
 
     @can('category-page')
         <li class="nav-item {{ request()->is('admin/master/category*') ? 'active' : '' }}">
-            <a class="nav-link" href="" wire:navigate>
+            <a class="nav-link" href="{{ route('category') }}" >
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Categories</span></a>
         </li>
     @endcan
 
-    @can('news-page')
-        <li class="nav-item {{ request()->is('admin/master/news*') ? 'active' : '' }}">
-            <a class="nav-link" href="" wire:navigate>
+    @can('post-page')
+        <li class="nav-item {{ request()->is('admin/master/post*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('post') }}" >
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>News</span></a>
+                <span>Posts</span></a>
         </li>
     @endcan
 
     @can('user-page')
         <li class="nav-item {{ request()->is('admin/master/user*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('user') }}" wire:navigate>
+            <a class="nav-link" href="{{ route('user') }}" >
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Users</span></a>
         </li>
@@ -62,10 +62,10 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     @can('role-page')
-                    <a class="collapse-item" href="{{ route('role') }}" wire:navigate>Role</a>
+                    <a class="collapse-item" href="{{ route('role') }}" >Role</a>
                     @endcan
                     @can('permission-page')
-                    <a class="collapse-item" href="{{ route('permission') }}" wire:navigate>Permission</a>
+                    <a class="collapse-item" href="{{ route('permission') }}" >Permission</a>
                     @endcan
                 </div>
             </div>
