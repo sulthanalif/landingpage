@@ -140,7 +140,7 @@ $delete = function ($id) {
 <div>
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between items-center py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Users</h3>
+            <h3 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-users"></i> Users</h3>
             <div class="float-right">
                 <!-- Button trigger modal -->
                 @can('user-create')
