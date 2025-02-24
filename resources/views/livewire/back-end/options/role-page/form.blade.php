@@ -21,35 +21,39 @@
                         @enderror
                     </div>
 
+
                     <div class="form-group">
-                        <table>
-                            <thead>
+                        <div style="display: flex; flex-wrap: wrap; margin-left: 1px;">
+                            <input type="checkbox" wire:click="toggleSelectAll"
+                                {{ count($selected ?? []) == count($permissions ?? []) ? 'checked' : '' }}>
+
+                            <div class="ml-3 text-bold">all</div>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap;">
+                            @forelse (array_chunk($permissions->toArray(), 10) as $chunk)
+                                <div style="width: calc(100% / {{ ceil(count($permissions) / 10) }})">
+                                    <table style="width: 100%">
+                                        <tbody>
+                                            @foreach ($chunk as $permission)
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" wire:model.live='selected'
+                                                            value="{{ $permission['id'] }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ $permission['name'] }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @empty
                                 <tr>
-                                    <th>
-                                        <input type="checkbox" wire:click="toggleSelectAll"
-                                            {{ count($selected ?? []) == count($permissions ?? []) ? 'checked' : '' }}>
-                                    </th>
-                                    <th>Permission</th>
+                                    <td colspan="5" class="text-center">No permissions found</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($permissions as $permission)
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" wire:model.live='selected'
-                                                value="{{ $permission->id }}">
-                                        </td>
-                                        <td>
-                                            {{ $permission->name }}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">No permissions found</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                            @endforelse
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

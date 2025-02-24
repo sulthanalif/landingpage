@@ -15,6 +15,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/logout', Logout::class)->name('logout');
 
     Volt::route('/dashboard', 'back-end.dashboard')->name('dashboard');
+    Volt::route('/profile', 'back-end.profile')->name('profile');
 
     Route::prefix('master')->middleware('can:master')->group(function () {
         Volt::route('/category', 'back-end.category-page.index')->middleware('can:category-page')->name('category');

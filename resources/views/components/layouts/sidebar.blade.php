@@ -30,7 +30,7 @@
         @can('category-page')
             <li class="nav-item {{ request()->is('admin/master/category*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('category') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-tags"></i>
                     <span>Categories</span></a>
             </li>
         @endcan
@@ -38,7 +38,7 @@
         @can('post-page')
             <li class="nav-item {{ request()->is('admin/master/post*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('post') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-paper-plane"></i>
                     <span>Posts</span></a>
             </li>
         @endcan
@@ -46,7 +46,7 @@
         @can('mail-page')
             <li class="nav-item {{ request()->is('admin/master/mail*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('mail') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-envelope"></i>
                     <span>Mail Box</span></a>
             </li>
         @endcan
@@ -54,7 +54,7 @@
         @can('user-page')
             <li class="nav-item {{ request()->is('admin/master/user*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('user') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
             </li>
         @endcan
