@@ -23,7 +23,7 @@
     <!-- Custom styles for this page -->
     {{-- <link href="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"> --}}
 
-    @vite(['resources/css/app.css'])
+    {{-- @vite(['resources/css/app.css']) --}}
     @livewireStyles
 
 
@@ -135,4 +135,3 @@
 </body>
 
 </html>
-

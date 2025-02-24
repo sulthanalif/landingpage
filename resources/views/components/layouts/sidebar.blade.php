@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('dashboard') }}" >
+        <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -23,54 +23,65 @@
 
     @can('master')
         <!-- Heading -->
-    <div class="sidebar-heading">
-        Master
-    </div>
+        <div class="sidebar-heading">
+            Master
+        </div>
 
-    @can('category-page')
-        <li class="nav-item {{ request()->is('admin/master/category*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('category') }}" >
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Categories</span></a>
-        </li>
-    @endcan
+        @can('category-page')
+            <li class="nav-item {{ request()->is('admin/master/category*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('category') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Categories</span></a>
+            </li>
+        @endcan
 
-    @can('post-page')
-        <li class="nav-item {{ request()->is('admin/master/post*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('post') }}" >
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Posts</span></a>
-        </li>
-    @endcan
+        @can('post-page')
+            <li class="nav-item {{ request()->is('admin/master/post*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('post') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Posts</span></a>
+            </li>
+        @endcan
 
-    @can('user-page')
-        <li class="nav-item {{ request()->is('admin/master/user*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('user') }}" >
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Users</span></a>
-        </li>
-    @endcan
+        @can('mail-page')
+            <li class="nav-item {{ request()->is('admin/master/mail*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('mail') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Mail Box</span></a>
+            </li>
+        @endcan
+
+        @can('user-page')
+            <li class="nav-item {{ request()->is('admin/master/user*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('user') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Users</span></a>
+            </li>
+        @endcan
 
 
-    @can('options')
-        <li class="nav-item {{ request()->is('admin/master/options*') ? 'active' : '' }}">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Options</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    @can('role-page')
-                    <a class="collapse-item" href="{{ route('role') }}" >Role</a>
-                    @endcan
-                    @can('permission-page')
-                    <a class="collapse-item" href="{{ route('permission') }}" >Permission</a>
-                    @endcan
+        @can('options')
+            <li class="nav-item {{ request()->is('admin/master/options*') ? 'active' : '' }}">
+                <a class="nav-link {{ request()->is('admin/master/options*') ? '' : 'collapsed' }}" href="#"
+                    data-toggle="collapse" data-target="#collapseOptions" aria-expanded="true" aria-controls="collapseOptions">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Options</span>
+                </a>
+                <div id="collapseOptions" class="collapse {{ request()->is('admin/master/options*') ? 'show' : '' }}"
+                    aria-labelledby="headingOptions" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        @can('role-page')
+                            <a class="collapse-item {{ request()->is('admin/master/options/role*') ? 'active' : '' }}"
+                                href="{{ route('role') }}">Role</a>
+                        @endcan
+                        @can('permission-page')
+                            <a class="collapse-item {{ request()->is('admin/master/options/permission*') ? 'active' : '' }}"
+                                href="{{ route('permission') }}">Permission</a>
+                        @endcan
+                    </div>
                 </div>
-            </div>
-        </li>
-    @endcan
+            </li>
+        @endcan
     @endcan
 
     <!-- Divider -->

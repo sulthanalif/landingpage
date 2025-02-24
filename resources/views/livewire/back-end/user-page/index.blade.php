@@ -23,16 +23,18 @@ state([
     'search' => '',
 ]);
 
-with(fn () => [
-    'users' => User::query()
-        ->where('name', 'like', '%' . $this->search . '%')
-        ->orWhere('email', 'like', '%' . $this->search . '%')
-        ->orderBy('created_at', 'desc')
-        ->paginate($this->perPage)
-]);
+with(
+    fn() => [
+        'users' => User::query()
+            ->where('name', 'like', '%' . $this->search . '%')
+            ->orWhere('email', 'like', '%' . $this->search . '%')
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->perPage),
+    ],
+);
 
 $create = function () {
-    $this->reset(['id','name', 'email', 'password', 'status', 'role']);
+    $this->reset(['id', 'name', 'email', 'password', 'status', 'role']);
 };
 
 $edit = function ($id) {
@@ -66,6 +68,11 @@ $save = function () {
                 'email' => $this->email,
                 'status' => $this->status,
             ]);
+
+            if ($this->password) {
+                $user->update(['password' => Hash::make($this->password)]);
+            }
+
             $user->syncRoles([$this->role]);
         } else {
             $user = User::create([
@@ -115,8 +122,7 @@ $delete = function ($id) {
             'trace' => $e->getTraceAsString(),
         ]);
     }
-}
-
+};
 
 ?>
 
@@ -138,9 +144,10 @@ $delete = function ($id) {
             <div class="float-right">
                 <!-- Button trigger modal -->
                 @can('user-create')
-                <button type="button" class="btn btn-sm btn-primary" wire:click="create" data-toggle="modal" data-target="#exampleModal">
-                    Create
-                </button>
+                    <button type="button" class="btn btn-sm btn-primary" wire:click="create" data-toggle="modal"
+                        data-target="#exampleModal">
+                        Create
+                    </button>
                 @endcan
             </div>
         </div>
@@ -148,23 +155,24 @@ $delete = function ($id) {
             <div class="table-responsive">
                 <div class="d-flex justify-content-between items-center my-3">
                     <div>
-                        <select class="form-control form-select" wire:model.live='perPage' aria-label="Default select example">
+                        <select class="form-control form-select" wire:model.live='perPage'
+                            aria-label="Default select example">
                             <option value="10">10</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
-                          </select>
+                        </select>
                     </div>
                     <div class="mr-2">
-                        <form
-                        class="navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" wire:model.live='search' placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                        </div>
-                    </form>
+                        <form class="navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small"
+                                    wire:model.live='search' placeholder="Search for..." aria-label="Search"
+                                    aria-describedby="basic-addon2">
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <table class="table table-bordered"  width="100%" cellspacing="0">
+                <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -192,10 +200,14 @@ $delete = function ($id) {
                                 <td>{{ $user->created_at->format('d/m/Y') }}</td>
                                 <td>
                                     @can('user-edit')
-                                    <a href="#" class="btn btn-sm btn-primary" wire:click="edit({{ $user->id }})" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="btn btn-sm btn-primary"
+                                            wire:click="edit({{ $user->id }})" data-toggle="modal"
+                                            data-target="#exampleModal"><i class="fas fa-edit"></i></a>
                                     @endcan
                                     @can('user-delete')
-                                    <a href="#" class="btn btn-sm btn-danger" wire:click='modalDelete({{ $user->id }})' data-toggle="modal" data-target="#modalDelete"><i class="fas fa-trash"></i></a>
+                                        <a href="#" class="btn btn-sm btn-danger"
+                                            wire:click='modalDelete({{ $user->id }})' data-toggle="modal"
+                                            data-target="#modalDelete"><i class="fas fa-trash"></i></a>
                                     @endcan
                                 </td>
                             </tr>
@@ -215,4 +227,3 @@ $delete = function ($id) {
     @include('livewire.back-end.modals.delete')
 
 </div>
-
