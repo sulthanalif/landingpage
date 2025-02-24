@@ -1,12 +1,12 @@
 import { usePage } from "@inertiajs/react";
 import Layout from "../Components/Layout";
-import Carousel from "./Sections/Carousel";
-import Service from "./Sections/Service";
+import Hero from "./Sections/Hero";
 import About from "./Sections/About";
-import Categories from "./Sections/Categories";
-import Courses from "./Sections/Courses";
-import Team from "./Sections/Team";
-import Testimonial from "./Sections/Testimonial";
+import News from "./Sections/News";
+import Value from "./Sections/Value";
+import Activity from "./Sections/Activity";
+import Admission from "./Sections/Admission";
+import Faq from "./Sections/Faq";
 
 export default function Home() {
     const props = usePage().props;
@@ -14,13 +14,13 @@ export default function Home() {
     return (
         <>
             <Layout>
-                <Carousel />
-                <Service />
+                <Hero />
                 <About />
-                <Categories />
-                <Courses />
-                <Team />
-                <Testimonial />
+                <News />
+                <Value />
+                <Activity />
+                <Admission />
+                <Faq />
             </Layout>
         </>
     );

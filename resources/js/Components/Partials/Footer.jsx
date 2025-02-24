@@ -3,175 +3,210 @@ import React from "react";
 const Footer = () => {
     return (
         <>
-            {/* Footer Start */}
-            <div
-                className="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn"
-                data-wow-delay="0.1s"
-            >
-                <div className="container py-5">
-                    <div className="row g-5">
-                        <div className="col-lg-3 col-md-6">
-                            <h4 className="text-white mb-3">Quick Link</h4>
-                            <a className="btn btn-link" href>
-                                About Us
-                            </a>
-                            <a className="btn btn-link" href>
-                                Contact Us
-                            </a>
-                            <a className="btn btn-link" href>
-                                Privacy Policy
-                            </a>
-                            <a className="btn btn-link" href>
-                                Terms &amp; Condition
-                            </a>
-                            <a className="btn btn-link" href>
-                                FAQs &amp; Help
-                            </a>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <h4 className="text-white mb-3">Contact</h4>
-                            <p className="mb-2">
-                                <i className="fa fa-map-marker-alt me-3" />
-                                123 Street, New York, USA
-                            </p>
-                            <p className="mb-2">
-                                <i className="fa fa-phone-alt me-3" />
-                                +012 345 67890
-                            </p>
-                            <p className="mb-2">
-                                <i className="fa fa-envelope me-3" />
-                                info@example.com
-                            </p>
-                            <div className="d-flex pt-2">
-                                <a
-                                    className="btn btn-outline-light btn-social"
-                                    href
-                                >
-                                    <i className="fab fa-twitter" />
-                                </a>
-                                <a
-                                    className="btn btn-outline-light btn-social"
-                                    href
-                                >
-                                    <i className="fab fa-facebook-f" />
-                                </a>
-                                <a
-                                    className="btn btn-outline-light btn-social"
-                                    href
-                                >
-                                    <i className="fab fa-youtube" />
-                                </a>
-                                <a
-                                    className="btn btn-outline-light btn-social"
-                                    href
-                                >
-                                    <i className="fab fa-linkedin-in" />
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <h4 className="text-white mb-3">Gallery</h4>
-                            <div className="row g-2 pt-2">
-                                <div className="col-4">
-                                    <img
-                                        className="img-fluid bg-light p-1"
-                                        src="#"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="col-4">
-                                    <img
-                                        className="img-fluid bg-light p-1"
-                                        src="#"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="col-4">
-                                    <img
-                                        className="img-fluid bg-light p-1"
-                                        src="#"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="col-4">
-                                    <img
-                                        className="img-fluid bg-light p-1"
-                                        src="#"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="col-4">
-                                    <img
-                                        className="img-fluid bg-light p-1"
-                                        src="#"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="col-4">
-                                    <img
-                                        className="img-fluid bg-light p-1"
-                                        src="#"
-                                        alt=""
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <h4 className="text-white mb-3">Newsletter</h4>
-                            <p>
-                                Dolor amet sit justo amet elitr clita ipsum
-                                elitr est.
-                            </p>
-                            <div
-                                className="position-relative mx-auto"
-                                style={{ maxWidth: "400px" }}
-                            >
-                                <input
-                                    className="form-control border-0 w-100 py-3 ps-4 pe-5"
-                                    type="text"
-                                    placeholder="Your email"
-                                />
-                                <button
-                                    type="button"
-                                    className="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2"
-                                >
-                                    SignUp
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <footer className="footer">
+                <div
+                    className="footer_background"
+                    style={{
+                        backgroundImage: "url(images/footer_background.png)",
+                    }}
+                />
                 <div className="container">
-                    <div className="copyright">
-                        <div className="row">
-                            <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                                ©{" "}
-                                <a className="border-bottom" href="#">
-                                    Your Site Name
-                                </a>
-                                , All Right Reserved.
-                                {/*/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. *** /*/}
-                                Designed By{" "}
-                                <a
-                                    className="border-bottom"
-                                    href="https://htmlcodex.com"
-                                >
-                                    HTML Codex
-                                </a>
+                    <div className="row footer_row">
+                        <div className="col">
+                            <div className="footer_content">
+                                <div className="row">
+                                    <div className="col-lg-3 footer_col">
+                                        {/* Footer About */}
+                                        <div className="footer_section footer_about">
+                                            <div className="footer_logo_container">
+                                                <a href="#">
+                                                    <div className="footer_logo_text">
+                                                        Unic<span>at</span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div className="footer_about_text">
+                                                <p>
+                                                    Lorem ipsum dolor sit
+                                                    ametium, consectetur
+                                                    adipiscing elit.
+                                                </p>
+                                            </div>
+                                            <div className="footer_social">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            <i
+                                                                className="fa fa-facebook"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <i
+                                                                className="fa fa-google-plus"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <i
+                                                                className="fa fa-instagram"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <i
+                                                                className="fa fa-twitter"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-3 footer_col">
+                                        {/* Footer Contact */}
+                                        <div className="footer_section footer_contact">
+                                            <div className="footer_title">
+                                                Contact Us
+                                            </div>
+                                            <div className="footer_contact_info">
+                                                <ul>
+                                                    <li>
+                                                        Email:
+                                                        Info.deercreative@gmail.com
+                                                    </li>
+                                                    <li>
+                                                        Phone: +(88) 111 555 666
+                                                    </li>
+                                                    <li>
+                                                        40 Baria Sreet 133/2 New
+                                                        York City, United States
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-3 footer_col">
+                                        {/* Footer links */}
+                                        <div className="footer_section footer_links">
+                                            <div className="footer_title">
+                                                Contact Us
+                                            </div>
+                                            <div className="footer_links_container">
+                                                <ul>
+                                                    <li>
+                                                        <a href="index.html">
+                                                            Home
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="about.html">
+                                                            About
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="contact.html">
+                                                            Contact
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Features</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="courses.html">
+                                                            Courses
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Events</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Gallery</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">FAQs</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-3 footer_col clearfix">
+                                        {/* Footer links */}
+                                        <div className="footer_section footer_mobile">
+                                            <div className="footer_title">
+                                                Mobile
+                                            </div>
+                                            <div className="footer_mobile_content">
+                                                <div className="footer_image">
+                                                    <a href="#">
+                                                        <img
+                                                            src="images/mobile_1.png"
+                                                            alt=""
+                                                        />
+                                                    </a>
+                                                </div>
+                                                <div className="footer_image">
+                                                    <a href="#">
+                                                        <img
+                                                            src="images/mobile_2.png"
+                                                            alt=""
+                                                        />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col-md-6 text-center text-md-end">
-                                <div className="footer-menu">
-                                    <a href>Home</a>
-                                    <a href>Cookies</a>
-                                    <a href>Help</a>
-                                    <a href>FQAs</a>
+                        </div>
+                    </div>
+                    <div className="row copyright_row">
+                        <div className="col">
+                            <div className="copyright d-flex flex-lg-row flex-column align-items-center justify-content-start">
+                                <div className="cr_text">
+                                    {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+                                    Copyright © All rights reserved | This
+                                    template is made with{" "}
+                                    <i
+                                        className="fa fa-heart-o"
+                                        aria-hidden="true"
+                                    />{" "}
+                                    by{" "}
+                                    <a
+                                        href="https://colorlib.com"
+                                        target="_blank"
+                                    >
+                                        Colorlib
+                                    </a>
+                                    {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+                                </div>
+                                <div className="ml-lg-auto cr_links">
+                                    <ul className="cr_list">
+                                        <li>
+                                            <a href="#">
+                                                Copyright notification
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Terms of Use</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Privacy Policy</a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {/* Footer End */}
+            </footer>
         </>
     );
 };

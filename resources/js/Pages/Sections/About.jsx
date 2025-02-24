@@ -3,89 +3,94 @@ import React from "react";
 const About = () => {
     return (
         <>
-            {/* About Start */}
-            <div className="container-xxl py-5">
+            <div className="features">
                 <div className="container">
-                    <div className="row g-5">
-                        <div
-                            className="col-lg-6 wow fadeInUp"
-                            data-wow-delay="0.1s"
-                            style={{ minHeight: "400px" }}
-                        >
-                            <div className="position-relative h-100">
-                                <img
-                                    className="img-fluid position-absolute w-100 h-100"
-                                    src="img/about.jpg"
-                                    alt=""
-                                    style={{ objectFit: "cover" }}
-                                />
+                    <div className="row">
+                        <div className="col">
+                            <div className="section_title_container text-center">
+                                <h2 className="section_title">
+                                    Welcome To Unicat E-Learning
+                                </h2>
+                                <div className="section_subtitle">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Donec vel gravida arcu.
+                                        Vestibulum feugiat, sapien ultrices
+                                        fermentum congue, quam velit venenatis
+                                        sem
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <div
-                            className="col-lg-6 wow fadeInUp"
-                            data-wow-delay="0.3s"
-                        >
-                            <h6 className="section-title bg-white text-start text-primary pe-3">
-                                About Us
-                            </h6>
-                            <h1 className="mb-4">Welcome to eLEARNING</h1>
-                            <p className="mb-4">
-                                Tempor erat elitr rebum at clita. Diam dolor
-                                diam ipsum sit. Aliqu diam amet diam et eos.
-                                Clita erat ipsum et lorem et sit.
-                            </p>
-                            <p className="mb-4">
-                                Tempor erat elitr rebum at clita. Diam dolor
-                                diam ipsum sit. Aliqu diam amet diam et eos.
-                                Clita erat ipsum et lorem et sit, sed stet lorem
-                                sit clita duo justo magna dolore erat amet
-                            </p>
-                            <div className="row gy-2 gx-4 mb-4">
-                                <div className="col-sm-6">
-                                    <p className="mb-0">
-                                        <i className="fa fa-arrow-right text-primary me-2" />
-                                        Skilled Instructors
-                                    </p>
+                    </div>
+                    <div className="row features_row">
+                        {/* Features Item */}
+                        <div className="col-lg-3 feature_col">
+                            <div className="feature text-center trans_400">
+                                <div className="feature_icon">
+                                    <img src="/landing/images/icon_1.png" alt="" />
                                 </div>
-                                <div className="col-sm-6">
-                                    <p className="mb-0">
-                                        <i className="fa fa-arrow-right text-primary me-2" />
-                                        Online Classes
-                                    </p>
-                                </div>
-                                <div className="col-sm-6">
-                                    <p className="mb-0">
-                                        <i className="fa fa-arrow-right text-primary me-2" />
-                                        International Certificate
-                                    </p>
-                                </div>
-                                <div className="col-sm-6">
-                                    <p className="mb-0">
-                                        <i className="fa fa-arrow-right text-primary me-2" />
-                                        Skilled Instructors
-                                    </p>
-                                </div>
-                                <div className="col-sm-6">
-                                    <p className="mb-0">
-                                        <i className="fa fa-arrow-right text-primary me-2" />
-                                        Online Classes
-                                    </p>
-                                </div>
-                                <div className="col-sm-6">
-                                    <p className="mb-0">
-                                        <i className="fa fa-arrow-right text-primary me-2" />
-                                        International Certificate
+                                <h3 className="feature_title">The Experts</h3>
+                                <div className="feature_text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit
                                     </p>
                                 </div>
                             </div>
-                            <a className="btn btn-primary py-3 px-5 mt-2" href>
-                                Read More
-                            </a>
+                        </div>
+                        {/* Features Item */}
+                        <div className="col-lg-3 feature_col">
+                            <div className="feature text-center trans_400">
+                                <div className="feature_icon">
+                                    <img src="/landing/images/icon_2.png" alt="" />
+                                </div>
+                                <h3 className="feature_title">
+                                    Book &amp; Library
+                                </h3>
+                                <div className="feature_text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Features Item */}
+                        <div className="col-lg-3 feature_col">
+                            <div className="feature text-center trans_400">
+                                <div className="feature_icon">
+                                    <img src="/landing/images/icon_3.png" alt="" />
+                                </div>
+                                <h3 className="feature_title">Best Courses</h3>
+                                <div className="feature_text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Features Item */}
+                        <div className="col-lg-3 feature_col">
+                            <div className="feature text-center trans_400">
+                                <div className="feature_icon">
+                                    <img src="/landing/images/icon_4.png" alt="" />
+                                </div>
+                                <h3 className="feature_title">
+                                    Award &amp; Reward
+                                </h3>
+                                <div className="feature_text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* About End */}
         </>
     );
 };
