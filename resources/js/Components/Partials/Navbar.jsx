@@ -53,13 +53,16 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 Curriculum
                             </a>
                             <div className="dropdown-menu">
-                                <Link className="dropdown-item" href="#">
+                                <Link className="dropdown-item" href="/curriculum">
+                                    Explanation
+                                </Link>
+                                <Link className="dropdown-item" href="/apply-admission">
                                     Apply Admission
                                 </Link>
-                                <Link className="dropdown-item" href="#">
+                                <Link className="dropdown-item" href="/calendar-academic">
                                     Academic Calendar
                                 </Link>
-                                <Link className="dropdown-item" href="#">
+                                <Link className="dropdown-item" href="/accreditation">
                                     Accreditation
                                 </Link>
                             </div>

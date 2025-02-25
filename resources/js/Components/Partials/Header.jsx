@@ -118,19 +118,25 @@ const Header = () => {
                                                 <div className="dropdown-menu">
                                                     <Link
                                                         className="dropdown-item"
-                                                        href="#"
+                                                        href="/curriculum"
+                                                    >
+                                                        Explanation
+                                                    </Link>
+                                                    <Link
+                                                        className="dropdown-item"
+                                                        href="/apply-admission"
                                                     >
                                                         Apply Admission
                                                     </Link>
                                                     <Link
                                                         className="dropdown-item"
-                                                        href="#"
+                                                        href="/calendar-academic"
                                                     >
                                                         Academic Calendar
                                                     </Link>
                                                     <Link
                                                         className="dropdown-item"
-                                                        href="#"
+                                                        href="/accreditation"
                                                     >
                                                         Accreditation
                                                     </Link>

@@ -9,6 +9,10 @@ Route::get('/', [LandingpageController::class, 'index']);
 Route::get('/about', [LandingpageController::class, 'about']);
 Route::get('/story', [LandingpageController::class, 'story']);
 Route::get('/admission', [LandingpageController::class, 'admission']);
+Route::get('/curriculum', [LandingpageController::class, 'curriculum']);
+Route::get('/apply-admission', [LandingpageController::class, 'apply']);
+Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademic']);
+Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 
 Route::middleware(['guest'])->group(function () {
     Volt::route('login', 'login')->name('login');

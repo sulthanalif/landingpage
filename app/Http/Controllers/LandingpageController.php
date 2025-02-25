@@ -29,4 +29,24 @@ class LandingpageController extends Controller
     {
         return inertia('Admission');
     }
+
+    public function curriculum()
+    {
+        return inertia('Curriculum');
+    }
+
+    public function apply()
+    {
+        return inertia('Apply');
+    }
+
+    public function calendarAcademic()
+    {
+        return inertia('CalendarAcademic');
+    }
+
+    public function accreditation()
+    {
+        return inertia('Accreditation');
+    }
 }
