@@ -6,6 +6,7 @@ const Activity = () => {
             <div className="courses">
                 <div
                     className="section_background parallax-window"
+                    loading="lazy"
                     style={{
                         backgroundImage: `url('/landing/images/courses_background.jpg')`,
                         backgroundAttachment: "fixed",
@@ -40,6 +41,7 @@ const Activity = () => {
                                     <img
                                         src="/landing/images/course_1.jpg"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                                 <div className="course_body">
@@ -89,6 +91,7 @@ const Activity = () => {
                                     <img
                                         src="/landing/images/course_2.jpg"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                                 <div className="course_body">
@@ -138,6 +141,7 @@ const Activity = () => {
                                     <img
                                         src="/landing/images/course_3.jpg"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                                 <div className="course_body">

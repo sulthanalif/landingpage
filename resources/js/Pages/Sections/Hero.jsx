@@ -17,6 +17,7 @@ const Hero = () => {
                             <div className="owl-item" key={index}>
                                 <div
                                     className="home_slider_background"
+                                    loading="lazy"
                                     style={{
                                         backgroundImage: `url(${image})`,
                                     }}
@@ -26,59 +27,22 @@ const Hero = () => {
                                         <div className="row">
                                             <div className="col text-center">
                                                 <div className="home_slider_title">
-                                                    The Premium System Education
+                                                    Selamat Datang di
                                                 </div>
                                                 <div className="home_slider_subtitle">
-                                                    Future Of Education
-                                                    Technology
+                                                    Website Sekolah
                                                 </div>
                                                 <div className="home_slider_form_container">
-                                                    <form
-                                                        action="#"
-                                                        id={`home_search_form_${
-                                                            index + 1
-                                                        }`}
-                                                        className="home_search_form d-flex flex-lg-row flex-column align-items-center justify-content-between"
+                                                    <div
+                                                        className="home_search_form d-flex flex-lg-row flex-column align-items-center justify-content-center"
                                                     >
-                                                        <div className="d-flex flex-row align-items-center justify-content-start">
-                                                            <input
-                                                                type="search"
-                                                                className="home_search_input"
-                                                                placeholder="Keyword Search"
-                                                                required
-                                                            />
-                                                            <select className="dropdown_item_select home_search_input">
-                                                                <option>
-                                                                    Category
-                                                                    Courses
-                                                                </option>
-                                                                <option>
-                                                                    Category
-                                                                </option>
-                                                                <option>
-                                                                    Category
-                                                                </option>
-                                                            </select>
-                                                            <select className="dropdown_item_select home_search_input">
-                                                                <option>
-                                                                    Select Price
-                                                                    Type
-                                                                </option>
-                                                                <option>
-                                                                    Price Type
-                                                                </option>
-                                                                <option>
-                                                                    Price Type
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <button
-                                                            type="submit"
-                                                            className="home_search_button"
+                                                        <a
+                                                            href="#"
+                                                            className="home_search_button d-flex align-items-center justify-content-center text-white p-3"
                                                         >
-                                                            Search
-                                                        </button>
-                                                    </form>
+                                                            Lihat Selengkapnya
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

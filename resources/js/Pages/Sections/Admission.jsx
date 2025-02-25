@@ -28,7 +28,7 @@ const Admission = () => {
                         <div className="col-lg-4 event_col">
                             <div className="event event_left">
                                 <div className="event_image">
-                                    <img src="/landing/images/event_1.jpg" alt="" />
+                                    <img src="/landing/images/event_1.jpg" alt="" loading="lazy" />
                                 </div>
                                 <div className="event_body d-flex flex-row align-items-start justify-content-start">
                                     <div className="event_date">
@@ -79,7 +79,7 @@ const Admission = () => {
                         <div className="col-lg-4 event_col">
                             <div className="event event_mid">
                                 <div className="event_image">
-                                    <img src="/landing/images/event_2.jpg" alt="" />
+                                    <img src="/landing/images/event_2.jpg" alt="" loading="lazy" />
                                 </div>
                                 <div className="event_body d-flex flex-row align-items-start justify-content-start">
                                     <div className="event_date">
@@ -130,7 +130,7 @@ const Admission = () => {
                         <div className="col-lg-4 event_col">
                             <div className="event event_right">
                                 <div className="event_image">
-                                    <img src="/landing/images/event_3.jpg" alt="" />
+                                    <img src="/landing/images/event_3.jpg" alt="" loading="lazy" />
                                 </div>
                                 <div className="event_body d-flex flex-row align-items-start justify-content-start">
                                     <div className="event_date">

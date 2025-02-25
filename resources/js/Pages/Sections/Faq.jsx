@@ -6,6 +6,7 @@ const Faq = () => {
             <div className="newsletter">
                 <div
                     className="newsletter_background parallax-window"
+                    loading="lazy"
                     style={{
                         backgroundImage: `url('/landing/images/newsletter.jpg')`,
                         backgroundAttachment: "fixed",

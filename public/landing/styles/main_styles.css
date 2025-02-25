@@ -888,7 +888,7 @@ section
 }
 .home_search_button
 {
-	width: 120px;
+	width: auto;
 	height: 46px;
 	background: #14bdee;
 	border: none;

@@ -28,7 +28,7 @@ const About = () => {
                         <div className="col-lg-3 feature_col">
                             <div className="feature text-center trans_400">
                                 <div className="feature_icon">
-                                    <img src="/landing/images/icon_1.png" alt="" />
+                                    <img src="/landing/images/icon_1.png" alt="" loading="lazy" />
                                 </div>
                                 <h3 className="feature_title">The Experts</h3>
                                 <div className="feature_text">
@@ -43,7 +43,7 @@ const About = () => {
                         <div className="col-lg-3 feature_col">
                             <div className="feature text-center trans_400">
                                 <div className="feature_icon">
-                                    <img src="/landing/images/icon_2.png" alt="" />
+                                    <img src="/landing/images/icon_2.png" alt="" loading="lazy" />
                                 </div>
                                 <h3 className="feature_title">
                                     Book &amp; Library
@@ -60,7 +60,7 @@ const About = () => {
                         <div className="col-lg-3 feature_col">
                             <div className="feature text-center trans_400">
                                 <div className="feature_icon">
-                                    <img src="/landing/images/icon_3.png" alt="" />
+                                    <img src="/landing/images/icon_3.png" alt="" loading="lazy" />
                                 </div>
                                 <h3 className="feature_title">Best Courses</h3>
                                 <div className="feature_text">
@@ -75,7 +75,7 @@ const About = () => {
                         <div className="col-lg-3 feature_col">
                             <div className="feature text-center trans_400">
                                 <div className="feature_icon">
-                                    <img src="/landing/images/icon_4.png" alt="" />
+                                    <img src="/landing/images/icon_4.png" alt="" loading="lazy" />
                                 </div>
                                 <h3 className="feature_title">
                                     Award &amp; Reward

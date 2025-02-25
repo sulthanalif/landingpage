@@ -27,7 +27,7 @@ const News = () => {
                             <div className="news_post_large_container">
                                 <div className="news_post_large">
                                     <div className="news_post_image">
-                                        <img src="/landing/images/news_1.jpg" alt="" />
+                                        <img src="/landing/images/news_1.jpg" alt="" loading="lazy" />
                                     </div>
                                     <div className="news_post_large_title">
                                         <a href="blog_single.html">

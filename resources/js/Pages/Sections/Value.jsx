@@ -31,6 +31,7 @@ const Value = () => {
                                     <img
                                         src="/landing/images/icon_1.png"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                                 <h3 className="feature_title">The Experts</h3>
@@ -49,6 +50,7 @@ const Value = () => {
                                     <img
                                         src="/landing/images/icon_2.png"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                                 <h3 className="feature_title">
@@ -69,6 +71,7 @@ const Value = () => {
                                     <img
                                         src="/landing/images/icon_3.png"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                                 <h3 className="feature_title">Best Courses</h3>
@@ -87,6 +90,7 @@ const Value = () => {
                                     <img
                                         src="/landing/images/icon_4.png"
                                         alt=""
+                                        loading="lazy"
                                     />
                                 </div>
                                 <h3 className="feature_title">

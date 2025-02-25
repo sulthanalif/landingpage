@@ -376,7 +376,7 @@
 	}
 	.home_search_button
 	{
-		width: 100px;
+		width: auto;
 		height: 40px;
 	}
 	.newsletter_form_container
