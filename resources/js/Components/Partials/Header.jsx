@@ -66,7 +66,7 @@ const Header = () => {
                             <div className="col">
                                 <div className="header_content d-flex flex-row align-items-center justify-content-start">
                                     <div className="logo_container">
-                                        <Link href="#">
+                                        <Link href="/">
                                             <div className="logo_text">
                                                 Sch<span>ool</span>
                                             </div>
@@ -75,7 +75,7 @@ const Header = () => {
                                     <nav className="main_nav_contaner ml-auto">
                                         <ul className="main_nav">
                                             <li className="active">
-                                                <Link href="#">Home</Link>
+                                                <Link href="/">Home</Link>
                                             </li>
                                             <li className="nav-item dropdown">
                                                 <a
@@ -90,13 +90,13 @@ const Header = () => {
                                                 <div className="dropdown-menu">
                                                     <Link
                                                         className="dropdown-item"
-                                                        href="#"
+                                                        href="/about"
                                                     >
                                                         About Us
                                                     </Link>
                                                     <Link
                                                         className="dropdown-item"
-                                                        href="#"
+                                                        href="/story"
                                                     >
                                                         Our Stories
                                                     </Link>

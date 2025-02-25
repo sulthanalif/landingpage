@@ -31,10 +31,10 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 About
                             </a>
                             <div className="dropdown-menu">
-                                <Link className="dropdown-item" href="#">
+                                <Link className="dropdown-item" href="/about">
                                     About Us
                                 </Link>
-                                <Link className="dropdown-item" href="#">
+                                <Link className="dropdown-item" href="/story">
                                     Our Stories
                                 </Link>
                             </div>

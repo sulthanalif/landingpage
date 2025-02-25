@@ -14,4 +14,14 @@ class LandingpageController extends Controller
             'users' => User::all(),
         ]);
     }
+
+    public function about()
+    {
+        return inertia('About');
+    }
+
+    public function story()
+    {
+        return inertia('Story');
+    }
 }

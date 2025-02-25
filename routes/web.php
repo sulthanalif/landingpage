@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingpageController;
 
 Route::get('/', [LandingpageController::class, 'index']);
+Route::get('/about', [LandingpageController::class, 'about']);
+Route::get('/story', [LandingpageController::class, 'story']);
 
 Route::middleware(['guest'])->group(function () {
     Volt::route('login', 'login')->name('login');
