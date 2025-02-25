@@ -19,15 +19,18 @@ class ContactUsController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'subject' => 'required|string|max:100',
+            'message' => 'required|string|max:500',
+        ]);
+
         try {
             DB::beginTransaction();
-            $mailBox = new MailBox();
-            $mailBox->first_name = $request->first_name;
-            $mailBox->last_name = $request->last_name;
-            $mailBox->email = $request->email;
-            $mailBox->phone = $request->phone;
-            $mailBox->subject = $request->subject;
-            $mailBox->message = $request->message;
+            $mailBox = new MailBox($validated);
             $mailBox->save();
 
             DB::commit();
