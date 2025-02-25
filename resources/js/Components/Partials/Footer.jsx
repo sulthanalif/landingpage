@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/react";
 import React from "react";
 
 const Footer = () => {
@@ -7,7 +8,7 @@ const Footer = () => {
                 <div
                     className="footer_background"
                     style={{
-                        backgroundImage: "url(images/footer_background.png)",
+                        backgroundImage: "url(/landing/images/footer_background.png)",
                     }}
                 />
                 <div className="container">
@@ -21,7 +22,7 @@ const Footer = () => {
                                             <div className="footer_logo_container">
                                                 <a href="#">
                                                     <div className="footer_logo_text">
-                                                        Unic<span>at</span>
+                                                        Sch<span>ool</span>
                                                     </div>
                                                 </a>
                                             </div>
@@ -70,7 +71,51 @@ const Footer = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-lg-3 footer_col">
+                                    <div className="col-lg-4 footer_col">
+                                        {/* Footer links */}
+                                        <div className="footer_section footer_links">
+                                            <div className="footer_title">
+                                                Menu
+                                            </div>
+                                            <div className="footer_links_container">
+                                                <ul>
+                                                    <li>
+                                                        <Link href="/">
+                                                            Home
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="#">
+                                                            About
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="#">
+                                                            News
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="#">Values</Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="#">
+                                                            Activities
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="#">Admission</Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="#">FAQs</Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="#">Contact</Link>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-4 footer_col">
                                         {/* Footer Contact */}
                                         <div className="footer_section footer_contact">
                                             <div className="footer_title">
@@ -93,76 +138,6 @@ const Footer = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-lg-3 footer_col">
-                                        {/* Footer links */}
-                                        <div className="footer_section footer_links">
-                                            <div className="footer_title">
-                                                Contact Us
-                                            </div>
-                                            <div className="footer_links_container">
-                                                <ul>
-                                                    <li>
-                                                        <a href="index.html">
-                                                            Home
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="about.html">
-                                                            About
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="contact.html">
-                                                            Contact
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">Features</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="courses.html">
-                                                            Courses
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">Events</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">Gallery</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">FAQs</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-3 footer_col clearfix">
-                                        {/* Footer links */}
-                                        <div className="footer_section footer_mobile">
-                                            <div className="footer_title">
-                                                Mobile
-                                            </div>
-                                            <div className="footer_mobile_content">
-                                                <div className="footer_image">
-                                                    <a href="#">
-                                                        <img
-                                                            src="images/mobile_1.png"
-                                                            alt=""
-                                                        />
-                                                    </a>
-                                                </div>
-                                                <div className="footer_image">
-                                                    <a href="#">
-                                                        <img
-                                                            src="images/mobile_2.png"
-                                                            alt=""
-                                                        />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -171,29 +146,10 @@ const Footer = () => {
                         <div className="col">
                             <div className="copyright d-flex flex-lg-row flex-column align-items-center justify-content-start">
                                 <div className="cr_text">
-                                    {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
-                                    Copyright © All rights reserved | This
-                                    template is made with{" "}
-                                    <i
-                                        className="fa fa-heart-o"
-                                        aria-hidden="true"
-                                    />{" "}
-                                    by{" "}
-                                    <a
-                                        href="https://colorlib.com"
-                                        target="_blank"
-                                    >
-                                        Colorlib
-                                    </a>
-                                    {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+                                    Copyright © All rights reserved.
                                 </div>
                                 <div className="ml-lg-auto cr_links">
                                     <ul className="cr_list">
-                                        <li>
-                                            <a href="#">
-                                                Copyright notification
-                                            </a>
-                                        </li>
                                         <li>
                                             <a href="#">Terms of Use</a>
                                         </li>

@@ -19,7 +19,7 @@ const Activity = () => {
                         <div className="col">
                             <div className="section_title_container text-center">
                                 <h2 className="section_title">
-                                    Popular Online Courses
+                                    Our Activities
                                 </h2>
                                 <div className="section_subtitle">
                                     <p>
@@ -61,27 +61,6 @@ const Activity = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="course_footer">
-                                    <div className="course_footer_content d-flex flex-row align-items-center justify-content-start">
-                                        <div className="course_info">
-                                            <i
-                                                className="fa fa-graduation-cap"
-                                                aria-hidden="true"
-                                            />
-                                            <span>20 Student</span>
-                                        </div>
-                                        <div className="course_info">
-                                            <i
-                                                className="fa fa-star"
-                                                aria-hidden="true"
-                                            />
-                                            <span>5 Ratings</span>
-                                        </div>
-                                        <div className="course_price ml-auto">
-                                            $130
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         {/* Course */}
@@ -109,27 +88,6 @@ const Activity = () => {
                                             consectetur adipi elitsed do eiusmod
                                             tempor
                                         </p>
-                                    </div>
-                                </div>
-                                <div className="course_footer">
-                                    <div className="course_footer_content d-flex flex-row align-items-center justify-content-start">
-                                        <div className="course_info">
-                                            <i
-                                                className="fa fa-graduation-cap"
-                                                aria-hidden="true"
-                                            />
-                                            <span>20 Student</span>
-                                        </div>
-                                        <div className="course_info">
-                                            <i
-                                                className="fa fa-star"
-                                                aria-hidden="true"
-                                            />
-                                            <span>5 Ratings</span>
-                                        </div>
-                                        <div className="course_price ml-auto">
-                                            Free
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +119,7 @@ const Activity = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="course_footer">
+                                {/* <div className="course_footer">
                                     <div className="course_footer_content d-flex flex-row align-items-center justify-content-start">
                                         <div className="course_info">
                                             <i
@@ -181,14 +139,14 @@ const Activity = () => {
                                             <span>$320</span>$220
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col">
                             <div className="courses_button trans_200">
-                                <a href="#">view all courses</a>
+                                <a href="#">view all activities</a>
                             </div>
                         </div>
                     </div>

@@ -27,7 +27,7 @@ const Hero = () => {
                                         <div className="row">
                                             <div className="col text-center">
                                                 <div className="home_slider_title">
-                                                    Selamat Datang di
+                                                    Welcome To
                                                 </div>
                                                 <div className="home_slider_subtitle">
                                                     Website Sekolah
@@ -40,7 +40,7 @@ const Hero = () => {
                                                             href="#"
                                                             className="home_search_button d-flex align-items-center justify-content-center text-white p-3"
                                                         >
-                                                            Lihat Selengkapnya
+                                                            See More
                                                         </a>
                                                     </div>
                                                 </div>

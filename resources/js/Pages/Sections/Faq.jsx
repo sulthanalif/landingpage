@@ -3,51 +3,126 @@ import React from "react";
 const Faq = () => {
     return (
         <>
-            <div className="newsletter">
+            <div className="courses">
                 <div
-                    className="newsletter_background parallax-window"
+                    className="section_background parallax-window"
                     loading="lazy"
                     style={{
-                        backgroundImage: `url('/landing/images/newsletter.jpg')`,
+                        backgroundImage: `url('/landing/images/courses_background.jpg')`,
                         backgroundAttachment: "fixed",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                     }}
                 />
                 <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <div className="newsletter_container d-flex flex-lg-row flex-column align-items-center justify-content-start">
-                                {/* Newsletter Content */}
-                                <div className="newsletter_content text-lg-left text-center">
-                                    <div className="newsletter_title">
-                                        sign up for news and offers
+                    <div className="row courses_row">
+                        <div className="col-lg-4">
+                            <div className="section_title_container text-center">
+                                <h2 className="section_title">
+                                    Frequently asked questions
+                                </h2>
+                                <div className="section_subtitle">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Donec vel gravida arcu.
+                                        Vestibulum feugiat, sapien ultrices
+                                        fermentum congue, quam velit venenatis
+                                        sem
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-8">
+                            <div className="accordion" id="accordionExample">
+                                <div className="course">
+                                    <div className="card-header" id="headingOne">
+                                        <h3 className="course_title">
+                                            <a
+                                                href="#"
+                                                type="button"
+                                                data-toggle="collapse"
+                                                data-target="#collapseOne"
+                                                aria-expanded="true"
+                                                aria-controls="collapseOne"
+                                            >
+                                                Question 1
+                                            </a>
+                                        </h3>
                                     </div>
-                                    <div className="newsletter_subtitle">
-                                        Subcribe to lastest smartphones news
-                                        &amp; great deals we offer
+
+                                    <div
+                                        id="collapseOne"
+                                        className="collapse show"
+                                        aria-labelledby="headingOne"
+                                        data-parent="#accordionExample"
+                                    >
+                                        <div className="card-body">
+                                            Some placeholder content for the
+                                            first accordion panel. This panel is
+                                            shown by default, thanks to the{" "}
+                                            <code>.show</code> class.
+                                        </div>
                                     </div>
                                 </div>
-                                {/* Newsletter Form */}
-                                <div className="newsletter_form_container ml-lg-auto">
-                                    <form
-                                        action="#"
-                                        id="newsletter_form"
-                                        className="newsletter_form d-flex flex-row align-items-center justify-content-center"
+                                <div className="course">
+                                    <div className="card-header" id="headingTwo">
+                                        <h3 className="course_title">
+                                            <a
+                                                href="#"
+                                                type="button"
+                                                data-toggle="collapse"
+                                                data-target="#collapseTwo"
+                                                aria-expanded="true"
+                                                aria-controls="collapseTwo"
+                                            >
+                                                Question 2
+                                            </a>
+                                        </h3>
+                                    </div>
+
+                                    <div
+                                        id="collapseTwo"
+                                        className="collapse"
+                                        aria-labelledby="headingTwo"
+                                        data-parent="#accordionExample"
                                     >
-                                        <input
-                                            type="email"
-                                            className="newsletter_input"
-                                            placeholder="Your Email"
-                                            required="required"
-                                        />
-                                        <button
-                                            type="submit"
-                                            className="newsletter_button"
-                                        >
-                                            subscribe
-                                        </button>
-                                    </form>
+                                        <div className="card-body">
+                                            Some placeholder content for the
+                                            first accordion panel. This panel is
+                                            shown by default, thanks to the{" "}
+                                            <code>.show</code> class.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="course">
+                                    <div className="card-header" id="headingThree">
+                                        <h3 className="course_title">
+                                            <a
+                                                href="#"
+                                                type="button"
+                                                data-toggle="collapse"
+                                                data-target="#collapseThree"
+                                                aria-expanded="true"
+                                                aria-controls="collapseThree"
+                                            >
+                                                Question 3
+                                            </a>
+                                        </h3>
+                                    </div>
+
+                                    <div
+                                        id="collapseThree"
+                                        className="collapse"
+                                        aria-labelledby="headingThree"
+                                        data-parent="#accordionExample"
+                                    >
+                                        <div className="card-body">
+                                            Some placeholder content for the
+                                            first accordion panel. This panel is
+                                            shown by default, thanks to the{" "}
+                                            <code>.show</code> class.
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

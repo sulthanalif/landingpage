@@ -9,7 +9,7 @@ const Value = () => {
                         <div className="col">
                             <div className="section_title_container text-center">
                                 <h2 className="section_title">
-                                    Welcome To Unicat E-Learning
+                                    Our Values
                                 </h2>
                                 <div className="section_subtitle">
                                     <p>

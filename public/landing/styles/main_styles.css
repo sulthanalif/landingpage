@@ -241,6 +241,17 @@ section
 {
 	padding: 0px !important;
 }
+.btn-primary
+{
+	background: #14bdee;
+	border-color: #14bdee;
+}
+.btn-primary:hover
+{
+	background: #0d9fcb;
+	border-color: #0d9fcb;
+	transition: all 300ms linear;
+}
 
 /*********************************
 3. Header
@@ -803,12 +814,14 @@ section
 	font-weight: 700;
 	line-height: 1.2;
 	color: #384158;
+	text-shadow: 1px 1px 2px #000000;
 }
 .home_slider_subtitle
 {
 	font-size: 24px;
 	color: #76777a;
 	margin-top: 9px;
+	text-shadow: 1px 1px 2px #000000;
 }
 .home_slider_form_container
 {
@@ -901,6 +914,11 @@ section
 	letter-spacing: 0.1em;
 	cursor: pointer;
 }
+.home_search_button:hover
+{
+	background: #0d9fcb;
+	transition: all 300ms linear;
+}
 .home_slider_nav
 {
 	position: absolute;
@@ -954,8 +972,8 @@ section
 .feature
 {
 	width: 100%;
-	padding-top: 30px;
-	padding-bottom: 28px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	padding-left: 15px;
 	padding-right: 15px;
 	background: #FFFFFF;

@@ -5,86 +5,26 @@ const About = () => {
         <>
             <div className="features">
                 <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <div className="section_title_container text-center">
-                                <h2 className="section_title">
-                                    Welcome To Unicat E-Learning
-                                </h2>
-                                <div className="section_subtitle">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit. Donec vel gravida arcu.
-                                        Vestibulum feugiat, sapien ultrices
-                                        fermentum congue, quam velit venenatis
-                                        sem
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div className="row features_row">
-                        {/* Features Item */}
-                        <div className="col-lg-3 feature_col">
-                            <div className="feature text-center trans_400">
-                                <div className="feature_icon">
-                                    <img src="/landing/images/icon_1.png" alt="" loading="lazy" />
-                                </div>
-                                <h3 className="feature_title">The Experts</h3>
-                                <div className="feature_text">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit
-                                    </p>
-                                </div>
-                            </div>
+                        <div className="col-lg-6">
+                            <img
+                                src="/landing/images/course_1.jpg"
+                                alt=""
+                                loading="lazy"
+                                className="img-fluid"
+                            />
                         </div>
-                        {/* Features Item */}
-                        <div className="col-lg-3 feature_col">
-                            <div className="feature text-center trans_400">
-                                <div className="feature_icon">
-                                    <img src="/landing/images/icon_2.png" alt="" loading="lazy" />
-                                </div>
-                                <h3 className="feature_title">
-                                    Book &amp; Library
-                                </h3>
-                                <div className="feature_text">
+                        <div className="col-lg-6 feature_col">
+                            <div className="feature trans_400">
+                                <h2 className="section_title">
+                                    About Us
+                                </h2>
+                                <hr />
+                                <div className="feature_text mt-3 text-justify">
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque modi. Sapiente aspernatur, sit inventore iure sequi, eveniet ipsa sunt cupiditate ad harum itaque corrupti nulla asperiores iusto nam delectus incidunt, magni quam dolore hic laudantium omnis laboriosam illo! Facilis veniam sed incidunt obcaecati necessitatibus? Veniam dolore assumenda recusandae deleniti consequuntur corporis quidem impedit! Aperiam, ducimus impedit. Voluptas pariatur magnam earum harum, recusandae fugiat impedit commodi aliquam inventore et reiciendis.
                                     </p>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Features Item */}
-                        <div className="col-lg-3 feature_col">
-                            <div className="feature text-center trans_400">
-                                <div className="feature_icon">
-                                    <img src="/landing/images/icon_3.png" alt="" loading="lazy" />
-                                </div>
-                                <h3 className="feature_title">Best Courses</h3>
-                                <div className="feature_text">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Features Item */}
-                        <div className="col-lg-3 feature_col">
-                            <div className="feature text-center trans_400">
-                                <div className="feature_icon">
-                                    <img src="/landing/images/icon_4.png" alt="" loading="lazy" />
-                                </div>
-                                <h3 className="feature_title">
-                                    Award &amp; Reward
-                                </h3>
-                                <div className="feature_text">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit
-                                    </p>
+                                    <a href="#" className="btn btn-primary mt-3">Read More</a>
                                 </div>
                             </div>
                         </div>
