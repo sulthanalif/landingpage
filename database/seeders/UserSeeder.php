@@ -70,6 +70,9 @@ class UserSeeder extends Seeder
         $admin->givePermissionTo('post-create');
         $admin->givePermissionTo('post-edit');
         $admin->givePermissionTo('post-delete');
+        $admin->givePermissionTo('mail-page');
+        $admin->givePermissionTo('mail-show');
+        $admin->givePermissionTo('mail-delete');
 
         $marketing = Role::findByName('marketing');
         $marketing->givePermissionTo('dahsboard');
