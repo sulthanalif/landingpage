@@ -40,7 +40,7 @@ const Navbar = ({ isActive, closeMenu }) => {
                             </div>
                         </li>
                         <li className="menu_mm">
-                            <Link href="#">Admission</Link>
+                            <Link href="/admission">Admission</Link>
                         </li>
                         <li className="menu_mm dropdown">
                             <a

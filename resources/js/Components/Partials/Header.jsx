@@ -103,7 +103,7 @@ const Header = () => {
                                                 </div>
                                             </li>
                                             <li>
-                                                <Link href="#">Admission</Link>
+                                                <Link href="/admission">Admission</Link>
                                             </li>
                                             <li className="nav-item dropdown">
                                                 <a

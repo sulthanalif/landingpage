@@ -24,4 +24,9 @@ class LandingpageController extends Controller
     {
         return inertia('Story');
     }
+
+    public function admission()
+    {
+        return inertia('Admission');
+    }
 }
