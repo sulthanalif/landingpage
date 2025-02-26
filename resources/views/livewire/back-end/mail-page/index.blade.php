@@ -14,8 +14,7 @@ title('Mail Box');
 
 state([
     'id' => '',
-    'first_name' => '',
-    'last_name' => '',
+    'name' => '',
     'email' => '',
     'phone' => '',
     'subject' => '',
@@ -27,9 +26,7 @@ state([
 with(
     fn() => [
         'mails' => MailBox::query()
-            ->where(function ($query) {
-                $query->where('first_name', 'like', "%{$this->search}%")->orWhere('last_name', 'like', "%{$this->search}%");
-            })
+            ->where('name', 'like', "%{$this->search}%")
             ->orWhere('email', 'like', "%{$this->search}%")
             ->orWhere('phone', 'like', "%{$this->search}%")
             ->orWhere('subject', 'like', "%{$this->search}%")
@@ -66,7 +63,7 @@ $delete = function () {
 $show = function ($id) {
     $mail = MailBox::find($id);
 
-    $this->first_name = $mail->first_name;
+    $this->name = $mail->name;
     $this->last_name = $mail->last_name;
     $this->email = $mail->email;
     $this->phone = $mail->phone;
@@ -139,13 +136,14 @@ $show = function ($id) {
                     <tbody>
                         @forelse ($mails as $mail)
                             <tr>
-                                <td>{{ $mail->first_name }} {{ $mail->last_name }}</td>
+                                <td>{{ $mail->name }}</td>
                                 <td>{{ $mail->email }}</td>
                                 <td>{{ $mail->phone ?? '-' }}</td>
                                 <td>{{ $mail->subject }}</td>
                                 <td>{{ strlen($mail->message) > 25 ? substr($mail->message, 0, 25) . '...' : $mail->message }}
                                 </td>
-                                <td>{{ $mail->created_at->format('d/m/Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($mail->created_at)->locale('id_ID')->isoFormat('DD MMMM YYYY') }}
+                                </td>
                                 <td style="width: 10%">
                                     @can('mail-show')
                                         <a href="#" class="btn btn-sm btn-primary"

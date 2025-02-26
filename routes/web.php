@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\Logout;
+use App\Http\Controllers\ContactUsController;
 use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingpageController;
@@ -14,6 +15,8 @@ Route::get('/apply-admission', [LandingpageController::class, 'apply']);
 Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademic']);
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
+
+Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
 Route::middleware(['guest'])->group(function () {
     Volt::route('login', 'login')->name('login');

@@ -20,8 +20,7 @@ class ContactUsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|numeric',
             'subject' => 'required|string|max:100',

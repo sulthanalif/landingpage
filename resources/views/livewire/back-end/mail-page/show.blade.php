@@ -10,19 +10,9 @@
                 </button>
             </div>
             <div class="modal-body p-4">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="first_name" class="fw-bold">First Name:</label>
-                            <p class="border rounded p-2 bg-light">{{ $this->first_name }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="last_name" class="fw-bold">Last Name:</label>
-                            <p class="border rounded p-2 bg-light">{{ $this->last_name }}</p>
-                        </div>
-                    </div>
+                <div class="form-group mt-3">
+                    <label for="name" class="fw-bold">Name:</label>
+                    <p class="border rounded p-2 bg-light">{{ $this->name }}</p>
                 </div>
                 <div class="form-group mt-3">
                     <label for="email" class="fw-bold">Email:</label>
