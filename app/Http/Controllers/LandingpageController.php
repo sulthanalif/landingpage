@@ -49,4 +49,9 @@ class LandingpageController extends Controller
     {
         return inertia('Accreditation');
     }
+
+    public function contact()
+    {
+        return inertia('Contact');
+    }
 }
