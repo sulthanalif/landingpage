@@ -22,7 +22,7 @@
 
     <!-- Custom styles for this page -->
     {{-- <link href="{{ asset('sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"> --}}
-
+    @stack('styles')
     {{-- @vite(['resources/css/app.css']) --}}
     @livewireStyles
 
@@ -122,6 +122,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script>
+    @stack('scripts')
 
     @livewireScripts
 

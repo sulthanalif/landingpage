@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\Auth\Logout;
-use App\Http\Controllers\ContactUsController;
 use Livewire\Volt\Volt;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\Logout;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\LandingpageController;
 
 Route::get('/', [LandingpageController::class, 'index']);
@@ -27,6 +29,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Volt::route('/dashboard', 'back-end.dashboard')->name('dashboard');
     Volt::route('/profile', 'back-end.profile')->name('profile');
+
+    //upload image
+    Route::post('/upload-image', function (Request $request) {
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('uploads', 'public');
+            return response()->json(['url' => Storage::url($path)]);
+        }
+        return response()->json(['error' => 'Upload gagal'], 400);
+    })->name('upload.image');
 
     Route::prefix('master')->middleware('can:master')->group(function () {
         Volt::route('/category', 'back-end.category-page.index')->middleware('can:category-page')->name('category');

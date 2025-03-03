@@ -97,8 +97,8 @@ $save = function () {
     }
 };
 
-
 ?>
+
 
 <div>
     <div class="card shadow mb-4">
@@ -115,21 +115,24 @@ $save = function () {
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="slug" class="col-form-label">Slug<span class="text-danger">*</span> </label>
-                        <input type="text" class="form-control @error('slug') is-invalid @enderror" wire:model.live='slug' readonly>
+                        <input type="text" class="form-control @error('slug') is-invalid @enderror"
+                            wire:model.live='slug' readonly>
                         @error('slug')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="title" class="col-form-label">Title<span class="text-danger">*</span> </label>
-                        <input type="text" wire:change='generateSlug' class="form-control @error('title') is-invalid @enderror" wire:model.live='title'>
+                        <input type="text" wire:change='generateSlug'
+                            class="form-control @error('title') is-invalid @enderror" wire:model.live='title'>
                         @error('title')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="sub_title" class="col-form-label">Sub Title </label>
-                        <input type="text" class="form-control @error('sub_title') is-invalid @enderror" wire:model='sub_title'>
+                        <input type="text" class="form-control @error('sub_title') is-invalid @enderror"
+                            wire:model='sub_title'>
                         @error('sub_title')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
@@ -137,17 +140,19 @@ $save = function () {
 
                     <div class="form-group">
                         <label for="body" class="col-form-label">Body </label>
-                        <textarea class="form-control @error('body') is-invalid @enderror" wire:model='body' rows="5"></textarea>
+                        <textarea id="editor" name="content"></textarea>
                         @error('body')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="category_id" class="col-form-label">Category <span class="text-danger">*</span></label>
-                        <select class="form-control @error('category_id') is-invalid @enderror" wire:model='category_id'>
+                        <label for="category_id" class="col-form-label">Category <span
+                                class="text-danger">*</span></label>
+                        <select class="form-control @error('category_id') is-invalid @enderror"
+                            wire:model='category_id'>
                             <option value="" disabled selected>Select...</option>
                             @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                         @error('category_id')
@@ -173,3 +178,18 @@ $save = function () {
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script src="https://cdn.ckeditor.com/4.19.1/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('editor', {
+            filebrowserUploadUrl: "{{ route('upload.image') }}",
+            filebrowserUploadMethod: 'form',
+            extraPlugins: 'uploadimage',
+            uploadUrl: "{{ route('upload.image') }}",
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            }
+        });
+    </script>
+@endpush
