@@ -8,7 +8,7 @@ const Footer = () => {
                 <div
                     className="footer_background"
                     style={{
-                        backgroundImage: "url(/landing/images/footer_background.png)",
+                        backgroundImage: "url(/landing/images/footer_bg.jpg)",
                     }}
                 />
                 <div className="container">
@@ -20,23 +20,37 @@ const Footer = () => {
                                         {/* Footer About */}
                                         <div className="footer_section footer_about">
                                             <div className="footer_logo_container">
-                                                <a href="#">
+                                                <Link
+                                                    href="/"
+                                                    className="d-flex align-items-center"
+                                                >
+                                                    <img
+                                                        src="/sbadmin/img/logo.png"
+                                                        className="img-fluid"
+                                                        style={{
+                                                            maxWidth: "70px",
+                                                            maxHeight: "auto",
+                                                        }}
+                                                        alt="logo"
+                                                    />
                                                     <div className="footer_logo_text">
-                                                        Sch<span>ool</span>
+                                                        LS<span>CS</span>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
-                                            <div className="footer_about_text">
+                                            {/* <div className="footer_about_text">
                                                 <p>
-                                                    Lorem ipsum dolor sit
-                                                    ametium, consectetur
-                                                    adipiscing elit.
+                                                    Jalan Taman Surya 5 Blok EE2
+                                                    No.20-27, RT.2/RW.3,
+                                                    Pegadungan, Kec. Kalideres,
+                                                    Kota Jakarta Barat, Daerah
+                                                    Khusus Ibukota Jakarta 11830
                                                 </p>
-                                            </div>
+                                            </div> */}
                                             <div className="footer_social">
                                                 <ul>
                                                     <li>
-                                                        <a href="#">
+                                                        <a href="https://www.facebook.com/pages/category/Community/Lia-Stephanie-School-115071265257740/" target="_blank">
                                                             <i
                                                                 className="fa fa-facebook"
                                                                 aria-hidden="true"
@@ -44,15 +58,7 @@ const Footer = () => {
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#">
-                                                            <i
-                                                                className="fa fa-google-plus"
-                                                                aria-hidden="true"
-                                                            />
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
+                                                        <a href="https://www.instagram.com/liastephanieschool/" target="_blank">
                                                             <i
                                                                 className="fa fa-instagram"
                                                                 aria-hidden="true"
@@ -60,9 +66,17 @@ const Footer = () => {
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#">
+                                                        <a href="https://wa.me/+6281310602139" target="_blank">
                                                             <i
-                                                                className="fa fa-twitter"
+                                                                className="fa fa-whatsapp"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://lsgs.quintal.id/" target="_blank">
+                                                            <i
+                                                                className="fa fa-leanpub"
                                                                 aria-hidden="true"
                                                             />
                                                         </a>
@@ -95,7 +109,9 @@ const Footer = () => {
                                                         </Link>
                                                     </li>
                                                     <li>
-                                                        <Link href="#">Values</Link>
+                                                        <Link href="#">
+                                                            Values
+                                                        </Link>
                                                     </li>
                                                     <li>
                                                         <Link href="#">
@@ -103,13 +119,19 @@ const Footer = () => {
                                                         </Link>
                                                     </li>
                                                     <li>
-                                                        <Link href="#">Admission</Link>
+                                                        <Link href="#">
+                                                            Admission
+                                                        </Link>
                                                     </li>
                                                     <li>
-                                                        <Link href="#">FAQs</Link>
+                                                        <Link href="#">
+                                                            FAQs
+                                                        </Link>
                                                     </li>
                                                     <li>
-                                                        <Link href="#">Contact</Link>
+                                                        <Link href="#">
+                                                            Contact
+                                                        </Link>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -125,14 +147,18 @@ const Footer = () => {
                                                 <ul>
                                                     <li>
                                                         Email:
-                                                        Info.deercreative@gmail.com
+                                                        info@lscs.sch.id
                                                     </li>
                                                     <li>
-                                                        Phone: +(88) 111 555 666
+                                                        Tel: (021) 54390347
                                                     </li>
                                                     <li>
-                                                        40 Baria Sreet 133/2 New
-                                                        York City, United States
+                                                        Jalan Taman Surya 5 Blok
+                                                        EE2 No.20-27, RT.2/RW.3,
+                                                        Pegadungan, Kec.
+                                                        Kalideres, Kota Jakarta
+                                                        Barat, Daerah Khusus
+                                                        Ibukota Jakarta 11830
                                                     </li>
                                                 </ul>
                                             </div>

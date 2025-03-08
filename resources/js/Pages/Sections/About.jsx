@@ -3,28 +3,33 @@ import React from "react";
 const About = () => {
     return (
         <>
-            <div className="features">
+            <div className="features" id="about">
                 <div className="container">
                     <div className="row features_row">
                         <div className="col-lg-6">
                             <img
-                                src="/landing/images/course_1.jpg"
+                                src="/landing/images/about.jpg"
                                 alt=""
                                 loading="lazy"
-                                className="img-fluid"
+                                className="img-fluid mx-auto d-block"
                             />
                         </div>
                         <div className="col-lg-6 feature_col">
                             <div className="feature trans_400">
-                                <h2 className="section_title">
-                                    About Us
+                                <h2 className="feature_title">
+                                    Discover our School
                                 </h2>
-                                <hr />
+                                <hr className="feature_line" />
                                 <div className="feature_text mt-3 text-justify">
                                     <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque modi. Sapiente aspernatur, sit inventore iure sequi, eveniet ipsa sunt cupiditate ad harum itaque corrupti nulla asperiores iusto nam delectus incidunt, magni quam dolore hic laudantium omnis laboriosam illo! Facilis veniam sed incidunt obcaecati necessitatibus? Veniam dolore assumenda recusandae deleniti consequuntur corporis quidem impedit! Aperiam, ducimus impedit. Voluptas pariatur magnam earum harum, recusandae fugiat impedit commodi aliquam inventore et reiciendis.
+                                    Along with the global growth, Lia Stephanie School was established to be one of the leading Catholic schools in West Jakarta, with a focus on academic, personal, spiritual, and professional of our students and teachers. With the mission by cultivating our students and bring out the best version of them.
                                     </p>
-                                    <a href="#" className="btn btn-primary mt-3">Read More</a>
+                                    <a
+                                        href="#"
+                                        className="btn btn-primary mt-3"
+                                    >
+                                        Read More
+                                    </a>
                                 </div>
                             </div>
                         </div>

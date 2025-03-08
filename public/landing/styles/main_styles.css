@@ -992,9 +992,20 @@ section
 }
 .feature_title
 {
-	position: relative;
-	font-size: 20px;
-	margin-top: 23px;
+	font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+.feature_line {
+    height: 4px; 
+    background-color: #007bff; 
+    border: none; 
+    margin-top: 5px;
+    width: 100%;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
 }
 
 /*********************************

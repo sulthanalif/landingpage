@@ -34,16 +34,24 @@ const Header = () => {
                                                     className="fa fa-phone"
                                                     aria-hidden="true"
                                                 />
-                                                <div>001-1234-88888</div>
+                                                <a
+                                                    href="tel:02154390347"
+                                                    target="_blank"
+                                                >
+                                                    (021)54390347
+                                                </a>
                                             </li>
                                             <li>
                                                 <i
                                                     className="fa fa-envelope-o"
                                                     aria-hidden="true"
                                                 />
-                                                <div>
-                                                    info.deercreative@gmail.com
-                                                </div>
+                                                <a
+                                                    href="mailto:info@lscs.sch.id"
+                                                    target="_blank"
+                                                >
+                                                    info@lscs.sch.id
+                                                </a>
                                             </li>
                                         </ul>
                                         <div className="top_bar_login ml-auto">
@@ -67,9 +75,18 @@ const Header = () => {
                                 <div className="header_content d-flex flex-row align-items-center justify-content-start">
                                     <div className="logo_container">
                                         <Link href="/">
-                                            <div className="logo_text">
+                                            <img
+                                                src="/sbadmin/img/logo.png"
+                                                className="img-fluid"
+                                                style={{
+                                                    maxWidth: "70px",
+                                                    maxHeight: "auto",
+                                                }}
+                                                alt="logo"
+                                            />
+                                            {/* <div className="logo_text">
                                                 Sch<span>ool</span>
-                                            </div>
+                                            </div> */}
                                         </Link>
                                     </div>
                                     <nav className="main_nav_contaner ml-auto">
@@ -103,7 +120,9 @@ const Header = () => {
                                                 </div>
                                             </li>
                                             <li>
-                                                <Link href="/admission">Admission</Link>
+                                                <Link href="/admission">
+                                                    Admission
+                                                </Link>
                                             </li>
                                             <li className="nav-item dropdown">
                                                 <a
@@ -143,12 +162,20 @@ const Header = () => {
                                                 </div>
                                             </li>
                                             <li>
-                                                <Link href="/contact">Contact</Link>
+                                                <Link href="/contact">
+                                                    Contact
+                                                </Link>
                                             </li>
                                         </ul>
                                         {/* Hamburger */}
-                                        <div className="hamburger menu_mm" onClick={toggleNavbar}>
-                                            <i className="fa fa-bars menu_mm" aria-hidden="true" />
+                                        <div
+                                            className="hamburger menu_mm"
+                                            onClick={toggleNavbar}
+                                        >
+                                            <i
+                                                className="fa fa-bars menu_mm"
+                                                aria-hidden="true"
+                                            />
                                         </div>
                                     </nav>
                                 </div>
