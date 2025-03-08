@@ -4,54 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LandingpageController extends Controller
 {
     public function index()
     {
-        return inertia('Home', [
+        return Inertia::render('Home', [
             'title' => 'Home',
-            'users' => User::all(),
         ]);
     }
 
     public function about()
     {
-        return inertia('About');
+        return Inertia::render('About');
     }
 
     public function story()
     {
-        return inertia('Story');
+        return Inertia::render('Story');
     }
 
     public function admission()
     {
-        return inertia('Admission');
+        return Inertia::render('Admission');
     }
 
     public function curriculum()
     {
-        return inertia('Curriculum');
+        return Inertia::render('Curriculum');
     }
 
     public function apply()
     {
-        return inertia('Apply');
+        return Inertia::render('Apply');
     }
 
     public function calendarAcademic()
     {
-        return inertia('CalendarAcademic');
+        return Inertia::render('CalendarAcademic');
     }
 
     public function accreditation()
     {
-        return inertia('Accreditation');
+        return Inertia::render('Accreditation');
     }
 
     public function contact()
     {
-        return inertia('Contact');
+        return Inertia::render('Contact');
     }
 }

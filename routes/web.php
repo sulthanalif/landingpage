@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\LandingpageController;
 
-Route::get('/', [LandingpageController::class, 'index']);
+Route::get('/', [LandingpageController::class, 'index'])->name('homepage');
 Route::get('/about', [LandingpageController::class, 'about']);
 Route::get('/story', [LandingpageController::class, 'story']);
 Route::get('/admission', [LandingpageController::class, 'admission']);

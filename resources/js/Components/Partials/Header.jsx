@@ -1,8 +1,9 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import Navbar from "./Navbar";
 
 const Header = () => {
+    const { url, component } = usePage()
     const [isNavbarActive, setIsNavbarActive] = useState(false);
 
     const toggleNavbar = () => {
@@ -36,6 +37,7 @@ const Header = () => {
                                                 />
                                                 <a
                                                     href="tel:02154390347"
+                                                    className="text-light ml-2"
                                                     target="_blank"
                                                 >
                                                     (021)54390347
@@ -48,6 +50,7 @@ const Header = () => {
                                                 />
                                                 <a
                                                     href="mailto:info@lscs.sch.id"
+                                                    className="text-light ml-2"
                                                     target="_blank"
                                                 >
                                                     info@lscs.sch.id
@@ -91,7 +94,7 @@ const Header = () => {
                                     </div>
                                     <nav className="main_nav_contaner ml-auto">
                                         <ul className="main_nav">
-                                            <li className="active">
+                                            <li className={url === '/' ? 'active' : ''}>
                                                 <Link href="/">Home</Link>
                                             </li>
                                             <li className="nav-item dropdown">
@@ -104,22 +107,22 @@ const Header = () => {
                                                 >
                                                     About
                                                 </a>
-                                                <div className="dropdown-menu">
+                                                <div className={url === '/about' || url === '/story' ? 'dropdown-menu show' : 'dropdown-menu'}>
                                                     <Link
-                                                        className="dropdown-item"
+                                                        className={url === '/about' ? 'dropdown-item active' : 'dropdown-item'}
                                                         href="/about"
                                                     >
                                                         About Us
                                                     </Link>
                                                     <Link
-                                                        className="dropdown-item"
+                                                        className={url === '/story' ? 'dropdown-item active' : 'dropdown-item'}
                                                         href="/story"
                                                     >
                                                         Our Stories
                                                     </Link>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li className={url === '/admission' ? 'active' : ''}>
                                                 <Link href="/admission">
                                                     Admission
                                                 </Link>
@@ -134,34 +137,34 @@ const Header = () => {
                                                 >
                                                     Curriculum
                                                 </a>
-                                                <div className="dropdown-menu">
+                                                <div className={url === '/curriculum' || url === '/apply-admission' || url === '/calendar-academic' || url === '/accreditation' ? 'dropdown-menu show' : 'dropdown-menu'}>
                                                     <Link
-                                                        className="dropdown-item"
+                                                        className={url === '/curriculum' ? 'dropdown-item active' : 'dropdown-item'}
                                                         href="/curriculum"
                                                     >
                                                         Explanation
                                                     </Link>
                                                     <Link
-                                                        className="dropdown-item"
+                                                        className={url === '/apply-admission' ? 'dropdown-item active' : 'dropdown-item'}
                                                         href="/apply-admission"
                                                     >
                                                         Apply Admission
                                                     </Link>
                                                     <Link
-                                                        className="dropdown-item"
+                                                        className={url === '/calendar-academic' ? 'dropdown-item active' : 'dropdown-item'}
                                                         href="/calendar-academic"
                                                     >
                                                         Academic Calendar
                                                     </Link>
                                                     <Link
-                                                        className="dropdown-item"
+                                                        className={url === '/accreditation' ? 'dropdown-item active' : 'dropdown-item'}
                                                         href="/accreditation"
                                                     >
                                                         Accreditation
                                                     </Link>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li className={url === '/contact' ? 'active' : ''}>
                                                 <Link href="/contact">
                                                     Contact
                                                 </Link>
