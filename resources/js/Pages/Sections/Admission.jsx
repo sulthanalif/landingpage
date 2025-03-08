@@ -11,11 +11,9 @@ const Admission = () => {
                                 <h2 className="section_title">Admission</h2>
                                 <div className="section_subtitle">
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit. Donec vel gravida arcu.
-                                        Vestibulum feugiat, sapien ultrices
-                                        fermentum congue, quam velit venenatis
-                                        sem
+                                        We are currently accepting applications
+                                        for Elementary- Senior High School for
+                                        the new academic year.
                                     </p>
                                 </div>
                             </div>
@@ -36,20 +34,20 @@ const Admission = () => {
                                     <div className="event_date">
                                         <div className="d-flex flex-column align-items-center justify-content-center trans_200">
                                             <div className="event_day trans_200">
-                                                <i className="fa fa-list-alt" />
+                                                <i className="fa fa-file-text-o" />
                                             </div>
                                         </div>
                                     </div>
                                     <div className="event_content">
                                         <div className="event_title">
-                                            <a href="#">Guidelines</a>
+                                            <a href="#">Information services</a>
                                         </div>
                                         <div className="event_info_container">
                                             <div className="event_text">
                                                 <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path...
+                                                    Information about Lia
+                                                    Stephanie Catholic School
+                                                    can be asked to our staff.
                                                 </p>
                                             </div>
                                         </div>
@@ -71,20 +69,19 @@ const Admission = () => {
                                     <div className="event_date">
                                         <div className="d-flex flex-column align-items-center justify-content-center trans_200">
                                             <div className="event_day trans_200">
-                                                <i className="fa fa-calendar-o" />
+                                                <i className="fa fa-desktop" />
                                             </div>
                                         </div>
                                     </div>
                                     <div className="event_content">
                                         <div className="event_title">
-                                            <a href="#">Calendar School</a>
+                                            <a href="#">Form Retrieval</a>
                                         </div>
                                         <div className="event_info_container">
                                             <div className="event_text">
                                                 <p>
-                                                    This Consumer Action News
-                                                    issue covers topics now
-                                                    being debated before...
+                                                    Fill out the form clearly
+                                                    and completely.
                                                 </p>
                                             </div>
                                         </div>
@@ -106,7 +103,7 @@ const Admission = () => {
                                     <div className="event_date">
                                         <div className="d-flex flex-column align-items-center justify-content-center trans_200">
                                             <div className="event_day trans_200">
-                                                <i className="fa fa-shield" />
+                                                <i className="fa fa-list" />
                                             </div>
                                             {/* <div className="event_month trans_200">
                                                 Sep
@@ -115,7 +112,7 @@ const Admission = () => {
                                     </div>
                                     <div className="event_content">
                                         <div className="event_title">
-                                            <a href="#">Terms & Conditions</a>
+                                            <a href="#">Return of Form</a>
                                         </div>
                                         <div className="event_info_container">
                                             {/* <div className="event_info">
@@ -134,9 +131,8 @@ const Admission = () => {
                                             </div> */}
                                             <div className="event_text">
                                                 <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path...
+                                                    Return of form accompanied
+                                                    by payment of initial fee.
                                                 </p>
                                             </div>
                                         </div>
