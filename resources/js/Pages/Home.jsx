@@ -8,15 +8,15 @@ import Activity from "./Sections/Activity";
 import Admission from "./Sections/Admission";
 import Faq from "./Sections/Faq";
 
-export default function Home() {
-    const props = usePage().props;
+import React from "react";
 
+const Home = (props) => {
     return (
         <>
             <Layout>
                 <Hero />
                 <About />
-                <News />
+                <News posts={props.posts} />
                 <Value />
                 <Activity />
                 <Admission />
@@ -24,4 +24,6 @@ export default function Home() {
             </Layout>
         </>
     );
-}
+};
+
+export default Home;
