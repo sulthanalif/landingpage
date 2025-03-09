@@ -136,7 +136,7 @@ with(
                                 <td>{{ $post->created_at->format('d/m/Y') }}</td>
                                 <td>
                                     @can('post-edit')
-                                        <a href="{{ route('post.form', ['slug' => $post->slug]) }}"
+                                        <a href="{{ route('post.form', ['slug_url' => $post->slug]) }}"
                                             class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
                                     @endcan
                                     @can('post-delete')

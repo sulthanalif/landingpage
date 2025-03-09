@@ -5,7 +5,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
-use function Livewire\Volt\{state, title, uses, mount, with};
+use function Livewire\Volt\{state, title, uses, mount, with, on};
 
 title(isset($id) ? 'Edit Post' : 'Create Post');
 
@@ -18,17 +18,18 @@ state([
     'body' => '',
     'category_id' => '',
     'status' => '',
+    'slug' => '',
 ]);
 
-state(['slug'])->url();
+state(['slug_url'])->url();
 
 with([
     'categories' => Category::all(),
 ]);
 
 mount(function () {
-    if ($this->slug) {
-        $post = Post::where('slug', $this->slug)->first();
+    if ($this->slug_url) {
+        $post = Post::where('slug', $this->slug_url)->first();
         $this->id = $post->id;
         $this->title = $post->title;
         $this->sub_title = $post->sub_title;
@@ -37,6 +38,8 @@ mount(function () {
         $this->body = $post->body;
         $this->category_id = $post->category_id;
         $this->status = $post->status;
+
+        $this->dispatch('setBody', content: $this->body);
     }
 });
 
@@ -45,7 +48,20 @@ $generateSlug = function () {
     $this->slug = $slug;
 };
 
+on([
+    'updateBody' => function (...$args) {
+        $eventData = $args;
+
+        Log::debug('Event updateBody received', ['data' => $eventData[0]]);
+
+        $this->body = $eventData[0] ?? '';
+
+        Log::debug('Updated body:', ['body' => $this->body]);
+    },
+]);
+
 $save = function () {
+    // dd($this->body);
     $this->validate([
         'slug' => $this->id ? 'required|unique:posts,slug,' . $this->id . ',id' : 'required|unique:posts,slug',
         'title' => 'required',
@@ -110,9 +126,10 @@ $save = function () {
                 </a>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" >
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" x-data
+                    x-on:updateBody.window="Livewire.dispatch('updateBody', { content: $event.detail.content })">
                     <div class="form-group">
                         <label for="slug" class="col-form-label">Slug<span class="text-danger">*</span> </label>
                         <input type="text" class="form-control @error('slug') is-invalid @enderror"
@@ -138,9 +155,11 @@ $save = function () {
                         @enderror
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" x-data="ckeditor()" x-init="$nextTick(() => initEditor($wire.body))">
                         <label for="body" class="col-form-label">Body </label>
-                        <textarea id="editor" name="content"></textarea>
+                        <div wire:ignore>
+                            <textarea id="editor" name="content"></textarea>
+                        </div>
                         @error('body')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
@@ -182,14 +201,36 @@ $save = function () {
 @push('scripts')
     <script src="https://cdn.ckeditor.com/4.19.1/full/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace('editor', {
-            filebrowserUploadUrl: "{{ route('upload.image') }}",
-            filebrowserUploadMethod: 'form',
-            extraPlugins: 'uploadimage',
-            uploadUrl: "{{ route('upload.image') }}",
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            }
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('ckeditor', () => ({
+                editor: null,
+                initEditor(body) {
+                    this.editor = CKEDITOR.replace('editor', {
+                        filebrowserUploadUrl: "{{ route('upload.image') }}",
+                        filebrowserUploadMethod: 'form',
+                        extraPlugins: 'uploadimage',
+                        uploadUrl: "{{ route('upload.image') }}",
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        }
+                    });
+
+                    this.editor.on('change', () => {
+                        const content = this.editor.getData();
+                        // console.log('CKEditor content:', content);
+
+                        window.dispatchEvent(new CustomEvent('updateBody', {
+                            detail: {
+                                content
+                            }
+                        }));
+
+                    });
+
+                    this.editor.setData(body);
+                }
+            }));
         });
     </script>
 @endpush
