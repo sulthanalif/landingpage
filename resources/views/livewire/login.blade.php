@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\RateLimiter;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use function Livewire\Volt\{state, title, layout, action, uses};
 
@@ -14,6 +16,7 @@ layout('components.layouts.guest');
 state([
     'email' => '',
     'password' => '',
+    'remember' => false,
     'error' => '',
 ]);
 
@@ -28,15 +31,21 @@ $login = function () {
         'password' => $this->password,
     ];
 
-    if (Auth::attempt($credentials)) {
+    $this->ensureIsNotRateLimited();
+
+    if (Auth::attempt($credentials, $this->remember)) {
+        RateLimiter::clear($this->throttleKey());
+        Session::regenerate();
         Log::channel('auth')->info('User logged in', [
             'user' => Auth::user(),
             'ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
             'url' => request()->url(),
         ]);
-        return redirect(route('dashboard'));
+
+        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     } else {
+        RateLimiter::hit($this->throttleKey());
         $this->alert('error', 'Password salah');
         Log::channel('auth')->error('Login failed', [
             'email' => $this->email,
@@ -45,6 +54,35 @@ $login = function () {
             'url' => request()->url(),
         ]);
     }
+};
+
+/**
+ * Get the authentication rate limiting throttle key.
+ */
+$throttleKey = function ()
+{
+    return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+};
+
+/**
+ * Ensure the authentication request is not rate limited.
+ */
+$ensureIsNotRateLimited = function ()
+{
+    if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        return;
+    }
+
+    event(new Lockout(request()));
+
+    $seconds = RateLimiter::availableIn($this->throttleKey());
+
+    throw ValidationException::withMessages([
+        'email' => __('auth.throttle', [
+            'seconds' => $seconds,
+            'minutes' => ceil($seconds / 60),
+        ]),
+    ]);
 };
 
 ?>
@@ -75,7 +113,7 @@ $login = function () {
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-checkbox small">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck">
+                                    <input type="checkbox" class="custom-control-input" wire:model="remember" id="customCheck">
                                     <label class="custom-control-label" for="customCheck">Remember Me</label>
                                 </div>
                             </div>

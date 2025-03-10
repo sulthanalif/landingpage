@@ -14,6 +14,7 @@ class Logout extends Controller
      */
     public function __invoke(Request $request)
     {
+        Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         Log::channel('auth')->info('User logged out', [
@@ -23,7 +24,6 @@ class Logout extends Controller
             'url' => request()->url(),
         ]);
 
-        Auth::logout();
         return redirect('/login');
     }
 }
