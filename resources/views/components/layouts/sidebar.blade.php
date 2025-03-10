@@ -51,6 +51,14 @@
             </li>
         @endcan
 
+        @can('activity-page')
+            <li class="nav-item {{ request()->is('admin/master/activity*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('activity') }}">
+                    <i class="fas fa-fw fa-camera"></i>
+                    <span>Activities</span></a>
+            </li>
+        @endcan
+
         @can('user-page')
             <li class="nav-item {{ request()->is('admin/master/user*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('user') }}">
