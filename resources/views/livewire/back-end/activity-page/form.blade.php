@@ -29,12 +29,16 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="image" class="col-form-label">Image<span class="text-danger">*</span></label>
+                        <label for="image" class="col-form-label">Image<span class="text-danger">{{ $id ? '(Input image if you want to update)' : '*' }}</span></label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror"
                             wire:model='image' accept="image/*">
                         @if ($image)
                             <div class="d-flex justify-content-center mt-3">
                                 <img src="{{ $image->temporaryUrl() }}" style='width: 400px'>
+                            </div>
+                        @elseif ($old_image && !$image)
+                            <div class="d-flex justify-content-center mt-3">
+                                <img src="{{ asset('storage/' . $old_image) }}" style='width: 400px'>
                             </div>
                         @endif
                         @error('image')

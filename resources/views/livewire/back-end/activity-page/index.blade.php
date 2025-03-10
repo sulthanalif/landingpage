@@ -19,6 +19,7 @@ state([
     'title' => '',
     'date' => '',
     'image' => '',
+    'old_image' => '',
     'status' => '',
     'search' => '',
     'perPage' => 10,
@@ -37,7 +38,17 @@ $create = function () {
     $this->title = '';
     $this->date = now()->format('Y-m-d');
     $this->image = '';
+    $this->old_image = '';
     $this->status = '';
+};
+
+$edit = function ($id) {
+    $activity = Activity::findOrFail($id);
+    $this->id = $activity->id;
+    $this->title = $activity->title;
+    $this->date = $activity->date;
+    $this->old_image = $activity->image;
+    $this->status = $activity->status;
 };
 
 $modalDelete = function ($id) {
@@ -48,7 +59,7 @@ $save = function () {
     $this->validate([
         'title' => 'required|string|max:255',
         'date' => 'required|date',
-        'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        'image' => $this->id ? 'nullable' : 'required' .'|image|mimes:jpeg,png,jpg|max:2048',
         'status' => 'required',
     ]);
 
@@ -63,6 +74,10 @@ $save = function () {
             ]);
 
             if ($this->image) {
+                if (Storage::disk('public')->exists($activity->image)) {
+                    Storage::disk('public')->delete($activity->image);
+                }
+
                 $activity->update(['image' => $this->image->store(path: 'images', options: 'public')]);
             }
         } else {
@@ -75,7 +90,7 @@ $save = function () {
         }
         DB::commit();
         $this->alert('success', 'Activity berhasil disimpan');
-        $this->reset(['id', 'title', 'date', 'image', 'status']);
+        $this->reset(['id', 'title', 'date', 'image', 'status', 'old_image']);
         $this->dispatch('save');
     } catch (\Throwable $th) {
         DB::rollBack();
