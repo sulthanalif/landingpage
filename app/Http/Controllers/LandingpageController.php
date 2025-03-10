@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,11 +12,13 @@ class LandingpageController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->limit(5)->get();
+        $posts = Post::latest()->paginate(5);
+        $activities = Activity::latest()->paginate(5);
 
         return Inertia::render('Home', [
             'title' => 'Home',
-            'posts' => $posts
+            'posts' => $posts,
+            'activities' => $activities
         ]);
     }
 
