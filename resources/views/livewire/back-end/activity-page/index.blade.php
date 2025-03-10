@@ -33,7 +33,11 @@ with(
 ]);
 
 $create = function () {
-    $this->reset(['title', 'date', 'image', 'status']);
+    $this->id = '';
+    $this->title = '';
+    $this->date = now()->format('Y-m-d');
+    $this->image = '';
+    $this->status = '';
 };
 
 $modalDelete = function ($id) {
