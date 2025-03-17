@@ -4,6 +4,7 @@ use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use function Livewire\Volt\{state, title, uses, mount, with, on};
 
@@ -24,44 +25,38 @@ state([
 state(['slug_url'])->url();
 
 with([
-    'categories' => Category::all(),
+    'categories' => fn() => Category::all(),
 ]);
 
 mount(function () {
     if ($this->slug_url) {
         $post = Post::where('slug', $this->slug_url)->first();
-        $this->id = $post->id;
-        $this->title = $post->title;
-        $this->sub_title = $post->sub_title;
-        $this->description = $post->description;
-        $this->slug = $post->slug;
-        $this->body = $post->body;
-        $this->category_id = $post->category_id;
-        $this->status = $post->status;
+        if ($post) {
+            $this->id = $post->id;
+            $this->title = $post->title;
+            $this->sub_title = $post->sub_title;
+            $this->slug = $post->slug;
+            $this->body = $post->body;
+            $this->category_id = $post->category_id;
+            $this->status = $post->status;
 
-        $this->dispatch('setBody', content: $this->body);
+            $this->dispatch('updateBody', ...(is_array($content) ? $content : [$content]));
+
+        }
     }
 });
 
 $generateSlug = function () {
-    $slug = Str::slug($this->title);
-    $this->slug = $slug;
+    $this->slug = Str::slug($this->title);
 };
 
 on([
-    'updateBody' => function (...$args) {
-        $eventData = $args;
-
-        Log::debug('Event updateBody received', ['data' => $eventData[0]]);
-
-        $this->body = $eventData[0] ?? '';
-
-        Log::debug('Updated body:', ['body' => $this->body]);
+    'updateBody' => function ($data) {
+        $this->body = $data['content'];
     },
 ]);
 
 $save = function () {
-    // dd($this->body);
     $this->validate([
         'slug' => $this->id ? 'required|unique:posts,slug,' . $this->id . ',id' : 'required|unique:posts,slug',
         'title' => 'required',
@@ -71,29 +66,23 @@ $save = function () {
         'status' => 'required',
     ]);
 
+    $this->generateSlug();
     try {
         DB::beginTransaction();
+        $data = [
+            'slug' => $this->slug,
+            'title' => $this->title,
+            'sub_title' => $this->sub_title,
+            'body' => $this->body,
+            'category_id' => $this->category_id,
+            'status' => $this->status,
+        ];
 
         if ($this->id) {
-            $post = Post::find($this->id);
-            $post->update([
-                'slug' => $this->slug,
-                'title' => $this->title,
-                'sub_title' => $this->sub_title,
-                'body' => $this->body,
-                'category_id' => $this->category_id,
-                'status' => $this->status,
-            ]);
+            Post::find($this->id)->update($data);
         } else {
-            $post = Post::create([
-                'slug' => $this->slug,
-                'title' => $this->title,
-                'sub_title' => $this->sub_title,
-                'body' => $this->body,
-                'category_id' => $this->category_id,
-                'status' => $this->status,
-                'user_id' => auth()->user()->id,
-            ]);
+            $data['user_id'] = auth()->user()->id;
+            Post::create($data);
         }
 
         DB::commit();
@@ -102,135 +91,116 @@ $save = function () {
     } catch (\Exception $e) {
         DB::rollBack();
         $this->alert('error', 'An error occurred while saving the post.');
-
-        Log::channel('debug')->error('Error: ' . $e->getMessage(), [
-            'exception' => $e,
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'code' => $e->getCode(),
-            'trace' => $e->getTraceAsString(),
-        ]);
     }
 };
-
 ?>
 
-
-<div>
+<div x-data="tinymceComponent()" x-init="initEditor()">
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between items-center py-3">
             <h3 class="m-0 font-weight-bold text-primary">{{ $id ? 'Edit' : 'Create' }} Post</h3>
-            <div class="float-right">
-                <a href="{{ route('post') }}" class="btn btn-sm btn-secondary">
-                    Back
-                </a>
-            </div>
+            <a href="{{ route('post') }}" class="btn btn-sm btn-secondary">Back</a>
         </div>
-        <div class="card-body" >
-            <div class="row">
-                <div class="col-md-12" x-data
-                    x-on:updateBody.window="Livewire.dispatch('updateBody', { content: $event.detail.content })">
-                    <div class="form-group">
-                        <label for="slug" class="col-form-label">Slug<span class="text-danger">*</span> </label>
-                        <input type="text" class="form-control @error('slug') is-invalid @enderror"
-                            wire:model.live='slug' readonly>
-                        @error('slug')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="title" class="col-form-label">Title<span class="text-danger">*</span> </label>
-                        <input type="text" wire:change='generateSlug'
-                            class="form-control @error('title') is-invalid @enderror" wire:model.live='title'>
-                        @error('title')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="sub_title" class="col-form-label">Sub Title </label>
-                        <input type="text" class="form-control @error('sub_title') is-invalid @enderror"
-                            wire:model='sub_title'>
-                        @error('sub_title')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group" x-data="ckeditor()" x-init="$nextTick(() => initEditor($wire.body))">
-                        <label for="body" class="col-form-label">Body </label>
-                        <div wire:ignore>
-                            <textarea id="editor" name="content"></textarea>
-                        </div>
-                        @error('body')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="category_id" class="col-form-label">Category <span
-                                class="text-danger">*</span></label>
-                        <select class="form-control @error('category_id') is-invalid @enderror"
-                            wire:model='category_id'>
-                            <option value="" disabled selected>Select...</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('category_id')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
-                        <select class="form-control @error('status') is-invalid @enderror" wire:model='status'>
-                            <option value="" disabled selected>Select...</option>
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
-                        </select>
-                        @error('status')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" wire:click='save'>Save</button>
-                    </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label>Title<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" wire:model.live='title'
+                    x-on:change="$dispatch('updateSlug')">
+            </div>
+            <div class="form-group">
+                <label>Sub Title</label>
+                <input type="text" class="form-control" wire:model='sub_title'>
+            </div>
+            <div class="form-group" wire:ignore>
+                <label>Body</label>
+                <div wire:ignore>
+                    <textarea id="tiny-editor" x-ref="editor" class="form-control"></textarea>
                 </div>
+            </div>
+            <div class="form-group">
+                <label>Category<span class="text-danger">*</span></label>
+                <select class="form-control" wire:model='category_id'>
+                    <option value="" disabled selected>Select...</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status<span class="text-danger">*</span></label>
+                <select class="form-control" wire:model='status'>
+                    <option value="" disabled selected>Select...</option>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" wire:click='save'>Save</button>
             </div>
         </div>
     </div>
 </div>
 
+@push('styles')
+    <script src="https://cdn.tiny.cloud/1/08d4t4shdvti5w4vrql0voaztnvps1jtngr9iy40lozsy4jz/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
+@endpush
+
 @push('scripts')
-    <script src="https://cdn.ckeditor.com/4.19.1/full/ckeditor.js"></script>
     <script>
+        window.tinymceComponent = function() {
+            return {
+                initEditor() {
+                    tinymce.init({
+                        selector: '#tiny-editor',
+                        plugins: 'image code',
+                        toolbar: 'undo redo | link image | code',
+                        images_upload_handler: function(blobInfo, progress) {
+                            return new Promise((resolve, reject) => {
+                                let xhr = new XMLHttpRequest();
+                                xhr.open('POST', '/upload-image', true);
+                                xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                                xhr.upload.onprogress = function(e) {
+                                    progress(e.loaded / e.total * 100);
+                                };
+                                xhr.onload = function() {
+                                    let json = JSON.parse(xhr.responseText);
+                                    if (!json || typeof json.location !== 'string') reject(
+                                        'Invalid JSON');
+                                    resolve(json.location);
+                                };
+                                xhr.onerror = function() {
+                                    reject('Upload failed due to a network error.');
+                                };
+                                let formData = new FormData();
+                                formData.append('file', blobInfo.blob(), blobInfo.filename());
+                                xhr.send(formData);
+                            });
+                        },
+                        setup: function(editor) {
+                            let timeout = null;
 
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('ckeditor', () => ({
-                editor: null,
-                initEditor(body) {
-                    this.editor = CKEDITOR.replace('editor', {
-                        filebrowserUploadUrl: "{{ route('upload.image') }}",
-                        filebrowserUploadMethod: 'form',
-                        extraPlugins: 'uploadimage',
-                        uploadUrl: "{{ route('upload.image') }}",
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            editor.on('change', function() {
+                                clearTimeout(timeout);
+                                timeout = setTimeout(() => {
+                                    let newContent = editor.getContent();
+                                    if (newContent !== @this.body) {
+                                        Livewire.dispatch('updateBody', { content: editor.getContent() });
+                                    }
+                                }, 500);
+                            });
+
+                            Livewire.hook('message.processed', (message, component) => {
+                                let newContent = @this.body || "";
+                                if (editor.getContent() !== newContent) {
+                                    editor.setContent(newContent);
+                                }
+                            });
                         }
-                    });
-
-                    this.editor.on('change', () => {
-                        const content = this.editor.getData();
-                        // console.log('CKEditor content:', content);
-
-                        window.dispatchEvent(new CustomEvent('updateBody', {
-                            detail: {
-                                content
-                            }
-                        }));
 
                     });
-
-                    this.editor.setData(body);
                 }
-            }));
-        });
+            };
+        };
     </script>
 @endpush

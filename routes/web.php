@@ -20,6 +20,17 @@ Route::get('/contact', [LandingpageController::class, 'contact']);
 
 Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
+Route::post('/upload-image', function (Request $request) {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->store('uploads', 'public'); // Simpan di storage/app/public/uploads
+
+            return response()->json(['location' => asset("storage/$path")]); // Kembalikan URL gambar
+        }
+
+        return response()->json(['error' => 'No file uploaded'], 400);
+    });
+
 Route::middleware(['guest'])->group(function () {
     Volt::route('login', 'login')->name('login');
 });
@@ -30,14 +41,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Volt::route('/dashboard', 'back-end.dashboard')->name('dashboard');
     Volt::route('/profile', 'back-end.profile')->name('profile');
 
-    //upload image
-    Route::post('/upload-image', function (Request $request) {
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('uploads', 'public');
-            return response()->json(['url' => Storage::url($path)]);
-        }
-        return response()->json(['error' => 'Upload gagal'], 400);
-    })->name('upload.image');
+
 
     Route::prefix('master')->middleware('can:master')->group(function () {
         Volt::route('/category', 'back-end.category-page.index')->middleware('can:category-page')->name('category');
