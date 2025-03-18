@@ -1,9 +1,6 @@
 import React from "react";
 
 const News = ({ posts }) => {
-    const hasPosts = posts.length > 0;
-    const firstPost = hasPosts ? posts[0] : null;
-
     return (
         <div className="news">
             <div className="container">
@@ -21,17 +18,7 @@ const News = ({ posts }) => {
                     </div>
                 </div>
 
-                {!hasPosts ? (
-                    <div className="row news_row">
-                        <div className="col-lg-12 news_col">
-                            <div className="text-center">
-                                <h4 className="text-gray-500">
-                                    No news available.
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
+                {posts && Array.isArray(posts.data) && posts.data.length > 0 ? ( // Simplified condition
                     <div className="row news_row">
                         <div className="col-lg-7 news_col">
                             <div className="news_post_large_container">
@@ -39,16 +26,16 @@ const News = ({ posts }) => {
                                     <div className="news_post_image">
                                         <img
                                             src={
-                                                firstPost?.image ||
+                                                posts.data[0]?.image ||
                                                 "/landing/images/news_1.jpg"
                                             }
-                                            alt={firstPost?.title || "No title"}
+                                            alt={posts.data[0]?.title}
                                             loading="lazy"
                                         />
                                     </div>
                                     <div className="news_post_large_title">
-                                        <a href={`/posts/${firstPost?.id}`}>
-                                            {firstPost?.title || "No title"}
+                                        <a href={`/posts/${posts.data[0]?.id}`}>
+                                            {posts.data[0]?.title}
                                         </a>
                                     </div>
                                     <div className="news_post_meta">
@@ -59,17 +46,17 @@ const News = ({ posts }) => {
                                             <li>
                                                 <a href="#">
                                                     {new Date(
-                                                        posts[0].created_at
+                                                        posts.data[0]?.created_at
                                                     ).toLocaleDateString()}
                                                 </a>
                                             </li>
                                         </ul>
                                     </div>
                                     <div className="news_post_text">
-                                        <p>{posts[0].excerpt}</p>
+                                        <p>{posts.data[0]?.body}</p>
                                     </div>
                                     <div className="news_post_link">
-                                        <a href={`/posts/${posts[0].id}`}>
+                                        <a href={`/posts/${posts.data[0]?.id}`}>
                                             Read More
                                         </a>
                                     </div>
@@ -79,7 +66,7 @@ const News = ({ posts }) => {
 
                         <div className="col-lg-5 news_col">
                             <div className="news_posts_small">
-                                {posts.slice(1).map((post) => (
+                                {posts.data.slice(1).map((post) => (
                                     <div
                                         key={post.id}
                                         className="news_post_small"
@@ -105,6 +92,16 @@ const News = ({ posts }) => {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="row news_row">
+                        <div className="col-lg-12 news_col">
+                            <div className="text-center">
+                                <h4 className="text-gray-500">
+                                    No news available.
+                                </h4>
                             </div>
                         </div>
                     </div>
