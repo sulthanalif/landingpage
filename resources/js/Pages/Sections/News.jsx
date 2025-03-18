@@ -1,6 +1,9 @@
 import React from "react";
 
 const News = ({ posts }) => {
+    const hasPosts = posts.length > 0;
+    const firstPost = hasPosts ? posts[0] : null;
+
     return (
         <div className="news">
             <div className="container">
@@ -18,7 +21,7 @@ const News = ({ posts }) => {
                     </div>
                 </div>
 
-                {posts.length === 0 ? (
+                {!hasPosts ? (
                     <div className="row news_row">
                         <div className="col-lg-12 news_col">
                             <div className="text-center">
@@ -36,16 +39,16 @@ const News = ({ posts }) => {
                                     <div className="news_post_image">
                                         <img
                                             src={
-                                                posts[0].image ||
+                                                firstPost?.image ||
                                                 "/landing/images/news_1.jpg"
                                             }
-                                            alt={posts[0].title}
+                                            alt={firstPost?.title || "No title"}
                                             loading="lazy"
                                         />
                                     </div>
                                     <div className="news_post_large_title">
-                                        <a href={`/posts/${posts[0].id}`}>
-                                            {posts[0].title}
+                                        <a href={`/posts/${firstPost?.id}`}>
+                                            {firstPost?.title || "No title"}
                                         </a>
                                     </div>
                                     <div className="news_post_meta">
