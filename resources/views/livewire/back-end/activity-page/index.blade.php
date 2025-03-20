@@ -118,6 +118,14 @@ new class extends Component {
         }
     }
 
+    public function delete(): void
+    {
+        Activity::whereIn('id', $this->selected)->delete();
+        $this->selected = [];
+        $this->modalAlertDelete = false;
+        $this->success('Data berhasil dihapus', position: 'toast-bottom');
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return Activity::query()

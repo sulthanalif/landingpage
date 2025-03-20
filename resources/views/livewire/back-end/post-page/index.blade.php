@@ -79,6 +79,14 @@ new class extends Component {
         return Excel::download(new ExportDatas($datas, 'Data Post', $headers), 'Post_' . date('Y-m-d') . '.xlsx');
     }
 
+    public function delete():void
+    {
+        Post::whereIn('id', $this->selected)->delete();
+        $this->selected = [];
+        $this->modalAlertDelete = false;
+        $this->success('Data berhasil dihapus', position: 'toast-bottom');
+    }
+
 
 
     public function datas(): LengthAwarePaginator
