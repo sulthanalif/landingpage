@@ -26,7 +26,7 @@ class AppBrand extends Component
                     <!-- Hidden when collapsed -->
                     <div {{ $attributes->class(["hidden-when-collapsed"]) }}>
                         <div class="flex items-center gap-2">
-                            <img src="{{ asset('img/logo.png') }}" alt="" style="width: 250px; height: auto;">
+                            <img src="{{ asset('img/logo.png') }}" alt="" style="width: 150px; height: auto;">
                         </div>
                     </div>
 
