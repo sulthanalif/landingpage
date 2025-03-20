@@ -1,245 +1,251 @@
 <?php
 
+use App\ManageDatas;
+use Mary\Traits\Toast;
 use App\Models\Activity;
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use function Livewire\Volt\{state, title, usesPagination, with, uses};
+use Illuminate\Pagination\LengthAwarePaginator;
 
-title('Activity');
+new class extends Component {
+    use Toast, ManageDatas, WithPagination, WithFileUploads;
 
-usesPagination(theme: 'bootstrap');
+    public array $config = [
+        'guides' => false,
+    ];
 
-uses([LivewireAlert::class, WithFileUploads::class]);
+    public string $search = '';
 
-state([
-    'id' => '',
-    'title' => '',
-    'date' => '',
-    'image' => '',
-    'old_image' => '',
-    'status' => '',
-    'search' => '',
-    'perPage' => 10,
-]);
+    public bool $drawer = false;
+    public bool $myModal = false;
+    public bool $modalAlertDelete = false;
+    public bool $modalAlertWarning = false;
+    public bool $upload = false;
+    public ?UploadedFile $file = null;
 
-with(
-    fn() => [
-        'activities' => Activity::query()
-            ->where('title', 'like', "%{$this->search}%")
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage),
-]);
+    //table
+    public array $selected = [];
+    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
+    public int $perPage = 5;
 
-$create = function () {
-    $this->id = '';
-    $this->title = '';
-    $this->date = now()->format('Y-m-d');
-    $this->image = '';
-    $this->old_image = '';
-    $this->status = '';
-};
+    //varActivity
+    public string $oldImage = '';
+    public string $title = '';
+    public string $date = '';
+    public ?UploadedFile $image = null;
+    public bool $status = true;
 
-$edit = function ($id) {
-    $activity = Activity::findOrFail($id);
-    $this->id = $activity->id;
-    $this->title = $activity->title;
-    $this->date = $activity->date;
-    $this->old_image = $activity->image;
-    $this->status = $activity->status;
-};
+    public array $varActivity = ['recordId', 'title', 'date', 'image', 'status', 'oldImage'];
 
-$modalDelete = function ($id) {
-    $this->id = $id;
-};
+    //select status
+    public array $selectStatus = [['id' => true, 'name' => 'Aktif'], ['id' => false, 'name' => 'Tidak aktif']];
 
-$save = function () {
-    $this->validate([
-        'title' => 'required|string|max:255',
-        'date' => 'required|date',
-        'image' => $this->id ? 'nullable' : 'required' .'|image|mimes:jpeg,png,jpg|max:2048',
-        'status' => 'required',
-    ]);
+    public function create(): void
+    {
+        $this->reset($this->varActivity);
+        $this->oldImage = 'img/upload.png';
+        // $this->refresh();
+        $this->dispatch('updatedImage', asset($this->oldImage));
+        $this->drawer = true;
+    }
 
-    try {
-        DB::beginTransaction();
-        if ($this->id) {
-            $activity = Activity::find($this->id);
-            $activity->update([
-                'title' => $this->title,
-                'date' => $this->date,
-                'status' => $this->status,
-            ]);
+    public function detail($id): void
+    {
+        $this->reset($this->varActivity);
+        $activity = Activity::find($id);
+        $this->oldImage = $activity->image ? 'storage/' . $activity->image : 'img/upload.png';
+        $this->recordId = $activity->id;
+        $this->title = $activity->title;
+        $this->date = $activity->date;
+        // $this->image = $activity->image;
+        $this->status = $activity->status;
+        // $this->refresh();
+        $this->dispatch('updatedImage', asset($this->oldImage));
+        $this->drawer = true;
+    }
 
-            if ($this->image) {
-                if (Storage::disk('public')->exists($activity->image)) {
-                    Storage::disk('public')->delete($activity->image);
+    public function save(): void
+    {
+        $this->validate([
+            'title' => 'required|string|max:255',
+            'date' => 'required|date',
+            'image' => $this->recordId ? 'nullable' : 'required' . '|image|mimes:jpeg,png,jpg|max:2048',
+            'status' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            if ($this->recordId) {
+                $activity = Activity::find($this->recordId);
+                $activity->update([
+                    'title' => $this->title,
+                    'date' => $this->date,
+                    'status' => $this->status,
+                ]);
+
+                if ($this->image) {
+                    if (Storage::disk('public')->exists($activity->image)) {
+                        Storage::disk('public')->delete($activity->image);
+                    }
+
+                    $activity->update(['image' => $this->image->store(path: 'images', options: 'public')]);
                 }
-
-                $activity->update(['image' => $this->image->store(path: 'images', options: 'public')]);
+            } else {
+                Activity::create([
+                    'title' => $this->title,
+                    'date' => $this->date,
+                    'image' => $this->image->store(path: 'images', options: 'public'),
+                    'status' => $this->status,
+                ]);
             }
-        } else {
-            Activity::create([
-                'title' => $this->title,
-                'date' => $this->date,
-                'image' => $this->image->store(path: 'images', options: 'public'),
-                'status' => $this->status,
+            DB::commit();
+            $this->success('Activity berhasil disimpan', position: 'toast-bottom');
+            $this->reset($this->varActivity);
+            $this->drawer = false;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $this->error('Activity gagal disimpan', position: 'toast-bottom');
+            Log::channel('debug')->error('Error: ' . $th->getMessage(), [
+                'exception' => $th,
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'code' => $th->getCode(),
+                'trace' => $th->getTraceAsString(),
             ]);
         }
-        DB::commit();
-        $this->alert('success', 'Activity berhasil disimpan');
-        $this->reset(['id', 'title', 'date', 'image', 'status', 'old_image']);
-        $this->dispatch('save');
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        $this->alert('error', 'Activity gagal disimpan');
-        Log::channel('debug')->error('Error: ' . $th->getMessage(), [
-            'exception' => $th,
-            'file' => $th->getFile(),
-            'line' => $th->getLine(),
-            'code' => $th->getCode(),
-            'trace' => $th->getTraceAsString(),
-        ]);
     }
-};
 
-$delete = function () {
-
-    try {
-        DB::beginTransaction();
-        $activity = Activity::find($this->id);
-        if (!$activity) {
-            $this->alert('error', 'Data tidak ditemukan');
-            return;
-        }
-
-        if (Storage::disk('public')->exists($activity->image)) {
-            Storage::disk('public')->delete($activity->image);
-        }
-
-        $activity->delete();
-        DB::commit();
-        $this->alert('success', 'Activity berhasil dihapus');
-        $this->reset('id');
-        $this->dispatch('delete');
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        $this->alert('error', 'Activity gagal dihapus');
-        Log::channel('debug')->error('Error: ' . $th->getMessage(), [
-            'exception' => $th,
-            'file' => $th->getFile(),
-            'line' => $th->getLine(),
-            'code' => $th->getCode(),
-            'trace' => $th->getTraceAsString(),
-        ]);
+    public function datas(): LengthAwarePaginator
+    {
+        return Activity::query()
+            ->where(function ($query) {
+                $query->where('title', 'like', "%{$this->search}%");
+            })
+            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+            ->paginate($this->perPage);
     }
-};
 
-?>
+    public function headers(): array
+    {
+        return [['key' => 'image', 'label' => 'Image'],['key' => 'title', 'label' => 'Title'], ['key' => 'date', 'label' => 'Date'], ['key' => 'status', 'label' => 'Status'], ['key' => 'created_at', 'label' => 'Created At']];
+    }
+
+    public function with(): array
+    {
+        return [
+            'datas' => $this->datas(),
+            'headers' => $this->headers(),
+        ];
+    }
+}; ?>
 
 @script
     <script>
-        Livewire.on('save', () => {
-            $('#exampleModal').modal('hide');
+        $js('create', () => {
+            $wire.create();
+            const previewImage = document.getElementById('previewImage');
+            const oldImage = @json(asset($oldImage)); // Convert ke string agar bisa diakses
+
+            $wire.on('updatedImage', image => {
+                if (image) {
+                    previewImage.src =
+                        image; // Pastikan `image` yang dikirim adalah URL, bukan file
+                } else {
+                    previewImage.src = oldImage; // Kembalikan ke default jika tidak ada gambar
+                }
+            });
         });
 
-        Livewire.on('delete', () => {
-            $('#modalDelete').modal('hide');
-        });
+        $js('detail', (id) => {
+            $wire.detail(id);
+            const previewImage = document.getElementById('previewImage');
+            const oldImage = @json(asset($oldImage)); // Convert ke string agar bisa diakses
+
+            $wire.on('updatedImage', image => {
+                if (image) {
+                    previewImage.src =
+                        image; // Pastikan `image` yang dikirim adalah URL, bukan file
+                } else {
+                    previewImage.src = oldImage; // Kembalikan ke default jika tidak ada gambar
+                }
+            })
+        })
     </script>
 @endscript
 
 <div>
-    <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between items-center py-3">
-            <h3 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-camera"></i> Activities</h3>
-            <div class="float-right">
-                <!-- Button trigger modal -->
-                @can('activity-create')
-                    <button type="button" class="btn btn-sm btn-primary" wire:click="create" data-toggle="modal"
-                        data-target="#exampleModal" data-bs-backdrop="false">
-                        Create
-                    </button>
-                @endcan
+    <!-- HEADER -->
+    <x-header title="Activities" separator>
+        <x-slot:actions>
+            {{-- <div>
+                <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
+                    icon="o-arrow-up-tray" />
             </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <div class="d-flex justify-content-between items-center my-3">
-                    <div>
-                        <select class="form-control form-select" wire:model.live='perPage'
-                            aria-label="Default select example">
-                            <option value="10">10</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <div class="mr-2">
-                        <form class="navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small"
-                                    wire:model.live='search' placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Title</th>
-                            <th>Image</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Date</th>
-                            <th>Title</th>
-                            <th>Image</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @forelse ($activities as $activity)
-                            <tr>
-                                <td>{{ $activity->date }}</td>
-                                <td>{{ $activity->title }}</td>
-                                <td>{{ $activity->image }}</td>
-                                <td>{{ $activity->status ? 'Active' : 'Inactive' }}</td>
-                                <td>{{ $activity->created_at->format('d/m/Y') }}</td>
-                                <td>
-                                    @can('activity-edit')
-                                        <a href="#" class="btn btn-sm btn-primary"
-                                            wire:click="edit({{ $activity->id }})" data-toggle="modal"
-                                            data-target="#exampleModal"><i class="fas fa-edit"></i></a>
-                                    @endcan
-                                    @can('activity-delete')
-                                        <a href="#" class="btn btn-sm btn-danger"
-                                            wire:click='modalDelete({{ $activity->id }})' data-toggle="modal"
-                                            data-target="#modalDelete"><i class="fas fa-trash"></i></a>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center">No activity found</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                {{ $activities->links(data: ['scrollTo' => false]) }}
-            </div>
-        </div>
+            <div>
+                <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
+                    spinner='export' />
+            </div> --}}
+            @can('activity-create')
+                <x-button label="Create" @click="$js.create" responsive icon="o-plus" x-on:click="$wire.$refresh()" />
+            @endcan
+        </x-slot:actions>
+    </x-header>
+
+    <div class="flex justify-end items-center gap-5">
+        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
     </div>
 
-    @include('livewire.back-end.activity-page.form')
-    @include('livewire.back-end.modals.delete')
+    <!-- TABLE  -->
+    <x-card class="mt-5">
+        <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
+            wire:model.live="selected" selectable with-pagination>
+            @scope('cell_image', $data)
+                <img src="{{ asset('storage/' . $data['image']) }}" alt="" style="width: 100px; height: auto">
+            @endscope
+            @scope('cell_title', $data)
+                <p class="cursor-pointer text-blue-500 hover:underline" @click="$js.detail({{ $data['id'] }})">
+                    {{ $data['title'] }}</p>
+            @endscope
+            @scope('cell_status', $data)
+                @if ($data['status'])
+                    <span class="text-green-500">Aktif</span>
+                @else
+                    <span class="text-red-500">Tidak aktif</span>
+                @endif
+            @endscope
+            <x-slot:empty>
+                <x-icon name="o-cube" label="It is empty." />
+            </x-slot:empty>
+        </x-table>
+        @if ($this->selected)
+            <div class="flex justify-end items-center gap-2">
+                @can('category-delete')
+                    <div class="mt-3 flex justify-end">
+                        <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
+                            class="text-red-500" wire:loading.attr="disabled" />
+                    </div>
+                @endcan
+                <div class="mt-3 flex justify-end">
+                    <x-button label="Ubah Status" icon="o-arrow-path-rounded-square"
+                        wire:click="modalAlertWarning = true" spinner class="text-blue-500"
+                        wire:loading.attr="disabled" />
+                </div>
+            </div>
+        @endif
+    </x-card>
+
+    <!-- DRAWER CREATE -->
+    @include('livewire.back-end.activity-page.create')
+
+    <!-- MODAL ALERT DELETE -->
+    @include('livewire.alerts.alert-delete')
+
+    <!-- MODAL ALERT WARNING -->
+    @include('livewire.alerts.alert-warning')
+
+    <!-- MODAL UPLOAD FILE -->
+    @include('livewire.modals.modal-upload-file')
 </div>

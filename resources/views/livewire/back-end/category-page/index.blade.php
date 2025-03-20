@@ -1,212 +1,261 @@
 <?php
 
+use App\ManageDatas;
+use Mary\Traits\Toast;
 use App\Models\Category;
-use Illuminate\Support\Facades\DB;
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Excel;
+use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use function Livewire\Volt\{state, title, usesPagination, with, uses};
+use Illuminate\Pagination\LengthAwarePaginator;
 
-title('Categories');
-uses([LivewireAlert::class]);
-usesPagination(theme: 'bootstrap');
+new #[Title('Categories')] class extends Component {
+    use Toast, ManageDatas, WithPagination, WithFileUploads;
 
-state([
-    'id' => '',
-    'name' => '',
-    'description' => '',
-    'status' => '',
-    'perPage' => 10,
-    'search' => '',
-]);
+    public string $search = '';
 
-with(
-    fn() => [
-        'categories' => Category::query()
-            ->where('name', 'like', "%{$this->search}%")
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage),
-    ],
-);
+    public bool $drawer = false;
+    public bool $myModal = false;
+    public bool $modalAlertDelete = false;
+    public bool $modalAlertWarning = false;
+    public bool $upload = false;
 
-$create = function () {
-    $this->id = '';
-    $this->name = '';
-    $this->description = '';
-    $this->status = '';
-};
+    //table
+    public array $selected = [];
+    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
+    public int $perPage = 5;
 
-$edit = function ($id) {
-    $category = Category::findOrFail($id);
-    $this->id = $category->id;
-    $this->name = $category->name;
-    $this->status = $category->status;
-    $this->description = $category->description;
-};
+    //varCategory
+    public string $name = '';
+    public ?UploadedFile $file = null;
+    public bool $status = true;
+    public string $description = '';
+    public array $varCategory = ['recordId', 'name', 'status', 'description', 'file'];
 
-$modalDelete = function ($id) {
-    $this->id = $id;
-};
+    //select status
+    public array $selectStatus = [['id' => true, 'name' => 'Aktif'], ['id' => false, 'name' => 'Tidak aktif']];
 
-$save = function () {
-    $this->validate([
-        'name' => $this->id ? 'required|unique:categories,name,' . $this->id . ',id' : 'required|unique:categories,name',
-        'description' => 'required',
-        'status' => 'required',
-    ]);
+    public function create(): void
+    {
+        $this->drawer = true;
+        $this->reset($this->varCategory);
+    }
 
-    try {
-        DB::beginTransaction();
-        if ($this->id) {
-            $category = Category::findOrFail($this->id);
-            $category->update([
-                'name' => $this->name,
-                'description' => $this->description,
-            ]);
-        } else {
-            Category::create([
-                'name' => $this->name,
-                'description' => $this->description,
-            ]);
+    public function detail($id): void
+    {
+        $this->reset($this->varCategory);
+        $sub = Category::find($id);
+        $this->recordId = $sub->id;
+        $this->name = $sub->name;
+        $this->status = $sub->status;
+        $this->description = $sub->description;
+        $this->drawer = true;
+    }
+
+    public function modalUpload(): void
+    {
+        $this->upload = true;
+        $this->reset('file');
+    }
+
+    public function downloadTemplate()
+    {
+        $file = public_path('templates/template-category.xlsx');
+
+        if (!file_exists($file)) {
+            $this->error('File tidak ditemukan', position: 'toast-bottom');
+            return;
         }
-        DB::commit();
-        $this->alert('success', 'Category berhasil disimpan');
-        $this->reset(['id', 'name', 'description']);
-        $this->dispatch('save');
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        $this->alert('error', 'Category gagal disimpan');
-        Log::channel('debug')->error('Error: ' . $th->getMessage(), [
-            'exception' => $th,
-            'file' => $th->getFile(),
-            'line' => $th->getLine(),
-            'code' => $th->getCode(),
-            'trace' => $th->getTraceAsString(),
-        ]);
+
+        return Response::download($file);
     }
-};
 
-$delete = function () {
-    try {
-        DB::beginTransaction();
-        $category = Category::findOrFail($this->id);
-        $category->delete();
-        DB::commit();
-        $this->reset('id');
-        $this->alert('success', 'Category berhasil dihapus');
-        $this->dispatch('delete');
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        $this->alert('error', 'Category gagal dihapus');
-        Log::channel('debug')->error('Error: ' . $th->getMessage(), [
-            'exception' => $th,
-            'file' => $th->getFile(),
-            'line' => $th->getLine(),
-            'code' => $th->getCode(),
-            'trace' => $th->getTraceAsString(),
+    public function import(): void
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx',
         ]);
+
+        try {
+            Excel::import(new CategoryImport(), $this->file);
+
+            $this->upload = false;
+            $this->reset('file');
+            $this->success('Data berhasil diupload', position: 'toast-bottom');
+        } catch (\Exception $e) {
+            $this->error('Data gagal diupload', position: 'toast-bottom');
+            Log::channel('debug')->error("message: {$e->getMessage()}  file: {$e->getFile()}  line: {$e->getLine()}");
+        }
     }
-};
 
-?>
-
-@script
-    <script>
-        Livewire.on('save', () => {
-            $('#exampleModal').modal('hide');
+    public function export()
+    {
+        $datas = Category::all();
+        $datas = $datas->map(function ($Category) {
+            return [
+                'name' => $Category->name,
+                'status' => $Category->status == true ? 'Aktif' : 'Tidak aktif',
+                'created_at' => $Category->created_at->format('Y-m-d'),
+            ];
         });
 
-        Livewire.on('delete', () => {
-            $('#modalDelete').modal('hide');
-        });
-    </script>
-@endscript
+        $headers = ['NAMA', 'STATUS', 'DIBUAT PADA'];
+
+        return Excel::download(new ExportDatas($datas, 'Data Category', $headers), 'category_' . date('Y-m-d') . '.xlsx');
+    }
+
+    public function save(): void
+    {
+        $this->setModel(new Category());
+
+        $this->saveOrUpdate(
+            validationRules: [
+                'name' => 'required|string|max:255',
+                'status' => 'required|boolean',
+                'description' => 'nullable|string|max:500',
+            ],
+
+            beforeSave: function ($sub, $component) {
+                $sub->name = $component->name;
+                $sub->status = $component->status;
+                $sub->description = $component->description;
+            },
+        );
+
+        $this->unsetModel();
+        $this->reset($this->varCategory);
+        $this->drawer = false;
+    }
+
+    public function changeStatus(): void
+    {
+        foreach ($this->selected as $id) {
+            $sub = Category::find($id);
+            try {
+                DB::beginTransaction();
+                $sub->status = !$sub->status;
+                $sub->save();
+                DB::commit();
+
+                $this->success('Status berhasil diubah', position: 'toast-bottom');
+                $this->modalAlertWarning = false;
+                $this->reset('selected');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::channel('debug')->error("message: '{$e->getMessage()}',  file: '{$e->getFile()}',  line: {$e->getLine()}");
+            }
+        }
+    }
+
+    public function delete(): void
+    {
+        $this->setModel(new Category());
+
+        foreach ($this->selected as $id) {
+            $this->setRecordId($id);
+            $this->deleteData();
+        }
+
+        $this->reset('selected');
+        $this->unsetRecordId();
+        $this->unsetModel();
+        $this->modalAlertDelete = false;
+    }
+
+    public function datas(): LengthAwarePaginator
+    {
+        return Category::query()
+            ->where(function ($query) {
+                $query->where('name', 'like', "%{$this->search}%");
+            })
+            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+            ->paginate($this->perPage);
+    }
+
+    public function headers(): array
+    {
+        return [['key' => 'name', 'label' => 'Name'], ['key' => 'description', 'label' => 'Description', 'sortable' => false], ['key' => 'status', 'label' => 'Status'], ['key' => 'created_at', 'label' => 'Created At']];
+    }
+
+    public function with(): array
+    {
+        return [
+            'datas' => $this->datas(),
+            'headers' => $this->headers(),
+        ];
+    }
+}; ?>
 
 <div>
-    <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between items-center py-3">
-            <h3 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-tags"></i> Categories</h3>
-            <div class="float-right">
-                <!-- Button trigger modal -->
-                @can('category-create')
-                    <button type="button" class="btn btn-sm btn-primary" wire:click="create" data-toggle="modal"
-                        data-target="#exampleModal" data-bs-backdrop="false">
-                        Create
-                    </button>
-                @endcan
+    <!-- HEADER -->
+    <x-header title="Categories" separator>
+        <x-slot:actions>
+            <div>
+                <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
+                    icon="o-arrow-up-tray" />
             </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <div class="d-flex justify-content-between items-center my-3">
-                    <div>
-                        <select class="form-control form-select" wire:model.live='perPage'
-                            aria-label="Default select example">
-                            <option value="10">10</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <div class="mr-2">
-                        <form class="navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small"
-                                    wire:model.live='search' placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @forelse ($categories as $category)
-                            <tr>
-                                <td>{{ $category->name }}</td>
-                                <td>{{ $category->description }}</td>
-                                <td>{{ $category->status ? 'Active' : 'Inactive' }}</td>
-                                <td>{{ $category->created_at->format('d/m/Y') }}</td>
-                                <td>
-                                    @can('category-edit')
-                                        <a href="#" class="btn btn-sm btn-primary"
-                                            wire:click="edit({{ $category->id }})" data-toggle="modal"
-                                            data-target="#exampleModal"><i class="fas fa-edit"></i></a>
-                                    @endcan
-                                    @can('category-delete')
-                                        <a href="#" class="btn btn-sm btn-danger"
-                                            wire:click='modalDelete({{ $category->id }})' data-toggle="modal"
-                                            data-target="#modalDelete"><i class="fas fa-trash"></i></a>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No category found</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                {{ $categories->links(data: ['scrollTo' => false]) }}
+            <div>
+                <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
+                    spinner='export' />
             </div>
-        </div>
+            @can('category-create')
+                <x-button label="Create" @click="$wire.create" responsive icon="o-plus" />
+            @endcan
+        </x-slot:actions>
+    </x-header>
+
+    <div class="flex justify-end items-center gap-5">
+        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
     </div>
 
-    @include('livewire.back-end.category-page.form')
-    @include('livewire.back-end.modals.delete')
+    <!-- TABLE  -->
+    <x-card class="mt-5">
+        <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
+            wire:model.live="selected" selectable with-pagination>
+            @scope('cell_name', $data)
+                <p class="cursor-pointer text-blue-500 hover:underline" @click="$wire.detail({{ $data['id'] }})">
+                    {{ $data['name'] }}</p>
+            @endscope
+            @scope('cell_status', $data)
+                @if ($data['status'])
+                    <span class="text-green-500">Aktif</span>
+                @else
+                    <span class="text-red-500">Tidak aktif</span>
+                @endif
+            @endscope
+            <x-slot:empty>
+                <x-icon name="o-cube" label="It is empty." />
+            </x-slot:empty>
+        </x-table>
+        @if ($this->selected)
+            <div class="flex justify-end items-center gap-2">
+                @can('category-delete')
+                    <div class="mt-3 flex justify-end">
+                        <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
+                            class="text-red-500" wire:loading.attr="disabled" />
+                    </div>
+                @endcan
+                <div class="mt-3 flex justify-end">
+                    <x-button label="Ubah Status" icon="o-arrow-path-rounded-square"
+                        wire:click="modalAlertWarning = true" spinner class="text-blue-500"
+                        wire:loading.attr="disabled" />
+                </div>
+            </div>
+        @endif
+    </x-card>
+
+    <!-- DRAWER CREATE -->
+    @include('livewire.back-end.category-page.create')
+
+    <!-- MODAL ALERT DELETE -->
+    @include('livewire.alerts.alert-delete')
+
+    <!-- MODAL ALERT WARNING -->
+    @include('livewire.alerts.alert-warning')
+
+    <!-- MODAL UPLOAD FILE -->
+    @include('livewire.modals.modal-upload-file')
 </div>

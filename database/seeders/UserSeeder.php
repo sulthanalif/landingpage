@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
 
         //permission
         $permissions = [
-            'dahsboard',
+            'dashboard',
             'master',
             'user-page',
             'user-create',
@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
         $superAdmin->givePermissionTo(Permission::all());
 
         $admin = Role::findByName('admin');
-        $admin->givePermissionTo('dahsboard');
+        $admin->givePermissionTo('dashboard');
         $admin->givePermissionTo('master');
         $admin->givePermissionTo('category-page');
         $admin->givePermissionTo('category-create');
@@ -79,7 +79,7 @@ class UserSeeder extends Seeder
         $admin->givePermissionTo('mail-delete');
 
         $marketing = Role::findByName('marketing');
-        $marketing->givePermissionTo('dahsboard');
+        $marketing->givePermissionTo('dashboard');
         $marketing->givePermissionTo('master');
         $marketing->givePermissionTo('post-page');
         $marketing->givePermissionTo('post-create');

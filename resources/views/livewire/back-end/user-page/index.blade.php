@@ -1,229 +1,413 @@
 <?php
 
+use App\ManageDatas;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use function Livewire\Volt\{state, title, usesPagination, with, uses};
+use Mary\Traits\Toast;
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-uses([LivewireAlert::class]);
+new #[Title('Users')] class extends Component {
+    use Toast, WithPagination, ManageDatas, WithFileUploads;
 
-usesPagination(theme: 'bootstrap');
+    public string $search = '';
 
-title('Users');
+    public bool $drawer = false;
+    public bool $myModal = false;
+    public bool $showID = false;
 
-state([
-    'id' => '',
-    'name' => '',
-    'email' => '',
-    'password' => '',
-    'status' => '',
-    'role' => '',
-    'perPage' => 10,
-    'search' => '',
-]);
+    //image
+    public array $config = [
+        'guides' => false,
+        'aspectRatio' => 1, // Maintain square aspect ratio
+    ];
+    public ?UploadedFile $image = null;
+    public string $oldImage = '';
 
-with(
-    fn() => [
-        'users' => User::query()
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('email', 'like', '%' . $this->search . '%')
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage),
-    ],
-);
+    //var user
+    public $recordId;
+    public string $name = '';
+    public string $email = '';
+    public string $password = '';
+    public string $role = '';
+    public string $phone = '';
+    public string $address = '';
+    public $roles = [];
 
-$create = function () {
-    $this->reset(['id', 'name', 'email', 'password', 'status', 'role']);
-};
+    public array $varUser = [ 'recordId', 'name', 'email', 'password', 'role', 'roles', 'phone', 'address', 'oldImage', 'image'];
 
-$edit = function ($id) {
-    $user = User::find($id);
-    $this->id = $user->id;
-    $this->name = $user->name;
-    $this->email = $user->email;
-    $this->status = $user->status;
-    $this->role = $user->roles[0]->name;
-};
+    //table
+    public array $selected = [];
+    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
+    public int $perPage = 5;
 
-$modalDelete = function ($id) {
-    $this->id = $id;
-};
+    // Selected option
+    public ?int $role_searchable_id = null;
+    public ?array $permissions_multi_searchable_ids = [];
 
-$save = function () {
-    $this->validate([
-        'name' => 'required',
-        'email' => $this->id ? "required|email|unique:users,email,{$this->id}" : 'required|email|unique:users,email',
-        'password' => $this->id ? 'nullable' : 'required',
-        'status' => 'required',
-        'role' => 'required',
-    ]);
+    // Options list
+    public Collection $rolesSearchable;
+    public Collection $permissionsMultiSearchable;
 
-    try {
-        DB::beginTransaction();
-        if ($this->id) {
-            $user = User::find($this->id);
-            $user->update([
-                'name' => $this->name,
-                'email' => $this->email,
-                'status' => $this->status,
-            ]);
+    //var Role Permission
+    public string $roleName = '';
+    public string $permissionName = '';
 
-            if ($this->password) {
-                $user->update(['password' => Hash::make($this->password)]);
-            }
+    public function mount()
+    {
+        $this->searchSelectRole();
+        $this->searchSelectMultiPermission();
+        $this->selectPermissions();
+    }
 
-            $user->syncRoles([$this->role]);
-        } else {
-            $user = User::create([
-                'name' => $this->name,
-                'email' => $this->email,
-                'password' => Hash::make($this->password),
-                'status' => $this->status,
-            ]);
-            $user->assignRole($this->role);
+    public function updatedRoleSearchableId($value)
+    {
+        $this->selectPermissions();
+    }
+
+    public function selectPermissions(string $value = ''): void
+    {
+        // Pastikan $this->role_searchable_id memiliki nilai
+        if (!$this->role_searchable_id) {
+            $this->permissions_multi_searchable_ids = [];
+            $this->permissionsMultiSearchable = collect([]);
+            return;
         }
-        DB::commit();
-        $this->reset(['id', 'name', 'email', 'password', 'status', 'role']);
 
-        $this->alert('success', 'User berhasil disimpan');
-        $this->dispatch('save');
-    } catch (\Exception $e) {
-        $this->alert('error', 'An error occurred while saving the user.');
-        Log::channel('debug')->error('Error: ' . $e->getMessage(), [
-            'exception' => $e,
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'code' => $e->getCode(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+        // Cari role berdasarkan ID
+        $role = Role::find($this->role_searchable_id);
+
+        if ($role) {
+            // Ambil ID permissions dari role
+            $this->permissions_multi_searchable_ids = $role->permissions->pluck('id')->toArray();
+            $this->permissionsMultiSearchable = Permission::query()
+                ->where('name', 'like', "%$value%")
+                ->orderBy('name')
+                ->get()
+                ->merge($role->permissions);
+        } else {
+            // Jika role tidak ditemukan, set ke array kosong
+            $this->permissions_multi_searchable_ids = [];
+            $this->permissionsMultiSearchable = collect([]);
+        }
     }
-};
 
-$delete = function ($id) {
-    try {
-        DB::beginTransaction();
-        $user = User::find($id);
-        $user->delete();
-        DB::commit();
-        $this->reset('id');
+    // Also called as you type
+    public function searchSelectRole(string $value = '')
+    {
+        // Besides the search results, you must include on demand selected option
+        $selectedOption = Role::where('id', $this->role_searchable_id)->get();
 
-        $this->alert('success', 'User berhasil dihapus');
-        $this->dispatch('delete');
-    } catch (\Exception $e) {
-        $this->reset('id');
-        $this->alert('error', 'An error occurred while deleting the user.');
-
-        Log::channel('debug')->error('Error: ' . $e->getMessage(), [
-            'exception' => $e,
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'code' => $e->getCode(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+        $this->rolesSearchable = Role::query()
+            ->where('name', 'like', "%$value%")
+            ->orderBy('name')
+            ->get()
+            ->merge($selectedOption); // <-- Adds selected option
     }
-};
 
-?>
+    public function searchSelectMultiPermission(string $value = '')
+    {
+        // Besides the search results, you must include on demand selected option
+        $selectedOptions = collect($this->permissions_multi_searchable_ids)->map(fn(int $id) => Permission::where('id', $id)->first())->filter()->values();
 
-@script
-    <script>
-        Livewire.on('save', () => {
-            $('#exampleModal').modal('hide');
-        });
-        Livewire.on('delete', () => {
-            $('#modalDelete').modal('hide');
-        });
-    </script>
-@endscript
+        $this->permissionsMultiSearchable = Permission::query()
+            ->where('name', 'like', "%$value%")
+            ->orderBy('name')
+            ->get()
+            ->merge($selectedOptions); // <-- Adds selected option
+    }
+
+    //options
+    public function saveRole(): void
+    {
+        $this->setModel(new Role());
+
+        $this->saveOrUpdate(
+            validationRules: [
+                'roleName' => ['required', 'string', 'max:255'],
+            ],
+
+            beforeSave: function ($role, $component) {
+                $role->name = $component->roleName;
+            },
+
+            afterSave: function ($role, $component) {
+                $permission = Permission::where('name', 'dashboard-page')->first();
+                $role->permissions()->attach($permission);
+            },
+        );
+
+        $this->unsetModel();
+        $this->reset(['roleName']);
+        $this->mount();
+    }
+
+    public function savePermission(): void
+    {
+        $this->setModel(new Permission());
+
+        $this->saveOrUpdate(
+            validationRules: [
+                'permissionName' => ['required', 'string', 'max:255'],
+            ],
+
+            beforeSave: function ($permission, $component) {
+                $permission->name = $component->permissionName;
+            },
+        );
+
+        $this->updatePermissionSuperAdmin($this->permissionName);
+        $this->reset(['permissionName']);
+        $this->unsetModel();
+        $this->mount();
+    }
+
+    public function saveRolePermission(): void
+    {
+        $this->validate([
+            'role_searchable_id' => 'required',
+            'permissions_multi_searchable_ids' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $role = Role::find($this->role_searchable_id);
+            $role->syncPermissions($this->permissions_multi_searchable_ids);
+            DB::commit();
+            $this->success('Role updated.', position: 'toast-bottom');
+            $this->drawer = false;
+            $this->reset(['role_searchable_id', 'permissions_multi_searchable_ids']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $this->warning('Will update role', $th->getMessage(), position: 'toast-bottom');
+            $this->drawer = false;
+        }
+    }
+
+    public function updatePermissionSuperAdmin(string $permissionName): void
+    {
+        $superadmin = Role::where('name', 'Super Admin')->first();
+        $permission = Permission::where('name', $permissionName)->first();
+
+        if ($superadmin) {
+            $superadmin->permissions()->attach($permission);
+            $superadmin->save();
+        }
+    }
+
+    public function delete(): void
+    {
+        $this->setModel(new User());
+
+        foreach ($this->selected as $userId) {
+            $this->setRecordId($userId);
+            $this->deleteData(
+                beforeDelete: function ($id, $component) {
+                    $user = User::find($id);
+                    $user->roles()->detach();
+                },
+            );
+        }
+        $this->reset('selected');
+        $this->unsetRecordId();
+        $this->unsetModel();
+    }
+
+    public function edit($id): void
+    {
+        $this->reset($this->varUser);
+        $user = User::with('roles')->find($id);
+
+        $this->recordId = $user->id;
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->password = '';
+        $this->role = $user->roles->first()->id;
+        $this->roles = Role::all();
+        $this->oldImage = $user->image ? 'storage/' . $user->image : 'img/user-avatar.png';
+
+        $this->myModal = true;
+    }
+
+    public function create(): void
+    {
+        $this->reset($this->varUser);
+        // dump($this->oldImage);
+        $this->roles = Role::all();
+        $this->myModal = true;
+    }
+
+
+    public function save(): void
+    {
+        $this->setModel(new User());
+
+        if ($this->recordId) {
+            $this->saveOrUpdate(
+                validationRules: [
+                    'name' => ['required', 'string', 'max:255'],
+                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->recordId],
+                    // 'bse_id' => ['required', 'string', 'max:255', 'unique:bses,bse_id,' . $this->recordId . ',user_id,user_id'],
+                    'password' => ['nullable', 'string', 'min:8'],
+                    'role' => ['required'],
+                    'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+                ],
+
+                beforeSave: function ($user, $component) {
+                    $user->email = $component->email;
+                    if ($component->password) {
+                        $user->password = Hash::make($component->password);
+                    }
+                    if ($component->image) {
+                        if ($user->image) {
+                            $component->deleteImage($user->image);
+                        }
+                        $path = $component->uploadImage($component->image, 'users');
+                        $user->image = $path;
+                    }
+                    if ($component->bse_id) {
+                        $user->bse->create([
+                            'bse_id' => $component->bse_id,
+                        ]);
+                    }
+                },
+
+                afterSave: function ($user, $component) {
+                    $role = Role::find($component->role);
+                    $user->roles()->detach();
+                    $user->assignRole($role->name);
+                },
+            );
+        } else {
+            $this->saveOrUpdate(
+                validationRules: [
+                    'name' => ['required', 'string', 'max:255'],
+                    // 'bse_id' => ['required', 'string', 'max:255', 'unique:users'],
+                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                    'password' => ['required', 'string', 'min:8'],
+                    'role' => ['required'],
+                ],
+
+                beforeSave: function ($user, $component) {
+                    $user->name = $component->name;
+                    $user->email = $component->email;
+                    $user->password = Hash::make($component->password);
+                    if ($component->image) {
+                        $path = $component->uploadImage($component->image, 'users');
+                        $user->image = $path;
+                    }
+                    if ($component->bse_id) {
+                        $user->bse->update([
+                            'bse_id' => $component->bse_id,
+                        ]);
+                    }
+                },
+
+                afterSave: function ($user, $component) {
+                    $role = Role::find($component->role);
+                    $user->assignRole($role->name);
+                },
+            );
+        }
+
+        $this->reset($this->varUser);
+        $this->unsetModel();
+        $this->myModal = false;
+    }
+
+    public function headers(): array
+    {
+        return [['key' => 'id', 'label' => '', 'class' => 'w-1'], ['key' => 'name', 'label' => 'Nama', 'class' => 'w-64'], ['key' => 'roles.0.name', 'label' => 'Role', 'class' => 'w-40', 'sortable' => false], ['key' => 'email', 'label' => 'E-mail'], ['key' => 'created_at', 'label' => 'Dibuat pada']];
+    }
+
+    public function datas(): LengthAwarePaginator
+    {
+        return User::query()
+            ->with('roles') // Eager load roles
+            ->where(function ($query) {
+                $query
+                    ->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('email', 'like', "%{$this->search}%")
+                    ->orWhereHas('roles', function ($query) {
+                        $query->where('name', 'like', "%{$this->search}%");
+                    });
+            })
+            ->where('id', '!=', Auth::id()) // Exclude current user
+            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+            ->paginate($this->perPage);
+    }
+
+    public function with(): array
+    {
+        return [
+            'datas' => $this->datas(),
+            'headers' => $this->headers(),
+        ];
+    }
+
+    /**
+     * For demo purpose, this is a static collection.
+     *
+     * On real projects you do it with Eloquent collections.
+     * Please, refer to maryUI docs to see the eloquent examples.
+     */
+}; ?>
 
 <div>
-    <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between items-center py-3">
-            <h3 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-users"></i> Users</h3>
-            <div class="float-right">
-                <!-- Button trigger modal -->
-                @can('user-create')
-                    <button type="button" class="btn btn-sm btn-primary" wire:click="create" data-toggle="modal"
-                        data-target="#exampleModal">
-                        Create
-                    </button>
-                @endcan
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <div class="d-flex justify-content-between items-center my-3">
-                    <div>
-                        <select class="form-control form-select" wire:model.live='perPage'
-                            aria-label="Default select example">
-                            <option value="10">10</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <div class="mr-2">
-                        <form class="navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small"
-                                    wire:model.live='search' placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
-                            </div>
-                        </form>
-                    </div>
+    <!-- HEADER -->
+    <x-header title="Data User" separator>
+        <x-slot:middle class="!justify-end">
+            <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+        </x-slot:middle>
+        <x-slot:actions>
+            @can('user-create')
+                <x-button label="Tambah" @click="$wire.create" responsive icon="o-plus" />
+            @endcan
+            @can('options')
+                <x-button label="Options" @click="$wire.drawer = true" responsive icon="o-cog" />
+            @endcan
+        </x-slot:actions>
+    </x-header>
+
+    <!-- TABLE  -->
+    <x-card>
+        <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
+            wire:model.live="selected" selectable with-pagination>
+            @scope('cell_id', $data)
+                <x-avatar :image="$data->image ? asset('storage/' . $data->image) : asset('img/user-avatar.png')" class="!w-14 !rounded-lg" />
+            @endscope
+            @scope('cell_roles.0.name', $data)
+                <x-badge :value="$data['roles'][0]['name']"
+                    class="{{ $data['roles'][0]['name'] == 'Admin' ? 'badge-warning' : 'badge-primary' }}" />
+            @endscope
+            @scope('actions', $data)
+                <x-button icon="o-eye" wire:click="edit({{ $data['id'] }})" class="btn-ghost btn-sm text-primary-500" />
+            @endscope
+            <x-slot:empty>
+                <x-icon name="o-cube" label="It is empty." />
+            </x-slot:empty>
+        </x-table>
+        @can('user-delete')
+            @if ($this->selected)
+                <div class="mt-2">
+                    <x-button label="Hapus" icon="o-trash" wire:click="delete" spinner class="btn-ghost  text-red-500"
+                        wire:confirm="Are you sure?" wire:loading.attr="disabled" />
                 </div>
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @forelse ($users as $user)
-                            <tr>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->status ? 'Active' : 'Inactive' }}</td>
-                                <td>{{ $user->created_at->format('d/m/Y') }}</td>
-                                <td>
-                                    @can('user-edit')
-                                        <a href="#" class="btn btn-sm btn-primary"
-                                            wire:click="edit({{ $user->id }})" data-toggle="modal"
-                                            data-target="#exampleModal"><i class="fas fa-edit"></i></a>
-                                    @endcan
-                                    @can('user-delete')
-                                        <a href="#" class="btn btn-sm btn-danger"
-                                            wire:click='modalDelete({{ $user->id }})' data-toggle="modal"
-                                            data-target="#modalDelete"><i class="fas fa-trash"></i></a>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No users found</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                {{ $users->links(data: ['scrollTo' => false]) }}
-            </div>
-        </div>
-    </div>
+            @endif
+        @endcan
+    </x-card>
 
-    @include('livewire.back-end.user-page.form')
-    @include('livewire.back-end.modals.delete')
+    <!-- FILTER DRAWER -->
+    @include('livewire.back-end.user-page.options')
 
+    {{-- modal --}}
+    @include('livewire.back-end.user-page.modal')
 </div>

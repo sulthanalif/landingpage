@@ -1,163 +1,196 @@
 <?php
 
+use App\ManageDatas;
 use App\Models\Post;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use function Livewire\Volt\{state, title, usesPagination, with, uses};
+use Mary\Traits\Toast;
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-title('Posts');
-uses([LivewireAlert::class]);
-usesPagination(theme: 'bootstrap');
+new class extends Component {
+    use Toast, ManageDatas, WithPagination, WithFileUploads;
 
-state([
-    'id' => '',
-    'perPage' => 10,
-    'search' => '',
-]);
+    public string $search = '';
 
-$modalDelete = function ($id) {
-    $this->id = $id;
-};
+    public bool $drawer = false;
+    public bool $myModal = false;
+    public bool $modalAlertDelete = false;
+    public bool $modalAlertWarning = false;
+    public bool $upload = false;
 
-$delete = function () {
-    try {
-        DB::beginTransaction();
-        $post = Post::find($this->id);
-        $post->delete();
-        DB::commit();
-        $this->reset('id');
-        $this->dispatch('delete');
-        $this->alert('success', 'Post berhasil dihapus');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        $this->reset('id');
-        $this->alert('error', 'An error occurred while deleting the post.');
+    //table
+    public array $selected = [];
+    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
+    public int $perPage = 5;
 
-        Log::channel('debug')->error('Error: ' . $e->getMessage(), [
-            'exception' => $e,
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'code' => $e->getCode(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+    public ?UploadedFile $file = null;
+
+    public function modalUpload(): void
+    {
+        $this->upload = true;
+        $this->reset('file');
     }
-};
 
-with(
-    fn() => [
-        'posts' => Post::query()
-            ->with('category', 'user')
-            ->where('title', 'like', "%{$this->search}%")
-            ->orWhere('sub_title', 'like', "%{$this->search}%")
-            ->orWhere('slug', 'like', "%{$this->search}%")
-            ->whereHas('category', fn($q) => $q->where('name', 'like', "%{$this->search}%"))
-            ->whereHas('user', fn($q) => $q->where('name', 'like', "%{$this->search}%"))
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage),
-    ],
-);
+    public function downloadTemplate()
+    {
+        $file = public_path('templates/template-Post.xlsx');
 
-?>
+        if (!file_exists($file)) {
+            $this->error('File tidak ditemukan', position: 'toast-bottom');
+            return;
+        }
 
-@script
-    <script>
-        Livewire.on('delete', () => {
-            $('#modalDelete').modal('hide');
+        return Response::download($file);
+    }
+
+    public function import(): void
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        try {
+            Excel::import(new PostImport(), $this->file);
+
+            $this->upload = false;
+            $this->reset('file');
+            $this->success('Data berhasil diupload', position: 'toast-bottom');
+        } catch (\Exception $e) {
+            $this->error('Data gagal diupload', position: 'toast-bottom');
+            Log::channel('debug')->error("message: {$e->getMessage()}  file: {$e->getFile()}  line: {$e->getLine()}");
+        }
+    }
+
+    public function export()
+    {
+        $datas = Post::all();
+        $datas = $datas->map(function ($Post) {
+            return [
+                'name' => $Post->name,
+                'status' => $Post->status == true ? 'Aktif' : 'Tidak aktif',
+                'created_at' => $Post->created_at->format('Y-m-d'),
+            ];
         });
-    </script>
-@endscript
+
+        $headers = ['NAMA', 'STATUS', 'DIBUAT PADA'];
+
+        return Excel::download(new ExportDatas($datas, 'Data Post', $headers), 'Post_' . date('Y-m-d') . '.xlsx');
+    }
+
+
+
+    public function datas(): LengthAwarePaginator
+    {
+        return Post::query()
+            ->with('category', 'user')
+            ->where(function ($query) {
+                $query->where('title', 'like', "%{$this->search}%")
+                    ->orWhere('sub_title', 'like', "%{$this->search}%")
+                    ->orWhere('slug', 'like', "%{$this->search}%");
+            })
+            ->whereHas('category', function ($query) {
+                $query->where('name', 'like', "%{$this->search}%");
+            })
+            ->whereHas('user', function ($query) {
+                $query->where('name', 'like', "%{$this->search}%");
+            })
+            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+            ->paginate($this->perPage);
+    }
+
+    public function headers(): array
+    {
+        return [
+            ['key' => 'title', 'label' => 'Title'],
+            ['key' => 'category.name', 'label' => 'Category'],
+            ['key' => 'user.name', 'label' => 'User'],
+            ['key' => 'body', 'label' => 'Body'],
+            ['key' => 'status', 'label' => 'Status'],
+            ['key' => 'created_at', 'label' => 'Created At'],
+        ];
+    }
+
+    public function with(): array
+    {
+        return [
+            'datas' => $this->datas(),
+            'headers' => $this->headers(),
+        ];
+    }
+}; ?>
 
 <div>
-    <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between items-center py-3">
-            <h3 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-paper-plane"></i> Posts</h3>
-            <div class="float-right">
-                <!-- Button trigger modal -->
-                @can('post-create')
-                    <a href="{{ route('post.form') }}" class="btn btn-sm btn-primary">
-                        Create
-                    </a>
-                @endcan
+    <!-- HEADER -->
+    <x-header title="Posts" separator>
+        <x-slot:actions>
+            <div>
+                <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
+                    icon="o-arrow-up-tray" />
             </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <div class="d-flex justify-content-between items-center my-3">
-                    <div>
-                        <select class="form-control form-select" wire:model.live='perPage'
-                            aria-label="Default select example">
-                            <option value="10">10</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <div class="mr-2">
-                        <form class="navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small"
-                                    wire:model.live='search' placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Slug</th>
-                            <th>Category</th>
-                            <th>Writer</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Title</th>
-                            <th>Slug</th>
-                            <th>Category</th>
-                            <th>Writer</th>
-                            <th>Status</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @forelse ($posts as $post)
-                            <tr>
-                                <td>{{ $post->title }}</td>
-                                <td>{{ $post->slug }}</td>
-                                <td>{{ $post->category->name }}</td>
-                                <td>{{ $post->user->name }}</td>
-                                <td>{{ $post->status ? 'Active' : 'Inactive' }}</td>
-                                <td>{{ $post->created_at->format('d/m/Y') }}</td>
-                                <td>
-                                    @can('post-edit')
-                                        <a href="{{ route('post.form', ['slug_url' => $post->slug]) }}"
-                                            class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                                    @endcan
-                                    @can('post-delete')
-                                        <a href="#" class="btn btn-sm btn-danger"
-                                            wire:click='modalDelete({{ $post->id }})' data-toggle="modal"
-                                            data-target="#modalDelete"><i class="fas fa-trash"></i></a>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No Posts found</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                {{ $posts->links(data: ['scrollTo' => false]) }}
+            <div>
+                <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
+                    spinner='export' />
             </div>
-        </div>
+            @can('post-create')
+                <x-button label="Create" link="{{ route('post.form') }}" responsive icon="o-plus" />
+            @endcan
+        </x-slot:actions>
+    </x-header>
+
+    <div class="flex justify-end items-center gap-5">
+        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
     </div>
 
-    {{-- @include('livewire.back-end.post-page.form') --}}
-    @include('livewire.back-end.modals.delete')
+    <!-- TABLE  -->
+    <x-card class="mt-5">
+        <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
+            wire:model.live="selected" selectable with-pagination>
+            @scope('cell_title', $data)
+                <a class="cursor-pointer text-blue-500 hover:underline" href="{{ route('post.form', ['url_slug' => $data['slug']]) }}" wire:navigate>
+                    {{ $data['title'] }}</a>
+            @endscope
+            @scope('cell_body', $data)
+                {{ Str::limit(strip_tags($data['body']), 25) }}
+            @endscope
+            @scope('cell_status', $data)
+                @if ($data['status'])
+                    <span class="text-green-500">Aktif</span>
+                @else
+                    <span class="text-red-500">Tidak aktif</span>
+                @endif
+            @endscope
+            <x-slot:empty>
+                <x-icon name="o-cube" label="It is empty." />
+            </x-slot:empty>
+        </x-table>
+        @if ($this->selected)
+            <div class="flex justify-end items-center gap-2">
+                @can('post-delete')
+                    <div class="mt-3 flex justify-end">
+                        <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
+                            class="text-red-500" wire:loading.attr="disabled" />
+                    </div>
+                @endcan
+                <div class="mt-3 flex justify-end">
+                    <x-button label="Ubah Status" icon="o-arrow-path-rounded-square"
+                        wire:click="modalAlertWarning = true" spinner class="text-blue-500"
+                        wire:loading.attr="disabled" />
+                </div>
+            </div>
+        @endif
+    </x-card>
+
+    <!-- DRAWER CREATE -->
+    {{-- @include('livewire.back-end.Post-page.create') --}}
+
+    <!-- MODAL ALERT DELETE -->
+    @include('livewire.alerts.alert-delete')
+
+    <!-- MODAL ALERT WARNING -->
+    @include('livewire.alerts.alert-warning')
+
+    <!-- MODAL UPLOAD FILE -->
+    @include('livewire.modals.modal-upload-file')
 </div>

@@ -1,130 +1,110 @@
 <?php
 
+use Mary\Traits\Toast;
+use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\RateLimiter;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use function Livewire\Volt\{state, title, layout, action, uses};
+use Livewire\Attributes\{Title, Layout};
 
-uses([LivewireAlert::class]);
+new
+#[Title('Login')]
+#[Layout('components.layouts.guest')]
+class extends Component {
+    use Toast;
 
-title('Login');
+    public string $email;
+    public string $password;
+    public bool $remember = false;
 
-layout('components.layouts.guest');
+    public function login(): void
+    {
+        $this->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-state([
-    'email' => '',
-    'password' => '',
-    'remember' => false,
-    'error' => '',
-]);
+        $this->ensureIsNotRateLimited();
 
-$login = function () {
-    $this->validate([
-        'email' => 'required|email|exists:users,email',
-        'password' => 'required|min:6',
-    ]);
+        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+            RateLimiter::hit($this->throttleKey());
 
-    $credentials = [
-        'email' => $this->email,
-        'password' => $this->password,
-    ];
+            Log::channel('auth')->warning('User failed login', [
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->header('User-Agent'),
+                'time' => now()->toDateTimeString(),
+                'email' => $this->email,
+            ]);
 
-    $this->ensureIsNotRateLimited();
+            $this->warning('Email atau password salah.', position: 'toast-bottom');
+            return;
+        }
 
-    if (Auth::attempt($credentials, $this->remember)) {
         RateLimiter::clear($this->throttleKey());
+
         Session::regenerate();
+
         Log::channel('auth')->info('User logged in', [
-            'user' => Auth::user(),
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'url' => request()->url(),
+            'user' => auth()->user(),
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->header('User-Agent'),
+            'time' => now()->toDateTimeString(),
         ]);
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    } else {
-        RateLimiter::hit($this->throttleKey());
-        $this->alert('error', 'Password salah');
-        Log::channel('auth')->error('Login failed', [
-            'email' => $this->email,
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'url' => request()->url(),
+        $this->redirectIntended(default: route ('dashboard'), navigate: true);
+    }
+
+    protected function ensureIsNotRateLimited(): void
+    {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+            return;
+        }
+
+        event(new Lockout(request()));
+
+        $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => __('auth.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
         ]);
     }
-};
 
-/**
- * Get the authentication rate limiting throttle key.
- */
-$throttleKey = function ()
-{
-    return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
-};
-
-/**
- * Ensure the authentication request is not rate limited.
- */
-$ensureIsNotRateLimited = function ()
-{
-    if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-        return;
+    /**
+     * Get the authentication rate limiting throttle key.
+     */
+    protected function throttleKey(): string
+    {
+        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
     }
+}; ?>
 
-    event(new Lockout(request()));
-
-    $seconds = RateLimiter::availableIn($this->throttleKey());
-
-    throw ValidationException::withMessages([
-        'email' => __('auth.throttle', [
-            'seconds' => $seconds,
-            'minutes' => ceil($seconds / 60),
-        ]),
-    ]);
-};
-
-?>
-
-<div>
-    <div class="card o-hidden border-0 shadow-lg my-5 mx-auto col-lg-5">
-        <div class="card-body p-0">
-            <div class="row d-flex justify-content-center items-center">
-                <div class="col-lg-12">
-                    <div class="p-5">
-                        <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">Login</h1>
-                        </div>
-                        <form class="user" wire:submit="login">
-                            <div class="form-group">
-                                <input type="email" class="form-control form-control-user" wire:model="email"
-                                    placeholder="Enter email...">
-                                @error('email')
-                                    <span class="text-danger text-sm">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control form-control-user" wire:model="password"
-                                    placeholder="Password">
-                                @error('password')
-                                    <span class="text-danger text-sm">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox small">
-                                    <input type="checkbox" class="custom-control-input" wire:model="remember" id="customCheck">
-                                    <label class="custom-control-label" for="customCheck">Remember Me</label>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-user btn-block">
-                                Login
-                            </button>
-                        </form>
-                        <hr>
+<div class="flex items-center justify-center min-h-screen h-screen">
+    <div class="w-full max-w-md">
+        <div class="rounded-lg shadow p-6 bg-base-100">
+            <div class="flex w-full justify-center">
+                <x-app-brand class="mb-4"  />
+            </div>
+            <!-- <div class="font-bold text-2xl text-center">
+                <p>Login</p>
+            </div> -->
+            <div class="mt-6">
+                <x-form wire:submit="login">
+                    <x-input label="Email" icon-right="o-user" type="email" wire:model="email" inline  autofocus />
+                    <x-password label="Password" type="password" wire:model="password" inline right />
+                    <div class="flex justify-between items-center my-3">
+                        <x-toggle label="Ingat saya" wire:model="remember" />
+                        {{-- <a class=" cursor-pointer hover:underline" href="{{ route('forgot-password') }}"
+                            wire:navigate>Lupa Password?</a> --}}
                     </div>
-                </div>
+                    <x-slot:actions>
+                        <x-button label="Login" class="btn-primary" type="submit" spinner="login" />
+                    </x-slot:actions>
+                </x-form>
             </div>
         </div>
     </div>

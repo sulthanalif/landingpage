@@ -20,17 +20,6 @@ Route::get('/contact', [LandingpageController::class, 'contact']);
 
 Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
-Route::post('/upload-image', function (Request $request) {
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $path = $file->store('uploads', 'public'); // Simpan di storage/app/public/uploads
-
-            return response()->json(['location' => asset("storage/$path")]); // Kembalikan URL gambar
-        }
-
-        return response()->json(['error' => 'No file uploaded'], 400);
-    });
-
 Route::middleware(['guest'])->group(function () {
     Volt::route('login', 'login')->name('login');
 });
@@ -46,7 +35,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::prefix('master')->middleware('can:master')->group(function () {
         Volt::route('/category', 'back-end.category-page.index')->middleware('can:category-page')->name('category');
         Volt::route('/post', 'back-end.post-page.index')->middleware('can:post-page')->name('post');
-        Volt::route('/post/form', 'back-end.post-page.form')->name('post.form');
+        Volt::route('/post/form', 'back-end.post-page.create')->name('post.form');
         Volt::route('/mail', 'back-end.mail-page.index')->middleware('can:mail-page')->name('mail');
         VOlt::route('/activity', 'back-end.activity-page.index')->middleware('can:activity-page')->name('activity');
 

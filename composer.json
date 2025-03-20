@@ -14,9 +14,11 @@
         "jantinnerezo/livewire-alert": "^3.0",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.5",
-        "livewire/volt": "^1.6",
+        "livewire/livewire": "^3.6",
+        "livewire/volt": "^1.7",
+        "maatwebsite/excel": "^3.1",
         "opcodesio/log-viewer": "^3.15",
+        "robsontenorio/mary": "^1.41",
         "spatie/laravel-permission": "^6.15"
     },
     "require-dev": {

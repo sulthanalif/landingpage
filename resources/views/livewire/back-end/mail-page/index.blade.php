@@ -1,173 +1,92 @@
 <?php
 
+use Mary\Traits\Toast;
 use App\Models\MailBox;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use function Livewire\Volt\{state, with, uses, title, usesPagination};
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-usesPagination(theme: 'bootstrap');
+new class extends Component {
+    use WithPagination, Toast;
 
-uses([LivewireAlert::class]);
+    public string $search = '';
 
-title('Mail Box');
+     //table
+    public array $selected = [];
+    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
+    public int $perPage = 5;
 
-state([
-    'id' => '',
-    'name' => '',
-    'email' => '',
-    'phone' => '',
-    'subject' => '',
-    'message' => '',
-    'perPage' => 10,
-    'search' => '',
-]);
-
-with(
-    fn() => [
-        'mails' => MailBox::query()
-            ->where('name', 'like', "%{$this->search}%")
-            ->orWhere('email', 'like', "%{$this->search}%")
-            ->orWhere('phone', 'like', "%{$this->search}%")
-            ->orWhere('subject', 'like', "%{$this->search}%")
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage),
-    ],
-);
-
-$modalDelete = fn($id) => ($this->id = $id);
-
-$delete = function () {
-    try {
-        DB::beginTransaction();
-        MailBox::find($this->id)->delete();
-        DB::commit();
-        $this->reset('id');
-        $this->alert('success', 'Mail berhasil dihapus');
-        $this->dispatch('delete');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        $this->reset('id');
-        $this->alert('error', 'Mail gagal dihapus');
-
-        Log::channel('debug')->error('Error: ' . $e->getMessage(), [
-            'exception' => $e,
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'code' => $e->getCode(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+    public function datas(): LengthAwarePaginator
+    {
+        return MailBox::query()
+            ->where(function ($query) {
+                $query->where('subject', 'like', "%{$this->search}%")
+                    ->orWhere('email', 'like', "%{$this->search}%")
+                    ->orWhere('message', 'like', "%{$this->search}%")
+                    ->orWhere('name', 'like', "%{$this->search}%")
+                    ->orWhere('phone', 'like', "%{$this->search}%");
+            })
+            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+            ->paginate($this->perPage);
     }
-};
 
-$show = function ($id) {
-    $mail = MailBox::find($id);
+    public function headers(): array
+    {
+        return [
+            ['key' => 'name', 'label' => 'Name'],
+            ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'phone', 'label' => 'Phone'],
+            ['key' => 'subject', 'label' => 'Subject'],
+            ['key' => 'message', 'label' => 'Message'],
+            ['key' => 'created_at', 'label' => 'Created At'],
+        ];
+    }
 
-    $this->name = $mail->name;
-    $this->last_name = $mail->last_name;
-    $this->email = $mail->email;
-    $this->phone = $mail->phone;
-    $this->subject = $mail->subject;
-    $this->message = $mail->message;
-};
+    public function with(): array
+    {
+        return [
+            'datas' => $this->datas(),
+            'headers' => $this->headers(),
+        ];
+    }
 
-?>
-@script
-    <script>
-        Livewire.on('delete', () => {
-            $('#modalDelete').modal('hide');
-        });
-    </script>
-@endscript
+}; ?>
 
 <div>
-    <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between items-center py-3">
-            <h3 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-envelope"></i> Mail Box</h3>
-            <div class="float-right">
-                <!-- Button trigger modal -->
+    <!-- HEADER -->
+    <x-header title="Mail Box" separator>
 
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <div class="d-flex justify-content-between items-center my-3">
-                    <div>
-                        <select class="form-control form-select" wire:model.live='perPage'
-                            aria-label="Default select example">
-                            <option value="10">10</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <div class="mr-2">
-                        <form class="navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small"
-                                    wire:model.live='search' placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Created_at</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @forelse ($mails as $mail)
-                            <tr>
-                                <td>{{ $mail->name }}</td>
-                                <td>{{ $mail->email }}</td>
-                                <td>{{ $mail->phone ?? '-' }}</td>
-                                <td>{{ $mail->subject }}</td>
-                                <td>{{ strlen($mail->message) > 25 ? substr($mail->message, 0, 25) . '...' : $mail->message }}
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($mail->created_at)->locale('id_ID')->isoFormat('DD MMMM YYYY') }}
-                                </td>
-                                <td style="width: 10%">
-                                    @can('mail-show')
-                                        <a href="#" class="btn btn-sm btn-primary"
-                                            wire:click="show({{ $mail->id }})" data-toggle="modal"
-                                            data-target="#exampleModal"><i class="fas fa-eye"></i></a>
-                                    @endcan
-                                    @can('mail-delete')
-                                        <a href="#" class="btn btn-sm btn-danger"
-                                            wire:click='modalDelete({{ $mail->id }})' data-toggle="modal"
-                                            data-target="#modalDelete"><i class="fas fa-trash"></i></a>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center">No mail found</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                {{ $mails->links(data: ['scrollTo' => false]) }}
-            </div>
-        </div>
+    </x-header>
+
+    <div class="flex justify-end items-center gap-5">
+        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
     </div>
-    @include('livewire.back-end.mail-page.show')
-    @include('livewire.back-end.modals.delete')
+
+    <!-- TABLE  -->
+    <x-card class="mt-5">
+        <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
+             with-pagination>
+            @scope('cell_message', $data)
+                {{ Str::limit($data['message'], 25) }}
+            @endscope
+            <x-slot:empty>
+                <x-icon name="o-cube" label="It is empty." />
+            </x-slot:empty>
+        </x-table>
+        {{-- @if ($this->selected)
+            <div class="flex justify-end items-center gap-2">
+                @can('post-delete')
+                    <div class="mt-3 flex justify-end">
+                        <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
+                            class="text-red-500" wire:loading.attr="disabled" />
+                    </div>
+                @endcan
+                <div class="mt-3 flex justify-end">
+                    <x-button label="Ubah Status" icon="o-arrow-path-rounded-square"
+                        wire:click="modalAlertWarning = true" spinner class="text-blue-500"
+                        wire:loading.attr="disabled" />
+                </div>
+            </div>
+        @endif --}}
+    </x-card>
 </div>
