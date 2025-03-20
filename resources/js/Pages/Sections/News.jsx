@@ -1,6 +1,21 @@
 import React from "react";
 
 const News = ({ posts }) => {
+    const limitText = (html, limit = 50) => {
+        if (!html) return "";
+
+        const sanitizedHtml = html.replace(/<img[^>]*>/g, "");
+
+        const tempElement = document.createElement("div");
+        tempElement.innerHTML = sanitizedHtml;
+        const textContent =
+            tempElement.textContent || tempElement.innerText || "";
+
+        return textContent.length > limit
+            ? textContent.substring(0, limit) + "..."
+            : textContent;
+    };
+
     return (
         <div className="news">
             <div className="container">
@@ -53,7 +68,13 @@ const News = ({ posts }) => {
                                         </ul>
                                     </div>
                                     <div className="news_post_text">
-                                        <p>{posts.data[0]?.body}</p>
+                                        <p
+                                            dangerouslySetInnerHTML={{
+                                                __html: limitText(
+                                                    posts.data[0]?.body
+                                                ),
+                                            }}
+                                        />
                                     </div>
                                     <div className="news_post_link">
                                         <a href={`/posts/${posts.data[0]?.id}`}>

@@ -25,7 +25,7 @@ const Footer = () => {
                                                     className="d-flex align-items-center"
                                                 >
                                                     <img
-                                                        src="/sbadmin/img/logo.png"
+                                                        src="/img/logo.png"
                                                         className="img-fluid"
                                                         style={{
                                                             maxWidth: "70px",

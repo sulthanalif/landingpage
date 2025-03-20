@@ -61,4 +61,9 @@ class LandingpageController extends Controller
     {
         return Inertia::render('Contact');
     }
+
+    public function register()
+    {
+        return Inertia::render('Register');
+    }
 }

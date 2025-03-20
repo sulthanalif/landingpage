@@ -70,6 +70,9 @@ const Navbar = ({ isActive, closeMenu }) => {
                         <li className="menu_mm">
                             <Link href="/contact">Contact</Link>
                         </li>
+                        <li className="menu_mm">
+                            <Link href="/register">Register</Link>
+                        </li>
                     </ul>
                 </nav>
             </div>

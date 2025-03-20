@@ -17,6 +17,7 @@ Route::get('/apply-admission', [LandingpageController::class, 'apply']);
 Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademic']);
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
+Route::get('/register', [LandingpageController::class, 'register']);
 
 Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
