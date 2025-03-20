@@ -6,15 +6,24 @@ use Mary\Traits\Toast;
 use App\Models\Category;
 use Livewire\Attributes\Url;
 use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
 new #[Title('Form Post')] class extends Component {
-    use Toast, ManageDatas;
+    use Toast, ManageDatas, WithFileUploads;
 
     //url
     #[Url]
     public $url_slug = '';
+    public array $config = [
+        'plugins' => 'autoresize',
+        'guides' => false,
+        'min_height' => 500,
+        'max_height' => 500,
+        'statusbar' => false,
+    ];
 
     //varPost
     public string $title = '';
@@ -22,9 +31,10 @@ new #[Title('Form Post')] class extends Component {
     public string $slug = '';
     public string $body = '';
     public ?UploadedFile $image = null;
+    public string $oldImage = '';
     public int $user_id = 0;
     public bool $status = true;
-    public array $varPost = ['recordId', 'title', 'sub_title', 'slug', 'body', 'image', 'category_searchable_id', 'user_id', 'status'];
+    public array $varPost = ['oldImage', 'recordId', 'title', 'sub_title', 'slug', 'body', 'image', 'category_searchable_id', 'user_id', 'status'];
 
     //select status
     public array $selectStatus = [['id' => true, 'name' => 'Active'], ['id' => false, 'name' => 'Inactive']];
@@ -44,9 +54,13 @@ new #[Title('Form Post')] class extends Component {
             $this->sub_title = $post->sub_title;
             $this->slug = $post->slug;
             $this->body = $post->body;
+            $this->oldImage = 'storage/'.$post->image;
             $this->category_searchable_id = $post->category_id;
             $this->status = $post->status;
+        } else {
+            $this->oldImage = 'img/upload.png';
         }
+
         $this->searchCategory();
     }
 
@@ -96,7 +110,19 @@ new #[Title('Form Post')] class extends Component {
                 $post->category_id = $component->category_searchable_id;
                 $post->user_id = $component->user_id;
                 $post->status = $component->status;
-            }
+                if ($this->image) {
+                    if (Storage::disk('public')->exists($this->image)) {
+                        Storage::disk('public')->delete($this->image);
+                    }
+
+                    $post->image = $this->image->store(path: 'images', options: 'public');
+                }
+            },
+            toast: false,
+            afterSave: function ($post, $component) {
+                $this->success('Post berhasil disimpan', position: 'toast-bottom', redirectTo: route('post'));
+            },
+
         );
 
         $this->reset($this->varPost);
@@ -131,6 +157,14 @@ new #[Title('Form Post')] class extends Component {
                 required/>
 
                 <x-select label="Status" :options="$selectStatus" wire:model="status" required />
+            </div>
+
+            <div class="flex justify-center my-3">
+                <x-file label='Cover Image' wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
+                change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
+                crop-save-text="Crop" :crop-config="$config">
+                <img id="previewImage" src="{{ asset($oldImage) }}" class="h-40 rounded-lg"  />
+            </x-file>
             </div>
 
             <x-editor wire:model="body" label="Body" />
