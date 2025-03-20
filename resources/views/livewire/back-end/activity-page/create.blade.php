@@ -1,4 +1,4 @@
-<x-drawer wire:model="drawer" title="{{ $this->recordId != null ? 'Detail' : 'Tambah' }} Sub Category" right separator
+<x-drawer wire:model="drawer" title="{{ $this->recordId != null ? 'Detail' : 'Create' }} Activity" right separator
     with-close-button close-on-escape class="w-full lg:w-1/2 sm:w-1/2">
 
     <x-form wire:submit="save">
