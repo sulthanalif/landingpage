@@ -6,9 +6,10 @@ use App\Models\Question;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new #[Title('Questions')] class extends Component {
    use Toast, ManageDatas, WithPagination, WithFileUploads;
 
     public string $search = '';
