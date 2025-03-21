@@ -4,9 +4,10 @@ use Mary\Traits\Toast;
 use App\Models\MailBox;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new #[Title('Mails')] class extends Component {
     use WithPagination, Toast;
 
     public string $search = '';
@@ -82,7 +83,7 @@ new class extends Component {
                     </div>
                 @endcan
                 <div class="mt-3 flex justify-end">
-                    <x-button label="Ubah Status" icon="o-arrow-path-rounded-square"
+                    <x-button label="Change Status" icon="o-arrow-path-rounded-square"
                         wire:click="modalAlertWarning = true" spinner class="text-blue-500"
                         wire:loading.attr="disabled" />
                 </div>

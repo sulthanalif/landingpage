@@ -1,17 +1,15 @@
 <?php
 
 use App\ManageDatas;
-use App\Models\Post;
 use Mary\Traits\Toast;
+use App\Models\Question;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\Title;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new #[Title('Posts')] class extends Component {
-    use Toast, ManageDatas, WithPagination, WithFileUploads;
+new class extends Component {
+   use Toast, ManageDatas, WithPagination, WithFileUploads;
 
     public string $search = '';
 
@@ -26,7 +24,31 @@ new #[Title('Posts')] class extends Component {
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public int $perPage = 5;
 
-    public ?UploadedFile $file = null;
+    //varQuestion
+    public string $question = '';
+    public string $answer = '';
+    public bool $status = true;
+    public array $varQuestion = ['recordId', 'question', 'answer', 'status'];
+
+    //select status
+    public array $selectStatus = [['id' => true, 'name' => 'Aktif'], ['id' => false, 'name' => 'Tidak aktif']];
+
+    public function create(): void
+    {
+        $this->drawer = true;
+        $this->reset($this->varQuestion);
+    }
+
+    public function detail($id): void
+    {
+        $this->reset($this->varQuestion);
+        $sub = Question::find($id);
+        $this->recordId = $sub->id;
+        $this->question = $sub->question;
+        $this->answer = $sub->answer;
+        $this->status = $sub->status;
+        $this->drawer = true;
+    }
 
     public function modalUpload(): void
     {
@@ -36,7 +58,7 @@ new #[Title('Posts')] class extends Component {
 
     public function downloadTemplate()
     {
-        $file = public_path('templates/template-Post.xlsx');
+        $file = public_path('templates/template-Question.xlsx');
 
         if (!file_exists($file)) {
             $this->error('File tidak ditemukan', position: 'toast-bottom');
@@ -53,7 +75,7 @@ new #[Title('Posts')] class extends Component {
         ]);
 
         try {
-            Excel::import(new PostImport(), $this->file);
+            Excel::import(new QuestionImport(), $this->file);
 
             $this->upload = false;
             $this->reset('file');
@@ -66,24 +88,41 @@ new #[Title('Posts')] class extends Component {
 
     public function export()
     {
-        $datas = Post::all();
-        $datas = $datas->map(function ($Post) {
+        $datas = Question::all();
+        $datas = $datas->map(function ($Question) {
             return [
-                'name' => $Post->name,
-                'status' => $Post->status == true ? 'Aktif' : 'Tidak aktif',
-                'created_at' => $Post->created_at->format('Y-m-d'),
+                'name' => $Question->name,
+                'status' => $Question->status == true ? 'Aktif' : 'Tidak aktif',
+                'created_at' => $Question->created_at->format('Y-m-d'),
             ];
         });
 
         $headers = ['NAMA', 'STATUS', 'DIBUAT PADA'];
 
-        return Excel::download(new ExportDatas($datas, 'Data Post', $headers), 'Post_' . date('Y-m-d') . '.xlsx');
+        return Excel::download(new ExportDatas($datas, 'Data Question', $headers), 'Question_' . date('Y-m-d') . '.xlsx');
+    }
+
+    public function save(): void
+    {
+        $this->setModel(new Question());
+
+        $this->saveOrUpdate(
+            validationRules: [
+                'question' => 'required|string|max:255',
+                'status' => 'required|boolean',
+                'answer' => 'nullable|string|max:500',
+            ],
+        );
+
+        $this->unsetModel();
+        $this->reset($this->varQuestion);
+        $this->drawer = false;
     }
 
     public function changeStatus(): void
     {
         foreach ($this->selected as $id) {
-            $sub = Post::find($id);
+            $sub = Question::find($id);
             try {
                 DB::beginTransaction();
                 $sub->status = !$sub->status;
@@ -100,30 +139,27 @@ new #[Title('Posts')] class extends Component {
         }
     }
 
-    public function delete():void
+    public function delete(): void
     {
-        Post::whereIn('id', $this->selected)->delete();
-        $this->selected = [];
-        $this->modalAlertDelete = false;
-        $this->success('Data berhasil dihapus', position: 'toast-bottom');
-    }
+        $this->setModel(new Question());
 
+        foreach ($this->selected as $id) {
+            $this->setRecordId($id);
+            $this->deleteData();
+        }
+
+        $this->reset('selected');
+        $this->unsetRecordId();
+        $this->unsetModel();
+        $this->modalAlertDelete = false;
+    }
 
 
     public function datas(): LengthAwarePaginator
     {
-        return Post::query()
-            ->with('category', 'user')
+        return Question::query()
             ->where(function ($query) {
-                $query->where('title', 'like', "%{$this->search}%")
-                    ->orWhere('sub_title', 'like', "%{$this->search}%")
-                    ->orWhere('slug', 'like', "%{$this->search}%");
-            })
-            ->whereHas('category', function ($query) {
-                $query->where('name', 'like', "%{$this->search}%");
-            })
-            ->whereHas('user', function ($query) {
-                $query->where('name', 'like', "%{$this->search}%");
+                $query->where('question', 'like', "%{$this->search}%");
             })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
@@ -131,14 +167,7 @@ new #[Title('Posts')] class extends Component {
 
     public function headers(): array
     {
-        return [
-            ['key' => 'title', 'label' => 'Title'],
-            ['key' => 'category.name', 'label' => 'Category'],
-            ['key' => 'user.name', 'label' => 'User'],
-            ['key' => 'body', 'label' => 'Body'],
-            ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'created_at', 'label' => 'Created At'],
-        ];
+        return [['key' => 'question', 'label' => 'Question'], ['key' => 'answer', 'label' => 'Answer'], ['key' => 'status', 'label' => 'Status'], ['key' => 'created_at', 'label' => 'Created At']];
     }
 
     public function with(): array
@@ -148,11 +177,13 @@ new #[Title('Posts')] class extends Component {
             'headers' => $this->headers(),
         ];
     }
+
+
 }; ?>
 
 <div>
     <!-- HEADER -->
-    <x-header title="Posts" separator>
+    <x-header title="Questions" separator>
         <x-slot:actions>
             <div>
                 <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
@@ -162,8 +193,8 @@ new #[Title('Posts')] class extends Component {
                 <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
                     spinner='export' />
             </div>
-            @can('post-create')
-                <x-button label="Create" link="{{ route('post.form') }}" responsive icon="o-plus" />
+            @can('question-create')
+                <x-button label="Create" @click="$wire.create" responsive icon="o-plus" />
             @endcan
         </x-slot:actions>
     </x-header>
@@ -176,8 +207,8 @@ new #[Title('Posts')] class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             wire:model.live="selected" selectable with-pagination>
-            @scope('cell_body', $data)
-                {{ Str::limit(strip_tags($data['body']), 25) }}
+            @scope('cell_answer', $data)
+                {{ Str::limit(strip_tags($data['answer']), 70) }}
             @endscope
             @scope('cell_status', $data)
                 @if ($data['status'])
@@ -187,7 +218,7 @@ new #[Title('Posts')] class extends Component {
                 @endif
             @endscope
             @scope('actions', $data)
-                <x-button class="btn-primary btn-sm btn-ghost" link="{{ route('post.form', ['url_slug' => $data['slug']]) }}"><x-icon name="o-pencil" color="primary" /></x-button>
+                <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
             @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
@@ -195,7 +226,7 @@ new #[Title('Posts')] class extends Component {
         </x-table>
         @if ($this->selected)
             <div class="flex justify-end items-center gap-2">
-                @can('post-delete')
+                @can('question-delete')
                     <div class="mt-3 flex justify-end">
                         <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
                             class="text-red-500" wire:loading.attr="disabled" />
@@ -211,7 +242,7 @@ new #[Title('Posts')] class extends Component {
     </x-card>
 
     <!-- DRAWER CREATE -->
-    {{-- @include('livewire.back-end.Post-page.create') --}}
+    @include('livewire.back-end.question-page.create')
 
     <!-- MODAL ALERT DELETE -->
     @include('livewire.alerts.alert-delete')

@@ -215,16 +215,15 @@ new #[Title('Categories')] class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             wire:model.live="selected" selectable with-pagination>
-            @scope('cell_name', $data)
-                <p class="cursor-pointer text-blue-500 hover:underline" @click="$wire.detail({{ $data['id'] }})">
-                    {{ $data['name'] }}</p>
-            @endscope
             @scope('cell_status', $data)
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
                 @else
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
+            @endscope
+            @scope('actions', $data)
+                <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
             @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
@@ -239,7 +238,7 @@ new #[Title('Categories')] class extends Component {
                     </div>
                 @endcan
                 <div class="mt-3 flex justify-end">
-                    <x-button label="Ubah Status" icon="o-arrow-path-rounded-square"
+                    <x-button label="Change Status" icon="o-arrow-path-rounded-square"
                         wire:click="modalAlertWarning = true" spinner class="text-blue-500"
                         wire:loading.attr="disabled" />
                 </div>

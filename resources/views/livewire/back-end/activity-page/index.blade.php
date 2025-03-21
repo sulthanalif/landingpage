@@ -6,11 +6,12 @@ use App\Models\Activity;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new #[Title('Activities')] class extends Component {
     use Toast, ManageDatas, WithPagination, WithFileUploads;
 
     public array $config = [
@@ -115,6 +116,26 @@ new class extends Component {
                 'code' => $th->getCode(),
                 'trace' => $th->getTraceAsString(),
             ]);
+        }
+    }
+
+    public function changeStatus(): void
+    {
+        foreach ($this->selected as $id) {
+            $sub = Activity::find($id);
+            try {
+                DB::beginTransaction();
+                $sub->status = !$sub->status;
+                $sub->save();
+                DB::commit();
+
+                $this->success('Status berhasil diubah', position: 'toast-bottom');
+                $this->modalAlertWarning = false;
+                $this->reset('selected');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::channel('debug')->error("message: '{$e->getMessage()}',  file: '{$e->getFile()}',  line: {$e->getLine()}");
+            }
         }
     }
 
@@ -237,7 +258,7 @@ new class extends Component {
                     </div>
                 @endcan
                 <div class="mt-3 flex justify-end">
-                    <x-button label="Ubah Status" icon="o-arrow-path-rounded-square"
+                    <x-button label="Change Status" icon="o-arrow-path-rounded-square"
                         wire:click="modalAlertWarning = true" spinner class="text-blue-500"
                         wire:loading.attr="disabled" />
                 </div>

@@ -18,6 +18,9 @@
     @can('activity-page')
         <x-menu-item title="Activities" icon="o-camera" link="{{ route('activity') }}" />
     @endcan
+    @can('question-page')
+        <x-menu-item title="Questions" icon="o-question-mark-circle" link="{{ route('question') }}" />
+    @endcan
     @can('user-page')
         <x-menu-item title="Users" icon="o-users" link="{{ route('user') }}" />
     @endcan
