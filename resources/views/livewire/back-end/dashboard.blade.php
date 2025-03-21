@@ -3,7 +3,9 @@
 use App\Models\Post;
 use App\Models\User;
 use App\Models\MailBox;
+use App\Models\Activity;
 use App\Models\Category;
+use App\Models\Question;
 use Livewire\Volt\Component;
 use Livewire\Attributes\Title;
 
@@ -15,6 +17,8 @@ new #[Title('Dashboard')] class extends Component {
         'posts' => Post::where('status', true)->count(),
         'categories' => Category::where('status', true)->count(),
         'mails' => MailBox::count(),
+        'activities' => Activity::where('status', true)->count(),
+        'questions' => Question::where('status', true)->count(),
         'users' => User::where('status', true)->count(),
     ];
  }
@@ -35,7 +39,9 @@ new #[Title('Dashboard')] class extends Component {
             <x-stat title="Posts" value="{{ $posts }}" icon="o-paper-airplane" />
             <x-stat title="Categories" value="{{ $categories }}" icon="o-tag" />
             <x-stat title="Mails" value="{{ $mails }}" icon="o-envelope" />
-            <x-stat title="Onlive Register" value="0" icon="o-users" />
+            <x-stat title="Activities" value="{{ $activities }}" icon="o-camera" />
+            <x-stat title="Questions" value="{{ $questions }}" icon="o-question-mark-circle" />
+            <x-stat title="Enrollment" value="0" icon="o-user-plus" />
             <x-stat title="Users" value="{{ $users }}" icon="o-users" />
     </div>
     <x-card>
