@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/react";
 import React from "react";
 
 const Hero = () => {
@@ -38,10 +39,16 @@ const Hero = () => {
                                                     >
                                                         <a
                                                             href="#about"
-                                                            className="home_search_button d-flex align-items-center justify-content-center text-white p-3"
+                                                            className="home_search_button d-flex align-items-center justify-content-center p-3"
                                                         >
                                                             Read More
                                                         </a>
+                                                        <Link
+                                                            href="/register"
+                                                            className="home_register_button d-flex align-items-center justify-content-center p-3 ml-3"
+                                                        >
+                                                            Register Here
+                                                        </Link>
                                                     </div>
                                                 </div>
                                             </div>

@@ -19,6 +19,10 @@ Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
 Route::get('/register', [LandingpageController::class, 'register']);
 
+Route::get('/news', [LandingpageController::class, 'allNews']);
+Route::get('/news/{slug}', [LandingpageController::class, 'detailNews']);
+Route::get('/activities', [LandingpageController::class, 'allActivities']);
+
 Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
 Route::middleware(['guest'])->group(function () {

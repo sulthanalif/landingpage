@@ -1,7 +1,8 @@
+import { Link } from "@inertiajs/react";
 import React from "react";
 
 const News = ({ posts }) => {
-    const limitText = (html, limit = 50) => {
+    const limitText = (html, limit = 150) => {
         if (!html) return "";
 
         const sanitizedHtml = html.replace(/<img[^>]*>/g, "");
@@ -41,28 +42,44 @@ const News = ({ posts }) => {
                                     <div className="news_post_image">
                                         <img
                                             src={
-                                                posts.data[0]?.image ||
-                                                "/landing/images/news_1.jpg"
+                                                posts.data[0]?.image
+                                                    ? "/storage/" +
+                                                      posts.data[0].image
+                                                    : "/landing/images/news_1.jpg"
                                             }
                                             alt={posts.data[0]?.title}
                                             loading="lazy"
+                                            style={{
+                                                maxHeight: "300px",
+                                                maxWidth: "690px",
+                                                objectFit: "cover",
+                                            }}
                                         />
                                     </div>
                                     <div className="news_post_large_title">
-                                        <a href={`/posts/${posts.data[0]?.id}`}>
+                                        <Link href={`/news/${posts.data[0]?.slug}`}>
                                             {posts.data[0]?.title}
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="news_post_meta">
                                         <ul>
                                             <li>
-                                                <a href="#">Admin</a>
+                                                <a href="#">
+                                                    {posts.data[0]?.user.name}
+                                                </a>
                                             </li>
                                             <li>
                                                 <a href="#">
                                                     {new Date(
-                                                        posts.data[0]?.created_at
-                                                    ).toLocaleDateString()}
+                                                        posts.data[0]?.updated_at
+                                                    ).toLocaleDateString(
+                                                        "en-US",
+                                                        {
+                                                            month: "long",
+                                                            day: "numeric",
+                                                            year: "numeric",
+                                                        }
+                                                    )}
                                                 </a>
                                             </li>
                                         </ul>
@@ -77,9 +94,9 @@ const News = ({ posts }) => {
                                         />
                                     </div>
                                     <div className="news_post_link">
-                                        <a href={`/posts/${posts.data[0]?.id}`}>
+                                        <Link href={`/news/${posts.data[0]?.slug}`}>
                                             Read More
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -93,20 +110,29 @@ const News = ({ posts }) => {
                                         className="news_post_small"
                                     >
                                         <div className="news_post_small_title">
-                                            <a href={`/posts/${post.id}`}>
+                                            <a href={`/news/${post.slug}`}>
                                                 {post.title}
                                             </a>
                                         </div>
                                         <div className="news_post_meta">
                                             <ul>
                                                 <li>
-                                                    <a href="#">Admin</a>
+                                                    <a href="#">
+                                                        {post.user.name}
+                                                    </a>
                                                 </li>
                                                 <li>
                                                     <a href="#">
                                                         {new Date(
-                                                            post.created_at
-                                                        ).toLocaleDateString()}
+                                                            post.updated_at
+                                                        ).toLocaleDateString(
+                                                            "en-US",
+                                                            {
+                                                                month: "long",
+                                                                day: "numeric",
+                                                                year: "numeric",
+                                                            }
+                                                        )}
                                                     </a>
                                                 </li>
                                             </ul>
@@ -127,6 +153,14 @@ const News = ({ posts }) => {
                         </div>
                     </div>
                 )}
+
+                <div className="row">
+                    <div className="col">
+                        <div className="courses_button trans_200">
+                            <Link href="/news">view all news</Link>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

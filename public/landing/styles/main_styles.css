@@ -909,14 +909,36 @@ section
 	border-radius: 3px;
 	font-size: 14px;
 	font-weight: 500;
-	color: #FFFFFF;
+	color: #ffffff;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	cursor: pointer;
 }
 .home_search_button:hover
 {
+	background: #ffffff;
+	color: #000000;
+	transition: all 300ms linear;
+}
+.home_register_button
+{
+	width: auto;
+	height: 46px;
+	background: #ffffff;
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #000000;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	cursor: pointer;
+}
+.home_register_button:hover
+{
 	background: #0d9fcb;
+	color: #ffffff;
 	transition: all 300ms linear;
 }
 .home_slider_nav

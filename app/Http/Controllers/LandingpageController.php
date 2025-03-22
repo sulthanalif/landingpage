@@ -12,7 +12,7 @@ class LandingpageController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->paginate(5);
+        $posts = Post::with(['category', 'user'])->latest()->paginate(5);
         $activities = Activity::latest()->paginate(5);
 
         return Inertia::render('Home', [
@@ -65,5 +65,34 @@ class LandingpageController extends Controller
     public function register()
     {
         return Inertia::render('Register');
+    }
+
+    public function allNews()
+    {
+        $posts = Post::with(['category', 'user'])->latest()->get();
+
+        return Inertia::render('AllNews', [
+            'posts' => $posts
+        ]);
+    }
+
+    public function detailNews($slug)
+    {
+        $latest = Post::with(['category', 'user'])->latest()->limit(3)->get();
+        $post = Post::with(['category', 'user'])->where('slug', $slug)->first();
+
+        return Inertia::render('DetailNews', [
+            'latest' => $latest,
+            'post' => $post
+        ]);
+    }
+
+    public function allActivities()
+    {
+        $activities = Activity::latest()->get();
+
+        return Inertia::render('AllActivity', [
+            'activities' => $activities
+        ]);
     }
 }

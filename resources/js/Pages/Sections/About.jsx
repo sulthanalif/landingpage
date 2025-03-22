@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/react";
 import React from "react";
 
 const About = () => {
@@ -24,12 +25,12 @@ const About = () => {
                                     <p>
                                     Along with the global growth, Lia Stephanie School was established to be one of the leading Catholic schools in West Jakarta, with a focus on academic, personal, spiritual, and professional of our students and teachers. With the mission by cultivating our students and bring out the best version of them.
                                     </p>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        href="/about"
                                         className="btn btn-primary mt-3"
                                     >
                                         Read More
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

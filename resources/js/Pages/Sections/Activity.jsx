@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/react";
 import React from "react";
 
 const Activity = () => {
@@ -146,7 +147,7 @@ const Activity = () => {
                     <div className="row">
                         <div className="col">
                             <div className="courses_button trans_200">
-                                <a href="#">view all activities</a>
+                                <Link href="/activities">view all activities</Link>
                             </div>
                         </div>
                     </div>
