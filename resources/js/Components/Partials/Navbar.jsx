@@ -37,6 +37,9 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 <Link className="dropdown-item" href="/story">
                                     Our Stories
                                 </Link>
+                                <Link className="dropdown-item" href="#">
+                                    Teacher Profile
+                                </Link>
                             </div>
                         </li>
                         <li className="menu_mm">
@@ -53,16 +56,28 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 Curriculum
                             </a>
                             <div className="dropdown-menu">
-                                <Link className="dropdown-item" href="/curriculum">
+                                <Link
+                                    className="dropdown-item"
+                                    href="/curriculum"
+                                >
                                     Explanation
                                 </Link>
-                                <Link className="dropdown-item" href="/apply-admission">
+                                <Link
+                                    className="dropdown-item"
+                                    href="/apply-admission"
+                                >
                                     Apply Admission
                                 </Link>
-                                <Link className="dropdown-item" href="/calendar-academic">
+                                <Link
+                                    className="dropdown-item"
+                                    href="/calendar-academic"
+                                >
                                     Academic Calendar
                                 </Link>
-                                <Link className="dropdown-item" href="/accreditation">
+                                <Link
+                                    className="dropdown-item"
+                                    href="/accreditation"
+                                >
                                     Accreditation
                                 </Link>
                             </div>
