@@ -27,16 +27,15 @@ const Hero = () => {
                                     <div className="container">
                                         <div className="row">
                                             <div className="col text-center">
-                                                <div className="home_slider_title">
+                                                <div className="home_slider_title text-primary bg-light">
                                                     Welcome To Website
-                                                </div>
-                                                <div className="home_slider_subtitle text-uppercase">
-                                                    Lia Stephanie Catholic School
+                                                    <div className="home_slider_subtitle text-uppercase bg-light pb-2">
+                                                        Lia Stephanie Catholic
+                                                        School
+                                                    </div>
                                                 </div>
                                                 <div className="home_slider_form_container">
-                                                    <div
-                                                        className="home_search_form d-flex flex-lg-row flex-column align-items-center justify-content-center"
-                                                    >
+                                                    <div className="home_search_form d-flex flex-lg-row flex-column align-items-center justify-content-center">
                                                         <a
                                                             href="#about"
                                                             className="home_search_button d-flex align-items-center justify-content-center p-3"
