@@ -47,6 +47,22 @@ const Register = () => {
         if (activeTab > 0) setActiveTab(activeTab - 1);
     };
 
+    const handleRegistration = (e) => {
+        e.preventDefault();
+        // Di sini Anda akan melakukan logika pendaftaran,
+        // seperti mengirimkan data ke server.
+    
+        // Setelah pendaftaran berhasil, Anda bisa mengarahkan pengguna ke /payment
+        console.log("Data registrasi akan dikirim.");
+        // Simulasi pendaftaran berhasil setelah 1 detik
+        setTimeout(() => {
+            console.log("Pendaftaran berhasil, mengarahkan ke /payment.");
+            window.location.href = "/payment";
+            // ATAU, lebih baik menggunakan router jika Anda menggunakan library seperti React Router
+            // history.push('/payment');
+        }, 1000);
+    };
+
     return (
         <>
             <Layout>
@@ -119,7 +135,7 @@ const Register = () => {
                             {/* Form Body */}
                             <form
                                 className="mt-3"
-                                onSubmit={(e) => e.preventDefault()}
+                                onSubmit={handleRegistration}
                             >
                                 <div className="card">
                                     <div className="card-body">
@@ -622,20 +638,20 @@ const Register = () => {
                                             Previous
                                         </button>
                                     )}
-                                    {activeTab < tabs.length - 1 ? (
+                                    {activeTab == 2 ? (
+                                        <button
+                                            type="submit"
+                                            className="btn btn-success ms-auto"
+                                        >
+                                            Register
+                                        </button>
+                                    ) : (
                                         <button
                                             type="button"
                                             className="btn btn-primary ms-auto"
                                             onClick={nextTab}
                                         >
                                             Next
-                                        </button>
-                                    ) : (
-                                        <button
-                                            type="submit"
-                                            className="btn btn-success ms-auto"
-                                        >
-                                            Register
                                         </button>
                                     )}
                                 </div>

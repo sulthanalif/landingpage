@@ -11,6 +11,7 @@ use App\Http\Controllers\LandingpageController;
 Route::get('/', [LandingpageController::class, 'index'])->name('homepage');
 Route::get('/about', [LandingpageController::class, 'about']);
 Route::get('/story', [LandingpageController::class, 'story']);
+Route::get('/teacher', [LandingpageController::class, 'teacher']);
 Route::get('/admission', [LandingpageController::class, 'admission']);
 Route::get('/curriculum', [LandingpageController::class, 'curriculum']);
 Route::get('/apply-admission', [LandingpageController::class, 'apply']);
@@ -18,6 +19,7 @@ Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademi
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
 Route::get('/register', [LandingpageController::class, 'register']);
+Route::get('/payment', [LandingpageController::class, 'payment']);
 
 Route::get('/news', [LandingpageController::class, 'allNews']);
 Route::get('/news/{slug}', [LandingpageController::class, 'detailNews']);

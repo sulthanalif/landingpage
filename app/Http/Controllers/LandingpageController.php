@@ -32,6 +32,11 @@ class LandingpageController extends Controller
         return Inertia::render('Story');
     }
 
+    public function teacher()
+    {
+        return Inertia::render('Teacher');
+    }
+
     public function admission()
     {
         return Inertia::render('Admission');
@@ -65,6 +70,11 @@ class LandingpageController extends Controller
     public function register()
     {
         return Inertia::render('Register');
+    }
+
+    public function payment()
+    {
+        return Inertia::render('Payment');
     }
 
     public function allNews()
