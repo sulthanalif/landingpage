@@ -735,7 +735,7 @@ section
 
 .section_title_container
 {
-	max-width: 600px;
+	max-width: 800px;
 	margin: 0 auto;
 }
 .section_title
@@ -876,6 +876,24 @@ section
 {
 	color: #14bdee;
 }
+.about_item_title p
+{
+	font-family: 'Roboto Slab', serif;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1;
+	padding-bottom: 5px;
+	color: #384158;
+	-webkit-transition: all 200ms ease;
+	-moz-transition: all 200ms ease;
+	-ms-transition: all 200ms ease;
+	-o-transition: all 200ms ease;
+	transition: all 200ms ease;
+}
+.about_item_title p:hover
+{
+	color: #14bdee;
+}
 .about_item_text
 {
 	margin-top: 12px;
@@ -883,6 +901,12 @@ section
 .about_item_text
 {
 	line-height: 2;
+}
+
+.about_item_text ul
+{
+	list-style-type: circle;
+	padding-left: 25px;
 }
 
 /*********************************
@@ -913,6 +937,26 @@ section
 .feature_content
 {
 	padding-right: 54px;
+}
+.feature_note
+{
+	background: #FFFFFF;
+	border-radius: 6px;
+	box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top: 13px;
+	padding-bottom: 4px;
+}
+.feature_note
+{
+	margin-top: 12px;
+	line-height: 2;
+}
+.feature_note ul
+{
+	list-style-type: circle;
+	padding-left: 25px;
 }
 .elements_accordions
 {
@@ -948,9 +992,9 @@ section
 }
 .accordion div
 {
-	max-width: 90%;
+	max-width: 100%;
 	overflow: hidden;
-	white-space: nowrap;
+	white-space: wrap;
 	font-family: 'Roboto Slab', serif;
 	font-size: 20px;
 	font-weight: 700;
@@ -1009,6 +1053,11 @@ section
 	font-weight: 400;
 	color: #76777a;
 	line-height: 2;
+}
+.accordion_panel ul
+{
+	list-style-type: disc;
+	padding-left: 25px;
 }
 .feature_video
 {

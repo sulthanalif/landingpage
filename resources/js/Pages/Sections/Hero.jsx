@@ -47,8 +47,11 @@ const Hero = () => {
                                         <div className="col text-center">
                                             <div className="home_slider_title text-primary bg-light">
                                                 Welcome To Website
-                                                <div className="home_slider_subtitle text-uppercase bg-light pb-2">
+                                                <div className="home_slider_subtitle text-uppercase bg-light">
                                                     Lia Stephanie Catholic School
+                                                </div>
+                                                <div className="home_slider_subtitle bg-light pb-2">
+                                                    <p className="font-italic font-weight-bold h6">"Menjadi Bagian dari Dunia, Dimulai dari Sini"</p>
                                                 </div>
                                             </div>
                                             <div className="home_slider_form_container">

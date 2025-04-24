@@ -67,7 +67,7 @@ const Admission = () => {
                                     <h2 className="section_title">
                                         Admission Guidelines
                                     </h2>
-                                    <div className="section_subtitle">
+                                    {/* <div className="section_subtitle">
                                         <p>
                                             Lorem ipsum dolor sit amet,
                                             consectetur adipiscing elit. Donec
@@ -75,7 +75,7 @@ const Admission = () => {
                                             feugiat, sapien ultrices fermentum
                                             congue, quam velit venenatis sem
                                         </p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -89,80 +89,119 @@ const Admission = () => {
                                             <div className="accordion_container">
                                                 <div className="accordion d-flex flex-row align-items-center active">
                                                     <div>
-                                                        Award for Best School
-                                                        2017
+                                                        Pengisian Formulir
+                                                        Pendaftaran
                                                     </div>
                                                 </div>
                                                 <div className="accordion_panel">
                                                     <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
+                                                        Isi formulir pendaftaran
+                                                        secara online melalui
+                                                        website kami atau
+                                                        langsung datang ke
+                                                        kantor administrasi
+                                                        sekolah.
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className="accordion_container">
                                                 <div className="accordion d-flex flex-row align-items-center">
                                                     <div>
-                                                        You’re learning from the
-                                                        best.
+                                                        Unggah Dokumen Pendukung
                                                     </div>
                                                 </div>
                                                 <div className="accordion_panel">
                                                     <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
+                                                        <ul>
+                                                            <li>
+                                                                Akta kelahiran
+                                                            </li>
+                                                            <li>
+                                                                Kartu identitas
+                                                                orang tua
+                                                            </li>
+                                                            <li>
+                                                                Rapor terakhir /
+                                                                transkrip nilai
+                                                            </li>
+                                                            <li>
+                                                                Pas foto terbaru
+                                                            </li>
+                                                        </ul>
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className="accordion_container">
                                                 <div className="accordion d-flex flex-row align-items-center">
                                                     <div>
-                                                        Our degrees are
-                                                        recognized worldwide.
+                                                        Jadwal Wawancara &
+                                                        Observasi Siswa ( test
+                                                        tertulis )
                                                     </div>
                                                 </div>
                                                 <div className="accordion_panel">
                                                     <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
+                                                        Tim akademik kami akan
+                                                        mengatur sesi observasi
+                                                        atau tes masuk sesuai
+                                                        jenjang pendidikan,
+                                                        serta wawancara singkat
+                                                        dengan calon siswa dan
+                                                        orang tua.
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className="accordion_container">
                                                 <div className="accordion d-flex flex-row align-items-center">
                                                     <div>
-                                                        We encourage our
-                                                        students to go global.
+                                                        Pengumuman Hasil Seleksi
                                                     </div>
                                                 </div>
                                                 <div className="accordion_panel">
                                                     <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
+                                                        Hasil seleksi akan
+                                                        diinformasikan melalui
+                                                        email dalam waktu 3–5
+                                                        hari kerja setelah sesi
+                                                        wawancara/observasi.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="accordion_container">
+                                                <div className="accordion d-flex flex-row align-items-center">
+                                                    <div>
+                                                        Proses Registrasi &
+                                                        Pembayaran
+                                                    </div>
+                                                </div>
+                                                <div className="accordion_panel">
+                                                    <p>
+                                                        Jika diterima, orang tua
+                                                        akan menerima rincian
+                                                        biaya dan prosedur
+                                                        pembayaran. Pendaftaran
+                                                        akan dianggap sah
+                                                        setelah seluruh
+                                                        administrasi
+                                                        diselesaikan.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="accordion_container">
+                                                <div className="accordion d-flex flex-row align-items-center">
+                                                    <div>
+                                                        Orientasi Siswa & Orang
+                                                        Tua
+                                                    </div>
+                                                </div>
+                                                <div className="accordion_panel">
+                                                    <p>
+                                                        Calon siswa dan orang
+                                                        tua akan mengikuti sesi
+                                                        orientasi untuk mengenal
+                                                        lingkungan sekolah,
+                                                        sistem belajar, dan
+                                                        komunitas sekolah kami.
                                                     </p>
                                                 </div>
                                             </div>
@@ -178,7 +217,7 @@ const Admission = () => {
                                         className="feature_video_background"
                                         style={{
                                             backgroundImage:
-                                                "url(/landing/images/video.jpg)",
+                                                "url(img/logo.png)",
                                         }}
                                     />
                                     <a
@@ -191,6 +230,66 @@ const Admission = () => {
                                             alt=""
                                         />
                                     </a>
+                                </div>
+                                <div className="feature-content mt-2">
+                                    <div className="feature_note">
+                                        <h4>Catatan Penting</h4>
+                                        <p>
+                                            <ul>
+                                                <li>
+                                                    Pendaftaran dibuka sepanjang
+                                                    tahun dengan jumlah kuota
+                                                    terbatas untuk tiap jenjang.
+                                                </li>
+                                                <li>
+                                                    Prioritas diberikan untuk
+                                                    siswa pindahan dari sekolah
+                                                    berkurikulum serupa
+                                                    (IB/Edexcel).
+                                                </li>
+                                                <li>
+                                                    Semua proses seleksi
+                                                    mempertimbangkan potensi
+                                                    akademik dan kesiapan
+                                                    sosial-emosional siswa.
+                                                </li>
+                                            </ul>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="newsletter">
+                    <div
+                        className="newsletter_background parallax-window"
+                        style={{
+                            backgroundImage: `url('landing/images/newsletter.jpg')`,
+                            backgroundAttachment: "fixed",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                        }}
+                    />
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">
+                                <div className="newsletter_container d-flex flex-lg-row flex-column align-items-center justify-content-start">
+                                    {/* Newsletter Content */}
+                                    <div className="newsletter_content text-lg-left text-center">
+                                        <div className="newsletter_title">
+                                            Jadwalkan Kunjungan Sekolah
+                                        </div>
+                                        <div className="newsletter_subtitle">
+                                            Kami menyarankan calon orang tua
+                                            untuk melakukan school tour sebelum
+                                            mendaftar. Hubungi tim admissions
+                                            kami di 0811-8880-678 atau email
+                                            marketing@lscs.sch.id untuk info
+                                            lebih lanjut.
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

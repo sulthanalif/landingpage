@@ -23,7 +23,37 @@ const About = () => {
                                 <hr className="feature_line" />
                                 <div className="feature_text mt-3 text-justify">
                                     <p>
-                                    Along with the global growth, Lia Stephanie School was established to be one of the leading Catholic schools in West Jakarta, with a focus on academic, personal, spiritual, and professional of our students and teachers. With the mission by cultivating our students and bring out the best version of them.
+                                        Di Lia Stephanie, kami percaya bahwa
+                                        pendidikan bukan hanya soal nilai
+                                        akademis, tapi juga tentang membentuk
+                                        karakter, membangun rasa percaya diri,
+                                        dan menyiapkan generasi masa depan yang
+                                        tangguh dan berakhlak.
+                                    </p>
+                                    <p>
+                                        Di Lia Stephanie, kami percaya bahwa
+                                        pendidikan bukan hanya soal nilai
+                                        akademis, tapi juga tentang membentuk
+                                        karakter, membangun rasa percaya diri,
+                                        dan menyiapkan generasi masa depan yang
+                                        tangguh dan berakhlak.
+                                    </p>
+                                    <p>
+                                        Dengan kurikulum yang terintegrasi,
+                                        tenaga pengajar berpengalaman, serta
+                                        lingkungan belajar yang nyaman dan aman,
+                                        kami berkomitmen memberikan pendidikan
+                                        terbaik untuk setiap anak.
+                                    </p>
+                                    <p>
+                                        Di Lia Stephanie, kami menghadirkan
+                                        program pendidikan yang dirancang secara
+                                        menyeluruh untuk mendukung perkembangan
+                                        akademik, emosional, sosial, dan
+                                        spiritual siswa. Kami percaya bahwa
+                                        setiap anak memiliki potensi unik yang
+                                        perlu diasah melalui pendekatan belajar
+                                        yang tepat dan relevan dengan zaman.
                                     </p>
                                     <Link
                                         href="/about"
