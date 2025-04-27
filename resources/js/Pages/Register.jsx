@@ -51,7 +51,7 @@ const Register = () => {
         e.preventDefault();
         // Di sini Anda akan melakukan logika pendaftaran,
         // seperti mengirimkan data ke server.
-    
+
         // Setelah pendaftaran berhasil, Anda bisa mengarahkan pengguna ke /payment
         console.log("Data registrasi akan dikirim.");
         // Simulasi pendaftaran berhasil setelah 1 detik

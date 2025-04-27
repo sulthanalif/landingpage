@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\Logout;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\LandingpageController;
 
@@ -29,6 +30,8 @@ Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mai
 
 Route::middleware(['guest'])->group(function () {
     Volt::route('login', 'login')->name('login');
+
+    Route::post('/register', [RegisterController::class, 'store'])->name('register');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
@@ -54,5 +57,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
             Volt::route('/permission', 'back-end.options.permission-page.index')->middleware('can:permission-page')->name('permission');
         });
     });
+
+
 
 });
