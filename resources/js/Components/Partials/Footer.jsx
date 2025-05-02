@@ -66,7 +66,7 @@ const Footer = () => {
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="https://wa.me/+6281310602139" target="_blank">
+                                                        <a href="https://wa.me/+628118880678" target="_blank">
                                                             <i
                                                                 className="fa fa-whatsapp"
                                                                 aria-hidden="true"
@@ -147,10 +147,10 @@ const Footer = () => {
                                                 <ul>
                                                     <li>
                                                         Email:
-                                                        info@lscs.sch.id
+                                                        marketing@lscs.sch.id
                                                     </li>
                                                     <li>
-                                                        Tel: (021) 54390347
+                                                        Tel: 0811-8880-678
                                                     </li>
                                                     <li>
                                                         Jalan Taman Surya 5 Blok

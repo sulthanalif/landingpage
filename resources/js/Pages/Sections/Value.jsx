@@ -9,7 +9,7 @@ const Value = () => {
                         <div className="col">
                             <div className="section_title_container text-center">
                                 <h2 className="section_title">
-                                    Mengapa Memilih Kami?
+                                    Why Choose Us?
                                 </h2>
                                 {/* <div className="section_subtitle">
                                     <p>
@@ -36,15 +36,14 @@ const Value = () => {
                                     />
                                 </div>
                                 <h3 className="feature_title">
-                                    Kurikulum Holistik dan berwawasan Global
+                                    Holistic and Globally-Minded Curriculum
                                 </h3>
                                 <div className="feature_text">
                                     <p>
-                                        Menggabungkan kurikulum nasiona dan
-                                        berwawasan global dan pendekatan
-                                        pembelajaran aktif yang mendorong
-                                        kreativitas, berpikir kritis, dan
-                                        kolaborasi.
+                                        Integrating the national curriculum with
+                                        a global perspective and active learning
+                                        approaches that foster creativity,
+                                        critical thinking, and collaboration.
                                     </p>
                                 </div>
                             </div>
@@ -64,14 +63,14 @@ const Value = () => {
                                     />
                                 </div>
                                 <h3 className="feature_title">
-                                    Guru Profesional & Peduli
+                                    Professional & Caring Teachers
                                 </h3>
                                 <div className="feature_text">
                                     <p>
-                                        Tim pendidik kami tidak hanya ahli dalam
-                                        mengajar, tetapi juga hadir sebagai
-                                        mentor yang memahami kebutuhan emosional
-                                        dan perkembangan siswa.
+                                        Our team of educators are not only
+                                        experts in teaching but also present as
+                                        mentors who understand the emotional
+                                        needs and development of students.
                                     </p>
                                 </div>
                             </div>
@@ -91,15 +90,14 @@ const Value = () => {
                                     />
                                 </div>
                                 <h3 className="feature_title">
-                                    Fasilitas Lengkap
+                                    Complete Facilities
                                 </h3>
                                 <div className="feature_text">
                                     <p>
-                                        Moving class, Kelas interaktif,
-                                        laboratorium sains, perpustakaan
-                                        digital, ruang seni, hingga area
-                                        olahraga—semua dirancang untuk menunjang
-                                        proses belajar yang optimal.
+                                        Moving classes, interactive classrooms,
+                                        science laboratories, digital libraries,
+                                        art rooms, and sports areas—all designed
+                                        to support an optimal learning process.
                                     </p>
                                 </div>
                             </div>
@@ -119,14 +117,13 @@ const Value = () => {
                                     />
                                 </div>
                                 <h3 className="feature_title">
-                                    Pengembangan Karakter & Soft Skills
+                                    Character & Soft Skills Development
                                 </h3>
                                 <div className="feature_text">
                                     <p>
-                                        Kami menanamkan nilai-nilai
-                                        kedisiplinan, empati, dan kepemimpinan
-                                        sejak dini melalui berbagai kegiatan
-                                        sekolah.
+                                        We instill values of discipline,
+                                        empathy, and leadership from an early
+                                        age through various school activities.
                                     </p>
                                 </div>
                             </div>

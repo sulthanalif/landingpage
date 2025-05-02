@@ -25,20 +25,14 @@ const Contact = () => {
         script2.src = "/landing/plugins/marker_with_label/marker_with_label.js";
         script2.async = true;
 
-        const script3 = document.createElement("script");
-        script3.src = "https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA";
-        script3.async = true;
-
         document.body.appendChild(script);
         document.body.appendChild(script2);
-        document.body.appendChild(script3);
 
         return () => {
             document.head.removeChild(link1);
             document.head.removeChild(link2);
             document.body.removeChild(script);
             document.body.removeChild(script2);
-            document.body.removeChild(script3);
         };
     }, []);
 
@@ -71,7 +65,17 @@ const Contact = () => {
                         <div className="map">
                             <div id="google_map" className="google_map">
                                 <div className="map_container">
-                                    <div id="map" />
+                                    <div id="map">
+                                        <iframe
+                                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7933.974303374864!2d106.706299!3d-6.132428!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a02a474c9b185%3A0xe3042c977b79a3ce!2sSekolah%20glbl!5e0!3m2!1sen!2sid!4v1746177407164!5m2!1sen!2sid"
+                                            width="100%"
+                                            height="100%"
+                                            style={{ border: 0 }}
+                                            allowFullScreen=""
+                                            loading="lazy"
+                                            referrerPolicy="no-referrer-when-downgrade"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -150,32 +154,18 @@ const Contact = () => {
                                         </div>
                                         <div className="contact_info_location">
                                             <div className="contact_info_location_title">
-                                                New York Office
+                                                Jakarta Office
                                             </div>
                                             <ul className="location_list">
                                                 <li>
-                                                    T8/480 Collins St, Melbourne
-                                                    VIC 3000, New York
+                                                    Jalan Taman Surya 5 Blok EE2
+                                                    No.20-27, RT.2/RW.3,
+                                                    Pegadungan, Kec. Kalideres,
+                                                    Kota Jakarta Barat, Daerah
+                                                    Khusus Ibukota Jakarta 11830
                                                 </li>
-                                                <li>1-234-567-89011</li>
-                                                <li>
-                                                    info.deercreative@gmail.com
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="contact_info_location">
-                                            <div className="contact_info_location_title">
-                                                Australia Office
-                                            </div>
-                                            <ul className="location_list">
-                                                <li>
-                                                    Forrest Ray, 191-103 Integer
-                                                    Rd, Corona Australia
-                                                </li>
-                                                <li>1-234-567-89011</li>
-                                                <li>
-                                                    info.deercreative@gmail.com
-                                                </li>
+                                                <li>0811-8880-678</li>
+                                                <li>marketing@lscs.sch.id</li>
                                             </ul>
                                         </div>
                                     </div>
