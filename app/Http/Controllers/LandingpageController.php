@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Post;
+use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,11 +15,13 @@ class LandingpageController extends Controller
     {
         $posts = Post::with(['category', 'user'])->latest()->paginate(5);
         $activities = Activity::latest()->paginate(5);
+        $faqs = Question::all();
 
         return Inertia::render('Home', [
             'title' => 'Home',
             'posts' => $posts,
-            'activities' => $activities
+            'activities' => $activities,
+            'faqs' => $faqs
         ]);
     }
 

@@ -9,7 +9,7 @@ const About = () => {
                     <div className="row features_row">
                         <div className="col-lg-6">
                             <img
-                                src="/landing/images/about.jpg"
+                                src="/landing/images/building.jpg"
                                 alt=""
                                 loading="lazy"
                                 className="img-fluid mx-auto d-block"

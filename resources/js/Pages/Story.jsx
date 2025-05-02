@@ -2,7 +2,7 @@ import { Link } from "@inertiajs/react";
 import React, { useEffect } from "react";
 import Layout from "../Components/Layout";
 
-const Story = () => {
+const Story = ({ activities }) => {
     useEffect(() => {
         const link1 = document.createElement("link");
         link1.rel = "stylesheet";
@@ -76,286 +76,47 @@ const Story = () => {
                         <div className="row">
                             <div className="col">
                                 <div className="blog_post_container">
-                                    {/* Blog Post */}
-                                    <div className="blog_post trans_200">
-                                        <div className="blog_post_image">
-                                            <img
-                                                src="/landing/images/event_1.jpg"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div className="blog_post_body">
-                                            <div className="blog_post_title">
-                                                <a href="blog_single.html">
-                                                    Here’s What You Need to Know
-                                                    About Online Testing
-                                                </a>
-                                            </div>
-                                            <div className="blog_post_meta">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">admin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            november 11, 2017
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="blog_post_text">
-                                                <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path
-                                                    policymakers should take...
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Blog Post */}
-                                    <div className="blog_post trans_200">
-                                        <div className="blog_post_body">
-                                            <div className="blog_post_title">
-                                                <a href="blog_single.html">
-                                                    With Changing Students and
-                                                    Times
-                                                </a>
-                                            </div>
-                                            <div className="blog_post_meta">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">admin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            november 11, 2017
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="blog_post_text">
-                                                <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path
-                                                    policymakers should take...
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Blog Post */}
-                                    <div className="blog_post trans_200">
-                                        <div className="blog_post_video_container">
-                                            <video
-                                                className="blog_post_video video-js"
-                                                data-setup='{"controls": true, "autoplay": false, "preload": "auto", "poster": "/landing/images/event_2.jpg"}'
+                                    {activities && activities.length > 0 ? (
+                                        activities.map((activity) => (
+                                            <div
+                                                className="blog_post"
+                                                key={activity.id}
                                             >
-                                                <source
-                                                    src="images/mov_bbb.mp4"
-                                                    type="video/mp4"
-                                                />
-                                                <source
-                                                    src="images/mov_bbb.ogg"
-                                                    type="video/ogg"
-                                                />
-                                                Your browser does not support
-                                                HTML5 video.
-                                            </video>
-                                        </div>
-                                        <div className="blog_post_body">
-                                            <div className="blog_post_title">
-                                                <a href="blog_single.html">
-                                                    Building Skills Outside the
-                                                    Classroom With New Ways
-                                                </a>
-                                            </div>
-                                            <div className="blog_post_meta">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">admin</a>
-                                                    </li>
-                                                    <li>
+                                                <div className="blog_post_image">
+                                                    <img
+                                                        src={
+                                                            activity.image
+                                                        }
+                                                        alt=""
+                                                    />
+                                                </div>
+                                                <div className="blog_post_content">
+                                                    <div className="blog_post_title">
                                                         <a href="#">
-                                                            november 11, 2017
+                                                            {activity.title}
                                                         </a>
-                                                    </li>
-                                                </ul>
+                                                    </div>
+                                                    {/* <div className="blog_post_text">
+                                                        <p>
+                                                            {activity.description}
+                                                        </p>
+                                                    </div> */}
+                                                </div>
                                             </div>
-                                            <div className="blog_post_text">
-                                                <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path
-                                                    policymakers should take...
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Blog Post */}
-                                    <div className="blog_post trans_200">
-                                        <div className="blog_post_image">
-                                            <img
-                                                src="/landing/images/event_2.jpg"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div className="blog_post_body">
-                                            <div className="blog_post_title">
-                                                <a href="blog_single.html">
-                                                    Law Schools Debate a
-                                                    Contentious Testing
-                                                    Alternative
-                                                </a>
-                                            </div>
-                                            <div className="blog_post_meta">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">admin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            november 11, 2017
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="blog_post_text">
-                                                <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path
-                                                    policymakers should take...
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Blog Post */}
-                                    <div className="blog_post trans_200">
-                                        <div className="blog_post_video_container">
-                                            <video
-                                                className="blog_post_video video-js"
-                                                data-setup='{"controls": true, "autoplay": false, "preload": "auto", "poster": "/landing/images/event_1.jpg"}'
-                                            >
-                                                <source
-                                                    src="images/mov_bbb.mp4"
-                                                    type="video/mp4"
-                                                />
-                                                <source
-                                                    src="images/mov_bbb.ogg"
-                                                    type="video/ogg"
-                                                />
-                                                Your browser does not support
-                                                HTML5 video.
-                                            </video>
-                                        </div>
-                                        <div className="blog_post_body">
-                                            <div className="blog_post_title">
-                                                <a href="blog_single.html">
-                                                    Building Skills Outside the
-                                                    Classroom With New Ways
-                                                </a>
-                                            </div>
-                                            <div className="blog_post_meta">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">admin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            november 11, 2017
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="blog_post_text">
-                                                <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path
-                                                    policymakers should take...
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Blog Post */}
-                                    <div className="blog_post trans_200">
-                                        <div className="blog_post_image">
-                                            <img
-                                                src="/landing/images/event_3.jpg"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div className="blog_post_body">
-                                            <div className="blog_post_title">
-                                                <a href="blog_single.html">
-                                                    Here’s What You Need to Know
-                                                    About Online Testing
-                                                </a>
-                                            </div>
-                                            <div className="blog_post_meta">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">admin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            november 11, 2017
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="blog_post_text">
-                                                <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path
-                                                    policymakers should take...
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Blog Post */}
-                                    <div className="blog_post trans_200">
-                                        <div className="blog_post_body">
-                                            <div className="blog_post_title">
-                                                <a href="blog_single.html">
-                                                    With Changing Students and
-                                                    Times
-                                                </a>
-                                            </div>
-                                            <div className="blog_post_meta">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">admin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            november 11, 2017
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="blog_post_text">
-                                                <p>
-                                                    Policy analysts generally
-                                                    agree on a need for reform,
-                                                    but not on which path
-                                                    policymakers should take...
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    ) : (
+                                        <h3 className="text-center">No activities found</h3>
+                                    )}
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col text-center">
                                 <div className="load_more trans_200">
                                     <a href="#">load more</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </Layout>

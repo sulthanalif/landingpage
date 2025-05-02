@@ -18,9 +18,9 @@ const Home = (props) => {
                 <About />
                 <News posts={props.posts} />
                 <Value />
-                <Activity />
+                <Activity activities={props.activities} />
                 <Admission />
-                <Faq />
+                <Faq faqs={props.faqs} />
             </Layout>
         </>
     );

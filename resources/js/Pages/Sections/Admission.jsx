@@ -20,94 +20,48 @@ const Admission = () => {
                         </div>
                     </div>
                     <div className="row events_row">
-                        {/* Event */}
                         <div className="col-lg-4 event_col">
                             <div className="event event_left">
                                 <div className="event_image">
                                     <img
-                                        src="/landing/images/event_1.jpg"
+                                        src="/landing/images/step-1.png"
                                         alt=""
                                         loading="lazy"
                                     />
                                 </div>
-                                <div className="event_body d-flex flex-row align-items-start justify-content-start">
-                                    <div className="event_date">
-                                        <div className="d-flex flex-column align-items-center justify-content-center trans_200">
-                                            <div className="event_day trans_200">
-                                                <i className="fa fa-file-text-o" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="event_content">
-                                        <div className="event_title">
-                                            <a href="#">Information services</a>
-                                        </div>
-                                        <div className="event_info_container">
-                                            <div className="event_text">
-                                                <p>
-                                                    Information about Lia
-                                                    Stephanie Catholic School
-                                                    can be asked to our staff.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                        {/* Event */}
+
                         <div className="col-lg-4 event_col">
                             <div className="event event_mid">
                                 <div className="event_image">
                                     <img
-                                        src="/landing/images/event_2.jpg"
+                                        src="/landing/images/step-2.png"
                                         alt=""
                                         loading="lazy"
                                     />
                                 </div>
-                                <div className="event_body d-flex flex-row align-items-start justify-content-start">
-                                    <div className="event_date">
-                                        <div className="d-flex flex-column align-items-center justify-content-center trans_200">
-                                            <div className="event_day trans_200">
-                                                <i className="fa fa-desktop" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="event_content">
-                                        <div className="event_title">
-                                            <a href="#">Form Retrieval</a>
-                                        </div>
-                                        <div className="event_info_container">
-                                            <div className="event_text">
-                                                <p>
-                                                    Fill out the form clearly
-                                                    and completely.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                        {/* Event */}
+
                         <div className="col-lg-4 event_col">
                             <div className="event event_right">
                                 <div className="event_image">
                                     <img
-                                        src="/landing/images/event_3.jpg"
+                                        src="/landing/images/step-3.png"
                                         alt=""
                                         loading="lazy"
                                     />
                                 </div>
-                                <div className="event_body d-flex flex-row align-items-start justify-content-start">
+                                {/* <div className="event_body d-flex flex-row align-items-start justify-content-start">
                                     <div className="event_date">
                                         <div className="d-flex flex-column align-items-center justify-content-center trans_200">
                                             <div className="event_day trans_200">
                                                 <i className="fa fa-list" />
                                             </div>
-                                            {/* <div className="event_month trans_200">
+                                            <div className="event_month trans_200">
                                                 Sep
-                                            </div> */}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="event_content">
@@ -115,7 +69,7 @@ const Admission = () => {
                                             <a href="#">Return of Form</a>
                                         </div>
                                         <div className="event_info_container">
-                                            {/* <div className="event_info">
+                                            <div className="event_info">
                                                 <i
                                                     className="fa fa-clock-o"
                                                     aria-hidden="true"
@@ -128,7 +82,7 @@ const Admission = () => {
                                                     aria-hidden="true"
                                                 />
                                                 <span>25 New York City</span>
-                                            </div> */}
+                                            </div>
                                             <div className="event_text">
                                                 <p>
                                                     Return of form accompanied
@@ -137,7 +91,7 @@ const Admission = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

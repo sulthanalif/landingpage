@@ -265,7 +265,7 @@ const OurGoal = () => {
                             <div className="about_item">
                                 <div className="about_item_image">
                                     <img
-                                        src="/landing/images/about_1.jpg"
+                                        src="/landing/images/edexcel.jpg"
                                         alt=""
                                     />
                                 </div>
@@ -333,7 +333,7 @@ const OurGoal = () => {
                             <div className="about_item">
                                 <div className="about_item_image">
                                     <img
-                                        src="/landing/images/about_1.jpg"
+                                        src="/landing/images/ib-curriculum.jpg"
                                         alt=""
                                     />
                                 </div>
