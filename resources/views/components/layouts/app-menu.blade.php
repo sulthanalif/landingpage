@@ -21,6 +21,9 @@
     @can('question-page')
         <x-menu-item title="Questions" icon="o-question-mark-circle" link="{{ route('question') }}" />
     @endcan
+    @can('calendar-page')
+        <x-menu-item title="Calendar" icon="o-calendar" link="{{ route('calendar') }}" />
+    @endcan
     @can('enrollment-page')
         <x-menu-item title="Enrollment" icon="o-user-plus" link="{{ route('enrollment') }}" />
     @endcan
