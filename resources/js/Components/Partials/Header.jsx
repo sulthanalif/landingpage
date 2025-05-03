@@ -36,11 +36,11 @@ const Header = () => {
                                                     aria-hidden="true"
                                                 />
                                                 <a
-                                                    href="tel:02154390347"
+                                                    href="tel:08118880678"
                                                     className="text-light ml-2"
                                                     target="_blank"
                                                 >
-                                                    (021)54390347
+                                                    0811-8880-678
                                                 </a>
                                             </li>
                                             <li>
@@ -49,11 +49,11 @@ const Header = () => {
                                                     aria-hidden="true"
                                                 />
                                                 <a
-                                                    href="mailto:info@lscs.sch.id"
+                                                    href="mailto:marketing@lscs.sch.id"
                                                     className="text-light ml-2"
                                                     target="_blank"
                                                 >
-                                                    info@lscs.sch.id
+                                                    marketing@lscs.sch.id
                                                 </a>
                                             </li>
                                         </ul>

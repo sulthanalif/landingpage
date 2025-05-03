@@ -51,7 +51,7 @@ const Hero = () => {
                                                     Lia Stephanie Catholic School
                                                 </div>
                                                 <div className="home_slider_subtitle bg-light pb-2">
-                                                    <p className="font-italic font-weight-bold h6">"Menjadi Bagian dari Dunia, Dimulai dari Sini"</p>
+                                                    <p className="font-italic font-weight-bold h6">"Becoming Part of the World Starts Here"</p>
                                                 </div>
                                             </div>
                                             <div className="home_slider_form_container">

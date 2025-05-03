@@ -9,7 +9,7 @@ const About = () => {
                     <div className="row features_row">
                         <div className="col-lg-6">
                             <img
-                                src="/landing/images/about.jpg"
+                                src="/landing/images/building.jpg"
                                 alt=""
                                 loading="lazy"
                                 className="img-fluid mx-auto d-block"
@@ -23,37 +23,30 @@ const About = () => {
                                 <hr className="feature_line" />
                                 <div className="feature_text mt-3 text-justify">
                                     <p>
-                                        Di Lia Stephanie, kami percaya bahwa
-                                        pendidikan bukan hanya soal nilai
-                                        akademis, tapi juga tentang membentuk
-                                        karakter, membangun rasa percaya diri,
-                                        dan menyiapkan generasi masa depan yang
-                                        tangguh dan berakhlak.
+                                        At Lia Stephanie, we believe that
+                                        education is not just about academic
+                                        scores, but also about shaping
+                                        character, building self-confidence, and
+                                        preparing a resilient and moral future
+                                        generation.
                                     </p>
                                     <p>
-                                        Di Lia Stephanie, kami percaya bahwa
-                                        pendidikan bukan hanya soal nilai
-                                        akademis, tapi juga tentang membentuk
-                                        karakter, membangun rasa percaya diri,
-                                        dan menyiapkan generasi masa depan yang
-                                        tangguh dan berakhlak.
+                                        With an integrated curriculum,
+                                        experienced educators, and a comfortable
+                                        and safe learning environment, we are
+                                        committed to providing the best
+                                        education for every child.
                                     </p>
                                     <p>
-                                        Dengan kurikulum yang terintegrasi,
-                                        tenaga pengajar berpengalaman, serta
-                                        lingkungan belajar yang nyaman dan aman,
-                                        kami berkomitmen memberikan pendidikan
-                                        terbaik untuk setiap anak.
-                                    </p>
-                                    <p>
-                                        Di Lia Stephanie, kami menghadirkan
-                                        program pendidikan yang dirancang secara
-                                        menyeluruh untuk mendukung perkembangan
-                                        akademik, emosional, sosial, dan
-                                        spiritual siswa. Kami percaya bahwa
-                                        setiap anak memiliki potensi unik yang
-                                        perlu diasah melalui pendekatan belajar
-                                        yang tepat dan relevan dengan zaman.
+                                        At Lia Stephanie, we offer educational
+                                        programs that are comprehensively
+                                        designed to support the academic,
+                                        emotional, social, and spiritual
+                                        development of students. We believe that
+                                        every child possesses unique potential
+                                        that needs to be nurtured through the
+                                        right learning approach, relevant to the
+                                        times.
                                     </p>
                                     <Link
                                         href="/about"
