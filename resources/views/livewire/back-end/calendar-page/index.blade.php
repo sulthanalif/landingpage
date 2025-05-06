@@ -5,6 +5,7 @@ use Mary\Traits\Toast;
 use App\Models\Calendar;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new class extends Component {
@@ -27,11 +28,98 @@ new class extends Component {
     //var
     public string $label = '';
     public string $description = '';
-    public string $css = '';
+    // public string $css = '';
     public string $start_date = '';
     public string $end_date = '';
     public bool $status = true;
     public array $varCalendar = ['recordId', 'label', 'description', 'css', 'start_date', 'end_date', 'status'];
+
+    // Selected option
+    public ?string $css = null;
+    public Collection $colorsSearchable;
+
+    public function mount(): void
+    {
+        $this->searchColor();
+    }
+
+    public function searchColor(string $value = '')
+    {
+        $colors = collect([
+            ['id' => 'red-200', 'name' => 'Red'],
+            ['id' => 'green-200', 'name' => 'Green'],
+            ['id' => 'blue-200', 'name' => 'Blue'],
+            ['id' => 'amber-200', 'name' => 'Amber'],
+            ['id' => 'cyan-200', 'name' => 'Cyan'],
+            ['id' => 'lime-200', 'name' => 'Lime'],
+            ['id' => 'indigo-200', 'name' => 'Indigo'],
+            ['id' => 'pink-200', 'name' => 'Pink'],
+            ['id' => 'teal-200', 'name' => 'Teal'],
+            ['id' => 'rose-200', 'name' => 'Rose'],
+            ['id' => 'gray-200', 'name' => 'Gray'],
+            ['id' => 'zinc-200', 'name' => 'Zinc'],
+            ['id' => 'neutral-200', 'name' => 'Neutral'],
+            ['id' => 'stone-200', 'name' => 'Stone'],
+        ]);
+
+        $selectedOption = $colors->firstWhere('id', $this->css);
+
+        $filtered = $colors->filter(function ($item) use ($value) {
+            return str_contains(strtolower($item['name']), strtolower($value));
+        })->values();
+
+        $this->colorsSearchable = $filtered->when($selectedOption, fn ($col) => $col->push($selectedOption))->unique('id');
+
+    }
+
+    public function save(): void
+    {
+        $this->setModel(new Calendar());
+
+        $this->saveOrUpdate(
+            validationRules: [
+                'label' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'css' => 'required|string|max:255',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+                'status' => 'required|boolean',
+            ],
+            afterSave: function ($calendar, $component) {
+                $component->drawer = false;
+            }
+        );
+        $this->reset($this->varCalendar);
+        $this->unsetModel();
+    }
+
+    public function delete(): void
+    {
+        $this->setModel(new Calendar());
+
+        foreach ($this->selected as $id) {
+            $this->setRecordId($id);
+            $this->deleteData();
+        }
+
+        $this->reset('selected');
+        $this->unsetRecordId();
+        $this->unsetModel();
+        $this->modalAlertDelete = false;
+    }
+
+    public function changeStatus(): void
+    {
+        $this->setModel(new Calendar());
+
+        foreach ($this->selected as $id) {
+            $this->setRecordId($id);
+            $this->changeStatusData();
+        }
+        $this->reset('selected');
+        $this->unsetModel();
+        $this->modalAlertWarning = false;
+    }
 
     public function datas(): LengthAwarePaginator
     {
@@ -41,6 +129,21 @@ new class extends Component {
             })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
+    }
+
+    public function events(): array
+    {
+        return Calendar::query()->get()->map(function ($calendar) {
+            return [
+                'label' => $calendar->label,
+                'description' => $calendar->description,
+                'css' => '!bg-'.$calendar->css,
+                'range' => [
+                    $calendar->start_date,
+                    $calendar->end_date
+                ],
+            ];
+        })->toArray();
     }
 
     public function headers(): array
@@ -61,17 +164,7 @@ new class extends Component {
         return [
             'datas' => $this->datas(),
             'headers' => $this->headers(),
-            'events' => [
-                [
-                    'label' => 'Business Travel',
-                    'description' => 'Series A founding',
-                    'css' => '!bg-red-200',
-                    'range' => [
-                        now()->startOfMonth()->addDays(12),
-                        now()->startOfMonth()->addDays(19)
-                    ]
-                ],
-            ],
+            'events' => $this->events(),
         ];
     }
 }; ?>
@@ -117,6 +210,9 @@ new class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             wire:model.live="selected" selectable with-pagination>
+            @scope('cell_css', $data)
+                <x-badge value="{{ $data['css'] }}" class="!bg-{{ $data['css'] }}" />
+            @endscope
             @scope('cell_status', $data)
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
@@ -149,4 +245,6 @@ new class extends Component {
     </x-card>
 
     @include('livewire.back-end.calendar-page.create')
+    @include('livewire.alerts.alert-delete')
+    @include('livewire.alerts.alert-warning')
 </div>

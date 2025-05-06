@@ -113,6 +113,23 @@ trait ManageDatas
         }
     }
 
+    private function changeStatusData(): void
+    {
+        try {
+            DB::beginTransaction();
+            $record = $this->model->find($this->recordId);
+            if (!$record) {
+                throw Log::alert("Record not found");
+            }
+            $record->status = !$record->status;
+            $record->save();
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+            Log::channel('debug')->warning("An error occurred: " . $e->getMessage()." file: " . $e->getFile()." line: " . $e->getLine()." trace: " . $e->getTraceAsString());
+        }
+    }
+
     private function uploadImage($image, $folder = null): string
     {
         return $image->store('images/'. $folder, 'public');

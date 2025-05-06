@@ -1,5 +1,5 @@
 {{--  modal --}}
-<x-modal wire:model="modalAlertDelete" class="backdrop-blur">
+<x-modal wire:model="modalAlertDelete">
     <x-form wire:submit="delete" class="relative" no-separator>
         <div class="flex justify-center items-center">
                 <div class="mb-5 rounded-lg w-full text-center">

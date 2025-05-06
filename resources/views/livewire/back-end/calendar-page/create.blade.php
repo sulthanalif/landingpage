@@ -19,7 +19,28 @@
         </div>
 
         <div>
-            <x-colorpicker wire:model="css" label="Color" />
+            <x-choices-offline
+            label="Color"
+            wire:model="css"
+            :options="$colorsSearchable"
+            search-function="searchColor"
+            placeholder="Search ..."
+            single
+            clearable
+            searchable >
+                @scope('item', $color)
+                    <x-list-item :item="$color">
+                        <x-slot:actions>
+                            <div class="w-8 h-8 rounded-full border-4 bg-{{ $color['id'] }}"></div>
+                        </x-slot:actions>
+                    </x-list-item>
+                @endscope
+
+                {{-- Selection slot--}}
+                @scope('selection', $color)
+                     <div class="w-full px-2 py-1 rounded border-4 bg-{{ $color['id'] }}">{{ $color['name'] }}</div>
+                @endscope
+            </x-choices-offline>
         </div>
 
         <div class="my-3">

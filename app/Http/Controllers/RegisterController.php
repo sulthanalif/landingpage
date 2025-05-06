@@ -13,7 +13,7 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         //testing
-        return response()->json($request->all());
+        // return response()->json($request->all());
 
         $validate = $request->validate([
             'level' => 'required',
