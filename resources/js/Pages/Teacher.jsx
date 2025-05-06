@@ -85,175 +85,175 @@ const Teacher = () => {
                         </div>
                         <div className="row team_row">
                             <TeamItem
-                                imgSrc="/landing/images/teacher/ari.JPG"
+                                imgSrc="/landing/images/teacher/ari.jpg"
                                 name="ari"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/baginda.JPG"
+                                imgSrc="/landing/images/teacher/baginda.jpg"
                                 name="baginda"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/beatrice.JPG"
+                                imgSrc="/landing/images/teacher/beatrice.jpg"
                                 name="beatrice"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/benedictus.JPG"
+                                imgSrc="/landing/images/teacher/benedictus.jpg"
                                 name="benedictus"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/bero.JPG"
+                                imgSrc="/landing/images/teacher/bero.jpg"
                                 name="bero"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/cindy.JPG"
+                                imgSrc="/landing/images/teacher/cindy.jpg"
                                 name="cindy"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/dewany.JPG"
+                                imgSrc="/landing/images/teacher/dewany.jpg"
                                 name="dewany"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/dewi.JPG"
+                                imgSrc="/landing/images/teacher/dewi.jpg"
                                 name="dewi"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/dian.JPG"
+                                imgSrc="/landing/images/teacher/dian.jpg"
                                 name="dian"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/dwi.JPG"
+                                imgSrc="/landing/images/teacher/dwi.jpg"
                                 name="dwi"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/elsya.JPG"
+                                imgSrc="/landing/images/teacher/elsya.jpg"
                                 name="elsya"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/emil.JPG"
+                                imgSrc="/landing/images/teacher/emil.jpg"
                                 name="emil"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/eriko.JPG"
+                                imgSrc="/landing/images/teacher/eriko.jpg"
                                 name="eriko"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/ferren.JPG"
+                                imgSrc="/landing/images/teacher/ferren.jpg"
                                 name="ferren"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/frans.JPG"
+                                imgSrc="/landing/images/teacher/frans.jpg"
                                 name="frans"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/fridus.JPG"
+                                imgSrc="/landing/images/teacher/fridus.jpg"
                                 name="fridus"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/herry.JPG"
+                                imgSrc="/landing/images/teacher/herry.jpg"
                                 name="herry"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/indah.JPG"
+                                imgSrc="/landing/images/teacher/indah.jpg"
                                 name="indah"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/jaka.JPG"
+                                imgSrc="/landing/images/teacher/jaka.jpg"
                                 name="jaka"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/juli.JPG"
+                                imgSrc="/landing/images/teacher/juli.jpg"
                                 name="juli"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/lena.JPG"
+                                imgSrc="/landing/images/teacher/lena.jpg"
                                 name="lena"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/lulu.JPG"
+                                imgSrc="/landing/images/teacher/lulu.jpg"
                                 name="lulu"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/madya.JPG"
+                                imgSrc="/landing/images/teacher/madya.jpg"
                                 name="madya"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/meifang.JPG"
+                                imgSrc="/landing/images/teacher/meifang.jpg"
                                 name="meifang"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/mia.JPG"
+                                imgSrc="/landing/images/teacher/mia.jpg"
                                 name="mia"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/niken.JPG"
+                                imgSrc="/landing/images/teacher/niken.jpg"
                                 name="niken"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/novi.JPG"
+                                imgSrc="/landing/images/teacher/novi.jpg"
                                 name="novi"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/nurafni.JPG"
+                                imgSrc="/landing/images/teacher/nurafni.jpg"
                                 name="nurafni"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/probo.JPG"
+                                imgSrc="/landing/images/teacher/probo.jpg"
                                 name="probo"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/retha.JPG"
+                                imgSrc="/landing/images/teacher/retha.jpg"
                                 name="retha"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/retno.JPG"
+                                imgSrc="/landing/images/teacher/retno.jpg"
                                 name="retno"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/ricky.JPG"
+                                imgSrc="/landing/images/teacher/ricky.jpg"
                                 name="ricky"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/risma.JPG"
+                                imgSrc="/landing/images/teacher/risma.jpg"
                                 name="risma"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/selfi.JPG"
+                                imgSrc="/landing/images/teacher/selfi.jpg"
                                 name="selfi"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/septo.JPG"
+                                imgSrc="/landing/images/teacher/septo.jpg"
                                 name="septo"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/simamarta.JPG"
+                                imgSrc="/landing/images/teacher/simamarta.jpg"
                                 name="simamarta"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/sri.JPG"
+                                imgSrc="/landing/images/teacher/sri.jpg"
                                 name="sri"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/tan.JPG"
+                                imgSrc="/landing/images/teacher/tan.jpg"
                                 name="tan"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/there.JPG"
+                                imgSrc="/landing/images/teacher/there.jpg"
                                 name="there"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/tining.JPG"
+                                imgSrc="/landing/images/teacher/tining.jpg"
                                 name="tining"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/tri.JPG"
+                                imgSrc="/landing/images/teacher/tri.jpg"
                                 name="tri"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/ulfa.JPG"
+                                imgSrc="/landing/images/teacher/ulfa.jpg"
                                 name="ulfa"
                             />
                             <TeamItem
-                                imgSrc="/landing/images/teacher/yosef.JPG"
+                                imgSrc="/landing/images/teacher/yosef.jpg"
                                 name="yosef"
                             />
                         </div>
