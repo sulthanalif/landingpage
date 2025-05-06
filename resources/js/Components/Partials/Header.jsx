@@ -120,7 +120,8 @@ const Header = () => {
                                             <li
                                                 className={
                                                     url === "/about" ||
-                                                    url === "/story"
+                                                    url === "/story" ||
+                                                    url === "/teacher"
                                                         ? "nav-item dropdown active"
                                                         : "nav-item dropdown"
                                                 }
@@ -182,10 +183,9 @@ const Header = () => {
                                                 className={
                                                     url === "/curriculum" ||
                                                     url ===
-                                                        "/apply-admission" ||
-                                                    url ===
                                                         "/calendar-academic" ||
-                                                    url === "/accreditation"
+                                                    url === "/accreditation" ||
+                                                    url === "/extracurricular"
                                                         ? "nav-item dropdown active"
                                                         : "nav-item dropdown"
                                                 }
@@ -214,17 +214,6 @@ const Header = () => {
                                                     <Link
                                                         className={
                                                             url ===
-                                                            "/apply-admission"
-                                                                ? "dropdown-item active"
-                                                                : "dropdown-item text-dark"
-                                                        }
-                                                        href="/apply-admission"
-                                                    >
-                                                        Apply Admission
-                                                    </Link>
-                                                    <Link
-                                                        className={
-                                                            url ===
                                                             "/calendar-academic"
                                                                 ? "dropdown-item active"
                                                                 : "dropdown-item text-dark"
@@ -232,6 +221,17 @@ const Header = () => {
                                                         href="/calendar-academic"
                                                     >
                                                         Academic Calendar
+                                                    </Link>
+                                                    <Link
+                                                        className={
+                                                            url ===
+                                                            "/extracurricular"
+                                                                ? "dropdown-item active"
+                                                                : "dropdown-item text-dark"
+                                                        }
+                                                        href="/extracurricular"
+                                                    >
+                                                        Extracurricular
                                                     </Link>
                                                     <Link
                                                         className={

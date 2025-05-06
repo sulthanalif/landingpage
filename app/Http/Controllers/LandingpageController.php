@@ -50,9 +50,9 @@ class LandingpageController extends Controller
         return Inertia::render('Curriculum');
     }
 
-    public function apply()
+    public function extracurricular()
     {
-        return Inertia::render('Apply');
+        return Inertia::render('Extracurricular');
     }
 
     public function calendarAcademic()

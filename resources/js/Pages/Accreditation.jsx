@@ -179,13 +179,14 @@ const Accreditation = () => {
                                         className="feature_video_background"
                                         style={{
                                             backgroundImage:
-                                                "url(/landing/images/video.jpg)",
+                                                "url(/img/logo.png)",
                                         }}
                                     />
                                     <a
                                         className="vimeo feature_video_button"
-                                        href="https://player.vimeo.com/video/99340873?title=0"
-                                        title="OH, PORTUGAL - IN 4K - Basti Hansen - Stock Footage"
+                                        href="https://drive.google.com/file/d/14SY6mxL8ly_iRpHK-a82wyRlOlQGQIJq/view?usp=drive_link"
+                                        title="Teaching and Learning Activities (Entrepreneur Got Talent)"
+                                        target="_blank"
                                     >
                                         <img
                                             src="/landing/images/play.png"

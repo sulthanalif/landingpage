@@ -15,7 +15,7 @@ Route::get('/story', [LandingpageController::class, 'story']);
 Route::get('/teacher', [LandingpageController::class, 'teacher']);
 Route::get('/admission', [LandingpageController::class, 'admission']);
 Route::get('/curriculum', [LandingpageController::class, 'curriculum']);
-Route::get('/apply-admission', [LandingpageController::class, 'apply']);
+Route::get('/extracurricular', [LandingpageController::class, 'extracurricular']);
 Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademic']);
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 Route::get('/contact', [LandingpageController::class, 'contact']);

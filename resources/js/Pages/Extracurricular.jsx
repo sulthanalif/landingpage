@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
 
-const Apply = () => {
+const Extracurricular = () => {
     useEffect(() => {
         const link1 = document.createElement("link");
         link1.rel = "stylesheet";
@@ -44,7 +44,7 @@ const Apply = () => {
                                                 <Link href="/">Home</Link>
                                             </li>
                                             <li>Curriculum</li>
-                                            <li>Apply Admission</li>
+                                            <li>Extracurricular</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@ const Apply = () => {
                             <div className="col">
                                 <div className="section_title_container text-center">
                                     <h2 className="section_title">
-                                        Apply Admission
+                                        Extracurricular
                                     </h2>
                                     <div className="section_subtitle">
                                         <p>
@@ -179,13 +179,14 @@ const Apply = () => {
                                         className="feature_video_background"
                                         style={{
                                             backgroundImage:
-                                                "url(/landing/images/video.jpg)",
+                                                "url(/img/logo.png)",
                                         }}
                                     />
                                     <a
                                         className="vimeo feature_video_button"
-                                        href="https://player.vimeo.com/video/99340873?title=0"
-                                        title="OH, PORTUGAL - IN 4K - Basti Hansen - Stock Footage"
+                                        href="https://drive.google.com/file/d/14SY6mxL8ly_iRpHK-a82wyRlOlQGQIJq/view?usp=drive_link"
+                                        title="Teaching and Learning Activities (Entrepreneur Got Talent)"
+                                        target="_blank"
                                     >
                                         <img
                                             src="/landing/images/play.png"
@@ -200,6 +201,6 @@ const Apply = () => {
             </Layout>
         </>
     );
-}
+};
 
-export default Apply
+export default Extracurricular;
