@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 const CalendarAcademic = () => {
     useEffect(() => {
@@ -29,6 +33,8 @@ const CalendarAcademic = () => {
             document.body.removeChild(script);
         };
     }, []);
+
+    const events = [{ title: "Meeting", start: new Date() }];
 
     return (
         <>
@@ -81,118 +87,20 @@ const CalendarAcademic = () => {
                             </div>
                         </div>
                         <div className="row feature_row">
-                            {/* Feature Content */}
-                            <div className="col-lg-6 feature_col">
+                            <div className="col-lg-12 feature_col">
                                 <div className="feature_content">
-                                    {/* Accordions */}
-                                    <div className="accordions">
-                                        <div className="elements_accordions">
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center active">
-                                                    <div>
-                                                        Award for Best School
-                                                        2017
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        You’re learning from the
-                                                        best.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        Our degrees are
-                                                        recognized worldwide.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        We encourage our
-                                                        students to go global.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Accordions End */}
-                                </div>
-                            </div>
-                            {/* Feature Video */}
-                            <div className="col-lg-6 feature_col">
-                                <div className="feature_video d-flex flex-column align-items-center justify-content-center">
-                                    <div
-                                        className="feature_video_background"
-                                        style={{
-                                            backgroundImage:
-                                                "url(/img/logo.png)",
+                                    <FullCalendar
+                                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                        headerToolbar={{
+                                          left: 'prev,next today',
+                                          center: 'title',
+                                          right: 'dayGridMonth,timeGridWeek,timeGridDay'
                                         }}
+                                        initialView="dayGridMonth"
+                                        weekends={true}
+                                        events={events}
+                                        eventContent={renderEventContent}
                                     />
-                                    <a
-                                        className="vimeo feature_video_button"
-                                        href="https://drive.google.com/file/d/14SY6mxL8ly_iRpHK-a82wyRlOlQGQIJq/view?usp=drive_link"
-                                        title="Teaching and Learning Activities (Entrepreneur Got Talent)"
-                                        target="_blank"
-                                    >
-                                        <img
-                                            src="/landing/images/play.png"
-                                            alt=""
-                                        />
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -202,5 +110,14 @@ const CalendarAcademic = () => {
         </>
     );
 };
+
+function renderEventContent(eventInfo) {
+    return (
+        <>
+            <b>{eventInfo.timeText}</b>
+            <i>{eventInfo.event.title}</i>
+        </>
+    );
+}
 
 export default CalendarAcademic;
