@@ -2,6 +2,7 @@
 
 use App\ManageDatas;
 use Mary\Traits\Toast;
+use App\Models\Register;
 use App\Models\Enrollment;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
@@ -26,7 +27,7 @@ new class extends Component {
 
     public function datas(): LengthAwarePaginator
     {
-        return Enrollment::query()
+        return Register::query()
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
     }

@@ -127,7 +127,7 @@ const Register = () => {
                 : "",
         };
 
-        post("/register", {
+        post('/register', {
             data: formData,
             preserveScroll: true,
             onSuccess: () => {

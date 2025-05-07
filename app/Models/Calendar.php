@@ -10,6 +10,7 @@ class Calendar extends Model
         'label',
         'description',
         'css',
+        'code',
         'start_date',
         'end_date',
         'status'

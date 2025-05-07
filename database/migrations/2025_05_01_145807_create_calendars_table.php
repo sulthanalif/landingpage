@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('label');
             $table->string('description')->nullable();
             $table->string('css')->nullable();
+            $table->string('code')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('status')->default(true);

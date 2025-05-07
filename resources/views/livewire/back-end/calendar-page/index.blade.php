@@ -5,10 +5,11 @@ use Mary\Traits\Toast;
 use App\Models\Calendar;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new #[Title('Calendars')] class extends Component {
     use Toast, WithPagination, ManageDatas;
 
     public string $search = '';
@@ -46,20 +47,20 @@ new class extends Component {
     public function searchColor(string $value = '')
     {
         $colors = collect([
-            ['id' => 'red-200', 'name' => 'Red'],
-            ['id' => 'green-200', 'name' => 'Green'],
-            ['id' => 'blue-200', 'name' => 'Blue'],
-            ['id' => 'amber-200', 'name' => 'Amber'],
-            ['id' => 'cyan-200', 'name' => 'Cyan'],
-            ['id' => 'lime-200', 'name' => 'Lime'],
-            ['id' => 'indigo-200', 'name' => 'Indigo'],
-            ['id' => 'pink-200', 'name' => 'Pink'],
-            ['id' => 'teal-200', 'name' => 'Teal'],
-            ['id' => 'rose-200', 'name' => 'Rose'],
-            ['id' => 'gray-200', 'name' => 'Gray'],
-            ['id' => 'zinc-200', 'name' => 'Zinc'],
-            ['id' => 'neutral-200', 'name' => 'Neutral'],
-            ['id' => 'stone-200', 'name' => 'Stone'],
+            ['id' => 'red-200', 'name' => 'Red', 'code' => '#ef4444'],
+            ['id' => 'green-200', 'name' => 'Green', 'code' => '#22c55e'],
+            ['id' => 'blue-200', 'name' => 'Blue', 'code' => '#3b82f6'],
+            ['id' => 'amber-200', 'name' => 'Amber', 'code' => '#f59e0b'],
+            ['id' => 'cyan-200', 'name' => 'Cyan', 'code' => '#06b6d4'],
+            ['id' => 'lime-200', 'name' => 'Lime', 'code' => '#84cc16'],
+            ['id' => 'indigo-200', 'name' => 'Indigo', 'code' => '#6366f1'],
+            ['id' => 'pink-200', 'name' => 'Pink', 'code' => '#ec4899'],
+            ['id' => 'teal-200', 'name' => 'Teal', 'code' => '#14b8a6'],
+            ['id' => 'rose-200', 'name' => 'Rose', 'code' => '#f43f5e'],
+            ['id' => 'gray-200', 'name' => 'Gray', 'code' => '#9ca3af'],
+            ['id' => 'zinc-200', 'name' => 'Zinc', 'code' => '#71717a'],
+            ['id' => 'neutral-200', 'name' => 'Neutral', 'code' => '#737373'],
+            ['id' => 'stone-200', 'name' => 'Stone', 'code' => '#78716c'],
         ]);
 
         $selectedOption = $colors->firstWhere('id', $this->css);
@@ -85,6 +86,9 @@ new class extends Component {
                 'end_date' => 'required|date',
                 'status' => 'required|boolean',
             ],
+            beforeSave: function ($calendar, $component) {
+                $calendar->code = $this->colorsSearchable->firstWhere('id', $component->css)['code'];
+            },
             afterSave: function ($calendar, $component) {
                 $component->drawer = false;
             }
@@ -184,6 +188,17 @@ new class extends Component {
             $wire.status = true;
             $wire.drawer = true;
         })
+        $js('detail', (calendar) => {
+            $wire.recordId = calendar.id;
+            $wire.label = calendar.label;
+            $wire.description = calendar.description;
+            $wire.css = calendar.css;
+            $wire.start_date = calendar.start_date;
+            $wire.end_date = calendar.end_date;
+            $wire.status = calendar.status;
+            $wire.drawer = true;
+            $wire.$refresh();
+        })
     </script>
 @endscript
 
@@ -209,7 +224,7 @@ new class extends Component {
 
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            wire:model.live="selected" selectable with-pagination>
+            wire:model.live="selected" selectable with-pagination @row-click="$js.detail($event.detail)">
             @scope('cell_css', $data)
                 <x-badge value="{{ $data['css'] }}" class="!bg-{{ $data['css'] }}" />
             @endscope
@@ -220,9 +235,9 @@ new class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
-            @scope('actions', $data)
+            {{-- @scope('actions', $data)
                 <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
-            @endscope
+            @endscope --}}
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
