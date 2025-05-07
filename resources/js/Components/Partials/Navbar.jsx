@@ -90,6 +90,66 @@ const Navbar = ({ isActive, closeMenu }) => {
                         </li>
                     </ul>
                 </nav>
+                <div className="menu_nav mt-5">
+                    <ul className="menu_mm">
+                        <li>
+                            <i className="fa fa-phone" aria-hidden="true" />
+                            <a
+                                href="tel:08118880678"
+                                className="text-dark ml-2"
+                                target="_blank"
+                            >
+                                0811-8880-678
+                            </a>
+                        </li>
+                        <li>
+                            <i
+                                className="fa fa-envelope-o"
+                                aria-hidden="true"
+                            />
+                            <a
+                                href="mailto:marketing@lscs.sch.id"
+                                className="text-dark ml-2"
+                                target="_blank"
+                            >
+                                marketing@lscs.sch.id
+                            </a>
+                        </li>
+                    </ul>
+                    <div className="d-flex justify-content-end align-items-center">
+                        <Link
+                            href="#"
+                            className="d-flex align-items-center ml-2 mr-4 text-dark"
+                        >
+                            <img
+                                src="/img/en.svg"
+                                className="img-fluid mr-1"
+                                style={{
+                                    maxWidth: "auto",
+                                    maxHeight: "25px",
+                                }}
+                                alt="EN"
+                            />
+                            EN
+                        </Link>
+                        |
+                        <Link
+                            href="#"
+                            className="d-flex align-items-center ml-2 mr-4 text-dark"
+                        >
+                            <img
+                                src="/img/id.svg"
+                                className="img-fluid mr-1"
+                                style={{
+                                    maxWidth: "auto",
+                                    maxHeight: "25px",
+                                }}
+                                alt="EN"
+                            />
+                            ID
+                        </Link>
+                    </div>
+                </div>
             </div>
         </>
     );

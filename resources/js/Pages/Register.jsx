@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
-import { Link } from "@inertiajs/react";
+import { Link, useForm } from "@inertiajs/react";
 
 const Register = () => {
     useEffect(() => {
@@ -30,9 +30,68 @@ const Register = () => {
         };
     }, []);
 
+    // State untuk modal
+    const [showModal, setShowModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    // Inertia useForm hook untuk handle form submission
+    const { data, setData, post, processing, errors, reset } = useForm({
+        // Tab 1: Student Personal Data
+        level: "",
+        name: "",
+        gender: "",
+        religion: "",
+        place_of_birth: "",
+        date_of_birth: "",
+        phone: "",
+        email: "",
+        previous_school: "",
+        hobbi: "",
+        achievement: "",
+
+        // Tab 2: Student Parent Data
+        father_name: "",
+        place_of_birth_father: "",
+        date_of_birth_father: "",
+        mother_name: "",
+        place_of_birth_mother: "",
+        date_of_birth_mother: "",
+        number_of_siblings: "",
+        phone_parent: "",
+        email_parent: "",
+
+        // Tab 3: Student Address Data
+        father_address: "",
+        same_with_father: true,
+        mother_address: "",
+        student_residence_status: "",
+        student_address: "",
+    });
+
+    useEffect(() => {
+        if (data.same_with_father && data.father_address) {
+            setData("mother_address", data.father_address);
+        }
+    }, [data.same_with_father, data.father_address]);
+
+    useEffect(() => {
+        if (data.student_residence_status === "Father" && data.father_address) {
+            setData("student_address", data.father_address);
+        } else if (
+            data.student_residence_status === "Mother" &&
+            data.mother_address
+        ) {
+            setData("student_address", data.mother_address);
+        }
+    }, [
+        data.student_residence_status,
+        data.father_address,
+        data.mother_address,
+    ]);
+
     const [activeTab, setActiveTab] = useState(0);
-    const [sameWithFather, setSameWithFather] = useState(true);
-    const [residenceStatus, setResidenceStatus] = useState("");
     const tabs = [
         "Student Personal Data",
         "Student Parent Data",
@@ -47,20 +106,65 @@ const Register = () => {
         if (activeTab > 0) setActiveTab(activeTab - 1);
     };
 
-    const handleRegistration = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        // Di sini Anda akan melakukan logika pendaftaran,
-        // seperti mengirimkan data ke server.
 
-        // Setelah pendaftaran berhasil, Anda bisa mengarahkan pengguna ke /payment
-        console.log("Data registrasi akan dikirim.");
-        // Simulasi pendaftaran berhasil setelah 1 detik
-        setTimeout(() => {
-            console.log("Pendaftaran berhasil, mengarahkan ke /payment.");
-            window.location.href = "/payment";
-            // ATAU, lebih baik menggunakan router jika Anda menggunakan library seperti React Router
-            // history.push('/payment');
-        }, 1000);
+        const formData = {
+            ...data,
+            // Konversi tanggal ke format Y-m-d
+            date_of_birth: data.date_of_birth
+                ? new Date(data.date_of_birth).toISOString().split("T")[0]
+                : "",
+            father_date_of_birth: data.father_date_of_birth
+                ? new Date(data.father_date_of_birth)
+                      .toISOString()
+                      .split("T")[0]
+                : "",
+            mother_date_of_birth: data.mother_date_of_birth
+                ? new Date(data.mother_date_of_birth)
+                      .toISOString()
+                      .split("T")[0]
+                : "",
+        };
+
+        post("/register", {
+            data: formData,
+            preserveScroll: true,
+            onSuccess: () => {
+                setModalTitle("Registration Successful");
+                setModalMessage(
+                    "Your registration has been submitted successfully. We will contact you soon."
+                );
+                setIsSuccess(true);
+                setShowModal(true);
+                reset();
+            },
+            onError: (errors) => {
+                setModalTitle("Registration Failed");
+                setModalMessage(
+                    "Please check your form and try again. " +
+                        (errors.message || Object.values(errors).join(" "))
+                );
+                setIsSuccess(false);
+                setShowModal(true);
+
+                // Scroll ke field yang error
+                if (Object.keys(errors).length > 0) {
+                    const firstErrorField = Object.keys(errors)[0];
+                    document.getElementById(firstErrorField)?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                    });
+                }
+            },
+        });
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        if (isSuccess) {
+            window.location.href = "/register";
+        }
     };
 
     return (
@@ -102,11 +206,8 @@ const Register = () => {
                                     </h2>
                                     <div className="section_subtitle">
                                         <p>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit. Donec
-                                            vel gravida arcu. Vestibulum
-                                            feugiat, sapien ultrices fermentum
-                                            congue, quam velit venenatis sem
+                                            Please fill out all required fields
+                                            (*) to complete your registration.
                                         </p>
                                     </div>
                                 </div>
@@ -133,25 +234,34 @@ const Register = () => {
                             </ul>
 
                             {/* Form Body */}
-                            <form
-                                className="mt-3"
-                                onSubmit={handleRegistration}
-                            >
+                            <form className="mt-3" onSubmit={handleSubmit}>
                                 <div className="card">
                                     <div className="card-body">
                                         {/* Tab 1: Student Personal Data */}
                                         {activeTab === 0 && (
                                             <>
                                                 <div className="form-group">
-                                                    <label htmlFor="registered-level">
+                                                    <label htmlFor="level">
                                                         Registered Level{" "}
                                                         <span className="text-danger">
                                                             *
                                                         </span>
                                                     </label>
                                                     <select
-                                                        className="form-control text-secondary"
-                                                        id="registered-level"
+                                                        className={`form-control ${
+                                                            errors.level
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="level"
+                                                        value={data.level}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "level",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
                                                     >
                                                         <option
                                                             selected
@@ -176,16 +286,21 @@ const Register = () => {
                                                             "SMA1",
                                                             "SMA2",
                                                             "SMA3",
-                                                        ].map((level) => (
-                                                            <option key={level}>
-                                                                {level}
+                                                        ].map((lvl) => (
+                                                            <option key={lvl}>
+                                                                {lvl}
                                                             </option>
                                                         ))}
                                                     </select>
+                                                    {errors.level && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.level}
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label htmlFor="full-name">
+                                                    <label htmlFor="name">
                                                         Full Name{" "}
                                                         <span className="text-danger">
                                                             *
@@ -193,9 +308,26 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
-                                                        id="full-name"
+                                                        className={`form-control ${
+                                                            errors.name
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="name"
+                                                        value={data.name}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "name",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
                                                     />
+                                                    {errors.name && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.name}
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="row">
@@ -208,8 +340,23 @@ const Register = () => {
                                                                 </span>
                                                             </label>
                                                             <select
-                                                                className="form-control text-secondary"
+                                                                className={`form-control ${
+                                                                    errors.gender
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
                                                                 id="gender"
+                                                                value={
+                                                                    data.gender
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "gender",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             >
                                                                 <option
                                                                     selected
@@ -225,6 +372,13 @@ const Register = () => {
                                                                     Female
                                                                 </option>
                                                             </select>
+                                                            {errors.gender && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.gender
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
@@ -236,8 +390,23 @@ const Register = () => {
                                                                 </span>
                                                             </label>
                                                             <select
-                                                                className="form-control text-secondary"
+                                                                className={`form-control ${
+                                                                    errors.religion
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
                                                                 id="religion"
+                                                                value={
+                                                                    data.religion
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "religion",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             >
                                                                 <option
                                                                     selected
@@ -262,6 +431,13 @@ const Register = () => {
                                                                     Hindu
                                                                 </option>
                                                             </select>
+                                                            {errors.religion && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.religion
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -269,7 +445,7 @@ const Register = () => {
                                                 <div className="row">
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="place-of-birth">
+                                                            <label htmlFor="place_of_birth">
                                                                 Place of Birth{" "}
                                                                 <span className="text-danger">
                                                                     *
@@ -277,14 +453,36 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
-                                                                id="place-of-birth"
+                                                                className={`form-control ${
+                                                                    errors.place_of_birth
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="place_of_birth"
+                                                                value={
+                                                                    data.place_of_birth
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "place_of_birth",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.place_of_birth && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.place_of_birth
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="date-of-birth">
+                                                            <label htmlFor="date_of_birth">
                                                                 Date of Birth{" "}
                                                                 <span className="text-danger">
                                                                     *
@@ -292,9 +490,31 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="date"
-                                                                className="form-control text-secondary"
-                                                                id="date-of-birth"
+                                                                className={`form-control ${
+                                                                    errors.date_of_birth
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="date_of_birth"
+                                                                value={
+                                                                    data.date_of_birth
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "date_of_birth",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.date_of_birth && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.date_of_birth
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -302,7 +522,7 @@ const Register = () => {
                                                 <div className="row">
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="number">
+                                                            <label htmlFor="phone">
                                                                 Number
                                                                 Handphone/Whatsapp{" "}
                                                                 <span className="text-danger">
@@ -311,9 +531,31 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
-                                                                id="number"
+                                                                className={`form-control ${
+                                                                    errors.phone
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="phone"
+                                                                value={
+                                                                    data.phone
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "phone",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.phone && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.phone
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
@@ -323,9 +565,31 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="email"
-                                                                className="form-control text-secondary"
+                                                                className={`form-control ${
+                                                                    errors.email
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
                                                                 id="email"
+                                                                value={
+                                                                    data.email
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "email",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.email && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.email
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -339,31 +603,76 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
-                                                        id="previous-school"
+                                                        className={`form-control ${
+                                                            errors.previous_school
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="previous_school"
+                                                        value={
+                                                            data.previous_school
+                                                        }
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "previous_school",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
                                                     />
+                                                    {errors.previous_school && (
+                                                        <div className="invalid-feedback">
+                                                            {
+                                                                errors.previous_school
+                                                            }
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label htmlFor="hobbies">
+                                                    <label htmlFor="hobbi">
                                                         Hobbies
                                                     </label>
                                                     <textarea
-                                                        className="form-control"
-                                                        id="hobbies"
+                                                        className="form-control text-secondary"
+                                                        id="hobbi"
                                                         rows={2}
+                                                        value={data.hobbi}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "hobbi",
+                                                                e.target.value
+                                                            )
+                                                        }
                                                     />
+                                                    {errors.hobbi && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.hobbi}
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label htmlFor="achievements">
+                                                    <label htmlFor="achievement">
                                                         Achievements
                                                     </label>
                                                     <textarea
-                                                        className="form-control"
-                                                        id="achievements"
+                                                        className="form-control text-secondary"
+                                                        id="achievement"
                                                         rows={2}
+                                                        value={data.achievement}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "achievement",
+                                                                e.target.value
+                                                            )
+                                                        }
                                                     />
+                                                    {errors.achievement && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.achievement}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </>
                                         )}
@@ -372,7 +681,7 @@ const Register = () => {
                                         {activeTab === 1 && (
                                             <>
                                                 <div className="form-group">
-                                                    <label htmlFor="father-name">
+                                                    <label htmlFor="father_name">
                                                         Father Name{" "}
                                                         <span className="text-danger">
                                                             *
@@ -380,15 +689,32 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
-                                                        id="father-name"
+                                                        className={`form-control ${
+                                                            errors.father_name
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="father_name"
+                                                        value={data.father_name}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "father_name",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
                                                     />
+                                                    {errors.father_name && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.father_name}
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="row">
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="place-of-birth-father">
+                                                            <label htmlFor="place_of_birth_father">
                                                                 Place of Birth{" "}
                                                                 <span className="text-danger">
                                                                     *
@@ -396,14 +722,36 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
-                                                                id="place-of-birth-father"
+                                                                className={`form-control ${
+                                                                    errors.place_of_birth_father
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="place_of_birth_father"
+                                                                value={
+                                                                    data.place_of_birth_father
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "place_of_birth_father",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.place_of_birth_father && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.place_of_birth_father
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="date-of-birth-father">
+                                                            <label htmlFor="date_of_birth_father">
                                                                 Date of Birth{" "}
                                                                 <span className="text-danger">
                                                                     *
@@ -411,15 +759,37 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="date"
-                                                                className="form-control text-secondary"
-                                                                id="date-of-birth-father"
+                                                                className={`form-control ${
+                                                                    errors.date_of_birth_father
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="date_of_birth_father"
+                                                                value={
+                                                                    data.date_of_birth_father
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "date_of_birth_father",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.date_of_birth_father && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.date_of_birth_father
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label htmlFor="mother-name">
+                                                    <label htmlFor="mother_name">
                                                         Mother Name{" "}
                                                         <span className="text-danger">
                                                             *
@@ -427,15 +797,32 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
-                                                        id="mother-name"
+                                                        className={`form-control ${
+                                                            errors.mother_name
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="mother_name"
+                                                        value={data.mother_name}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "mother_name",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
                                                     />
+                                                    {errors.mother_name && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.mother_name}
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="row">
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="place-of-birth-mother">
+                                                            <label htmlFor="place_of_birth_mother">
                                                                 Place of Birth{" "}
                                                                 <span className="text-danger">
                                                                     *
@@ -443,14 +830,36 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
-                                                                id="place-of-birth-mother"
+                                                                className={`form-control ${
+                                                                    errors.place_of_birth_mother
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="place_of_birth_mother"
+                                                                value={
+                                                                    data.place_of_birth_mother
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "place_of_birth_mother",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.place_of_birth_mother && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.place_of_birth_mother
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="date-of-birth-mother">
+                                                            <label htmlFor="date_of_birth_mother">
                                                                 Date of Birth{" "}
                                                                 <span className="text-danger">
                                                                     *
@@ -458,15 +867,37 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="date"
-                                                                className="form-control text-secondary"
-                                                                id="date-of-birth-mother"
+                                                                className={`form-control ${
+                                                                    errors.date_of_birth_mother
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="date_of_birth_mother"
+                                                                value={
+                                                                    data.date_of_birth_mother
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "date_of_birth_mother",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.date_of_birth_mother && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.date_of_birth_mother
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label htmlFor="number-of-siblings">
+                                                    <label htmlFor="number_of_siblings">
                                                         Number Of Siblings{" "}
                                                         <span className="text-danger">
                                                             *
@@ -474,15 +905,36 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
-                                                        id="number-of-siblings"
+                                                        className={`form-control ${
+                                                            errors.number_of_siblings
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="number_of_siblings"
+                                                        value={
+                                                            data.number_of_siblings
+                                                        }
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "number_of_siblings",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
                                                     />
+                                                    {errors.number_of_siblings && (
+                                                        <div className="invalid-feedback">
+                                                            {
+                                                                errors.number_of_siblings
+                                                            }
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="row">
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="parent-number">
+                                                            <label htmlFor="phone_parent">
                                                                 Number
                                                                 Handphone/Whatsapp{" "}
                                                                 <span className="text-danger">
@@ -491,21 +943,65 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
-                                                                id="parent-number"
+                                                                className={`form-control ${
+                                                                    errors.phone_parent
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="phone_parent"
+                                                                value={
+                                                                    data.phone_parent
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "phone_parent",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.phone_parent && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.phone_parent
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
-                                                            <label htmlFor="parent-email">
+                                                            <label htmlFor="email_parent">
                                                                 Email
                                                             </label>
                                                             <input
-                                                                type="email"
-                                                                className="form-control text-secondary"
-                                                                id="parent-email"
+                                                                type="text"
+                                                                className={`form-control ${
+                                                                    errors.email_parent
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="email_parent"
+                                                                value={
+                                                                    data.email_parent
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "email_parent",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
                                                             />
+                                                            {errors.email_parent && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.email_parent
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -517,17 +1013,38 @@ const Register = () => {
                                             <>
                                                 {/* Father Address */}
                                                 <div className="form-group">
-                                                    <label htmlFor="father-address">
+                                                    <label htmlFor="father_address">
                                                         Father Address{" "}
                                                         <span className="text-danger">
                                                             *
                                                         </span>
                                                     </label>
                                                     <textarea
-                                                        className="form-control"
-                                                        id="father-address"
+                                                        className={`form-control ${
+                                                            errors.father_address
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="father_address"
                                                         rows={2}
+                                                        value={
+                                                            data.father_address
+                                                        }
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "father_address",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
                                                     />
+                                                    {errors.father_address && (
+                                                        <div className="invalid-feedback">
+                                                            {
+                                                                errors.father_address
+                                                            }
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 {/* Checkbox: Same with father */}
@@ -535,61 +1052,123 @@ const Register = () => {
                                                     <input
                                                         className="form-check-input"
                                                         type="checkbox"
-                                                        id="flexCheckDefault"
-                                                        checked={sameWithFather}
-                                                        onChange={(e) =>
-                                                            setSameWithFather(
-                                                                e.target.checked
-                                                            )
+                                                        id="same_with_father"
+                                                        checked={
+                                                            data.same_with_father
                                                         }
+                                                        onChange={(e) => {
+                                                            setData(
+                                                                "same_with_father",
+                                                                e.target.checked
+                                                            );
+                                                            if (
+                                                                e.target.checked
+                                                            ) {
+                                                                setData(
+                                                                    "mother_address",
+                                                                    data.father_address
+                                                                );
+                                                            }
+                                                        }}
                                                     />
                                                     <label
                                                         className="form-check-label"
-                                                        htmlFor="flexCheckDefault"
+                                                        htmlFor="same_with_father"
                                                     >
                                                         Same with father
                                                     </label>
                                                 </div>
 
-                                                {/* Mother Address - show only if NOT sameWithFather */}
-                                                {!sameWithFather && (
+                                                {/* Student Residence Status */}
+                                                {!data.same_with_father && (
                                                     <div className="form-group">
-                                                        <label htmlFor="mother-address">
+                                                        <label htmlFor="mother_address">
                                                             Mother Address{" "}
                                                             <span className="text-danger">
                                                                 *
                                                             </span>
                                                         </label>
                                                         <textarea
-                                                            className="form-control"
-                                                            id="mother-address"
+                                                            className={`form-control ${
+                                                                errors.mother_address
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                            }`}
+                                                            id="mother_address"
                                                             rows={2}
+                                                            value={
+                                                                data.mother_address
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "mother_address",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            required={
+                                                                !data.same_with_father
+                                                            }
+                                                            disabled={
+                                                                data.same_with_father
+                                                            }
                                                         />
+                                                        {errors.mother_address && (
+                                                            <div className="invalid-feedback">
+                                                                {
+                                                                    errors.mother_address
+                                                                }
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )}
 
-                                                {/* Student Residence Status */}
                                                 <div className="form-group">
-                                                    <label htmlFor="student-resident-status">
+                                                    <label htmlFor="student_residence_status">
                                                         Student Residence Status{" "}
                                                         <span className="text-danger">
                                                             *
                                                         </span>
                                                     </label>
                                                     <select
-                                                        className="form-control text-secondary"
-                                                        id="student-resident-status"
-                                                        value={residenceStatus}
-                                                        onChange={(e) =>
-                                                            setResidenceStatus(
-                                                                e.target.value
-                                                            )
+                                                        className={`form-control ${
+                                                            errors.student_residence_status
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="student_residence_status"
+                                                        value={
+                                                            data.student_residence_status
                                                         }
+                                                        onChange={(e) => {
+                                                            setData(
+                                                                "student_residence_status",
+                                                                e.target.value
+                                                            );
+                                                            // Auto-fill student address based on selection
+                                                            if (
+                                                                e.target
+                                                                    .value ===
+                                                                "Father"
+                                                            ) {
+                                                                setData(
+                                                                    "student_address",
+                                                                    data.father_address
+                                                                );
+                                                            } else if (
+                                                                e.target
+                                                                    .value ===
+                                                                "Mother"
+                                                            ) {
+                                                                setData(
+                                                                    "student_address",
+                                                                    data.mother_address
+                                                                );
+                                                            }
+                                                        }}
+                                                        required
                                                     >
-                                                        <option
-                                                            value=""
-                                                            disabled
-                                                        >
+                                                        <option value="">
                                                             ---Select Student
                                                             Residence Status---
                                                         </option>
@@ -603,23 +1182,54 @@ const Register = () => {
                                                             Other
                                                         </option>
                                                     </select>
+                                                    {errors.student_residence_status && (
+                                                        <div className="invalid-feedback">
+                                                            {
+                                                                errors.student_residence_status
+                                                            }
+                                                        </div>
+                                                    )}
                                                 </div>
 
-                                                {/* Student Address - only show if status is "Other" */}
-                                                {residenceStatus ===
+                                                {data.student_residence_status ===
                                                     "Other" && (
                                                     <div className="form-group">
-                                                        <label htmlFor="student-address">
+                                                        <label htmlFor="student_address">
                                                             Student Address{" "}
                                                             <span className="text-danger">
                                                                 *
                                                             </span>
                                                         </label>
                                                         <textarea
-                                                            className="form-control"
-                                                            id="student-address"
+                                                            className={`form-control ${
+                                                                errors.student_address
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                            }`}
+                                                            id="student_address"
                                                             rows={2}
+                                                            value={
+                                                                data.student_address
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "student_address",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            required={
+                                                                data.student_residence_status ===
+                                                                "Other"
+                                                            }
                                                         />
+                                                        {errors.student_address && (
+                                                            <div className="invalid-feedback">
+                                                                {
+                                                                    errors.student_address
+                                                                }
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )}
                                             </>
@@ -634,6 +1244,7 @@ const Register = () => {
                                             type="button"
                                             className="btn btn-secondary"
                                             onClick={prevTab}
+                                            disabled={processing}
                                         >
                                             Previous
                                         </button>
@@ -642,14 +1253,18 @@ const Register = () => {
                                         <button
                                             type="submit"
                                             className="btn btn-success ms-auto"
+                                            disabled={processing}
                                         >
-                                            Register
+                                            {processing
+                                                ? "Processing..."
+                                                : "Register"}
                                         </button>
                                     ) : (
                                         <button
                                             type="button"
                                             className="btn btn-primary ms-auto"
                                             onClick={nextTab}
+                                            disabled={processing}
                                         >
                                             Next
                                         </button>
@@ -659,6 +1274,53 @@ const Register = () => {
                         </div>
                     </div>
                 </div>
+
+                <div
+                    className={`modal fade ${showModal ? "show" : ""}`}
+                    style={{ display: showModal ? "block" : "none" }}
+                >
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">{modalTitle}</h5>
+                                <button
+                                    type="button"
+                                    className="close"
+                                    onClick={handleCloseModal}
+                                >
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <p>{modalMessage}</p>
+                                {!isSuccess && errors && (
+                                    <ul className="text-danger">
+                                        {Object.entries(errors).map(
+                                            ([key, value]) =>
+                                                key !== "message" && (
+                                                    <li key={key}>{value}</li>
+                                                )
+                                        )}
+                                    </ul>
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className={`btn ${
+                                        isSuccess ? "btn-success" : "btn-danger"
+                                    }`}
+                                    onClick={handleCloseModal}
+                                >
+                                    OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Modal Backdrop */}
+                {showModal && <div className="modal-backdrop fade show"></div>}
             </Layout>
         </>
     );

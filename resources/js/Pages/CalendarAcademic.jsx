@@ -99,7 +99,7 @@ const CalendarAcademic = () => {
                                         initialView="dayGridMonth"
                                         weekends={true}
                                         events={events}
-                                        eventContent={renderEventContent}
+                                        // eventContent={renderEventContent}
                                     />
                                 </div>
                             </div>

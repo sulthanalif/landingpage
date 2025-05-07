@@ -77,6 +77,24 @@ const Header = () => {
                                                         />
                                                         EN
                                                     </Link>
+                                                    |
+                                                    <Link
+                                                        href="#"
+                                                        className="d-flex align-items-center ml-2 mr-4"
+                                                    >
+                                                        <img
+                                                            src="/img/id.svg"
+                                                            className="img-fluid mr-1"
+                                                            style={{
+                                                                maxWidth:
+                                                                    "auto",
+                                                                maxHeight:
+                                                                    "25px",
+                                                            }}
+                                                            alt="EN"
+                                                        />
+                                                        ID
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
