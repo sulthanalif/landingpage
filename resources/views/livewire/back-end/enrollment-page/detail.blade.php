@@ -115,8 +115,8 @@ new class extends Component {
                     <tr class="border-b">
                         <td class="font-bold">Status</td>
                         <td>{{ match (true) {
-                            $register->approvalRegis->status == 1 && $register->approvalRegis->is_reject == 0 => 'Approved',
-                            $register->approvalRegis->status == 0 && $register->approvalRegis->is_reject == 1 => 'Rejected',
+                            $register->approvalRegis?->status == 1 && $register->approvalRegis?->is_reject == 0 => 'Approved',
+                            $register->approvalRegis?->status == 0 && $register->approvalRegis?->is_reject == 1 => 'Rejected',
                             default => 'Pending',
                         } }}</td>
                     </tr>
@@ -126,7 +126,7 @@ new class extends Component {
                     </tr>
                     <tr class="border-b">
                         <td class="font-bold">Action Date</td>
-                        <td>{{ $register->approvalRegis->created_at }}</td>
+                        <td>{{ $register->approvalRegis?->created_at ?? '-' }}</td>
                     </tr>
                 </tbody>
             </table>

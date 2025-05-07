@@ -86,12 +86,14 @@ new class extends Component {
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             wire:model.live="selected" selectable with-pagination @row-click="$wire.detail($event.detail)">
             @scope('cell_status', $data)
-                @if ($data->approvalRegis->status == 1 && $data->approvalRegis->is_reject == 0)
-                    <span class="text-green-500">Approved</span>
-                @elseif ($data->approvalRegis->status == 0 && $data->approvalRegis->is_reject == 1)
-                    <span class="text-red-500">Rejected</span>
+                @if ($data->approvalRegis)
+                    @if ($data->approvalRegis->status == 1 && $data->approvalRegis->is_reject == 0)
+                        <span class="text-green-500">Approved</span>
+                    @elseif ($data->approvalRegis->status == 0 && $data->approvalRegis->is_reject == 1)
+                        <span class="text-red-500">Rejected</span>
+                    @endif
                 @else
-                    <span class="text-gray-500">Pending</span>
+                    <span class="text-yellow-500">Pending</span>
                 @endif
             @endscope
             {{-- @scope('actions', $data)
