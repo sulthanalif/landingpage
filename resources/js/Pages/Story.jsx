@@ -4,35 +4,39 @@ import Layout from "../Components/Layout";
 
 const Story = ({ activities }) => {
     useEffect(() => {
+        const addCacheBuster = (url) => {
+            return `${url}?v=${Date.now()}`;
+        };
+
         const link1 = document.createElement("link");
         link1.rel = "stylesheet";
         link1.type = "text/css";
-        link1.href = "/landing/styles/blog.css";
+        link1.href = addCacheBuster("/landing/styles/blog.css");
 
         const link2 = document.createElement("link");
         link2.rel = "stylesheet";
         link2.type = "text/css";
-        link2.href = "/landing/styles/blog_responsive.css";
+        link2.href = addCacheBuster("/landing/styles/blog_responsive.css");
 
         const link3 = document.createElement("link");
         link3.rel = "stylesheet";
         link3.type = "text/css";
-        link3.href = "/landing/plugins/video-js/video-js.css";
+        link3.href = addCacheBuster("/landing/plugins/video-js/video-js.css");
 
         document.head.appendChild(link1);
         document.head.appendChild(link2);
         document.head.appendChild(link3);
 
         const script1 = document.createElement("script");
-        script1.src = "/landing/js/blog.js";
+        script1.src = addCacheBuster("/landing/js/blog.js");
         script1.async = true;
 
         const script2 = document.createElement("script");
-        script2.src = "/landing/plugins/video-js/video.min.js";
+        script2.src = addCacheBuster("/landing/plugins/video-js/video.min.js");
         script2.async = true;
 
         const script3 = document.createElement("script");
-        script3.src = "/landing/plugins/masonry/masonry.js";
+        script3.src = addCacheBuster("/landing/plugins/masonry/masonry.js");
         script3.async = true;
         
         document.body.appendChild(script1);
@@ -40,12 +44,17 @@ const Story = ({ activities }) => {
         document.body.appendChild(script3);
 
         return () => {
-            document.head.removeChild(link1);
-            document.head.removeChild(link2);
-            document.head.removeChild(link3);
-            document.body.removeChild(script1);
-            document.body.removeChild(script2);
-            document.body.removeChild(script3);
+            [link1, link2, link3].forEach(link => {
+                if (document.head.contains(link)) {
+                    document.head.removeChild(link);
+                }
+            });
+
+            [script1, script2, script3].forEach(script => {
+                if (document.body.contains(script)) {
+                    document.body.removeChild(script);
+                }
+            });
         };
     }, []);
 

@@ -1,8 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
-import { Link } from "@inertiajs/react";
+import { Link, useForm } from "@inertiajs/react";
 
 const Contact = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    const { data, setData, post, processing, errors } = useForm({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+    });
+
     useEffect(() => {
         const link1 = document.createElement("link");
         link1.rel = "stylesheet";
@@ -36,6 +49,45 @@ const Contact = () => {
         };
     }, []);
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        post("/send-mail", {
+            data: data,
+            preserveScroll: true,
+            onSuccess: () => {
+                setModalTitle("Success");
+                setModalMessage("Your message has been sent successfully!");
+                setIsSuccess(true);
+                setShowModal(true);
+            },
+            onError: (errors) => {
+                setModalTitle("Error");
+                setModalMessage(
+                    "Please check your form and try again. " +
+                        (errors.message || Object.values(errors).join(" "))
+                );
+                setIsSuccess(false);
+                setShowModal(true);
+
+                if (Object.keys(errors).length > 0) {
+                    const firstErrorField = Object.keys(errors)[0];
+                    document.getElementById(firstErrorField)?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                    });
+                }
+            },
+        });
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        if (isSuccess) {
+            window.location.href = "/contact";
+        }
+    };
+
     return (
         <>
             <Layout>
@@ -59,9 +111,7 @@ const Contact = () => {
                 </div>
 
                 <div className="contact">
-                    {/* Contact Map */}
                     <div className="contact_map">
-                        {/* Google Map */}
                         <div className="map">
                             <div id="google_map" className="google_map">
                                 <div className="map_container">
@@ -80,18 +130,17 @@ const Contact = () => {
                             </div>
                         </div>
                     </div>
-                    {/* Contact Info */}
+
                     <div className="contact_info_container">
                         <div className="container">
                             <div className="row">
-                                {/* Contact Form */}
                                 <div className="col-lg-6">
                                     <div className="contact_form">
                                         <div className="contact_info_title">
                                             Contact Form
                                         </div>
                                         <form
-                                            action="#"
+                                            onSubmit={handleSubmit}
                                             className="comment_form"
                                         >
                                             <div>
@@ -100,42 +149,145 @@ const Contact = () => {
                                                 </div>
                                                 <input
                                                     type="text"
-                                                    className="comment_input"
-                                                    required="required"
+                                                    className={`comment_input ${
+                                                        errors.name
+                                                            ? "is-invalid"
+                                                            : ""
+                                                    }`}
+                                                    required
+                                                    value={data.name}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "name",
+                                                            e.target.value
+                                                        )
+                                                    }
                                                 />
+                                                {errors.name && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.name}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-lg-6">
+                                                    <div className="form_title">
+                                                        Email
+                                                    </div>
+                                                    <input
+                                                        type="email"
+                                                        className={`comment_input ${
+                                                            errors.email
+                                                                ? "is-invalid"
+                                                                : ""
+                                                        }`}
+                                                        required
+                                                        value={data.email}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "email",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                    {errors.email && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.email}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="col-lg-6">
+                                                    <div className="form_title">
+                                                        Phone
+                                                    </div>
+                                                    <input
+                                                        type="tel"
+                                                        className={`comment_input ${
+                                                            errors.phone
+                                                                ? "is-invalid"
+                                                                : ""
+                                                        }`}
+                                                        required
+                                                        value={data.phone}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "phone",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                    {errors.phone && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.phone}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                             <div>
                                                 <div className="form_title">
-                                                    Email
+                                                    Subject
                                                 </div>
                                                 <input
                                                     type="text"
-                                                    className="comment_input"
-                                                    required="required"
+                                                    className={`comment_input ${
+                                                        errors.subject
+                                                            ? "is-invalid"
+                                                            : ""
+                                                    }`}
+                                                    required
+                                                    value={data.subject}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "subject",
+                                                            e.target.value
+                                                        )
+                                                    }
                                                 />
+                                                {errors.subject && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.subject}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div>
                                                 <div className="form_title">
                                                     Message
                                                 </div>
                                                 <textarea
-                                                    className="comment_input comment_textarea"
-                                                    required="required"
-                                                    defaultValue={""}
+                                                    className={`comment_input comment_textarea ${
+                                                        errors.message
+                                                            ? "is-invalid"
+                                                            : ""
+                                                    }`}
+                                                    required
+                                                    value={data.message}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "message",
+                                                            e.target.value
+                                                        )
+                                                    }
                                                 />
+                                                {errors.message && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.message}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div>
                                                 <button
                                                     type="submit"
                                                     className="comment_button trans_200"
+                                                    disabled={processing}
                                                 >
-                                                    submit now
+                                                    {processing
+                                                        ? "Sending..."
+                                                        : "Submit Now"}
                                                 </button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-                                {/* Contact Info */}
                                 <div className="col-lg-6">
                                     <div className="contact_info">
                                         <div className="contact_info_title">
@@ -147,9 +299,6 @@ const Contact = () => {
                                                 that a reader will be distracted
                                                 by the readable content of a
                                                 page when looking at its layout.
-                                                The point of using Lorem Ipsum
-                                                is that it has a distribution of
-                                                letters.
                                             </p>
                                         </div>
                                         <div className="contact_info_location">
@@ -174,6 +323,52 @@ const Contact = () => {
                         </div>
                     </div>
                 </div>
+
+                <div
+                    className={`modal fade ${showModal ? "show" : ""}`}
+                    style={{ display: showModal ? "block" : "none" }}
+                >
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">{modalTitle}</h5>
+                                <button
+                                    type="button"
+                                    className="close"
+                                    onClick={handleCloseModal}
+                                >
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <p>{modalMessage}</p>
+                                {!isSuccess && errors && (
+                                    <ul className="text-danger">
+                                        {Object.entries(errors).map(
+                                            ([key, value]) =>
+                                                key !== "message" && (
+                                                    <li key={key}>{value}</li>
+                                                )
+                                        )}
+                                    </ul>
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className={`btn ${
+                                        isSuccess ? "btn-success" : "btn-danger"
+                                    }`}
+                                    onClick={handleCloseModal}
+                                >
+                                    OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {showModal && <div className="modal-backdrop fade show"></div>}
             </Layout>
         </>
     );

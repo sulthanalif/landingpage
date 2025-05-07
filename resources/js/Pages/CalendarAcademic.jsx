@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import Layout from "../Components/Layout";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 
-const CalendarAcademic = () => {
+const CalendarAcademic = ({ calendars }) => {
     useEffect(() => {
         const link1 = document.createElement("link");
         link1.rel = "stylesheet";
@@ -34,7 +34,70 @@ const CalendarAcademic = () => {
         };
     }, []);
 
-    const events = [{ title: "Meeting", start: new Date() }];
+    // const events = [{ title: "Meeting", start: new Date(), color: "#378006" }];
+
+    const calendarData = calendars || [];
+
+    const events = calendarData
+        .map((calendar) => {
+            try {
+                const startDate = new Date(calendar.start_date);
+                const endDate = new Date(calendar.end_date);
+
+                if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                    console.error("Invalid date format", calendar);
+                    return null;
+                }
+
+                const durationInDays =
+                    Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) +
+                    1;
+
+                let endDateFormatted = calendar.end_date;
+                if (durationInDays > 1) {
+                    const end = new Date(endDate);
+                    end.setDate(end.getDate() + 1);
+                    endDateFormatted = end.toISOString().split("T")[0];
+                }
+
+                return {
+                    id: calendar.id,
+                    title: calendar.label || calendar.description,
+                    start: calendar.start_date,
+                    end: endDateFormatted,
+                    color: calendar.code,
+                    textColor: "white",
+                    extendedProps: {
+                        description: calendar.description,
+                        status: calendar.status,
+                        duration:
+                            durationInDays > 1
+                                ? `${durationInDays} days`
+                                : "1 day",
+                    },
+                    allDay: true,
+                };
+            } catch (error) {
+                console.error(
+                    "Error processing calendar event:",
+                    calendar,
+                    error
+                );
+                return null;
+            }
+        })
+        .filter((event) => event !== null);
+
+    function getColorClass(cssClass) {
+        const colorMap = {
+            "blue-200": "#93c5fd",
+            "amber-200": "#fcd34d",
+            "red-200": "#fca5a5",
+            "green-200": "#86efac",
+            "purple-200": "#d8b4fe",
+        };
+        return colorMap[cssClass] || "#378006";
+    }
 
     return (
         <>
@@ -90,16 +153,22 @@ const CalendarAcademic = () => {
                             <div className="col-lg-12 feature_col">
                                 <div className="feature_content">
                                     <FullCalendar
-                                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                        plugins={[
+                                            dayGridPlugin,
+                                            timeGridPlugin,
+                                            interactionPlugin,
+                                        ]}
                                         headerToolbar={{
-                                          left: 'prev,next today',
-                                          center: 'title',
-                                          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                                            left: "prev,next today",
+                                            center: "title",
+                                            right: "dayGridMonth,timeGridWeek,timeGridDay",
                                         }}
                                         initialView="dayGridMonth"
                                         weekends={true}
                                         events={events}
                                         // eventContent={renderEventContent}
+                                        eventClick={handleEventClick}
+                                        eventDisplay="block"
                                     />
                                 </div>
                             </div>
@@ -112,11 +181,33 @@ const CalendarAcademic = () => {
 };
 
 function renderEventContent(eventInfo) {
+    const start = new Date(eventInfo.event.start);
+    const end = eventInfo.event.end ? new Date(eventInfo.event.end) : start;
+    const isMultiDay = (end - start) > 86400000; // Lebih dari 1 hari
+
     return (
-        <>
-            <b>{eventInfo.timeText}</b>
-            <i>{eventInfo.event.title}</i>
-        </>
+        <div className="fc-event-content">
+            <div className="fc-event-title">{eventInfo.event.title}</div>
+            {isMultiDay && (
+                <div className="fc-event-days">
+                    {Math.ceil((end - start) / 86400000)} days
+                </div>
+            )}
+        </div>
+    );
+}
+
+function handleEventClick(info) {
+    const start = info.event.start?.toLocaleDateString() || 'N/A';
+    const end = info.event.end ? 
+        new Date(info.event.end.getTime() - 86400000).toLocaleDateString() : 
+        start;
+    
+    alert(
+        `Event: ${info.event.title}\n` +
+        `Start: ${start}\n` +
+        `End: ${end}\n` +
+        `Description: ${info.event.extendedProps.description || 'No description'}`
     );
 }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Calendar;
 use App\Models\Post;
 use App\Models\Question;
 use App\Models\User;
@@ -32,7 +33,11 @@ class LandingpageController extends Controller
 
     public function story()
     {
-        return Inertia::render('Story');
+        $activities = Activity::all();
+
+        return Inertia::render('Story', [
+            'activities' => $activities
+        ]);
     }
 
     public function teacher()
@@ -57,7 +62,11 @@ class LandingpageController extends Controller
 
     public function calendarAcademic()
     {
-        return Inertia::render('CalendarAcademic');
+        $calendars = Calendar::all();
+
+        return Inertia::render('CalendarAcademic', [
+            'calendars' => $calendars
+        ]);
     }
 
     public function accreditation()

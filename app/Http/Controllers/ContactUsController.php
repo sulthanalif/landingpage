@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class ContactUsController extends Controller
 {
@@ -36,10 +37,11 @@ class ContactUsController extends Controller
 
             //function send email belum ada
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Pesan berhasil dikirim'
-            ]);
+            // return response()->json([
+            //     'status' => 'success',
+            //     'message' => 'Pesan berhasil dikirim'
+            // ]);
+            return Inertia::render('Contact')->with('success', 'Data berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::channel('debug')->error('Error: ' . $e->getMessage(), [
