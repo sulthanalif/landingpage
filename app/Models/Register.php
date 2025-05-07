@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Register extends Model
 {
+    use Notifiable;
+
     protected $table = 'registers';
 
     protected $fillable = [
@@ -33,4 +36,9 @@ class Register extends Model
         'mother_address',
         'student_residence_status'
     ];
+
+    public function approvalRegis()
+    {
+        return $this->hasOne(ApprovalRegis::class);
+    }
 }
