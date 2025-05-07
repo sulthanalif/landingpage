@@ -151,11 +151,9 @@ const News = ({ posts }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col">
-                                <div className="courses_button trans_200">
-                                    <Link href="/news">view all news</Link>
-                                </div>
+                        <div className="d-flex justify-content-center align-items-center">
+                            <div className="courses_button trans_200">
+                                <Link href="/news">view all news</Link>
                             </div>
                         </div>
                     </>
