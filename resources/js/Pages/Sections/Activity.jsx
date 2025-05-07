@@ -66,11 +66,13 @@ const Activity = ({ activities }) => {
                                         </div>
                                     ))}
                                 </div>
-                                <div className="d-flex justify-content-center align-items-center text-center">
-                                    <div className="courses_button trans_200">
-                                        <Link href="/story">
-                                            view all activities
-                                        </Link>
+                                <div className="row">
+                                    <div className="col-lg-12 text-center">
+                                        <div className="courses_button trans_200">
+                                            <Link href="/story">
+                                                view all activities
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </>
