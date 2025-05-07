@@ -32,49 +32,50 @@ const Activity = ({ activities }) => {
                         </div>
                     </div>
                     <div className="row courses_row">
-                        {activities && activities.length > 0 ? (
-                            activities.map((activity) => (
-                                <>
-                                    <div className="col-lg-4 course_col">
-                                        <div className="course">
-                                            <div className="course_image">
-                                                <img
-                                                    src="/landing/images/course_1.jpg"
-                                                    alt=""
-                                                    loading="lazy"
-                                                />
-                                            </div>
-                                            <div className="course_body">
-                                                <h3 className="course_title">
-                                                    <a href="#">
-                                                        {activity.title}
-                                                    </a>
-                                                </h3>
-                                                {/* <div className="course_teacher">
-                                                    Mr. John Taylor
+                        {activities && activities.data.length > 0 ? (
+                            <>
+                                <div className="row courses_row">
+                                    {activities.data.map((activity) => (
+                                        <div
+                                            className="col-lg-4 course_col"
+                                            key={activity.id}
+                                        >
+                                            <div className="course">
+                                                <div className="course_image">
+                                                    <img
+                                                        src={
+                                                            activity.image
+                                                                ? `/storage/${activity.image}`
+                                                                : "/landing/images/event_1.jpg"
+                                                        }
+                                                        alt={activity.title}
+                                                        loading="lazy"
+                                                    />
                                                 </div>
-                                                <div className="course_text">
-                                                    <p>
-                                                        Lorem ipsum dolor sit
-                                                        amet, consectetur adipi
-                                                        elitsed do eiusmod
-                                                        tempor
-                                                    </p>
-                                                </div> */}
+                                                <div className="course_body">
+                                                    <h3 className="course_title">
+                                                        <a
+                                                            href="#"
+                                                            className="text-center"
+                                                        >
+                                                            {activity.title}
+                                                        </a>
+                                                    </h3>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col">
-                                            <div className="courses_button trans_200">
-                                                <Link href="/story">
-                                                    view all activities
-                                                </Link>
-                                            </div>
+                                    ))}
+                                </div>
+                                <div className="row">
+                                    <div className="col-lg-12 text-center">
+                                        <div className="courses_button trans_200">
+                                            <Link href="/story">
+                                                view all activities
+                                            </Link>
                                         </div>
                                     </div>
-                                </>
-                            ))
+                                </div>
+                            </>
                         ) : (
                             <div className="col-lg-12 course_col">
                                 <div className="course">
