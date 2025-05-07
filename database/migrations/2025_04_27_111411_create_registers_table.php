@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('religion');
             $table->string('place_of_birth');
             $table->date('date_of_birth');
-            $table->integer('phone');
+            $table->string('phone');
             $table->string('email');
             $table->string('previous_school');
             $table->string('hobbi');
@@ -30,8 +30,8 @@ return new class extends Migration
             $table->string('mother_name');
             $table->string('place_of_birth_mother');
             $table->date('date_of_birth_mother');
-            $table->integer('number_of_siblings');
-            $table->integer('phone_parent');
+            $table->string('number_of_siblings');
+            $table->string('phone_parent');
             $table->string('email_parent');
             $table->string('father_address');
             $table->string('mother_address');
