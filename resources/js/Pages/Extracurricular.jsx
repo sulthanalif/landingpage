@@ -66,133 +66,232 @@ const Extracurricular = () => {
                             <div className="col">
                                 <div className="section_title_container text-center">
                                     <h2 className="section_title">
-                                        Extracurricular
+                                        Explore Your Passions
                                     </h2>
                                     <div className="section_subtitle">
                                         <p>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit. Donec
-                                            vel gravida arcu. Vestibulum
-                                            feugiat, sapien ultrices fermentum
-                                            congue, quam velit venenatis sem
+                                            Complementing academic excellence
+                                            with skill development
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="row feature_row">
-                            {/* Feature Content */}
-                            <div className="col-lg-6 feature_col">
-                                <div className="feature_content">
-                                    {/* Accordions */}
-                                    <div className="accordions">
-                                        <div className="elements_accordions">
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center active">
-                                                    <div>
-                                                        Award for Best School
-                                                        2017
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        You’re learning from the
-                                                        best.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        Our degrees are
-                                                        recognized worldwide.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        We encourage our
-                                                        students to go global.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Accordions End */}
-                                </div>
-                            </div>
-                            {/* Feature Video */}
-                            <div className="col-lg-6 feature_col">
-                                <div className="feature_video d-flex flex-column align-items-center justify-content-center">
-                                    <div
-                                        className="feature_video_background"
-                                        style={{
-                                            backgroundImage:
-                                                "url(/img/logo.png)",
-                                        }}
-                                    />
-                                    <a
-                                        className="vimeo feature_video_button"
-                                        href="https://drive.google.com/file/d/14SY6mxL8ly_iRpHK-a82wyRlOlQGQIJq/view?usp=drive_link"
-                                        title="Teaching and Learning Activities (Entrepreneur Got Talent)"
-                                        target="_blank"
-                                    >
+                        <div className="row my-5">
+                            <div className="col-lg-4 mb-4">
+                                <div className="about_item card px-3 pb-3">
+                                    <div className="about_item_image">
                                         <img
-                                            src="/landing/images/play.png"
+                                            src="/landing/images/extracurricular/basket.jpg"
                                             alt=""
                                         />
-                                    </a>
+                                    </div>
+                                    <div className="about_item_title">
+                                        <p className="text-center">Basketball</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p className="text-justify">
+                                            The basketball extracurricular
+                                            program serves as a platform for
+                                            students with interest and talent in
+                                            basketball. This program not only
+                                            aims to develop technical skills
+                                            like dribbling, passing, and
+                                            shooting, but also instills values
+                                            of sportsmanship, teamwork, and
+                                            discipline. Through regular training
+                                            and friendly matches, students are
+                                            encouraged to grow into resilient,
+                                            confident athletes with a champion's
+                                            mentality.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 mb-4">
+                                <div className="about_item card px-3 pb-3">
+                                    <div className="about_item_image">
+                                        <img
+                                            src="/landing/images/edexcel.jpg"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="about_item_title">
+                                        <p className="text-center">Futsal</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p className="text-justify">
+                                            Futsal is one of the most popular
+                                            extracurricular activities among
+                                            students. In this program, students
+                                            train to develop futsal skills
+                                            including basic techniques, game
+                                            strategies, and teamwork. Beyond
+                                            improving physical fitness, futsal
+                                            teaches the importance of
+                                            solidarity, mental toughness, and
+                                            healthy competitive spirit. This
+                                            activity provides the perfect outlet
+                                            for students' energy and sports
+                                            talents.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 mb-4">
+                                <div className="about_item card px-3 pb-3">
+                                    <div className="about_item_image">
+                                        <img
+                                            src="/landing/images/edexcel.jpg"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="about_item_title">
+                                        <p className="text-center">Art and Craft</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p className="text-justify">
+                                            Art and Craft is an extracurricular
+                                            program that offers unlimited
+                                            creative space for students. Here,
+                                            students learn various handicraft
+                                            techniques such as origami,
+                                            upcycling crafts, decoupage, and
+                                            other 3D art forms. This activity
+                                            not only sharpens fine motor skills
+                                            and imagination, but also cultivates
+                                            patience, attention to detail, and
+                                            creative confidence. Each artwork
+                                            reflects students' unique expression
+                                            and creativity.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 mb-4">
+                                <div className="about_item card px-3 pb-3">
+                                    <div className="about_item_image">
+                                        <img
+                                            src="/landing/images/extracurricular/painting.jpg"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="about_item_title">
+                                        <p className="text-center">Painting</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p className="text-justify">
+                                            In the Painting extracurricular,
+                                            students explore the world of colors
+                                            and forms through various painting
+                                            media. Using techniques like
+                                            watercolor, acrylic, and pastel,
+                                            students develop their visual and
+                                            artistic abilities. This program
+                                            provides a space for students to
+                                            express emotions, ideas, and
+                                            perspectives through meaningful
+                                            artworks. Painting not only builds
+                                            aesthetic appreciation but also
+                                            enriches creative and original
+                                            thinking.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 mb-4">
+                                <div className="about_item card px-3 pb-3">
+                                    <div className="about_item_image">
+                                        <img
+                                            src="/landing/images/edexcel.jpg"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="about_item_title">
+                                        <p className="text-center">Choir</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p className="text-justify">
+                                            Choir is an extracurricular activity
+                                            for students with interest in vocal
+                                            music. Participants learn to sing
+                                            harmoniously in groups, understand
+                                            vocal techniques, read musical
+                                            scores, and perform confidently in
+                                            public. Through choir, students
+                                            learn about cooperation, discipline,
+                                            and artistic sensitivity. The
+                                            program also fosters togetherness
+                                            and appreciation for musical arts.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 mb-4">
+                                <div className="about_item card px-3 pb-3">
+                                    <div className="about_item_image">
+                                        <img
+                                            src="/landing/images/edexcel.jpg"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="about_item_title">
+                                        <p className="text-center">Robotics (Kindergarten)</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p className="text-justify">
+                                            The Robotics extracurricular for
+                                            kindergarteners introduces
+                                            technology and science in fun,
+                                            engaging ways. Through simple
+                                            activities like assembling toy
+                                            robots, recognizing shapes and
+                                            colors, and learning basic
+                                            instructions, children develop
+                                            creative and logical thinking from
+                                            an early age. This program helps
+                                            train fine motor skills,
+                                            concentration, and problem-solving
+                                            abilities through play. With teacher
+                                            guidance, children learn while
+                                            exploring the exciting, imaginative
+                                            world of basic robotics!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 mb-4">
+                                <div className="about_item card px-3 pb-3">
+                                    <div className="about_item_image">
+                                        <img
+                                            src="/landing/images/extracurricular/dance.jpg"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="about_item_title">
+                                        <p className="text-center">Modern Dance</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p className="text-justify">
+                                            Modern Dance serves as a creative
+                                            and dynamic form of self-expression.
+                                            Students explore various dance
+                                            styles like hip hop, K-pop, and
+                                            contemporary, while developing
+                                            choreography and stage performance
+                                            skills. Through regular practice and
+                                            performances at school events or
+                                            competitions, students not only
+                                            refine their dancing abilities but
+                                            also learn teamwork, discipline, and
+                                            stage confidence. Modern dance
+                                            provides teenagers a space to
+                                            develop talents, strengthen positive
+                                            character traits, and build
+                                            self-confidence in a fun, supportive
+                                            environment.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

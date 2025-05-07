@@ -66,15 +66,13 @@ const Accreditation = () => {
                             <div className="col">
                                 <div className="section_title_container text-center">
                                     <h2 className="section_title">
-                                        Accreditation
+                                        Our Accreditation Excellence
                                     </h2>
                                     <div className="section_subtitle">
                                         <p>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit. Donec
-                                            vel gravida arcu. Vestibulum
-                                            feugiat, sapien ultrices fermentum
-                                            congue, quam velit venenatis sem
+                                            Validating our commitment to quality
+                                            education through recognized
+                                            accreditation
                                         </p>
                                     </div>
                                 </div>
@@ -82,117 +80,112 @@ const Accreditation = () => {
                         </div>
                         <div className="row feature_row">
                             {/* Feature Content */}
-                            <div className="col-lg-6 feature_col">
+                            <div className="col-lg-3 feature_col">
                                 <div className="feature_content">
-                                    {/* Accordions */}
-                                    <div className="accordions">
-                                        <div className="elements_accordions">
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center active">
-                                                    <div>
-                                                        Award for Best School
-                                                        2017
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        You’re learning from the
-                                                        best.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        Our degrees are
-                                                        recognized worldwide.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        We encourage our
-                                                        students to go global.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div
+                                        class="list-group"
+                                        id="list-tab"
+                                        role="tablist"
+                                    >
+                                        <a
+                                            class="list-group-item list-group-item-action active"
+                                            id="list-sma-list"
+                                            data-toggle="list"
+                                            href="#list-sma"
+                                            role="tab"
+                                            aria-controls="sma"
+                                        >
+                                            Senior High School
+                                        </a>
+                                        <a
+                                            class="list-group-item list-group-item-action"
+                                            id="list-smp-list"
+                                            data-toggle="list"
+                                            href="#list-smp"
+                                            role="tab"
+                                            aria-controls="smp"
+                                        >
+                                            Junior High School
+                                        </a>
+                                        <a
+                                            class="list-group-item list-group-item-action"
+                                            id="list-sd-list"
+                                            data-toggle="list"
+                                            href="#list-sd"
+                                            role="tab"
+                                            aria-controls="sd"
+                                        >
+                                            Elementary School
+                                        </a>
+                                        <a
+                                            class="list-group-item list-group-item-action"
+                                            id="list-edexcel-list"
+                                            data-toggle="list"
+                                            href="#list-edexcel"
+                                            role="tab"
+                                            aria-controls="edexcel"
+                                        >
+                                            Edexcel Certificate
+                                        </a>
                                     </div>
-                                    {/* Accordions End */}
                                 </div>
                             </div>
                             {/* Feature Video */}
-                            <div className="col-lg-6 feature_col">
-                                <div className="feature_video d-flex flex-column align-items-center justify-content-center">
+                            <div className="col-lg-9 feature_col">
+                                <div className="feature_content">
                                     <div
-                                        className="feature_video_background"
-                                        style={{
-                                            backgroundImage:
-                                                "url(/img/logo.png)",
-                                        }}
-                                    />
-                                    <a
-                                        className="vimeo feature_video_button"
-                                        href="https://drive.google.com/file/d/14SY6mxL8ly_iRpHK-a82wyRlOlQGQIJq/view?usp=drive_link"
-                                        title="Teaching and Learning Activities (Entrepreneur Got Talent)"
-                                        target="_blank"
+                                        class="tab-content"
+                                        id="nav-tabContent"
                                     >
-                                        <img
-                                            src="/landing/images/play.png"
-                                            alt=""
-                                        />
-                                    </a>
+                                        <div
+                                            class="tab-pane fade show active"
+                                            id="list-sma"
+                                            role="tabpanel"
+                                            aria-labelledby="list-sma-list"
+                                        >
+                                            <img
+                                                src="/landing/images/accreditation/akre-sma.jpg"
+                                                className="img-fluid"
+                                                alt="Accreditation SMA"
+                                            />
+                                        </div>
+                                        <div
+                                            class="tab-pane fade"
+                                            id="list-smp"
+                                            role="tabpanel"
+                                            aria-labelledby="list-smp-list"
+                                        >
+                                            <img
+                                                src="/landing/images/accreditation/akre-smp.jpg"
+                                                className="img-fluid"
+                                                alt="Accreditation SMP"
+                                            />
+                                        </div>
+                                        <div
+                                            class="tab-pane fade"
+                                            id="list-sd"
+                                            role="tabpanel"
+                                            aria-labelledby="list-sd-list"
+                                        >
+                                            <img
+                                                src="/landing/images/accreditation/akre-sd.jpg"
+                                                className="img-fluid"
+                                                alt="Accreditation SD"
+                                            />
+                                        </div>
+                                        <div
+                                            class="tab-pane fade"
+                                            id="list-edexcel"
+                                            role="tabpanel"
+                                            aria-labelledby="list-edexcel-list"
+                                        >
+                                            <img
+                                                src="/landing/images/accreditation/sertif-edexcel.jpg"
+                                                className="img-fluid"
+                                                alt="Sertifikat Edexcel"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
