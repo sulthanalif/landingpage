@@ -103,7 +103,7 @@ const Story = ({ activities }) => {
                                                 </div>
                                                 <div className="blog_post_content">
                                                     <div className="blog_post_title">
-                                                        <a href="#">
+                                                        <a href="#" className="text-center">
                                                             {activity.title}
                                                         </a>
                                                     </div>

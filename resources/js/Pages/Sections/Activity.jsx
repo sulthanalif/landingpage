@@ -33,9 +33,12 @@ const Activity = ({ activities }) => {
                     </div>
                     <div className="row courses_row">
                         {activities && activities.data.length > 0 ? (
-                            activities.data.map((activity) => (
-                                <>
-                                    <div className="col-lg-4 course_col">
+                            <>
+                                {activities.data.map((activity) => (
+                                    <div
+                                        className="col-lg-4 course_col"
+                                        key={activity.id}
+                                    >
                                         <div className="course">
                                             <div className="course_image">
                                                 <img
@@ -50,35 +53,24 @@ const Activity = ({ activities }) => {
                                             </div>
                                             <div className="course_body">
                                                 <h3 className="course_title">
-                                                    <a href="#">
+                                                    <a href="#" className="text-center">
                                                         {activity.title}
                                                     </a>
                                                 </h3>
-                                                {/* <div className="course_teacher">
-                                                    Mr. John Taylor
-                                                </div>
-                                                <div className="course_text">
-                                                    <p>
-                                                        Lorem ipsum dolor sit
-                                                        amet, consectetur adipi
-                                                        elitsed do eiusmod
-                                                        tempor
-                                                    </p>
-                                                </div> */}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="col">
-                                            <div className="courses_button trans_200">
-                                                <Link href="/story">
-                                                    view all activities
-                                                </Link>
-                                            </div>
+                                ))}
+                                <div className="row">
+                                    <div className="col">
+                                        <div className="courses_button trans_200">
+                                            <Link href="/story">
+                                                view all activities
+                                            </Link>
                                         </div>
                                     </div>
-                                </>
-                            ))
+                                </div>
+                            </>
                         ) : (
                             <div className="col-lg-12 course_col">
                                 <div className="course">
