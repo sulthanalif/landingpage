@@ -34,33 +34,38 @@ const Activity = ({ activities }) => {
                     <div className="row courses_row">
                         {activities && activities.data.length > 0 ? (
                             <>
-                                {activities.data.map((activity) => (
-                                    <div
-                                        className="col-lg-4 course_col"
-                                        key={activity.id}
-                                    >
-                                        <div className="course">
-                                            <div className="course_image">
-                                                <img
-                                                    src={
-                                                        activity.image
-                                                            ? `/storage/${activity.image}`
-                                                            : "/landing/images/event_1.jpg"
-                                                    }
-                                                    alt={activity.title}
-                                                    loading="lazy"
-                                                />
-                                            </div>
-                                            <div className="course_body">
-                                                <h3 className="course_title">
-                                                    <a href="#" className="text-center">
-                                                        {activity.title}
-                                                    </a>
-                                                </h3>
+                                <div className="row courses_row">
+                                    {activities.data.map((activity) => (
+                                        <div
+                                            className="col-lg-4 course_col"
+                                            key={activity.id}
+                                        >
+                                            <div className="course">
+                                                <div className="course_image">
+                                                    <img
+                                                        src={
+                                                            activity.image
+                                                                ? `/storage/${activity.image}`
+                                                                : "/landing/images/event_1.jpg"
+                                                        }
+                                                        alt={activity.title}
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                                <div className="course_body">
+                                                    <h3 className="course_title">
+                                                        <a
+                                                            href="#"
+                                                            className="text-center"
+                                                        >
+                                                            {activity.title}
+                                                        </a>
+                                                    </h3>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                                 <div className="row">
                                     <div className="col">
                                         <div className="courses_button trans_200">
