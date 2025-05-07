@@ -32,15 +32,19 @@ const Activity = ({ activities }) => {
                         </div>
                     </div>
                     <div className="row courses_row">
-                        {activities && activities.length > 0 ? (
-                            activities.map((activity) => (
+                        {activities && activities.data.length > 0 ? (
+                            activities.data.map((activity) => (
                                 <>
                                     <div className="col-lg-4 course_col">
                                         <div className="course">
                                             <div className="course_image">
                                                 <img
-                                                    src="/landing/images/course_1.jpg"
-                                                    alt=""
+                                                    src={
+                                                        activity.image
+                                                            ? `/storage/${activity.image}`
+                                                            : "/landing/images/event_1.jpg"
+                                                    }
+                                                    alt={activity.title}
                                                     loading="lazy"
                                                 />
                                             </div>

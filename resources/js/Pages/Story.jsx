@@ -95,8 +95,10 @@ const Story = ({ activities }) => {
                                                     <img
                                                         src={
                                                             activity.image
+                                                                ? `/storage/${activity.image}`
+                                                                : "/landing/images/event_1.jpg"
                                                         }
-                                                        alt=""
+                                                        alt={activity.title}
                                                     />
                                                 </div>
                                                 <div className="blog_post_content">
