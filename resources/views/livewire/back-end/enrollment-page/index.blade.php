@@ -62,7 +62,7 @@ new class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="Enrollments" separator>
+    <x-header title="Student Registration" separator>
         {{-- <x-slot:actions>
             @can('category-create')
                 <x-button label="Create" @click="$js.create" responsive icon="o-plus" />

@@ -101,7 +101,7 @@ new class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="Detail Enrollment" separator>
+    <x-header title="Detail Student" separator>
         <x-slot:actions>
                 <x-button label="Action" class="btn-primary" responsive  @click="$js.action" />
                 <x-button label="Back" responsive icon="o-arrow-left" link="{{ route('enrollment') }}" />
