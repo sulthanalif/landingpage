@@ -33,6 +33,13 @@ new class extends Component {
     public function datas(): LengthAwarePaginator
     {
         return Register::query()
+            ->withAggregate('approvalRegis', 'status')
+            ->where(function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('email', 'like', "%{$this->search}%")
+                    ->orWhere('level', 'like', "%{$this->search}%")
+                    ->orWhere('phone', 'like', "%{$this->search}%");
+            })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
     }
@@ -48,6 +55,7 @@ new class extends Component {
             ['key' => 'date_of_birth', 'label' => 'Date of Birth'],
             ['key' => 'phone', 'label' => 'Phone'],
             ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'status', 'label' => 'Status']
         ];
     }
 
@@ -70,14 +78,20 @@ new class extends Component {
         </x-slot:actions> --}}
     </x-header>
 
+    <div class="flex justify-end items-center gap-5">
+        <x-input placeholder="Search..." wire:model.live="search" clearable icon="o-magnifying-glass" />
+    </div>
+
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             wire:model.live="selected" selectable with-pagination @row-click="$wire.detail($event.detail)">
             @scope('cell_status', $data)
-                @if ($data['status'])
-                    <span class="text-green-500">Aktif</span>
+                @if ($data->approvalRegis->status == 1 && $data->approvalRegis->is_reject == 0)
+                    <span class="text-green-500">Approved</span>
+                @elseif ($data->approvalRegis->status == 0 && $data->approvalRegis->is_reject == 1)
+                    <span class="text-red-500">Rejected</span>
                 @else
-                    <span class="text-red-500">Tidak aktif</span>
+                    <span class="text-gray-500">Pending</span>
                 @endif
             @endscope
             {{-- @scope('actions', $data)
