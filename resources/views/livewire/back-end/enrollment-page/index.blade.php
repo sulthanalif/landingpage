@@ -25,6 +25,11 @@ new class extends Component {
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public int $perPage = 5;
 
+    public function detail(Register $register): void
+    {
+        $this->redirect(route('enrollment.detail', $register), navigate: true);
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return Register::query()
@@ -67,7 +72,7 @@ new class extends Component {
 
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            wire:model.live="selected" selectable with-pagination>
+            wire:model.live="selected" selectable with-pagination @row-click="$wire.detail($event.detail)">
             @scope('cell_status', $data)
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
@@ -75,9 +80,9 @@ new class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
-            @scope('actions', $data)
+            {{-- @scope('actions', $data)
                 <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
-            @endscope
+            @endscope --}}
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
