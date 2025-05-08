@@ -22,12 +22,66 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('landing/styles/main_styles.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('landing/styles/responsive.css') }}">
 
+    <style>
+        /* Sembunyikan Google Translate UI */
+        .goog-logo-link,
+        .goog-te-gadget,
+        .goog-te-banner-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .goog-te-menu-frame,
+        .skiptranslate {
+        display: none !important;
+        }
+
+        body {
+        top: 0px !important;
+        }
+    </style>
+
+
     @viteReactRefresh
     @vite(['resources/js/app.jsx'])
     @inertiaHead
 </head>
 
 <body>
+    <!-- Google Translate DIV (bisa disembunyikan) -->
+    <div id="google_translate_element" style="display: none;"></div>
+
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+            {
+                pageLanguage: 'en',
+                includedLanguages: 'en,id',
+                autoDisplay: false
+            },
+            'google_translate_element'
+            );
+        }
+
+        // Fungsi global untuk ubah bahasa
+        window.changeLanguage = function(lang) {
+            // Hapus banner jika muncul
+            const iframe = document.querySelector('iframe.goog-te-banner-frame');
+            if (iframe) iframe.remove();
+
+            // Hapus div yang mungkin bikin offset layout
+            const container = document.querySelector('.goog-te-banner-frame');
+            if (container) container.remove();
+
+            // Ubah value combo
+            const select = document.querySelector('.goog-te-combo');
+            if (select) {
+                select.value = lang;
+                select.dispatchEvent(new Event('change'));
+            }
+        };
+    </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     @inertia
 
     <!-- JavaScript Libraries -->

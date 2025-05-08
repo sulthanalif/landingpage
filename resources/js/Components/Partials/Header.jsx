@@ -60,41 +60,58 @@ const Header = () => {
                                         <div className="top_bar_login ml-auto">
                                             <div className="login_button">
                                                 <div className="d-flex justify-content-center align-items-center">
-                                                    <Link
-                                                        href="#"
-                                                        className="d-flex align-items-center ml-2 mr-4"
+                                                    <div
+                                                        className="d-flex justify-content-center align-items-center"
+                                                        translate="no"
                                                     >
-                                                        <img
-                                                            src="/img/en.svg"
-                                                            className="img-fluid mr-1"
+                                                        <button
+                                                            onClick={() =>
+                                                                window.changeLanguage(
+                                                                    "en"
+                                                                )
+                                                            }
+                                                            className="btn btn-link text-dark d-flex align-items-center ml-2 mr-4 notranslate"
                                                             style={{
-                                                                maxWidth:
-                                                                    "auto",
-                                                                maxHeight:
-                                                                    "25px",
+                                                                textDecoration:
+                                                                    "none",
                                                             }}
-                                                            alt="EN"
-                                                        />
-                                                        EN
-                                                    </Link>
-                                                    |
-                                                    <Link
-                                                        href="#"
-                                                        className="d-flex align-items-center ml-2 mr-4"
-                                                    >
-                                                        <img
-                                                            src="/img/id.svg"
-                                                            className="img-fluid mr-1"
+                                                        >
+                                                            <img
+                                                                src="/img/en.svg"
+                                                                className="img-fluid mr-1"
+                                                                style={{
+                                                                    maxHeight:
+                                                                        "25px",
+                                                                }}
+                                                                alt="EN"
+                                                            />
+                                                            EN
+                                                        </button>
+                                                        |
+                                                        <button
+                                                            onClick={() =>
+                                                                window.changeLanguage(
+                                                                    "id"
+                                                                )
+                                                            }
+                                                            className="btn btn-link text-dark d-flex align-items-center ml-2 mr-4 notranslate"
                                                             style={{
-                                                                maxWidth:
-                                                                    "auto",
-                                                                maxHeight:
-                                                                    "25px",
+                                                                textDecoration:
+                                                                    "none",
                                                             }}
-                                                            alt="EN"
-                                                        />
-                                                        ID
-                                                    </Link>
+                                                        >
+                                                            <img
+                                                                src="/img/id.svg"
+                                                                className="img-fluid mr-1"
+                                                                style={{
+                                                                    maxHeight:
+                                                                        "25px",
+                                                                }}
+                                                                alt="ID"
+                                                            />
+                                                            ID
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
