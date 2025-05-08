@@ -84,7 +84,7 @@ new class extends Component {
 
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            wire:model.live="selected" selectable with-pagination @row-click="$wire.detail($event.detail)">
+             with-pagination @row-click="$wire.detail($event.detail)">
             @scope('cell_status', $data)
                 @if ($data->approvalRegis)
                     @if ($data->approvalRegis->status == 1 && $data->approvalRegis->is_reject == 0)
