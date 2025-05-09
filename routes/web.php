@@ -53,6 +53,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         VOlt::route('/enrollment/{register}/detail', 'back-end.enrollment-page.detail')->middleware('can:enrollment-page')->name('enrollment.detail');
         Volt::route('/calendar', 'back-end.calendar-page.index')->middleware('can:calendar-page')->name('calendar');
         Volt::route('/teacher', 'back-end.teacher-page.index')->middleware('can:teacher-page')->name('teacher');
+        Volt::route('/wcu', 'back-end.wcu-page.index')->middleware('can:wcu-page')->name('wcu');
 
         Volt::route('/user', 'back-end.user-page.index')->middleware('can:user-page')->name('user');
         Route::prefix('options')->middleware('can:options')->group(function () {
