@@ -27,6 +27,9 @@
     @can('enrollment-page')
         <x-menu-item title="Student Registration" icon="o-user-plus" link="{{ route('enrollment') }}" />
     @endcan
+    @can('teacher-page')
+        <x-menu-item title="Teachers" icon="o-users" link="{{ route('teacher') }}" />
+    @endcan
     @can('user-page')
         <x-menu-item title="Users" icon="o-users" link="{{ route('user') }}" />
     @endcan

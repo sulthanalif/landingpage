@@ -51,7 +51,7 @@ trait ManageDatas
                 }
 
 
-                $record->fill($this->only(array_keys(array_diff_key($validationRules, array_flip(['image'])))));
+                $record->fill($this->only(array_keys(array_diff_key($validationRules, array_flip(['image', 'logo'])))));
                 $record->save();
             } else {
                 $record = new $this->model;
@@ -60,7 +60,7 @@ trait ManageDatas
                     $beforeSave($record, $this);
                 }
 
-                $record->fill($this->only(array_keys(array_diff_key($validationRules, array_flip(['image'])))));
+                $record->fill($this->only(array_keys(array_diff_key($validationRules, array_flip(['image', 'logo'])))));
                 $record->save();
             }
             DB::commit();

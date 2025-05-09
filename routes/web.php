@@ -52,6 +52,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Volt::route('/enrollment', 'back-end.enrollment-page.index')->middleware('can:enrollment-page')->name('enrollment');
         VOlt::route('/enrollment/{register}/detail', 'back-end.enrollment-page.detail')->middleware('can:enrollment-page')->name('enrollment.detail');
         Volt::route('/calendar', 'back-end.calendar-page.index')->middleware('can:calendar-page')->name('calendar');
+        Volt::route('/teacher', 'back-end.teacher-page.index')->middleware('can:teacher-page')->name('teacher');
 
         Volt::route('/user', 'back-end.user-page.index')->middleware('can:user-page')->name('user');
         Route::prefix('options')->middleware('can:options')->group(function () {
