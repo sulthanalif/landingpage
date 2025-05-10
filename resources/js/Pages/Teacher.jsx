@@ -83,178 +83,43 @@ const Teacher = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row team_row">
-                            <TeamItem
+
+                        <div className="teacher-grid mt-5">
+                            <TeacherItem
                                 imgSrc="/landing/images/teacher/ari.jpg"
                                 name="ari"
+                                position="Teacher"
+                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
                             />
-                            <TeamItem
+                            <TeacherItem
                                 imgSrc="/landing/images/teacher/baginda.jpg"
                                 name="baginda"
+                                position="Teacher"
+                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
                             />
-                            <TeamItem
+                            <TeacherItem
                                 imgSrc="/landing/images/teacher/beatrice.jpg"
                                 name="beatrice"
+                                position="Teacher"
+                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
                             />
-                            <TeamItem
+                            <TeacherItem
                                 imgSrc="/landing/images/teacher/benedictus.jpg"
                                 name="benedictus"
+                                position="Teacher"
+                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
                             />
-                            <TeamItem
+                            <TeacherItem
                                 imgSrc="/landing/images/teacher/bero.jpg"
                                 name="bero"
+                                position="Teacher"
+                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
                             />
-                            <TeamItem
+                            <TeacherItem
                                 imgSrc="/landing/images/teacher/cindy.jpg"
                                 name="cindy"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/dewany.jpg"
-                                name="dewany"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/dewi.jpg"
-                                name="dewi"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/dian.jpg"
-                                name="dian"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/dwi.jpg"
-                                name="dwi"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/elsya.jpg"
-                                name="elsya"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/emil.jpg"
-                                name="emil"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/eriko.jpg"
-                                name="eriko"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/ferren.jpg"
-                                name="ferren"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/frans.jpg"
-                                name="frans"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/fridus.jpg"
-                                name="fridus"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/herry.jpg"
-                                name="herry"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/indah.jpg"
-                                name="indah"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/jaka.jpg"
-                                name="jaka"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/juli.jpg"
-                                name="juli"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/lena.jpg"
-                                name="lena"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/lulu.jpg"
-                                name="lulu"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/madya.jpg"
-                                name="madya"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/meifang.jpg"
-                                name="meifang"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/mia.jpg"
-                                name="mia"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/niken.jpg"
-                                name="niken"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/novi.jpg"
-                                name="novi"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/nurafni.jpg"
-                                name="nurafni"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/probo.jpg"
-                                name="probo"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/retha.jpg"
-                                name="retha"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/retno.jpg"
-                                name="retno"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/ricky.jpg"
-                                name="ricky"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/risma.jpg"
-                                name="risma"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/selfi.jpg"
-                                name="selfi"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/septo.jpg"
-                                name="septo"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/simamarta.jpg"
-                                name="simamarta"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/sri.jpg"
-                                name="sri"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/tan.jpg"
-                                name="tan"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/there.jpg"
-                                name="there"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/tining.jpg"
-                                name="tining"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/tri.jpg"
-                                name="tri"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/ulfa.jpg"
-                                name="ulfa"
-                            />
-                            <TeamItem
-                                imgSrc="/landing/images/teacher/yosef.jpg"
-                                name="yosef"
+                                position="Teacher"
+                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
                             />
                         </div>
                     </div>
@@ -313,6 +178,105 @@ const TeamItem = ({ imgSrc, name }) => {
                                 </li>
                             </ul>
                         </div> */}
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};
+
+const TeacherItem = ({ imgSrc, name, position, bio }) => {
+    return (
+        <>
+            <a
+                type="button"
+                data-toggle="modal"
+                data-target={`#${name.replace(/\s+/g, "-").toLowerCase()}`}
+            >
+                <div className="teacher-card">
+                    <div className="teacher-photo-container">
+                        <img src={imgSrc} alt="Ari" className="teacher-photo" />
+                        <img
+                            src={imgSrc}
+                            alt="Mascot"
+                            className="teacher-mascot"
+                        />
+                    </div>
+                    <div className="teacher-info">
+                        <h3 className="teacher-name text-capitalize">{name}</h3>
+                        <p className="teacher-position">{position}</p>
+                    </div>
+                </div>
+            </a>
+
+            <div
+                className="modal fade"
+                id={`${name.replace(/\s+/g, "-").toLowerCase()}`}
+                tabIndex={-1}
+                aria-labelledby={`${name
+                    .replace(/\s+/g, "-")
+                    .toLowerCase()}-label`}
+                aria-hidden="true"
+            >
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5
+                                className="modal-title"
+                                id={`${name
+                                    .replace(/\s+/g, "-")
+                                    .toLowerCase()}-label`}
+                            >
+                                Teacher Detail
+                            </h5>
+                            <button
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="row no-gutters">
+                                <div className="col-md-5 mb-4 mb-md-0">
+                                    <div className="position-relative">
+                                        <img
+                                            src={imgSrc}
+                                            alt={name}
+                                            className="img-fluid rounded-lg shadow-sm"
+                                            style={{
+                                                width: "100%",
+                                                height: "300px",
+                                                objectFit: "cover",
+                                                objectPosition: "top",
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mt-3 text-center">
+                                        <h4 className="mb-1">{name}</h4>
+                                        <span className="badge badge-pill badge-primary px-3 py-2">
+                                            {position}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="col-md-7">
+                                    <div className="pl-md-3">
+                                        <h5 className="text-primary mb-3">
+                                            About Me
+                                        </h5>
+                                        <p
+                                            className="text-muted mb-4"
+                                            style={{ lineHeight: "1.8" }}
+                                        >
+                                            {bio ||
+                                                "No biography available yet."}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@
     <title>{{ env('APP_NAME', 'Laravel') }}</title>
 
     <!-- Favicon -->
-    {{-- <link href="{{ asset('landing/img/favicon.ico') }}" rel="icon"> --}}
+    <link href="{{ asset('img/logo.png') }}" rel="icon" type="image/x-icon">
 
 
     <link rel="stylesheet" type="text/css" href="{{ asset('landing/styles/bootstrap4/bootstrap.min.css') }}">

@@ -18,8 +18,8 @@ const Hero = () => {
                 autoplay: true,
                 autoplayTimeout: 5000,
                 dots: false,
-                animateOut: 'fadeOut',
-                animateIn: 'fadeIn',
+                animateOut: "fadeOut",
+                animateIn: "fadeIn",
             });
         }
     }, []);
@@ -42,31 +42,37 @@ const Hero = () => {
                                 }}
                             />
                             <div className="home_slider_content">
-                                <div className="container">
-                                    <div className="row">
-                                        <div className="col text-center">
-                                            <div className="home_slider_title text-primary bg-light">
-                                                Welcome To Website
-                                                <div className="home_slider_subtitle text-uppercase bg-light">
-                                                    Lia Stephanie Catholic School
+                                <div className="container position-relative z-index-1">
+                                    <div className="row justify-content-center">
+                                        <div className="col-lg-8 col-md-10 text-center">
+                                            <div className="slider-content">
+                                                <div className="school-subtitle text-uppercase mb-2">
+                                                    <span className="highlight-text">
+                                                        Lia Stephanie Catholic
+                                                        School
+                                                    </span>
                                                 </div>
-                                                <div className="home_slider_subtitle bg-light pb-2">
-                                                    <p className="font-italic font-weight-bold h6">"Becoming Part of the World Starts Here"</p>
-                                                </div>
-                                            </div>
-                                            <div className="home_slider_form_container">
-                                                <div className="home_search_form d-flex flex-lg-row flex-column align-items-center justify-content-center">
+
+                                                <h1 className="slider-title mb-4">
+                                                    "Becoming Part of the World
+                                                    Starts Here"
+                                                </h1>
+
+                                                <div className="slider-buttons d-flex flex-wrap justify-content-center mt-5">
                                                     <a
                                                         href="#about"
-                                                        className="home_search_button d-flex align-items-center justify-content-center p-3 mb-2 mb-lg-0"
+                                                        className="cta-button cta-primary d-flex align-items-center justify-content-center px-4 py-3 mr-2"
                                                     >
-                                                        Read More
+                                                        <span>Read More</span>
                                                     </a>
+
                                                     <Link
                                                         href="/register"
-                                                        className="home_register_button d-flex align-items-center justify-content-center p-3 ml-3"
+                                                        className="cta-button cta-secondary d-flex align-items-center justify-content-center px-4 py-3"
                                                     >
-                                                        Register Here
+                                                        <span>
+                                                            Register Now
+                                                        </span>
                                                     </Link>
                                                 </div>
                                             </div>
