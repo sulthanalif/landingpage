@@ -105,43 +105,84 @@ new class extends Component {
     public function save()
     {
 
-        dd($this->columns, $this->rows);
+        // dd($this->columns, $this->rows);
 
         try {
             DB::beginTransaction();
-            // 1. Simpan tabel
-            $table = DynamicTable::create([
-                'name' => $this->name,
-                'slug' => Str::slug($this->name),
-                'status' => $this->status,
-            ]);
-
-            // 2. Simpan kolom-kolomnya
-            $columns = [];
-            foreach ($this->columns as $order => $col) {
-                $columns[] = DynamicTableColumn::create([
-                    'table_id' => $table->id,
-                    'name'     => $col['name'],
-                    'label'    => $col['label'],
-                    'order'    => $order,
-                ]);
-            }
-
-            // 3. Simpan baris + value
-            foreach ($this->rows as $rowData) {
-                $row = DynamicTableRow::create([
-                    'table_id' => $table->id,
+            if ($this->slug) {
+                // 1. Update tabel
+                $table = DynamicTable::where('slug', $this->slug)->firstOrFail();
+                $table->update([
+                    'name' => $this->name,
+                    'status' => $this->status,
                 ]);
 
-                foreach ($columns as $index => $column) {
-                    DynamicTableValue::create([
-                        'row_id'    => $row->id,
-                        'column_id' => $column->id,
-                        'value'     => $rowData[$index] ?? '',
+                // 2. Hapus kolom yang sebelumnya
+                DynamicTableColumn::where('table_id', $table->id)->delete();
+
+                // 3. Simpan kolom-kolom yang terupdate
+                $columns = [];
+                foreach ($this->columns as $order => $col) {
+                    $columns[] = DynamicTableColumn::create([
+                        'table_id' => $table->id,
+                        'name'     => $col['name'],
+                        'label'    => $col['label'],
+                        'order'    => $order,
                     ]);
                 }
-            }
 
+                // 4. Hapus baris yang sebelumnya
+                DynamicTableRow::where('table_id', $table->id)->delete();
+
+                // 5. Simpan baris + value yang terupdate
+                foreach ($this->rows as $rowData) {
+                    $row = DynamicTableRow::create([
+                        'table_id' => $table->id,
+                    ]);
+
+                    foreach ($columns as $index => $column) {
+                        DynamicTableValue::create([
+                            'row_id'    => $row->id,
+                            'column_id' => $column->id,
+                            'value'     => $rowData[$index] ?? '',
+                        ]);
+                    }
+                }
+            } else {
+                // 1. Simpan tabel
+                $table = DynamicTable::create([
+                    'name' => $this->name,
+                    'slug' => Str::slug($this->name),
+                    'status' => $this->status,
+                ]);
+
+                // 2. Simpan kolom-kolomnya
+                $columns = [];
+                foreach ($this->columns as $order => $col) {
+                    $columns[] = DynamicTableColumn::create([
+                        'table_id' => $table->id,
+                        'name'     => $col['name'],
+                        'label'    => $col['label'],
+                        'order'    => $order,
+                    ]);
+                }
+
+                // 3. Simpan baris + value
+                foreach ($this->rows as $rowData) {
+                    $row = DynamicTableRow::create([
+                        'table_id' => $table->id,
+                    ]);
+
+                    foreach ($columns as $index => $column) {
+                        DynamicTableValue::create([
+                            'row_id'    => $row->id,
+                            'column_id' => $column->id,
+                            'value'     => $rowData[$index] ?? '',
+                        ]);
+                    }
+                }
+
+            }
             DB::commit();
 
             $this->success('Table created successfully', position: 'toast-bottom', redirectTo: route('tuition-fees'));
