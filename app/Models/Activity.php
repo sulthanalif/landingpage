@@ -14,7 +14,7 @@ class Activity extends Model
     protected $fillable = [
         'title',
         'date',
-        'image',
+        'file',
         'status',
     ];
 }

@@ -25,7 +25,7 @@ new #[Title('Activities')] class extends Component {
     public bool $modalAlertDelete = false;
     public bool $modalAlertWarning = false;
     public bool $upload = false;
-    public ?UploadedFile $file = null;
+
 
     //table
     public array $selected = [];
@@ -33,118 +33,74 @@ new #[Title('Activities')] class extends Component {
     public int $perPage = 5;
 
     //varActivity
-    public string $oldImage = '';
     public string $title = '';
     public string $date = '';
-    public ?UploadedFile $image = null;
+    public ?UploadedFile $file = null;
     public bool $status = true;
 
-    public array $varActivity = ['recordId', 'title', 'date', 'image', 'status', 'oldImage'];
+    public array $varActivity = ['recordId', 'title', 'date', 'file', 'status'];
 
     //select status
     public array $selectStatus = [['id' => true, 'name' => 'Aktif'], ['id' => false, 'name' => 'Tidak aktif']];
 
-    public function create(): void
-    {
-        $this->reset($this->varActivity);
-        $this->oldImage = 'img/upload.png';
-        // $this->refresh();
-        $this->dispatch('updatedImage', asset($this->oldImage));
-        $this->drawer = true;
-    }
-
-    public function detail($id): void
-    {
-        $this->reset($this->varActivity);
-        $activity = Activity::find($id);
-        $this->oldImage = $activity->image ? 'storage/' . $activity->image : 'img/upload.png';
-        $this->recordId = $activity->id;
-        $this->title = $activity->title;
-        $this->date = $activity->date;
-        // $this->image = $activity->image;
-        $this->status = $activity->status;
-        // $this->refresh();
-        $this->dispatch('updatedImage', asset($this->oldImage));
-        $this->drawer = true;
-    }
 
     public function save(): void
     {
-        $this->validate([
-            'title' => 'required|string|max:255',
-            'date' => 'required|date',
-            'image' => $this->recordId ? 'nullable' : 'required' . '|image|mimes:jpeg,png,jpg|max:2048',
-            'status' => 'required',
-        ]);
+        $this->setModel(new Activity());
 
-        try {
-            DB::beginTransaction();
-            if ($this->recordId) {
-                $activity = Activity::find($this->recordId);
-                $activity->update([
-                    'title' => $this->title,
-                    'date' => $this->date,
-                    'status' => $this->status,
-                ]);
+        $this->saveOrUpdate(
+            validationRules: [
+                'title' => ['required', 'string', 'max:255'],
+                'date' => ['required', 'date'],
+                'status' => ['required', 'boolean'],
+                'file' => ['required', 'mimes:jpeg,png,jpg,mp4', 'max:2048']
+            ],
 
-                if ($this->image) {
-                    if (Storage::disk('public')->exists($activity->image)) {
-                        Storage::disk('public')->delete($activity->image);
+            beforeSave: function ($activity, $component) {
+                if ($component->file) {
+                    if (Storage::disk('public')->exists($component->file)) {
+                        Storage::disk('public')->delete($component->file);
                     }
 
-                    $activity->update(['image' => $this->image->store(path: 'images', options: 'public')]);
+                    $activity->file = $component->file->store(path: 'files/activity', options: 'public');
                 }
-            } else {
-                Activity::create([
-                    'title' => $this->title,
-                    'date' => $this->date,
-                    'image' => $this->image->store(path: 'images', options: 'public'),
-                    'status' => $this->status,
-                ]);
             }
-            DB::commit();
-            $this->success('Activity berhasil disimpan', position: 'toast-bottom');
-            $this->reset($this->varActivity);
-            $this->drawer = false;
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            $this->error('Activity gagal disimpan', position: 'toast-bottom');
-            Log::channel('debug')->error('Error: ' . $th->getMessage(), [
-                'exception' => $th,
-                'file' => $th->getFile(),
-                'line' => $th->getLine(),
-                'code' => $th->getCode(),
-                'trace' => $th->getTraceAsString(),
-            ]);
-        }
+        );
+
+        $this->reset($this->varActivity);
+        $this->unsetModel();
+        $this->drawer = false;
     }
 
-    public function changeStatus(): void
-    {
-        foreach ($this->selected as $id) {
-            $sub = Activity::find($id);
-            try {
-                DB::beginTransaction();
-                $sub->status = !$sub->status;
-                $sub->save();
-                DB::commit();
-
-                $this->success('Status berhasil diubah', position: 'toast-bottom');
-                $this->modalAlertWarning = false;
-                $this->reset('selected');
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::channel('debug')->error("message: '{$e->getMessage()}',  file: '{$e->getFile()}',  line: {$e->getLine()}");
-            }
-        }
-    }
 
     public function delete(): void
     {
-        Activity::whereIn('id', $this->selected)->delete();
-        $this->selected = [];
+        $this->setModel(new Activity());
+
+        $this->deleteData(
+            beforeDelete: function ($id, $component) {
+                $activity = Activity::find($id);
+                if ($activity->file) {
+                    Storage::disk('public')->delete($activity->file);
+                }
+            },
+        );
+        $this->unsetModel();
+        $this->reset($this->varActivity);
+        $this->unsetRecordId();
         $this->modalAlertDelete = false;
-        $this->success('Data berhasil dihapus', position: 'toast-bottom');
+        $this->drawer = false;
+    }
+
+    public function downloadFile()
+    {
+        $file = public_path('storage/' . Activity::find($this->recordId)->file);
+
+        if (!file_exists($file)) {
+            $this->error('File tidak ditemukan', position: 'toast-bottom');
+        } else {
+            return response()->download($file);
+        }
     }
 
     public function datas(): LengthAwarePaginator
@@ -159,7 +115,7 @@ new #[Title('Activities')] class extends Component {
 
     public function headers(): array
     {
-        return [['key' => 'image', 'label' => 'Image'],['key' => 'title', 'label' => 'Title'], ['key' => 'date', 'label' => 'Date'], ['key' => 'status', 'label' => 'Status'], ['key' => 'created_at', 'label' => 'Created At']];
+        return [['key' => 'title', 'label' => 'Title'], ['key' => 'date', 'label' => 'Date'], ['key' => 'status', 'label' => 'Status'], ['key' => 'created_at', 'label' => 'Created At']];
     }
 
     public function with(): array
@@ -174,33 +130,23 @@ new #[Title('Activities')] class extends Component {
 @script
     <script>
         $js('create', () => {
-            $wire.create();
-            const previewImage = document.getElementById('previewImage');
-            const oldImage = @json(asset($oldImage)); // Convert ke string agar bisa diakses
-
-            $wire.on('updatedImage', image => {
-                if (image) {
-                    previewImage.src =
-                        image; // Pastikan `image` yang dikirim adalah URL, bukan file
-                } else {
-                    previewImage.src = oldImage; // Kembalikan ke default jika tidak ada gambar
-                }
-            });
+            $wire.recordId = null;
+            $wire.title = '';
+            $wire.date = '';
+            $wire.file = null;
+            $wire.status = true;
+            $wire.drawer = true;
+            $wire.$refresh();
         });
 
-        $js('detail', (id) => {
-            $wire.detail(id);
-            const previewImage = document.getElementById('previewImage');
-            const oldImage = @json(asset($oldImage)); // Convert ke string agar bisa diakses
-
-            $wire.on('updatedImage', image => {
-                if (image) {
-                    previewImage.src =
-                        image; // Pastikan `image` yang dikirim adalah URL, bukan file
-                } else {
-                    previewImage.src = oldImage; // Kembalikan ke default jika tidak ada gambar
-                }
-            })
+        $js('detail', (activity) => {
+            $wire.recordId = activity.id;
+            $wire.title = activity.title;
+            $wire.date = activity.date;
+            $wire.file = null;
+            $wire.status = activity.status;
+            $wire.drawer = true;
+            $wire.$refresh();
         })
     </script>
 @endscript
@@ -230,14 +176,7 @@ new #[Title('Activities')] class extends Component {
     <!-- TABLE  -->
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            wire:model.live="selected" selectable with-pagination>
-            @scope('cell_image', $data)
-                <img src="{{ asset('storage/' . $data['image']) }}" alt="" style="width: 100px; height: auto">
-            @endscope
-            @scope('cell_title', $data)
-                <p class="cursor-pointer text-blue-500 hover:underline" @click="$js.detail({{ $data['id'] }})">
-                    {{ $data['title'] }}</p>
-            @endscope
+            with-pagination @row-click="$js.detail($event.detail)">
             @scope('cell_status', $data)
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
@@ -249,7 +188,7 @@ new #[Title('Activities')] class extends Component {
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
         </x-table>
-        @if ($this->selected)
+        {{-- @if ($this->selected)
             <div class="flex justify-end items-center gap-2">
                 @can('category-delete')
                     <div class="mt-3 flex justify-end">
@@ -263,7 +202,7 @@ new #[Title('Activities')] class extends Component {
                         wire:loading.attr="disabled" />
                 </div>
             </div>
-        @endif
+        @endif --}}
     </x-card>
 
     <!-- DRAWER CREATE -->
@@ -276,5 +215,5 @@ new #[Title('Activities')] class extends Component {
     @include('livewire.alerts.alert-warning')
 
     <!-- MODAL UPLOAD FILE -->
-    @include('livewire.modals.modal-upload-file')
+    {{-- @include('livewire.modals.modal-upload-file') --}}
 </div>
