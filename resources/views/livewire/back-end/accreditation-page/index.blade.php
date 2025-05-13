@@ -6,10 +6,11 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use App\Models\Accreditation;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new #[Title('Accreditation')] class extends Component {
     use Toast, ManageDatas, WithPagination, WithFileUploads;
 
     public string $search = '';
@@ -76,11 +77,14 @@ new class extends Component {
     {
         $this->setModel(new Accreditation());
 
-        $accreditation = Accreditation::find($this->recordId);
-        if (Storage::disk('public')->exists($accreditation->file)) {
-            Storage::disk('public')->delete($accreditation->file);
-        }
-        $accreditation->delete();
+        $this->deleteData(
+            beforeDelete: function ($id, $component) {
+                $accreditation = Accreditation::find($id);
+                if (Storage::disk('public')->exists($accreditation->file)) {
+                    Storage::disk('public')->delete($accreditation->file);
+                }
+            }
+        );
 
         $this->reset($this->varAccreditation);
         $this->selected = [];
