@@ -109,80 +109,68 @@ new class extends Component {
 
         try {
             DB::beginTransaction();
-            if ($this->slug) {
-                // 1. Update tabel
-                $table = DynamicTable::where('slug', $this->slug)->firstOrFail();
-                $table->update([
-                    'name' => $this->name,
-                    'status' => $this->status,
-                ]);
-
-                // 2. Hapus kolom yang sebelumnya
-                DynamicTableColumn::where('table_id', $table->id)->delete();
-
-                // 3. Simpan kolom-kolom yang terupdate
-                $columns = [];
-                foreach ($this->columns as $order => $col) {
-                    $columns[] = DynamicTableColumn::create([
-                        'table_id' => $table->id,
-                        'name'     => $col['name'],
-                        'label'    => $col['label'],
-                        'order'    => $order,
-                    ]);
-                }
-
-                // 4. Hapus baris yang sebelumnya
-                DynamicTableRow::where('table_id', $table->id)->delete();
-
-                // 5. Simpan baris + value yang terupdate
-                foreach ($this->rows as $rowData) {
-                    $row = DynamicTableRow::create([
-                        'table_id' => $table->id,
-                    ]);
-
-                    foreach ($columns as $index => $column) {
-                        DynamicTableValue::create([
-                            'row_id'    => $row->id,
-                            'column_id' => $column->id,
-                            'value'     => $rowData[$index] ?? '',
-                        ]);
-                    }
-                }
-            } else {
-                // 1. Simpan tabel
-                $table = DynamicTable::create([
+            // 1. Simpan atau update tabel
+            $table = $this->slug
+                ? DynamicTable::where('slug', $this->slug)->firstOrFail()
+                : DynamicTable::create([
                     'name' => $this->name,
                     'slug' => Str::slug($this->name),
                     'status' => $this->status,
                 ]);
 
-                // 2. Simpan kolom-kolomnya
-                $columns = [];
-                foreach ($this->columns as $order => $col) {
-                    $columns[] = DynamicTableColumn::create([
-                        'table_id' => $table->id,
-                        'name'     => $col['name'],
-                        'label'    => $col['label'],
-                        'order'    => $order,
-                    ]);
-                }
-
-                // 3. Simpan baris + value
-                foreach ($this->rows as $rowData) {
-                    $row = DynamicTableRow::create([
-                        'table_id' => $table->id,
-                    ]);
-
-                    foreach ($columns as $index => $column) {
-                        DynamicTableValue::create([
-                            'row_id'    => $row->id,
-                            'column_id' => $column->id,
-                            'value'     => $rowData[$index] ?? '',
-                        ]);
-                    }
-                }
-
+            if ($this->slug) {
+                $table->update([
+                    'name' => $this->name,
+                    'status' => $this->status,
+                ]);
             }
+
+            // 2. Simpan atau update kolom
+            $existingColumnIds = [];
+            $columns = [];
+
+            foreach ($this->columns as $order => $col) {
+                $column = DynamicTableColumn::updateOrCreate(
+                    ['table_id' => $table->id, 'name' => $col['name']],
+                    ['label' => $col['label'], 'order' => $order]
+                );
+                $existingColumnIds[] = $column->id;
+                $columns[] = $column;
+            }
+
+            // Hapus kolom yang tidak dipakai lagi
+            DynamicTableColumn::where('table_id', $table->id)
+                ->whereNotIn('id', $existingColumnIds)
+                ->delete();
+
+            // 3. Simpan atau update baris dan valuenya
+            $existingRowIds = [];
+            foreach ($this->rows as $rowIndex => $rowData) {
+                // Coba ambil row berdasarkan urutan (atau bisa pakai id dari FE kalau ada)
+                $row = $table->rows()->skip($rowIndex)->first();
+
+                if (!$row) {
+                    $row = DynamicTableRow::create(['table_id' => $table->id]);
+                }
+
+                $existingRowIds[] = $row->id;
+
+                foreach ($columns as $index => $column) {
+                    DynamicTableValue::updateOrCreate(
+                        ['row_id' => $row->id, 'column_id' => $column->id],
+                        ['value' => $rowData[$index] ?? '']
+                    );
+                }
+            }
+
+            // Hapus baris (dan valuenya) yang tidak terpakai
+            $table->rows()
+                ->whereNotIn('id', $existingRowIds)
+                ->get()
+                ->each(function ($row) {
+                    $row->values()->delete();
+                    $row->delete();
+                });
             DB::commit();
 
             $this->success('Table created successfully', position: 'toast-bottom', redirectTo: route('tuition-fees'));
