@@ -2,27 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
+use Inertia\Inertia;
+use App\Models\Teacher;
 use App\Models\Activity;
 use App\Models\Calendar;
-use App\Models\Post;
 use App\Models\Question;
-use App\Models\User;
+use App\Models\WhyChooseUs;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Models\Accreditation;
 
 class LandingpageController extends Controller
 {
     public function index()
     {
-        $posts = Post::with(['category', 'user'])->latest()->paginate(5);
-        $activities = Activity::latest()->paginate(5);
-        $faqs = Question::all();
+        $posts = Post::with(['category', 'user'])->where('status', true)->latest()->paginate(5);
+        $activities = Activity::latest()->where('status', true)->paginate(5);
+        $faqs = Question::where('status', true)->get();
+        $wcus = WhyChooseUs::where('status', true)->get();
 
         return Inertia::render('Home', [
             'title' => 'Home',
             'posts' => $posts,
             'activities' => $activities,
-            'faqs' => $faqs
+            'faqs' => $faqs,
+            'wcus' => $wcus
         ]);
     }
 
@@ -33,7 +38,7 @@ class LandingpageController extends Controller
 
     public function story()
     {
-        $activities = Activity::all();
+        $activities = Activity::where('status', true)->get();
 
         return Inertia::render('Story', [
             'activities' => $activities
@@ -42,7 +47,10 @@ class LandingpageController extends Controller
 
     public function teacher()
     {
-        return Inertia::render('Teacher');
+        $teachers = Teacher::where('status', true)->get();
+        return Inertia::render('Teacher', [
+            'teachers' => $teachers
+        ]);
     }
 
     public function admission()
@@ -62,7 +70,7 @@ class LandingpageController extends Controller
 
     public function calendarAcademic()
     {
-        $calendars = Calendar::all();
+        $calendars = Calendar::where('status', true)->get();
 
         return Inertia::render('CalendarAcademic', [
             'calendars' => $calendars
@@ -71,7 +79,11 @@ class LandingpageController extends Controller
 
     public function accreditation()
     {
-        return Inertia::render('Accreditation');
+        $accreditations = Accreditation::where('status', true)->get();
+
+        return Inertia::render('Accreditation', [
+            'accreditations' => $accreditations
+        ]);
     }
 
     public function contact()
@@ -91,7 +103,7 @@ class LandingpageController extends Controller
 
     public function allNews()
     {
-        $posts = Post::with(['category', 'user'])->latest()->get();
+        $posts = Post::with(['category', 'user'])->where('status', true)->latest()->get();
 
         return Inertia::render('AllNews', [
             'posts' => $posts
@@ -100,8 +112,8 @@ class LandingpageController extends Controller
 
     public function detailNews($slug)
     {
-        $latest = Post::with(['category', 'user'])->latest()->limit(3)->get();
-        $post = Post::with(['category', 'user'])->where('slug', $slug)->first();
+        $latest = Post::with(['category', 'user'])->where('status', true)->latest()->limit(3)->get();
+        $post = Post::with(['category', 'user'])->where('status', true)->where('slug', $slug)->first();
 
         return Inertia::render('DetailNews', [
             'latest' => $latest,
@@ -111,7 +123,7 @@ class LandingpageController extends Controller
 
     public function allActivities()
     {
-        $activities = Activity::latest()->get();
+        $activities = Activity::where('status', true)->latest()->get();
 
         return Inertia::render('AllActivity', [
             'activities' => $activities
