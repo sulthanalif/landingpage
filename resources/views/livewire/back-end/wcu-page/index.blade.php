@@ -5,9 +5,10 @@ use Mary\Traits\Toast;
 use App\Models\WhyChooseUs;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new #[Title('Why Choose Us')] class extends Component {
     use Toast, ManageDatas, WithPagination;
 
     public string $search = '';
@@ -24,6 +25,31 @@ new class extends Component {
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public int $perPage = 10;
 
+    //var
+    public string $title = '';
+    public string $description = '';
+    public string $icon = '';
+    public bool $status = true;
+    public array $varWcu = ['recordId', 'title', 'description', 'icon', 'status'];
+
+    public function save(): void
+    {
+        $this->setModel(new WhyChooseUs());
+
+        $this->saveOrUpdate(
+            validationRules: [
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'icon' => 'required|string|max:255',
+                'status' => 'required|boolean',
+            ]
+        );
+
+        $this->unsetModel();
+        $this->reset($this->varWcu);
+        $this->drawer = false;
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return WhyChooseUs::query()
@@ -33,6 +59,17 @@ new class extends Component {
             })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
+    }
+
+    public function delete(): void
+    {
+        $this->setModel(new WhyChooseUs());
+        $this->deleteData();
+        $this->reset($this->varWcu);
+        $this->unsetRecordId();
+        $this->unsetModel();
+        $this->modalAlertDelete = false;
+        $this->drawer = false;
     }
 
     public function headers(): array
@@ -56,12 +93,35 @@ new class extends Component {
 
 }; ?>
 
+@script
+    <script>
+        $js('create', () => {
+            $wire.recordId = null;
+            $wire.title = '';
+            $wire.description = '';
+            $wire.icon = '';
+            $wire.status = true;
+            $wire.drawer = true;
+            $wire.$refresh();
+        })
+        $js('detail', (wcu) => {
+            $wire.recordId = wcu.id;
+            $wire.title = wcu.title;
+            $wire.description = wcu.description;
+            $wire.icon = wcu.icon;
+            $wire.status = wcu.status;
+            $wire.drawer = true;
+            $wire.$refresh();
+        })
+    </script>
+@endscript
+
 <div>
     <!-- HEADER -->
     <x-header title="Why Choose Us" separator>
         <x-slot:actions>
             @can('wcu-create')
-                <x-button label="Create" responsive icon="o-plus" />
+                <x-button label="Create" @click="$js.create" responsive icon="o-plus" />
             @endcan
         </x-slot:actions>
     </x-header>
@@ -81,9 +141,9 @@ new class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
-            @scope('actions', $data)
+            {{-- @scope('actions', $data)
                 <x-button class="btn-primary btn-sm btn-ghost" link="{{ route('post.form', ['url_slug' => $data['slug']]) }}"><x-icon name="o-pencil" color="primary" /></x-button>
-            @endscope
+            @endscope --}}
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
@@ -106,7 +166,7 @@ new class extends Component {
     </x-card>
 
     <!-- DRAWER CREATE -->
-    {{-- @include('livewire.back-end.Post-page.create') --}}
+    @include('livewire.back-end.wcu-page.create')
 
     <!-- MODAL ALERT DELETE -->
     @include('livewire.alerts.alert-delete')
