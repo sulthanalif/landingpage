@@ -10,6 +10,7 @@ use App\Models\Activity;
 use App\Models\Calendar;
 use App\Models\Question;
 use App\Models\WhyChooseUs;
+use App\Models\DynamicTable;
 use Illuminate\Http\Request;
 use App\Models\Accreditation;
 
@@ -55,7 +56,52 @@ class LandingpageController extends Controller
 
     public function admission()
     {
-        return Inertia::render('Admission');
+        $tables = DynamicTable::with([
+            'columns' => fn ($q) => $q->orderBy('order'),
+            'rows.values'
+        ])->where('status', true)->get()->map(function ($table) {
+            $columns = $table->columns->map(function ($col) {
+                return [
+                    'label' => $col->label,
+                    'name' => $col->name,
+                ];
+            });
+
+            $rows = $table->rows->map(function ($row) use ($table) {
+                $orderedValues = $table->columns->map(function ($column) use ($row) {
+                    return optional(
+                        $row->values->firstWhere('column_id', $column->id)
+                    )->value ?? null;
+                });
+
+                return $orderedValues->toArray();
+            });
+
+            return [
+                'name' => $table->name,
+                'slug' => $table->slug,
+                'columns' => $columns,
+                'rows' => $rows,
+            ];
+        });
+
+        //output
+        // [
+        //     'name' => 'Tuition Fees',
+        //     'slug' => 'tuition-fees',
+        //     'columns' => [
+        //         ['label' => 'C1', 'name' => 'c1'],
+        //         ['label' => 'C2', 'name' => 'c2'],
+        //     ],
+        //     'rows' => [
+        //         ['r11', 'r12'],
+        //         ['r21', 'r22'],
+        //     ]
+        // ]
+
+        return Inertia::render('Admission', [
+            'tables' => $tables,
+        ]);
     }
 
     public function curriculum()

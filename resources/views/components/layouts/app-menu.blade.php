@@ -33,6 +33,9 @@
     @can('accreditation-page')
         <x-menu-item title="Accreditation" icon="o-clipboard-document-check" link="{{ route('accreditation') }}" />
     @endcan
+    @can('tuition-fees-page')
+        <x-menu-item title="Tuition Fees" icon="o-document-currency-dollar" link="{{ route('tuition-fees') }}" />
+    @endcan
     @can('teacher-page')
         <x-menu-item title="Teachers" icon="o-users" link="{{ route('teacher') }}" />
     @endcan
