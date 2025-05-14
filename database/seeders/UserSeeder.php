@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
             ['name' => 'super-admin'],
             ['name' => 'admin'],
             ['name' => 'marketing'],
+            ['name' => 'hrd'],
         ];
 
         foreach ($roles as $role) {
@@ -91,36 +92,52 @@ class UserSeeder extends Seeder
         $superAdmin->givePermissionTo(Permission::all());
 
         $admin = Role::findByName('admin');
-        $admin->givePermissionTo('dashboard');
-        $admin->givePermissionTo('master');
-        $admin->givePermissionTo('category-page');
-        $admin->givePermissionTo('category-create');
-        $admin->givePermissionTo('category-edit');
-        $admin->givePermissionTo('category-delete');
-        $admin->givePermissionTo('post-page');
-        $admin->givePermissionTo('post-create');
-        $admin->givePermissionTo('post-edit');
-        $admin->givePermissionTo('post-delete');
-        $admin->givePermissionTo('mail-page');
-        $admin->givePermissionTo('mail-show');
-        $admin->givePermissionTo('mail-delete');
+        $adminPermissions = [
+            'dashboard',
+            'master',
+            'category-page',
+            'category-create',
+            'category-edit',
+            'category-delete',
+            'post-page',
+            'post-create',
+            'post-edit',
+            'post-delete',
+            'mail-page',
+            'mail-show',
+            'mail-delete',
+        ];
+        $admin->givePermissionTo($adminPermissions);
 
         $marketing = Role::findByName('marketing');
-        $marketing->givePermissionTo('dashboard');
-        $marketing->givePermissionTo('master');
-        $marketing->givePermissionTo('post-page');
-        $marketing->givePermissionTo('post-create');
-        $marketing->givePermissionTo('post-edit');
-        $marketing->givePermissionTo('post-delete');
-        $marketing->givePermissionTo('category-page');
-        $marketing->givePermissionTo('category-create');
-        $marketing->givePermissionTo('category-edit');
-        $marketing->givePermissionTo('category-delete');
+        $marketingPermissions = [
+            'dashboard',
+            'master',
+            'post-page',
+            'post-create',
+            'post-edit',
+            'post-delete',
+            'category-page',
+            'category-create',
+            'category-edit',
+            'category-delete',
+        ];
+        $marketing->givePermissionTo($marketingPermissions);
+
+        $hrd = Role::findByName('hrd');
+        $hrdPermissions = [
+            'dashboard',
+            'master',
+            'mail-page',
+            'mail-show',
+        ];
+        $hrd->givePermissionTo($hrdPermissions);
 
         $users = [
             ['name' => 'Super Admin', 'email' => 'superadmin@gmail.com', 'password' => Hash::make('password'), 'role' => 'super-admin'],
             ['name' => 'Admin', 'email' => 'admin@gmail.com', 'password' => Hash::make('password'), 'role' => 'admin'],
             ['name' => 'Marketing', 'email' => 'marketing@gmail.com', 'password' => Hash::make('password'), 'role' => 'marketing'],
+            ['name' => 'HRD', 'email' => 'hrd@gmail.com', 'password' => Hash::make('password'), 'role' => 'hrd'],
         ];
 
         foreach ($users as $user) {
