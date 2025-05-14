@@ -104,8 +104,26 @@ new class extends Component {
 
     public function save()
     {
+        $this->validate([
+            'name' => 'required',
+        ]);
 
         // dd($this->columns, $this->rows);
+
+        if (count($this->columns) === 0) return $this->error('Please add columns first!');
+
+        if (count($this->rows) === 0) return $this->error('Please add rows first!');
+
+        // Cek jika semua isi rows kosong (null, '', atau hanya whitespace)
+        $allRowsEmpty = collect($this->rows)->every(function ($row) {
+            return collect($row)->every(function ($cell) {
+                return is_null($cell) || trim($cell) === '';
+            });
+        });
+
+        if ($allRowsEmpty) {
+            return $this->error('Rows cannot be empty!');
+        }
 
         try {
             DB::beginTransaction();
