@@ -18,5 +18,6 @@ class MailBox extends Model
         'phone',
         'subject',
         'message',
+        'to',
     ];
 }

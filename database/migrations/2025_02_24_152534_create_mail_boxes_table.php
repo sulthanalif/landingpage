@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('phone')->nullable();
+            $table->enum('to', ['hrd', 'marketing', 'information'])->default('information');
             $table->string('subject');
             $table->text('message');
             $table->softDeletes();

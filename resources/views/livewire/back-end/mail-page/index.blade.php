@@ -25,6 +25,7 @@ new #[Title('Mails')] class extends Component {
                     ->orWhere('email', 'like', "%{$this->search}%")
                     ->orWhere('message', 'like', "%{$this->search}%")
                     ->orWhere('name', 'like', "%{$this->search}%")
+                    ->orWhere('to', 'like', "%{$this->search}%")
                     ->orWhere('phone', 'like', "%{$this->search}%");
             })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
@@ -37,6 +38,7 @@ new #[Title('Mails')] class extends Component {
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'phone', 'label' => 'Phone'],
+            ['key' => 'to', 'label' => 'To'],
             ['key' => 'subject', 'label' => 'Subject'],
             ['key' => 'message', 'label' => 'Message'],
             ['key' => 'created_at', 'label' => 'Created At'],

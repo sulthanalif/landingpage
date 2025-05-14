@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\MailBox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Notification;
 
 class ContactUsController extends Controller
 {
@@ -26,21 +27,23 @@ class ContactUsController extends Controller
             'phone' => 'required|numeric',
             'subject' => 'required|string|max:100',
             'message' => 'required|string|max:500',
+            'to' => 'required|enum:hrd,marketing,information'
         ]);
 
         try {
             DB::beginTransaction();
             $mailBox = new MailBox($validated);
             $mailBox->save();
-
             DB::commit();
 
-            //function send email belum ada
+            if ($validated['to'] == 'hrd') {
+                Notification::route('mail', 'hrd@mail.com')->notify(new \App\Notifications\ContactNotification($validated));
+            } elseif ($validated['to'] == 'marketing') {
+                Notification::route('mail', 'marketing@mail.com')->notify(new \App\Notifications\ContactNotification($validated));
+            } elseif ($validated['to'] == 'information') {
+                Notification::route('mail', 'information@mail.com')->notify(new \App\Notifications\ContactNotification($validated));
+            }
 
-            // return response()->json([
-            //     'status' => 'success',
-            //     'message' => 'Pesan berhasil dikirim'
-            // ]);
             return Inertia::render('Contact')->with('success', 'Data berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
