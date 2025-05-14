@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Register;
+use App\Models\TuitionFee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
+    public function index()
+    {
+        $edexcel = TuitionFee::fromTableSlug('national-program-edexcel')->map->formatted_values;
+        $ibCurricula = TuitionFee::fromTableSlug('global-program-ib-curricula')->map->formatted_values;
+
+        return Inertia::render('Register', [
+            'edexcel' => $edexcel ?? [],
+            'ibCurricula' => $ibCurricula ?? [],
+        ]);
+    }
+
     public function store(Request $request)
     {
         //testing

@@ -20,7 +20,7 @@ Route::get('/extracurricular', [LandingpageController::class, 'extracurricular']
 Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademic']);
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
-Route::get('/register', [LandingpageController::class, 'register']);
+Route::get('/register', [RegisterController::class, 'index']);
 Route::get('/payment', [LandingpageController::class, 'payment']);
 
 Route::get('/news', [LandingpageController::class, 'allNews']);
