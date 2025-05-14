@@ -68,15 +68,15 @@ new #[Title('Teachers')] class extends Component {
 
             beforeSave: function ($teacher, $component) {
                 if ($component->image) {
-                    if (Storage::disk('public')->exists($component->image)) {
-                        Storage::disk('public')->delete($component->image);
+                    if (Storage::disk('public')->exists($teacher->image)) {
+                        Storage::disk('public')->delete($teacher->image);
                     }
 
                     $teacher->image = $component->image->store(path: 'images', options: 'public');
                 }
                 if ($component->logo) {
-                    if (Storage::disk('public')->exists($component->logo)) {
-                        Storage::disk('public')->delete($component->logo);
+                    if (Storage::disk('public')->exists($teacher->logo)) {
+                        Storage::disk('public')->delete($teacher->logo);
                     }
 
                     $teacher->logo = $component->logo->store(path: 'images', options: 'public');

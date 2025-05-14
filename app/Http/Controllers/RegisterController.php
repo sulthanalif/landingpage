@@ -11,14 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
+
     public function index()
     {
-        $edexcel = TuitionFee::fromTableSlug('national-program-edexcel')->map->formatted_values;
-        $ibCurricula = TuitionFee::fromTableSlug('global-program-ib-curricula')->map->formatted_values;
-
         return Inertia::render('Register', [
-            'edexcel' => $edexcel ?? [],
-            'ibCurricula' => $ibCurricula ?? [],
+            'edexcel' => TuitionFee::fromTableSlug('national-program-edexcel')->map->formatted_values,
+            // 'ibCurricula' => TuitionFee::fromTableSlug('global-program-ib-curricula')->map->formatted_values
         ]);
     }
 
