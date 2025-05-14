@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Volt\Volt;
+use App\Models\TuitionFee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\Logout;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,12 @@ Route::get('/activities', [LandingpageController::class, 'allActivities']);
 Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
 Route::post('/register', [RegisterController::class, 'store'])->name('register');
+
+// Route::get('/tuition-fees', function () {
+//     $fees = TuitionFee::fromTableSlug('national-program-edexcel')->map->formatted_values;
+
+//     return response()->json($fees);
+// });
 
 Route::middleware(['guest'])->group(function () {
     Volt::route('login', 'login')->name('login');
