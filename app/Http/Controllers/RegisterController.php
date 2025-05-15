@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Discount;
 use App\Models\Register;
 use App\Models\TuitionFee;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -29,11 +31,20 @@ class RegisterController extends Controller
         }
     }
 
-    public function countFee($table_id, $jenjang_value)
+    public function countFee(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'jenjang' => 'required|string',
+            'table_id' => 'required|integer',
+            'discount_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) return response()->json($validator->errors(), 400);
+
         try {
-            // $table_id = $request->input('table_id');
-            // $jenjang_value = $request->input('jenjang');
+            $table_id = $request->input('table_id');
+            $jenjang_value = $request->input('jenjang');
+            $discount_id = $request->input('discount_id');
 
             $table = TuitionFee::getAllTable()
                 ->firstWhere('table.id', (int) $table_id);
@@ -74,9 +85,17 @@ class RegisterController extends Controller
                 }
             }
 
+            $discount = Discount::find($discount_id);
+
+            if (!$discount) return response()->json(['message' => 'Discount not found'], 404);
+
+            if($discount) $total_discount = $total - ($total * ($discount->percentage / 100));
+
             return $this->successResponse(data: [
                 'jenjang' => $jenjang_value,
-                'total' => $total,
+                'amount' => $total,
+                'discount' => $discount?->percentage,
+                'total' => $total_discount
             ]);
         } catch (\Throwable $th) {
             return $this->errorResponse($th);

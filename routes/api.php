@@ -19,4 +19,4 @@ Route::get('/posts', [LandingpageResponseController::class, 'posts']);
 Route::get('/post/{slug}', [LandingpageResponseController::class, 'detailPost']);
 
 Route::get('/dataRegister', [RegisterController::class, 'getData']);
-Route::get('/countFee/{table_id}/{jenjang_value}', [RegisterController::class, 'countFee']);
+Route::get('/countFee', [RegisterController::class, 'countFee']);
