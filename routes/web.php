@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\LandingpageController;
+use App\Http\Controllers\LandingpageResponseController;
 
 Route::get('/', [LandingpageController::class, 'index'])->name('homepage');
 Route::get('/about', [LandingpageController::class, 'about']);
@@ -72,7 +73,4 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
             Volt::route('/permission', 'back-end.options.permission-page.index')->middleware('can:permission-page')->name('permission');
         });
     });
-
-
-
 });

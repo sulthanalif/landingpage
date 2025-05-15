@@ -57,4 +57,24 @@ class TuitionFee extends DynamicTableRow
             ->with(['values.column', 'table.columns'])
             ->get();
     }
+
+    public static function getAllTable()
+    {
+        $tables = DynamicTable::with(['columns'])->get();
+
+        return $tables->map(function ($table) {
+            $rows = self::where('table_id', $table->id)
+                ->with(['values.column'])
+                ->get()
+                ->map(function ($row) {
+                    return $row->formatted_values;
+                });
+
+            return [
+                'table' => $table->only(['id', 'name', 'slug']),
+                'columns' => $table->columns->map(fn ($col) => $col->only(['id', 'name', 'order'])),
+                'rows' => $rows,
+            ];
+        });
+    }
 }
