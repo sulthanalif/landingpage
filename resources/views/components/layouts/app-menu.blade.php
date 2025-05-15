@@ -36,6 +36,9 @@
     @can('tuition-fees-page')
         <x-menu-item title="Tuition Fees" icon="o-document-currency-dollar" link="{{ route('tuition-fees') }}" />
     @endcan
+    @can('discount-page')
+        <x-menu-item title="Discounts" icon="o-percent-badge" link="{{ route('discount') }}" />
+    @endcan
     @can('teacher-page')
         <x-menu-item title="Teachers" icon="o-users" link="{{ route('teacher') }}" />
     @endcan

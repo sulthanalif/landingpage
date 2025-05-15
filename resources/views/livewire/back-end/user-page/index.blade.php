@@ -194,7 +194,7 @@ new #[Title('Users')] class extends Component {
 
     public function updatePermissionSuperAdmin(string $permissionName): void
     {
-        $superadmin = Role::where('name', 'Super Admin')->first();
+        $superadmin = Role::where('name', 'super-admin')->first();
         $permission = Permission::where('name', $permissionName)->first();
 
         if ($superadmin) {
