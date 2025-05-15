@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Register;
 use App\Models\TuitionFee;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,10 +15,72 @@ class RegisterController extends Controller
 
     public function index()
     {
-        return Inertia::render('Register', [
-            'edexcel' => TuitionFee::fromTableSlug('national-program-edexcel')->map->formatted_values,
-            // 'ibCurricula' => TuitionFee::fromTableSlug('global-program-ib-curricula')->map->formatted_values
-        ]);
+        return Inertia::render('Register');
+    }
+
+    public function getData()
+    {
+        try {
+            $types = TuitionFee::getAllTable();
+
+            return $this->successResponse(data: compact('types'));
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+    }
+
+    public function countFee($table_id, $jenjang_value)
+    {
+        try {
+            // $table_id = $request->input('table_id');
+            // $jenjang_value = $request->input('jenjang');
+
+            $table = TuitionFee::getAllTable()
+                ->firstWhere('table.id', (int) $table_id);
+
+            if (!$table) {
+                return response()->json(['message' => 'Table not found'], 404);
+            }
+
+            // Cari kolom yang order-nya === 0 (biasanya label, seperti 'Jenjang')
+            $labelColumn = collect($table['columns'])
+                ->firstWhere('order', 0);
+
+            if (!$labelColumn) {
+                return response()->json(['message' => 'Label column not found'], 404);
+            }
+
+            $jenjangKey = Str::slug($labelColumn['label'], '_');
+
+            // Cari row berdasarkan value jenjang
+            $targetRow = collect($table['rows'])
+                ->firstWhere($jenjangKey, $jenjang_value);
+
+            if (!$targetRow) {
+                return response()->json(['message' => 'Row not found for jenjang ' . $jenjang_value], 404);
+            }
+
+            // Ambil semua kolom numerik (order !== 0)
+            $numericColumns = collect($table['columns'])
+                ->filter(fn ($col) => $col['order'] !== 0)
+                ->pluck('label')
+                ->map(fn ($label) => Str::slug($label, '_'))
+                ->toArray();
+
+            $total = 0;
+            foreach ($numericColumns as $key) {
+                if (isset($targetRow[$key]) && is_numeric($targetRow[$key])) {
+                    $total += $targetRow[$key];
+                }
+            }
+
+            return $this->successResponse(data: [
+                'jenjang' => $jenjang_value,
+                'total' => $total,
+            ]);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
     }
 
     public function store(Request $request)

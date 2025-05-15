@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LandingpageResponseController;
 
 // Route::get('/user', function (Request $request) {
@@ -16,3 +17,6 @@ Route::get('/calendars', [LandingpageResponseController::class, 'calendars']);
 Route::get('/accreditations', [LandingpageResponseController::class, 'accreditations']);
 Route::get('/posts', [LandingpageResponseController::class, 'posts']);
 Route::get('/post/{slug}', [LandingpageResponseController::class, 'detailPost']);
+
+Route::get('/dataRegister', [RegisterController::class, 'getData']);
+Route::get('/countFee/{table_id}/{jenjang_value}', [RegisterController::class, 'countFee']);
