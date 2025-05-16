@@ -53,7 +53,7 @@ new #[Title('Accreditation')] class extends Component {
             validationRules: [
                 'title' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string', 'max:255'],
-                'file' => ['required', 'mimes:jpeg,png,jpg,pdf', 'max:2048'],
+                'file' => ['required', 'mimes:jpeg,png,jpg', 'max:2048'],
                 'status' => ['required', 'boolean'],
             ],
 
