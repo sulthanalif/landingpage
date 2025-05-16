@@ -18,6 +18,11 @@ new #[Title('Mails')] class extends Component {
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public int $perPage = 5;
 
+    public function detail($id): void
+    {
+        $this->redirect(route('mail.show', ['id' => $id]), navigate: true);
+    }
+
     public function datas(): LengthAwarePaginator
     {
         $role = auth()->user()->getRoleNames()->first();
@@ -76,7 +81,7 @@ new #[Title('Mails')] class extends Component {
     <!-- TABLE  -->
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-             with-pagination>
+             with-pagination @row-click="$wire.detail($event.detail.id)">
             @scope('cell_message', $data)
                 {{ Str::limit($data['message'], 25) }}
             @endscope
