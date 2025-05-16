@@ -29,7 +29,7 @@ class PaymentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'key' => 'required|string',
-            'payment_method' => 'required|string',
+            'payment_method' => 'required|enum:cash,bca,bni,bri,mandiri,other',
             'amount' => 'required|numeric',
         ]);
 
