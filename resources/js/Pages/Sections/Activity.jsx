@@ -1,7 +1,22 @@
 import { Link } from "@inertiajs/react";
 import React from "react";
+import useApi from "../../Hooks/response";
+import ActivityItem from "../../Components/Pages/ActivityItem";
 
-const Activity = ({ activities }) => {
+const Activity = () => {
+    const {
+        data: datas,
+        loading,
+        error,
+        get: getDatas,
+    } = useApi("getDataHome");
+
+    const activities = datas?.activities;
+
+    const handleRefresh = () => {
+        getDatas();
+    };
+
     return (
         <>
             <div className="courses">
@@ -31,63 +46,49 @@ const Activity = ({ activities }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="row courses_row">
-                        {activities && activities.data.length > 0 ? (
-                            <>
-                                <div className="row courses_row">
-                                    {activities.data.map((activity) => (
-                                        <div
-                                            className="col-lg-4 course_col"
-                                            key={activity.id}
-                                        >
-                                            <div className="course">
-                                                <div className="course_image">
-                                                    <img
-                                                        src={
-                                                            activity.image
-                                                                ? `/storage/${activity.image}`
-                                                                : "/landing/images/event_1.jpg"
-                                                        }
-                                                        alt={activity.title}
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-                                                <div className="course_body">
-                                                    <h3 className="course_title">
-                                                        <a
-                                                            href="#"
-                                                            className="text-center"
-                                                        >
-                                                            {activity.title}
-                                                        </a>
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="row">
-                                    <div className="col-lg-12 text-center">
-                                        <div className="courses_button trans_200">
-                                            <Link href="/story">
-                                                view all activities
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="col-lg-12 course_col">
-                                <div className="course">
-                                    <div className="course_body">
-                                        <h3 className="course_title text-center">
-                                            No activity found
-                                        </h3>
+
+                    {loading ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div
+                                className="spinner-border text-secondary"
+                                role="status"
+                            >
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    ) : error ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div className="alert alert-danger">{error}</div>
+                        </div>
+                    ) : activities && activities.data.length > 0 ? (
+                        <>
+                            {" "}
+                            <div className="row courses_row">
+                                {activities.data.map((activity) => (
+                                    <ActivityItem key={activity.id} activity={activity} />
+                                ))}
+                            </div>
+                            <div className="row">
+                                <div className="col-lg-12 text-center">
+                                    <div className="courses_button trans_200">
+                                        <Link href="/story">
+                                            view all activities
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
+                        </>
+                    ) : (
+                        <div className="col-lg-12 course_col">
+                            <div className="course">
+                                <div className="course_body">
+                                    <h3 className="course_title text-center">
+                                        No activity found
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

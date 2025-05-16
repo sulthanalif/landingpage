@@ -1,6 +1,20 @@
 import React from "react";
+import useApi from "../../Hooks/response";
 
-const Faq = ({ faqs }) => {
+const Faq = () => {
+    const {
+        data: datas,
+        loading,
+        error,
+        get: getDatas,
+    } = useApi("getDataHome");
+
+    const faqs = datas?.faqs;
+
+    const handleRefresh = () => {
+        getDatas();
+    };
+
     return (
         <>
             <div className="courses">
@@ -34,7 +48,24 @@ const Faq = ({ faqs }) => {
                         </div>
                         <div className="col-lg-8">
                             <div className="accordion" id="faqAccordion">
-                                {faqs && faqs.length > 0 ? (
+                                {loading ? (
+                                    <div className="col-lg-12 text-center py-5">
+                                        <div
+                                            className="spinner-border text-primary"
+                                            role="status"
+                                        >
+                                            <span className="sr-only">
+                                                Loading...
+                                            </span>
+                                        </div>
+                                    </div>
+                                ) : error ? (
+                                    <div className="col-lg12 text-center py-5">
+                                        <div className="alert alert-danger">
+                                            {error}
+                                        </div>
+                                    </div>
+                                ) : faqs && faqs.length > 0 ? (
                                     faqs.map((faq, index) => {
                                         const questionId = `heading${
                                             index + 1

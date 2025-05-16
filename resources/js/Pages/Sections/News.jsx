@@ -1,8 +1,9 @@
 import { Link } from "@inertiajs/react";
 import React from "react";
+import useApi from "../../Hooks/response";
 
-const News = ({ posts }) => {
-    const limitText = (html, limit = 150) => {
+const News = () => {
+    const limitText = (html, limit = 50) => {
         if (!html) return "";
 
         const sanitizedHtml = html.replace(/<img[^>]*>/g, "");
@@ -17,8 +18,46 @@ const News = ({ posts }) => {
             : textContent;
     };
 
+    const limitTextFirst = (html, limit = 150) => {
+        if (!html) return "";
+
+        const sanitizedHtml = html.replace(/<img[^>]*>/g, "");
+
+        const tempElement = document.createElement("div");
+        tempElement.innerHTML = sanitizedHtml;
+        const textContent =
+            tempElement.textContent || tempElement.innerText || "";
+
+        return textContent.length > limit
+            ? textContent.substring(0, limit) + "..."
+            : textContent;
+    };
+
+    const {
+        data: datas,
+        loading,
+        error,
+        get: getDatas,
+    } = useApi("getDataHome");
+
+    const posts = datas?.posts;
+
+    const handleRefresh = () => {
+        getDatas();
+    };
+
     return (
         <div className="news">
+            <div
+                className="section_background parallax-window"
+                loading="lazy"
+                style={{
+                    backgroundImage: `url('/landing/images/courses_background.jpg')`,
+                    backgroundAttachment: "fixed",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                }}
+            />
             <div className="container">
                 <div className="row">
                     <div className="col">
@@ -34,7 +73,22 @@ const News = ({ posts }) => {
                     </div>
                 </div>
 
-                {posts && Array.isArray(posts.data) && posts.data.length > 0 ? ( // Simplified condition
+                {loading ? (
+                    <div className="row news_row">
+                        <div className="col-lg-12 news_col text-center py-5">
+                            <div
+                                className="spinner-border text-secondary"
+                                role="status"
+                            >
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                ) : error ? (
+                    <div className="col-lg-12 news_col text-center py-5">
+                        <div className="alert alert-danger">{error}</div>
+                    </div>
+                ) : posts && posts.data.length > 0 ? (
                     <>
                         {" "}
                         <div className="row news_row">
@@ -47,7 +101,7 @@ const News = ({ posts }) => {
                                                     posts.data[0]?.image
                                                         ? "/storage/" +
                                                           posts.data[0].image
-                                                        : "/landing/images/news_1.jpg"
+                                                        : "/img/logo.png"
                                                 }
                                                 alt={posts.data[0]?.title}
                                                 loading="lazy"
@@ -70,8 +124,8 @@ const News = ({ posts }) => {
                                                 <li>
                                                     <a href="#">
                                                         {
-                                                            posts.data[0]?.user
-                                                                .name
+                                                            posts.data[0]
+                                                                ?.category.name
                                                         }
                                                     </a>
                                                 </li>
@@ -94,7 +148,7 @@ const News = ({ posts }) => {
                                         <div className="news_post_text">
                                             <p
                                                 dangerouslySetInnerHTML={{
-                                                    __html: limitText(
+                                                    __html: limitTextFirst(
                                                         posts.data[0]?.body
                                                     ),
                                                 }}
@@ -127,7 +181,7 @@ const News = ({ posts }) => {
                                                 <ul>
                                                     <li>
                                                         <a href="#">
-                                                            {post.user.name}
+                                                            {post.category.name}
                                                         </a>
                                                     </li>
                                                     <li>
@@ -145,6 +199,15 @@ const News = ({ posts }) => {
                                                         </a>
                                                     </li>
                                                 </ul>
+                                            </div>
+                                            <div className="news_post_text">
+                                                <p
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: limitText(
+                                                            post.body
+                                                        ),
+                                                    }}
+                                                />
                                             </div>
                                         </div>
                                     ))}
