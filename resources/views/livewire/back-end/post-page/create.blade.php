@@ -10,6 +10,7 @@ use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 new #[Title('Form Post')] class extends Component {
     use Toast, ManageDatas, WithFileUploads;
@@ -100,6 +101,7 @@ new #[Title('Form Post')] class extends Component {
                 'category_searchable_id' => 'required|exists:categories,id',
                 'user_id' => 'required|exists:users,id',
                 'status' => 'required|boolean',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             ],
 
             beforeSave: function ($post, $component) {
@@ -110,12 +112,12 @@ new #[Title('Form Post')] class extends Component {
                 $post->category_id = $component->category_searchable_id;
                 $post->user_id = $component->user_id;
                 $post->status = $component->status;
-                if ($this->image) {
-                    if (Storage::disk('public')->exists($this->image)) {
-                        Storage::disk('public')->delete($this->image);
+                if ($component->image) {
+                    if (Storage::disk('public')->exists($component->image)) {
+                        Storage::disk('public')->delete($component->image);
                     }
 
-                    $post->image = $this->image->store(path: 'images', options: 'public');
+                    $post->image = $component->image->store(path: 'images/post', options: 'public');
                 }
             },
             toast: false,
@@ -125,7 +127,7 @@ new #[Title('Form Post')] class extends Component {
 
         );
 
-        $this->reset($this->varPost);
+        // $this->reset($this->varPost);
     }
 }; ?>
 
