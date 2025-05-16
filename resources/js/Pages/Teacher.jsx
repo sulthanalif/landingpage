@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
+import TeacherItem from "../Components/Pages/TeacherItem";
+import useApi from "../Hooks/response";
 
 const Teacher = () => {
     useEffect(() => {
@@ -29,6 +31,17 @@ const Teacher = () => {
             document.body.removeChild(script);
         };
     }, []);
+
+    const {
+        data: teachers,
+        loading,
+        error,
+        get: getTeachers,
+    } = useApi("teachers");
+
+    const handleRefresh = () => {
+        getTeachers();
+    };
 
     return (
         <>
@@ -85,42 +98,37 @@ const Teacher = () => {
                         </div>
 
                         <div className="teacher-grid mt-5">
-                            <TeacherItem
-                                imgSrc="/landing/images/teacher/ari.jpg"
-                                name="ari"
-                                position="Teacher"
-                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
-                            />
-                            <TeacherItem
-                                imgSrc="/landing/images/teacher/baginda.jpg"
-                                name="baginda"
-                                position="Teacher"
-                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
-                            />
-                            <TeacherItem
-                                imgSrc="/landing/images/teacher/beatrice.jpg"
-                                name="beatrice"
-                                position="Teacher"
-                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
-                            />
-                            <TeacherItem
-                                imgSrc="/landing/images/teacher/benedictus.jpg"
-                                name="benedictus"
-                                position="Teacher"
-                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
-                            />
-                            <TeacherItem
-                                imgSrc="/landing/images/teacher/bero.jpg"
-                                name="bero"
-                                position="Teacher"
-                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
-                            />
-                            <TeacherItem
-                                imgSrc="/landing/images/teacher/cindy.jpg"
-                                name="cindy"
-                                position="Teacher"
-                                bio="Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio reiciendis, esse earum nam asperiores quae facilis suscipit doloremque fuga, voluptate iusto laudantium eaque, eum aliquam? Tempore, soluta deleniti. Possimus, nobis ex aperiam laboriosam vel expedita qui delectus ratione quod perspiciatis, ea repellendus, et saepe quisquam quia rerum quae iste deleniti!"
-                            />
+                            {loading ? (
+                                <div className="col-12 text-center py-5">
+                                    <div
+                                        className="spinner-border text-primary"
+                                        role="status"
+                                    >
+                                        <span className="sr-only">
+                                            Loading...
+                                        </span>
+                                    </div>
+                                </div>
+                            ) : error ? (
+                                <div className="col-12 text-center py-5">
+                                    <div className="alert alert-danger">
+                                        {error}
+                                    </div>
+                                </div>
+                            ) : teachers && teachers.teachers.length > 0 ? (
+                                teachers.teachers.map((teacher) => (
+                                    <TeacherItem
+                                        key={teacher.id}
+                                        teacher={teacher}
+                                    />
+                                ))
+                            ) : (
+                                <div className="col-12 text-center py-5">
+                                    <div className="alert alert-info">
+                                        No teachers data available
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -185,103 +193,103 @@ const TeamItem = ({ imgSrc, name }) => {
     );
 };
 
-const TeacherItem = ({ imgSrc, name, position, bio }) => {
-    return (
-        <>
-            <a
-                type="button"
-                data-toggle="modal"
-                data-target={`#${name.replace(/\s+/g, "-").toLowerCase()}`}
-            >
-                <div className="teacher-card">
-                    <div className="teacher-photo-container">
-                        <img src={imgSrc} alt="Ari" className="teacher-photo" />
-                        <img
-                            src={imgSrc}
-                            alt="Mascot"
-                            className="teacher-mascot"
-                        />
-                    </div>
-                    <div className="teacher-info">
-                        <h3 className="teacher-name text-capitalize">{name}</h3>
-                        <p className="teacher-position">{position}</p>
-                    </div>
-                </div>
-            </a>
+// const TeacherItem = ({ imgSrc, name, position, bio }) => {
+//     return (
+//         <>
+//             <a
+//                 type="button"
+//                 data-toggle="modal"
+//                 data-target={`#${name.replace(/\s+/g, "-").toLowerCase()}`}
+//             >
+//                 <div className="teacher-card">
+//                     <div className="teacher-photo-container">
+//                         <img src={imgSrc} alt="Ari" className="teacher-photo" />
+//                         <img
+//                             src={imgSrc}
+//                             alt="Mascot"
+//                             className="teacher-mascot"
+//                         />
+//                     </div>
+//                     <div className="teacher-info">
+//                         <h3 className="teacher-name text-capitalize">{name}</h3>
+//                         <p className="teacher-position">{position}</p>
+//                     </div>
+//                 </div>
+//             </a>
 
-            <div
-                className="modal fade"
-                id={`${name.replace(/\s+/g, "-").toLowerCase()}`}
-                tabIndex={-1}
-                aria-labelledby={`${name
-                    .replace(/\s+/g, "-")
-                    .toLowerCase()}-label`}
-                aria-hidden="true"
-            >
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5
-                                className="modal-title"
-                                id={`${name
-                                    .replace(/\s+/g, "-")
-                                    .toLowerCase()}-label`}
-                            >
-                                Teacher Detail
-                            </h5>
-                            <button
-                                type="button"
-                                className="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="row no-gutters">
-                                <div className="col-md-5 mb-4 mb-md-0">
-                                    <div className="position-relative">
-                                        <img
-                                            src={imgSrc}
-                                            alt={name}
-                                            className="img-fluid rounded-lg shadow-sm"
-                                            style={{
-                                                width: "100%",
-                                                height: "300px",
-                                                objectFit: "cover",
-                                                objectPosition: "top",
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="mt-3 text-center">
-                                        <h4 className="mb-1">{name}</h4>
-                                        <span className="badge badge-pill badge-primary px-3 py-2">
-                                            {position}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="col-md-7">
-                                    <div className="pl-md-3">
-                                        <h5 className="text-primary mb-3">
-                                            About Me
-                                        </h5>
-                                        <p
-                                            className="text-muted mb-4"
-                                            style={{ lineHeight: "1.8" }}
-                                        >
-                                            {bio ||
-                                                "No biography available yet."}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-};
+//             <div
+//                 className="modal fade"
+//                 id={`${name.replace(/\s+/g, "-").toLowerCase()}`}
+//                 tabIndex={-1}
+//                 aria-labelledby={`${name
+//                     .replace(/\s+/g, "-")
+//                     .toLowerCase()}-label`}
+//                 aria-hidden="true"
+//             >
+//                 <div className="modal-dialog">
+//                     <div className="modal-content">
+//                         <div className="modal-header">
+//                             <h5
+//                                 className="modal-title"
+//                                 id={`${name
+//                                     .replace(/\s+/g, "-")
+//                                     .toLowerCase()}-label`}
+//                             >
+//                                 Teacher Detail
+//                             </h5>
+//                             <button
+//                                 type="button"
+//                                 className="close"
+//                                 data-dismiss="modal"
+//                                 aria-label="Close"
+//                             >
+//                                 <span aria-hidden="true">&times;</span>
+//                             </button>
+//                         </div>
+//                         <div className="modal-body">
+//                             <div className="row no-gutters">
+//                                 <div className="col-md-5 mb-4 mb-md-0">
+//                                     <div className="position-relative">
+//                                         <img
+//                                             src={imgSrc}
+//                                             alt={name}
+//                                             className="img-fluid rounded-lg shadow-sm"
+//                                             style={{
+//                                                 width: "100%",
+//                                                 height: "300px",
+//                                                 objectFit: "cover",
+//                                                 objectPosition: "top",
+//                                             }}
+//                                         />
+//                                     </div>
+//                                     <div className="mt-3 text-center">
+//                                         <h4 className="mb-1">{name}</h4>
+//                                         <span className="badge badge-pill badge-primary px-3 py-2">
+//                                             {position}
+//                                         </span>
+//                                     </div>
+//                                 </div>
+//                                 <div className="col-md-7">
+//                                     <div className="pl-md-3">
+//                                         <h5 className="text-primary mb-3">
+//                                             About Me
+//                                         </h5>
+//                                         <p
+//                                             className="text-muted mb-4"
+//                                             style={{ lineHeight: "1.8" }}
+//                                         >
+//                                             {bio ||
+//                                                 "No biography available yet."}
+//                                         </p>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </>
+//     );
+// };
 
 export default Teacher;

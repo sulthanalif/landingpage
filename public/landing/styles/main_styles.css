@@ -1834,25 +1834,6 @@ section {
     display: inline-block;
 }
 
-.slider-title::before,
-.slider-title::after {
-    content: '"';
-    color: #f1c40f;
-    font-size: 4rem;
-    position: absolute;
-    opacity: 0.7;
-}
-
-.slider-title::before {
-    left: -30px;
-    top: -20px;
-}
-
-.slider-title::after {
-    right: -30px;
-    bottom: -30px;
-}
-
 /* Button Styling */
 .cta-button {
     border-radius: 50px;
@@ -1913,21 +1894,6 @@ section {
     .slider-title {
         font-size: 1.8rem;
         margin: 20px 0;
-    }
-
-    .slider-title::before,
-    .slider-title::after {
-        font-size: 2.5rem;
-    }
-
-    .slider-title::before {
-        left: -15px;
-        top: -10px;
-    }
-
-    .slider-title::after {
-        right: -15px;
-        bottom: -15px;
     }
 
     .school-subtitle {
