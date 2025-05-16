@@ -62,21 +62,21 @@ new #[Title('Teachers')] class extends Component {
                 'email' => ['required', 'string', 'email', 'unique:teachers,email'],
                 'category' => ['required', 'string'],
                 'status' => ['required', 'boolean'],
-                'image' => ['nullable', 'image'],
-                'logo' => ['nullable', 'image'],
+                'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+                'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             ],
 
             beforeSave: function ($teacher, $component) {
                 if ($component->image) {
-                    if (Storage::disk('public')->exists($teacher->image)) {
-                        Storage::disk('public')->delete($teacher->image);
+                    if (Storage::disk('public')->exists($component->image)) {
+                        Storage::disk('public')->delete($component->image);
                     }
 
                     $teacher->image = $component->image->store(path: 'images', options: 'public');
                 }
                 if ($component->logo) {
-                    if (Storage::disk('public')->exists($teacher->logo)) {
-                        Storage::disk('public')->delete($teacher->logo);
+                    if (Storage::disk('public')->exists($component->logo)) {
+                        Storage::disk('public')->delete($component->logo);
                     }
 
                     $teacher->logo = $component->logo->store(path: 'images', options: 'public');
@@ -157,8 +157,6 @@ new #[Title('Teachers')] class extends Component {
             $wire.email = '';
             $wire.category = '';
             $wire.status = true;
-            $wire.image = null;
-            $wire.logo = null;
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -170,8 +168,6 @@ new #[Title('Teachers')] class extends Component {
             $wire.email = teacher.email;
             $wire.category = teacher.category;
             $wire.status = teacher.status;
-            $wire.image = null;
-            $wire.logo = null;
             $wire.drawer = true;
             $wire.$refresh();
         })
