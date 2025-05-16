@@ -51,6 +51,12 @@ return [
     */
 
     'channels' => [
+        'api' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/model/api.log'),
+            'level' => 'info',
+            'days' => 14,
+        ],
         'model' => [
             'driver' => 'daily',
             'path' => storage_path('logs/model/model.log'),

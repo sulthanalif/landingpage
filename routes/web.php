@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\Logout;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\LandingpageController;
@@ -22,7 +23,7 @@ Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademi
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
 Route::get('/register', [RegisterController::class, 'index']);
-Route::get('/payment', [LandingpageController::class, 'payment']);
+Route::get('/payment/{key}', [PaymentController::class, 'page'])->name('payment');
 
 Route::get('/news', [LandingpageController::class, 'allNews']);
 Route::get('/news/{slug}', [LandingpageController::class, 'detailNews']);
@@ -31,6 +32,7 @@ Route::get('/activities', [LandingpageController::class, 'allActivities']);
 Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
 Route::post('/register', [RegisterController::class, 'store'])->name('register');
+
 
 // Route::get('/tuition-fees', function () {
 //     $fees = TuitionFee::fromTableSlug('national-program-edexcel')->map->formatted_values;

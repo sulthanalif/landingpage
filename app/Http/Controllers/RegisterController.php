@@ -8,6 +8,7 @@ use App\Models\Register;
 use App\Models\TuitionFee;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PaymentRegister;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -92,7 +93,7 @@ class RegisterController extends Controller
             if($discount) $total_discount = $total - ($total * ($discount->percentage / 100));
 
             return $this->successResponse(data: [
-                'jenjang' => $jenjang_value,
+                'level' => $jenjang_value,
                 'amount' => $total,
                 'discount' => $discount?->percentage,
                 'total' => $total_discount
@@ -130,12 +131,28 @@ class RegisterController extends Controller
             'email_parent' => 'required|email',
             'father_address' => 'required|string|max:255',
             'mother_address' => 'required|string|max:255',
-            'student_residence_status' => 'required'
+            'student_residence_status' => 'required',
+
+            'amount' => 'required|numeric',
+            'discount' => 'required|numeric',
+            'total' => 'required|numeric',
         ]);
 
         try {
             DB::beginTransaction();
-            Register::create($validate);
+            $register = Register::create($validate);
+
+            do {
+                $key = Str::random(20);
+            } while (PaymentRegister::where('key', $key)->exists());
+
+            $register->paymentRegister()->create([
+                'key' => $key,
+                'amount' => $request->amount,
+                'discount' => $request->discount,
+                'total' => $request->total
+            ]);
+
             DB::commit();
             return Inertia::render('Register')->with('success', 'Data berhasil disimpan');
         } catch (\Exception $e) {

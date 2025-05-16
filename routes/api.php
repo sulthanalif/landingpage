@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LandingpageResponseController;
 
@@ -20,3 +21,6 @@ Route::get('/post/{slug}', [LandingpageResponseController::class, 'detailPost'])
 
 Route::get('/dataRegister', [RegisterController::class, 'getData']);
 Route::get('/countFee', [RegisterController::class, 'countFee']);
+
+Route::get('/payment/getData/{key}', [PaymentController::class, 'getData']);
+Route::post('/payment', [PaymentController::class, 'store']);

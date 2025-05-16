@@ -16,7 +16,7 @@ trait ResponseHendler
 
     public function errorResponse($exception)
     {
-        \Log::info($exception);
+        \Log::channel('api')->info($exception);
         try {
             if(!is_int($exception->getCode()) || $exception->getCode() <= 0) {
                 throw null;

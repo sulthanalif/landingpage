@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Register extends Model
 {
@@ -37,8 +38,13 @@ class Register extends Model
         'student_residence_status'
     ];
 
-    public function approvalRegis()
+    public function approvalRegis(): HasOne
     {
         return $this->hasOne(ApprovalRegis::class);
+    }
+
+    public function paymentRegister(): HasOne
+    {
+        return $this->hasOne(PaymentRegister::class);
     }
 }

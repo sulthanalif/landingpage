@@ -39,10 +39,14 @@ class ActionRegisNotification extends Notification
     {
         $message = $this->regis->approvalRegis->status ? 'Congratulation, your registration has been approved' : 'Sorry, your registration has been rejected';
 
+
         return (new MailMessage)
                     ->subject("Notification Registration")
                     ->greeting("Halo, {$this->regis->name}")
                     ->line("{$message}.")
+                    ->when($this->regis->paymentRegister, function ($mail) {
+                        $mail->action('Go to payment', route('payment', $this->regis->paymentRegister->key));
+                    })
                     ->line('Thank you for registering.');
     }
 
