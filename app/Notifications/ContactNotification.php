@@ -37,9 +37,9 @@ class ContactNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject($this->mail->subject)
-                    ->greeting("From {$this->mail->name} ({$this->mail->email})")
-                    ->line($this->mail->message)
+                    ->subject($this->mail['subject'])
+                    ->greeting("From {$this->mail['name']} ({$this->mail['email']})")
+                    ->line($this->mail['message'])
                     ->action('Go to website', route('mail'));
                     // ->line('Thank you for using our application!');
     }

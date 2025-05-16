@@ -30,8 +30,8 @@ class ContactUsController extends Controller
             'to' => 'required|in:hrd,marketing,information'
         ]);
 
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $mailBox = new MailBox($validated);
             $mailBox->save();
             DB::commit();
