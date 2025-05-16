@@ -14,7 +14,7 @@
         </div>
 
         <div class="flex justify-between items-center">
-            <x-file wire:model="file" label="Receipt" hint="Only PDF/Image" accept="application/pdf, image/png, image/jpeg, image/jpg" />
+            <x-file wire:model="file" label="Receipt" hint="Only Image" accept="image/png, image/jpeg, image/jpg" />
             @if ($this->recordId)
                 <x-button label="Download File" @click="$wire.downloadFile" icon="o-arrow-down" class="btn-primary" spinner="downloadFile" />
             @endif
