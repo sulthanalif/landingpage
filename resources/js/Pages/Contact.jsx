@@ -10,6 +10,7 @@ const Contact = () => {
 
     const { data, setData, post, processing, errors } = useForm({
         name: "",
+        to: "hrd",
         email: "",
         phone: "",
         subject: "",
@@ -60,12 +61,18 @@ const Contact = () => {
                 setModalMessage("Your message has been sent successfully!");
                 setIsSuccess(true);
                 setShowModal(true);
+                reset();
             },
             onError: (errors) => {
                 setModalTitle("Error");
+                const errorMessage =
+                    errors.message ||
+                    (typeof errors === "string"
+                        ? errors
+                        : "Message failed to sent");
+
                 setModalMessage(
-                    "Please check your form and try again. " +
-                        (errors.message || Object.values(errors).join(" "))
+                    "Please check your form and try again. " + errorMessage
                 );
                 setIsSuccess(false);
                 setShowModal(true);
@@ -111,26 +118,6 @@ const Contact = () => {
                 </div>
 
                 <div className="contact">
-                    <div className="contact_map">
-                        <div className="map">
-                            <div id="google_map" className="google_map">
-                                <div className="map_container">
-                                    <div id="map">
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7933.974303374864!2d106.706299!3d-6.132428!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a02a474c9b185%3A0xe3042c977b79a3ce!2sSekolah%20glbl!5e0!3m2!1sen!2sid!4v1746177407164!5m2!1sen!2sid"
-                                            width="100%"
-                                            height="100%"
-                                            style={{ border: 0 }}
-                                            allowFullScreen=""
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div className="contact_info_container">
                         <div className="container">
                             <div className="row">
@@ -143,31 +130,74 @@ const Contact = () => {
                                             onSubmit={handleSubmit}
                                             className="comment_form"
                                         >
-                                            <div>
-                                                <div className="form_title">
-                                                    Name
-                                                </div>
-                                                <input
-                                                    type="text"
-                                                    className={`comment_input ${
-                                                        errors.name
-                                                            ? "is-invalid"
-                                                            : ""
-                                                    }`}
-                                                    required
-                                                    value={data.name}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "name",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                                {errors.name && (
-                                                    <div className="invalid-feedback">
-                                                        {errors.name}
+                                            <div className="row">
+                                                <div className="col-lg-6">
+                                                    <div className="form_title">
+                                                        Name
                                                     </div>
-                                                )}
+                                                    <input
+                                                        type="text"
+                                                        className={`comment_input ${
+                                                            errors.name
+                                                                ? "is-invalid"
+                                                                : ""
+                                                        }`}
+                                                        required
+                                                        value={data.name}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "name",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                    {errors.name && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.name}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="col-lg-6">
+                                                    <div className="form_title">
+                                                        To
+                                                    </div>
+                                                    <select
+                                                        name="to"
+                                                        id="to"
+                                                        className={`comment_input ${
+                                                            errors.to
+                                                                ? "is-invalid"
+                                                                : ""
+                                                        }`}
+                                                        required
+                                                        value={data.to}
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "to",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    >
+                                                        <option selected disabled>
+                                                            --Select message
+                                                            destination--
+                                                        </option>
+                                                        <option value="hrd">
+                                                            HRD
+                                                        </option>
+                                                        <option value="marketing">
+                                                            Marketing
+                                                        </option>
+                                                        <option value="information">
+                                                            Information
+                                                        </option>
+                                                    </select>
+                                                    {errors.to && (
+                                                        <div className="invalid-feedback">
+                                                            {errors.to}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-lg-6">
@@ -201,7 +231,7 @@ const Contact = () => {
                                                         Phone
                                                     </div>
                                                     <input
-                                                        type="tel"
+                                                        type="number"
                                                         className={`comment_input ${
                                                             errors.phone
                                                                 ? "is-invalid"
@@ -316,6 +346,31 @@ const Contact = () => {
                                                 <li>0811-8880-678</li>
                                                 <li>marketing@lscs.sch.id</li>
                                             </ul>
+                                        </div>
+
+                                        <div className="contact_map mt-4">
+                                            <div className="map">
+                                                <div
+                                                    id="google_map"
+                                                    className="google_map"
+                                                >
+                                                    <div className="map_container">
+                                                        <div id="map">
+                                                            <iframe
+                                                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7933.974303374864!2d106.706299!3d-6.132428!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a02a474c9b185%3A0xe3042c977b79a3ce!2sSekolah%20glbl!5e0!3m2!1sen!2sid!4v1746177407164!5m2!1sen!2sid"
+                                                                width="100%"
+                                                                height="100%"
+                                                                style={{
+                                                                    border: 0,
+                                                                }}
+                                                                allowFullScreen=""
+                                                                loading="lazy"
+                                                                referrerPolicy="no-referrer-when-downgrade"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
