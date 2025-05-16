@@ -69,6 +69,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Volt::route('/tuition-fees/form', 'back-end.tuition-fees-page.create')->name('tuition-fees.form');
         Volt::route('/tuition-fees/{slug}/detail', 'back-end.tuition-fees-page.create')->name('tuition-fees.detail');
         Volt::route('/discount', 'back-end.discount-page.index')->middleware('can:discount-page')->name('discount');
+        Volt::route('/career', 'back-end.career-page.index')->middleware('can:career-page')->name('career');
+        Volt::route('/career/form', 'back-end.career-page.form')->name('career.form');
 
         Volt::route('/user', 'back-end.user-page.index')->middleware('can:user-page')->name('user');
         Route::prefix('options')->middleware('can:options')->group(function () {
