@@ -27,7 +27,7 @@ class ContactUsController extends Controller
             'phone' => 'required|numeric',
             'subject' => 'required|string|max:100',
             'message' => 'required|string|max:500',
-            'to' => 'required|enum:hrd,marketing,information'
+            'to' => 'required|in:hrd,marketing,information'
         ]);
 
         try {
