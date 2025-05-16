@@ -5,6 +5,7 @@ use App\Models\MailBox;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new #[Title('Mails')] class extends Component {
@@ -19,8 +20,15 @@ new #[Title('Mails')] class extends Component {
 
     public function datas(): LengthAwarePaginator
     {
-        return MailBox::query()
-            ->where(function ($query) {
+        $role = auth()->user()->getRoleNames()->first();
+
+        $query = MailBox::query();
+
+        if (!in_array($role, ['super-admin', 'admin'])) {
+            $query->where('to', $role);
+        }
+
+        return $query->where(function ($query) {
                 $query->where('subject', 'like', "%{$this->search}%")
                     ->orWhere('email', 'like', "%{$this->search}%")
                     ->orWhere('message', 'like', "%{$this->search}%")

@@ -113,7 +113,6 @@ class UserSeeder extends Seeder
             'post-delete',
             'mail-page',
             'mail-show',
-            'mail-delete',
         ];
         $admin->givePermissionTo($adminPermissions);
 
@@ -129,6 +128,8 @@ class UserSeeder extends Seeder
             'category-create',
             'category-edit',
             'category-delete',
+            'mail-page',
+            'mail-show',
         ];
         $marketing->givePermissionTo($marketingPermissions);
 
