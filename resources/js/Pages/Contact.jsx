@@ -10,7 +10,7 @@ const Contact = () => {
 
     const { data, setData, post, processing, errors } = useForm({
         name: "",
-        to: "",
+        to: "hrd",
         email: "",
         phone: "",
         subject: "",
@@ -61,12 +61,18 @@ const Contact = () => {
                 setModalMessage("Your message has been sent successfully!");
                 setIsSuccess(true);
                 setShowModal(true);
+                reset();
             },
             onError: (errors) => {
                 setModalTitle("Error");
+                const errorMessage =
+                    errors.message ||
+                    (typeof errors === "string"
+                        ? errors
+                        : "Message failed to sent");
+
                 setModalMessage(
-                    "Please check your form and try again. " +
-                        (errors.message || Object.values(errors).join(" "))
+                    "Please check your form and try again. " + errorMessage
                 );
                 setIsSuccess(false);
                 setShowModal(true);
@@ -159,7 +165,7 @@ const Contact = () => {
                                                         name="to"
                                                         id="to"
                                                         className={`comment_input ${
-                                                            errors.name
+                                                            errors.to
                                                                 ? "is-invalid"
                                                                 : ""
                                                         }`}
@@ -172,10 +178,7 @@ const Contact = () => {
                                                             )
                                                         }
                                                     >
-                                                        <option
-                                                            selected
-                                                            disabled
-                                                        >
+                                                        <option selected disabled>
                                                             --Select message
                                                             destination--
                                                         </option>
