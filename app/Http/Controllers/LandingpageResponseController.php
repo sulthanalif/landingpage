@@ -17,7 +17,7 @@ class LandingpageResponseController extends Controller
     public function getDataHome()
     {
         try {
-            $posts = Post::where('status', true)->paginate(5);
+            $posts = Post::with(['category:id,name', 'user:name'])->where('status', true)->paginate(5);
             $activities = Activity::latest()->where('status', true)->paginate(5);
             $faqs = Question::where('status', true)->get();
             $wcus = WhyChooseUs::where('status', true)->get();
@@ -86,7 +86,7 @@ class LandingpageResponseController extends Controller
     public function posts()
     {
         try {
-            $posts = Post::with(['category', 'user'])->where('status', true)->latest()->get();
+            $posts = Post::with(['category:id,name', 'user:name'])->where('status', true)->latest()->get();
 
             return $this->successResponse(data: compact('posts'));
         } catch (\Throwable $th) {
@@ -97,8 +97,8 @@ class LandingpageResponseController extends Controller
     public function detailPost($slug)
     {
         try {
-            $latest = Post::with(['category', 'user'])->where('status', true)->latest()->limit(3)->get();
-            $post = Post::with(['category', 'user'])->where('status', true)->where('slug', $slug)->first();
+            $latest = Post::with(['category:id,name', 'user:name'])->where('status', true)->latest()->limit(3)->get();
+            $post = Post::with(['category:id,name', 'user:name'])->where('status', true)->where('slug', $slug)->first();
 
             return $this->successResponse(data: compact('latest', 'post'));
         } catch (\Throwable $th) {
