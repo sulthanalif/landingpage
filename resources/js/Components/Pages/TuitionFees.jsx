@@ -1,0 +1,119 @@
+import React, { useEffect, useState } from "react";
+import DataTable from "datatables.net-react";
+import DT from "datatables.net-bs5";
+import "datatables.net-select-dt";
+import "datatables.net-responsive-dt";
+import "datatables.net-responsive";
+import "datatables.net-select";
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import "datatables.net-responsive-dt/css/responsive.dataTables.min.css";
+import "datatables.net-select-dt/css/select.dataTables.min.css";
+import useApi from "../../Hooks/response";
+
+DataTable.use(DT);
+
+const TuitionFees = () => {
+    const [tables, setTables] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { data: tuitionFees, get: getTuitionFees } = useApi("tuition-fees");
+
+    useEffect(() => {
+        getTuitionFees();
+    }, []);
+
+    useEffect(() => {
+        if (tuitionFees) {
+            try {
+                const tuitionDatas = tuitionFees.tuitionFees;
+                const formattedTables = tuitionDatas.map((table) => {
+                    const columns = table.columns
+                        .map((col) => ({
+                            title: col.label,
+                            data: col.label.toLowerCase().replace(/\s+/g, "_"),
+                            className: "text-nowrap",
+                            order: col.order,
+                        }))
+                        .sort((a, b) => a.order - b.order);
+
+                    return {
+                        tableInfo: table.table,
+                        columns,
+                        data: table.rows.map(row => {
+                            const transformedRow = {};
+                            table.columns.forEach(col => {
+                                const key = col.label.toLowerCase().replace(/\s+/g, "_");
+                                transformedRow[key] = row[Object.keys(row).find(k => k.toLowerCase().replace(/\s+/g, "_") === key)];
+                            });
+                            return transformedRow;
+                        }),
+                    };
+                });
+                setTables(formattedTables);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        }
+    }, [tuitionFees]);
+
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center my-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="alert alert-danger">
+                Error loading data: {error}
+            </div>
+        );
+    }
+
+    return (
+        <>
+            {tables.map((table) => (
+                <div
+                    key={table.tableInfo.id}
+                    className="col-lg-6 about_col about_col_left mb-4"
+                >
+                    <div className="about_item card p-3 h-100">
+                        <div className="about_item_title text-center mt-0 mb-3">
+                            <h3>{table.tableInfo.name}</h3>
+                        </div>
+                        <div className="table-responsive">
+                            <DataTable
+                                columns={table.columns}
+                                data={table.data}
+                                className="table table-bordered table-striped display responsive"
+                                responsive={true}
+                                ordering
+                                select={{
+                                    style: "os",
+                                    items: "row",
+                                }}
+                                language={{
+                                    loadingRecords:
+                                        '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
+                                    zeroRecords: "No matching records found",
+                                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                                    infoFiltered:
+                                        "(filtered from _MAX_ total entries)",
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </>
+    );
+};
+
+export default TuitionFees;

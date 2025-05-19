@@ -1,6 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
+import DataTable from "datatables.net-react";
+import DT from "datatables.net-bs5";
+import "datatables.net-select-dt";
+import "datatables.net-responsive-dt";
+import "datatables.net-responsive";
+import "datatables.net-select";
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import "datatables.net-responsive-dt/css/responsive.dataTables.min.css";
+import "datatables.net-select-dt/css/select.dataTables.min.css";
+import TuitionFees from "../Components/Pages/TuitionFees";
+
+DataTable.use(DT);
 
 const Admission = () => {
     useEffect(() => {
@@ -56,7 +68,76 @@ const Admission = () => {
 
                 <SchoolVisit />
 
-                <TuitionFees />
+                <div className="about">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">
+                                <div className="section_title_container text-center">
+                                    <h2 className="section_title">
+                                        Tuition Fees
+                                    </h2>
+                                    <div className="section_subtitle">
+                                        <p>
+                                            The Best Investment for Your Child's
+                                            Future
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row about_row">
+                            <div className="col-lg-12 about_col about_col_left">
+                                <div className="about_item">
+                                    <div className="about_item_text">
+                                        <p>
+                                            At Lia Stephanie, we understand that
+                                            choosing an education is a
+                                            significant decision for every
+                                            family. Therefore, we are committed
+                                            to providing transparency and
+                                            flexibility in our fee structure, so
+                                            you can plan your child's education
+                                            carefully.
+                                            <br />
+                                            The listed fees reflect the quality
+                                            of education, adequate facilities,
+                                            and a learning environment that
+                                            fosters the academic, emotional, and
+                                            character development of students.
+                                        </p>
+                                        <h4 className="text-center py-4">
+                                            <strong>
+                                                Tuition Fee Structure for the
+                                                2025/2026 Academic Year
+                                            </strong>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <TuitionFees />
+
+                            <div className="col-lg-12 about_col about_col_left">
+                                <div className="about_item">
+                                    <div className="about_item_title">
+                                        <p>Payment Flexibility</p>
+                                    </div>
+                                    <div className="about_item_text">
+                                        <p>
+                                            We offer various payment methods
+                                            (bank transfer, credit card,
+                                            installments through select
+                                            financial partners). Our
+                                            administration team is ready to
+                                            assist you in arranging the most
+                                            suitable payment plan.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <SimulationFees />
             </Layout>
@@ -126,24 +207,17 @@ const Guidelines = () => {
                                                 </div>
                                             </div>
                                             <div className="accordion_panel">
-                                                <p>
-                                                    <ul>
-                                                        <li>
-                                                            Birth certificate
-                                                        </li>
-                                                        <li>
-                                                            Parent/guardian ID
-                                                            card
-                                                        </li>
-                                                        <li>
-                                                            Latest report
-                                                            card/transcript
-                                                        </li>
-                                                        <li>
-                                                            Recent photograph
-                                                        </li>
-                                                    </ul>
-                                                </p>
+                                                <ul>
+                                                    <li>Birth certificate</li>
+                                                    <li>
+                                                        Parent/guardian ID card
+                                                    </li>
+                                                    <li>
+                                                        Latest report
+                                                        card/transcript
+                                                    </li>
+                                                    <li>Recent photograph</li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div className="accordion_container">
@@ -250,26 +324,24 @@ const Guidelines = () => {
                             <div className="feature-content mt-2">
                                 <div className="feature_note">
                                     <h4>Important Notes</h4>
-                                    <p>
-                                        <ul>
-                                            <li>
-                                                Registration is open throughout
-                                                the year as long as quotas are
-                                                available for each level.
-                                            </li>
-                                            <li>
-                                                Priority is given to transfer
-                                                students from schools with a
-                                                similar curriculum (IB/Edexcel).
-                                            </li>
-                                            <li>
-                                                All selection processes consider
-                                                the academic potential and
-                                                socio-emotional readiness of
-                                                students.
-                                            </li>
-                                        </ul>
-                                    </p>
+                                    <ul>
+                                        <li>
+                                            Registration is open throughout the
+                                            year as long as quotas are available
+                                            for each level.
+                                        </li>
+                                        <li>
+                                            Priority is given to transfer
+                                            students from schools with a similar
+                                            curriculum (IB/Edexcel).
+                                        </li>
+                                        <li>
+                                            All selection processes consider the
+                                            academic potential and
+                                            socio-emotional readiness of
+                                            students.
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -310,114 +382,6 @@ const SchoolVisit = () => {
                                         marketing@lscs.sch.id for more
                                         information.
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-};
-
-const TuitionFees = () => {
-    return (
-        <>
-            <div className="about">
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            <div className="section_title_container text-center">
-                                <h2 className="section_title">Tuition Fees</h2>
-                                <div className="section_subtitle">
-                                    <p>
-                                        The Best Investment for Your Child's
-                                        Future
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row about_row">
-                        <div className="col-lg-12 about_col about_col_left">
-                            <div className="about_item">
-                                <div className="about_item_text">
-                                    <p>
-                                        At Lia Stephanie, we understand that
-                                        choosing an education is a significant
-                                        decision for every family. Therefore, we
-                                        are committed to providing transparency
-                                        and flexibility in our fee structure, so
-                                        you can plan your child's education
-                                        carefully.
-                                        <br />
-                                        The listed fees reflect the quality of
-                                        education, adequate facilities, and a
-                                        learning environment that fosters the
-                                        academic, emotional, and character
-                                        development of students.
-                                    </p>
-                                    <h4 className="text-center py-4">
-                                        <strong>Tuition Fee Structure for the 2025/2026 Academic Year</strong>
-                                    </h4>
-                                </div>
-                            </div>
-                        </div>
-                        {/* About Item */}
-                        <div className="col-lg-6 about_col about_col_left">
-                            <div className="about_item">
-                                <div className="about_item_image">
-                                    <img
-                                        src="/landing/images/national-program.png"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="about_item_title text-center">
-                                    <a
-                                        href="/landing/images/national-program.png"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        National Program{" "}
-                                        <strong>(Edexcel)</strong>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-6 about_col about_col_left">
-                            <div className="about_item">
-                                <div className="about_item_image">
-                                    <img
-                                        src="/landing/images/global-program.png"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="about_item_title text-center">
-                                    <a
-                                        href="/landing/images/global-program.png"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Global Program{" "}
-                                        <strong>(IB Curricula)</strong>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-12 about_col about_col_left">
-                            <div className="about_item">
-                                <div className="about_item_title">
-                                    <p>Payment Flexibility</p>
-                                </div>
-                                <div className="about_item_text">
-                                    <p>
-                                        We offer various payment methods (bank
-                                        transfer, credit card, installments
-                                        through select financial partners). Our
-                                        administration team is ready to assist
-                                        you in arranging the most suitable
-                                        payment plan.
-                                    </p>
                                 </div>
                             </div>
                         </div>
