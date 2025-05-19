@@ -26,7 +26,9 @@ class RegisterController extends Controller
         try {
             $types = TuitionFee::getAllTable();
 
-            return $this->successResponse(data: compact('types'));
+            $discounts = Discount::where('status', true)->get();
+
+            return $this->successResponse(data: compact('types', 'discounts'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }
@@ -98,6 +100,23 @@ class RegisterController extends Controller
                 'discount' => $discount?->percentage,
                 'total' => $total_discount
             ]);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+    }
+
+    public function getLevel()
+    {
+        try {
+            $table = TuitionFee::getAllTable()->map(fn ($table) => $table['rows'])->firstWhere('order', 0)->pluck();
+
+            if (!$table) {
+                return response()->json(['message' => 'Table not found'], 404);
+            }
+
+            // $labelColumn = collect($table['columns'])
+            //     ->firstWhere('order', 0);
+            return $this->successResponse(data: compact('table'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }

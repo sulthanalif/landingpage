@@ -193,14 +193,14 @@ new #[Title('Categories')] class extends Component {
     <!-- HEADER -->
     <x-header title="Categories" separator>
         <x-slot:actions>
-            <div>
+            {{-- <div>
                 <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
                     icon="o-arrow-up-tray" />
             </div>
             <div>
                 <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
                     spinner='export' />
-            </div>
+            </div> --}}
             @can('category-create')
                 <x-button label="Create" @click="$wire.create" responsive icon="o-plus" />
             @endcan

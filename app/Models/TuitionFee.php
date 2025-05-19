@@ -72,7 +72,7 @@ class TuitionFee extends DynamicTableRow
 
             return [
                 'table' => $table->only(['id', 'name', 'slug']),
-                'columns' => $table->columns->map(fn ($col) => $col->only(['id', 'label', 'order'])),
+                'columns' => $table->columns->map(fn ($col) => $col->only(['id', 'label', 'name',  'order'])),
                 'rows' => $rows,
             ];
         });
