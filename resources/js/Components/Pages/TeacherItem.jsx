@@ -26,7 +26,7 @@ const TeacherItem = ({ teacher }) => {
                         <h3 className="teacher-name text-capitalize">
                             {teacher.name}
                         </h3>
-                        <p className="teacher-position">{teacher.category}</p>
+                        <p className="teacher-position text-secondary">{teacher.email}</p>
                     </div>
                 </div>
             </a>

@@ -39,6 +39,27 @@ const Teacher = () => {
         get: getTeachers,
     } = useApi("teachers");
 
+    const groupedTeachers = teachers.teachers.reduce((groups, teacher) => {
+        const category = teacher.category || "Uncategorized";
+        if (!groups[category]) {
+            groups[category] = [];
+        }
+        groups[category].push(teacher);
+        return groups;
+    }, {});
+
+    const sortedCategories = Object.keys(groupedTeachers).sort((a, b) => {
+        const order = [];
+        const indexA = order.indexOf(a);
+        const indexB = order.indexOf(b);
+
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
+
+    console.log(sortedCategories);
+
     const handleRefresh = () => {
         getTeachers();
     };
@@ -97,7 +118,7 @@ const Teacher = () => {
                             </div>
                         </div>
 
-                        <div className="teacher-grid mt-5">
+                        <div className="row mt-5">
                             {loading ? (
                                 <div className="col-12 text-center py-5">
                                     <div
@@ -116,11 +137,23 @@ const Teacher = () => {
                                     </div>
                                 </div>
                             ) : teachers && teachers.teachers.length > 0 ? (
-                                teachers.teachers.map((teacher) => (
-                                    <TeacherItem
-                                        key={teacher.id}
-                                        teacher={teacher}
-                                    />
+                                sortedCategories.map((category) => (
+                                    <div key={category} className="col-12 mb-5">
+                                        <h3 className="category-title">
+                                            # {category}
+                                        </h3>
+                                        <div className="teacher-grid mt-3">
+                                            {groupedTeachers[category]
+                                                .sort((a, b) =>
+                                                    a.name.localeCompare(b.name)
+                                                )
+                                                .map((teacher) => (
+                                                    <TeacherItem
+                                                        teacher={teacher}
+                                                    />
+                                                ))}
+                                        </div>
+                                    </div>
                                 ))
                             ) : (
                                 <div className="col-12 text-center py-5">
