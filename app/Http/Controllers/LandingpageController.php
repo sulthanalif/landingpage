@@ -78,7 +78,7 @@ class LandingpageController extends Controller
 
     public function detailNews($slug)
     {
-        return Inertia::render('DetailNews');
+        return Inertia::render('DetailNews', ['slug' => $slug]);
     }
 
     public function allActivities()

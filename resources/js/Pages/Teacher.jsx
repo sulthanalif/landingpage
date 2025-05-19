@@ -39,7 +39,9 @@ const Teacher = () => {
         get: getTeachers,
     } = useApi("teachers");
 
-    const groupedTeachers = teachers.teachers.reduce((groups, teacher) => {
+    const teacherDatas = teachers && teachers.teachers ? teachers.teachers : [];
+
+    const groupedTeachers = teacherDatas.reduce((groups, teacher) => {
         const category = teacher.category || "Uncategorized";
         if (!groups[category]) {
             groups[category] = [];
@@ -57,8 +59,6 @@ const Teacher = () => {
         if (indexB === -1) return -1;
         return indexA - indexB;
     });
-
-    console.log(sortedCategories);
 
     const handleRefresh = () => {
         getTeachers();

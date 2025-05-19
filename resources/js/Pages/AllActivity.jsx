@@ -1,8 +1,9 @@
 import { Link } from "@inertiajs/react";
 import React, { useEffect, useRef } from "react";
 import Layout from "../Components/Layout";
+import useApi from "../Hooks/response";
 
-const AllActivity = ({ activities }) => {
+const AllActivity = () => {
     const styleRefs = useRef([]);
     const scriptRefs = useRef([]);
 
@@ -70,6 +71,12 @@ const AllActivity = ({ activities }) => {
             : textContent;
     };
 
+    const { data: activities, loading, error, get: getActivities } = useApi("activities");
+    
+    const handleRefresh = () => {
+        getActivities();
+    };
+
     return (
         <Layout>
             {/* Breadcrumbs */}
@@ -98,8 +105,9 @@ const AllActivity = ({ activities }) => {
                     <div className="row">
                         <div className="col">
                             <div className="blog_post_container">
-                                {Array.isArray(activities) && activities.length > 0 ? (
-                                    activities.map((activity) => (
+                                {activities &&
+                                activities?.activities.length > 0 ? (
+                                    activities?.activities.map((activity) => (
                                         <div
                                             key={activity.id}
                                             className="blog_post trans_200"
@@ -119,9 +127,7 @@ const AllActivity = ({ activities }) => {
                                             {/* Konten Post */}
                                             <div className="blog_post_body">
                                                 <div className="blog_post_title">
-                                                    <a
-                                                        href={`#`}
-                                                    >
+                                                    <a href={`#`}>
                                                         {activity.title}
                                                     </a>
                                                 </div>

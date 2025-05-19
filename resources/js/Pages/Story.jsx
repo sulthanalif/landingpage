@@ -1,9 +1,17 @@
 import { Link } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
+import useApi from "../Hooks/response";
+import ActivityItem from "../Components/Pages/ActivityItem";
 
-const Story = ({ activities }) => {
+const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
+    const {
+        data: activities,
+        loading,
+        error,
+        get: getActivities,
+    } = useApi("activities");
 
     useEffect(() => {
         const addCacheBuster = (url) => {
@@ -72,6 +80,10 @@ const Story = ({ activities }) => {
         };
     }, []);
 
+    const handleRefresh = () => {
+        getActivities();
+    };
+
     if (!isLoaded) {
         return (
             <Layout>
@@ -105,59 +117,67 @@ const Story = ({ activities }) => {
                 </div>
             </div>
 
-            <div className="blog">
+            <div className="courses">
+                <div
+                    className="section_background parallax-window"
+                    loading="lazy"
+                    style={{
+                        backgroundImage: `url('/landing/images/courses_background.jpg')`,
+                        backgroundAttachment: "fixed",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                />
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <div className="blog_post_container">
-                                {activities && activities.length > 0 ? (
-                                    activities.map((activity) => (
-                                        <div
-                                            className="blog_post"
-                                            key={activity.id}
-                                        >
-                                            <div className="blog_post_image">
-                                                <img
-                                                    src={
-                                                        activity.image
-                                                            ? `/storage/${activity.image}`
-                                                            : "/landing/images/event_1.jpg"
-                                                    }
-                                                    alt={activity.title}
-                                                />
-                                            </div>
-                                            <div className="blog_post_content">
-                                                <div className="blog_post_title">
-                                                    <a
-                                                        href="#"
-                                                        className="text-center"
-                                                    >
-                                                        {activity.title}
-                                                    </a>
-                                                </div>
-                                                {/* <div className="blog_post_text">
-                                                        <p>
-                                                            {activity.description}
-                                                        </p>
-                                                    </div> */}
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <h3 className="text-center">
-                                        No activities found
-                                    </h3>
-                                )}
+                            <div className="section_title_container text-center">
+                                <h2 className="section_title">
+                                    Our Activities
+                                </h2>
+                                <div className="section_subtitle">
+                                    <p>
+                                        The following are activities at our
+                                        school
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    {/* <div className="row">
-                            <div className="col text-center">
-                                <div className="load_more trans_200">
-                                    <a href="#">load more</a>
+
+                    {loading ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div
+                                className="spinner-border text-secondary"
+                                role="status"
+                            >
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    ) : error ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div className="alert alert-danger">{error}</div>
+                        </div>
+                    ) : activities && activities.activities.length > 0 ? (
+                        <>
+                            {" "}
+                            <div className="row courses_row">
+                                {activities.activities.map((activity) => (
+                                    <ActivityItem key={activity.id} activity={activity} />
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="col-lg-12 course_col">
+                            <div className="course">
+                                <div className="course_body">
+                                    <h3 className="course_title text-center">
+                                        No activity found
+                                    </h3>
                                 </div>
                             </div>
-                        </div> */}
+                        </div>
+                    )}
                 </div>
             </div>
         </Layout>

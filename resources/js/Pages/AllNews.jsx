@@ -1,8 +1,9 @@
 import { Link } from "@inertiajs/react";
 import React, { useEffect, useRef } from "react";
 import Layout from "../Components/Layout";
+import useApi from "../Hooks/response";
 
-const AllNews = ({ posts }) => {
+const AllNews = () => {
     const styleRefs = useRef([]);
     const scriptRefs = useRef([]);
 
@@ -70,6 +71,12 @@ const AllNews = ({ posts }) => {
             : textContent;
     };
 
+    const { data: posts, loading, error, get: getPosts } = useApi("posts");
+
+    const handleRefresh = () => {
+        getPosts();
+    };
+
     return (
         <Layout>
             {/* Breadcrumbs */}
@@ -92,88 +99,128 @@ const AllNews = ({ posts }) => {
                 </div>
             </div>
 
-            {/* Blog Section */}
-            <div className="blog">
+            <div className="courses">
+                <div
+                    className="section_background parallax-window"
+                    loading="lazy"
+                    style={{
+                        backgroundImage: `url('/landing/images/courses_background.jpg')`,
+                        backgroundAttachment: "fixed",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                />
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <div className="blog_post_container">
-                                {Array.isArray(posts) && posts.length > 0 ? (
-                                    posts.map((post) => (
-                                        <div
-                                            key={post.id}
-                                            className="blog_post trans_200"
-                                        >
-                                            <div className="blog_post_image">
-                                                <img
-                                                    src={
-                                                        post.image
-                                                            ? `/storage/${post.image}`
-                                                            : "/landing/images/event_1.jpg"
-                                                    }
-                                                    alt={post.title}
-                                                    loading="lazy"
-                                                />
-                                            </div>
-
-                                            {/* Konten Post */}
-                                            <div className="blog_post_body">
-                                                <div className="blog_post_title">
-                                                    <Link
-                                                        href={`/news/${post.slug}`}
-                                                    >
-                                                        {post.title}
-                                                    </Link>
-                                                </div>
-                                                <div className="blog_post_meta">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="#">
-                                                                {post.user.name}
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                {new Date(
-                                                                    post.updated_at
-                                                                ).toLocaleDateString(
-                                                                    "en-US",
-                                                                    {
-                                                                        month: "long",
-                                                                        day: "numeric",
-                                                                        year: "numeric",
-                                                                    }
-                                                                )}
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div className="blog_post_text">
-                                                    <p
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: limitText(
-                                                                post.body
-                                                            ),
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-center">No news found.</p>
-                                )}
+                            <div className="section_title_container text-center">
+                                <h2 className="section_title">Our News</h2>
+                                <div className="section_subtitle">
+                                    <p>
+                                        Stay updated with our latest articles
+                                        and insights.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* <div className="row">
-                        <div className="col text-center">
-                            <div className="load_more trans_200">
-                                <a href="#">Load More</a>
+                    {loading ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div
+                                className="spinner-border text-secondary"
+                                role="status"
+                            >
+                                <span className="sr-only">Loading...</span>
                             </div>
                         </div>
-                    </div> */}
+                    ) : error ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div className="alert alert-danger">{error}</div>
+                        </div>
+                    ) : posts && posts.posts.length > 0 ? (
+                        <>
+                            {" "}
+                            <div className="row courses_row">
+                                {posts?.posts.map((post) => (
+                                    <div
+                                        key={post.id}
+                                        className="blog_post trans_200 col-lg-4 col-md-6"
+                                    >
+                                        <div className="blog_post_image">
+                                            <img
+                                                src={
+                                                    post.image
+                                                        ? `/storage/${post.image}`
+                                                        : "/img/logo.png"
+                                                }
+                                                alt={post.title}
+                                                loading="lazy"
+                                                style={{
+                                                    width: "auto",
+                                                    height: "250px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                        </div>
+
+                                        {/* Konten Post */}
+                                        <div className="blog_post_body">
+                                            <div className="blog_post_title">
+                                                <Link
+                                                    href={`/news/${post.slug}`}
+                                                >
+                                                    {post.title}
+                                                </Link>
+                                            </div>
+                                            <div className="blog_post_meta">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            {post.category.name}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            {new Date(
+                                                                post.updated_at
+                                                            ).toLocaleDateString(
+                                                                "en-US",
+                                                                {
+                                                                    month: "long",
+                                                                    day: "numeric",
+                                                                    year: "numeric",
+                                                                }
+                                                            )}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="blog_post_text">
+                                                <p
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: limitText(
+                                                            post.body
+                                                        ),
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="col-lg-12 course_col">
+                            <div className="course">
+                                <div className="course_body">
+                                    <h3 className="course_title text-center">
+                                        No news found.
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </Layout>

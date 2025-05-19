@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
+import useApi from "../Hooks/response";
 
-const DetailNews = ({ post, latest }) => {
+const DetailNews = ({ slug }) => {
     const styleRefs = useRef([]);
     const scriptRefs = useRef([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const addFile = (type, attributes, target) => {
@@ -48,6 +50,8 @@ const DetailNews = ({ post, latest }) => {
             ),
         ];
 
+        setIsLoaded(true);
+
         return () => {
             styleRefs.current.forEach(
                 (file) => file && file.parentNode.removeChild(file)
@@ -57,6 +61,38 @@ const DetailNews = ({ post, latest }) => {
             );
         };
     }, []);
+
+    const { data, loading, error, get: getData } = useApi(`post/${slug}`);
+    const post = data?.post;
+    const latest = data?.latest || [];    
+
+    const handleRefresh = () => {
+        getData();
+    };
+
+    if (!isLoaded || loading) {
+        return (
+            <Layout>
+                <div className="preloader">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </Layout>
+        );
+    }
+
+    if (error) {
+        return (
+            <Layout>
+                <div className="alert alert-danger">
+                    Failed to load news data. 
+                    <button onClick={handleRefresh}>Try again</button>
+                </div>
+            </Layout>
+        );
+    }
+
     return (
         <Layout>
             <div className="home">
@@ -72,7 +108,7 @@ const DetailNews = ({ post, latest }) => {
                                         <li>
                                             <Link href="/news">News</Link>
                                         </li>
-                                        <li>Detail News</li>
+                                        <li>{post?.title || "Detail News"}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -86,70 +122,62 @@ const DetailNews = ({ post, latest }) => {
                     <div className="row">
                         {/* Blog Content */}
                         <div className="col-lg-8">
-                            <div className="blog_content">
-                                <div className="blog_title">{post.title}</div>
-                                <div className="blog_meta">
-                                    <ul>
-                                        <li>
-                                            Post on{" "}
-                                            <a href="#">
-                                                {new Date(
-                                                    post.updated_at
-                                                ).toLocaleDateString("en-US", {
-                                                    month: "long",
-                                                    day: "numeric",
-                                                    year: "numeric",
-                                                })}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            By <a href="#">{post.user.name}</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="blog_image">
-                                    <img
-                                        src={
-                                            post.image
-                                                ? `/storage/${post.image}`
-                                                : "/landing/images/event_1.jpg"
-                                        }
-                                        alt={post.title}
-                                        loading="lazy"
+                            {post ? (
+                                <div className="blog_content">
+                                    <div className="blog_title">{post.title}</div>
+                                    <div className="blog_meta">
+                                        <ul>
+                                            <li>
+                                                Post on{" "}
+                                                <a href="#">
+                                                    {new Date(
+                                                        post.updated_at
+                                                    ).toLocaleDateString("en-US", {
+                                                        month: "long",
+                                                        day: "numeric",
+                                                        year: "numeric",
+                                                    })}
+                                                </a>
+                                            </li>
+                                            {post.category && (
+                                                <li>
+                                                    In <a href="#">{post.category.name}</a>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                    <div className="blog_image">
+                                        <img
+                                            src={
+                                                post.image
+                                                    ? `/storage/${post.image}`
+                                                    : "/landing/images/event_1.jpg"
+                                            }
+                                            alt={post.title}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <div
+                                        className="blog_text mt-3"
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.body,
+                                        }}
                                     />
                                 </div>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: post.body,
-                                    }}
-                                />
-                            </div>
+                            ) : (
+                                <div className="alert alert-warning">Post not found</div>
+                            )}
+                            
                             <div className="blog_extra d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
-                                {/* <div className="blog_tags">
-                                    <span>Tags: </span>
-                                    <ul>
-                                        <li>
-                                            <a href="#">Education</a>,{" "}
-                                        </li>
-                                        <li>
-                                            <a href="#">Math</a>,{" "}
-                                        </li>
-                                        <li>
-                                            <a href="#">Food</a>,{" "}
-                                        </li>
-                                        <li>
-                                            <a href="#">Schools</a>,{" "}
-                                        </li>
-                                        <li>
-                                            <a href="#">Religion</a>,{" "}
-                                        </li>
-                                    </ul>
-                                </div> */}
                                 <div className="blog_social ml-lg-auto">
                                     <span>Follow Us: </span>
                                     <ul>
                                         <li>
-                                            <a href="https://www.facebook.com/pages/category/Community/Lia-Stephanie-School-115071265257740/" target="_blank">
+                                            <a
+                                                href="https://www.facebook.com/pages/category/Community/Lia-Stephanie-School-115071265257740/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
                                                 <i
                                                     className="fa fa-facebook"
                                                     aria-hidden="true"
@@ -157,7 +185,11 @@ const DetailNews = ({ post, latest }) => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="https://www.instagram.com/liastephanieschool/" target="_blank">
+                                            <a
+                                                href="https://www.instagram.com/liastephanieschool/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
                                                 <i
                                                     className="fa fa-instagram"
                                                     aria-hidden="true"
@@ -165,7 +197,11 @@ const DetailNews = ({ post, latest }) => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="https://wa.me/+6281310602139" target="_blank">
+                                            <a
+                                                href="https://wa.me/+6281310602139"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
                                                 <i
                                                     className="fa fa-whatsapp"
                                                     aria-hidden="true"
@@ -173,7 +209,11 @@ const DetailNews = ({ post, latest }) => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="https://lsgs.quintal.id/" target="_blank">
+                                            <a
+                                                href="https://lsgs.quintal.id/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
                                                 <i
                                                     className="fa fa-leanpub"
                                                     aria-hidden="true"
@@ -184,6 +224,7 @@ const DetailNews = ({ post, latest }) => {
                                 </div>
                             </div>
                         </div>
+                        
                         {/* Blog Sidebar */}
                         <div className="col-lg-4">
                             <div className="sidebar">
@@ -193,10 +234,12 @@ const DetailNews = ({ post, latest }) => {
                                         Latest News
                                     </div>
                                     <div className="sidebar_latest">
-                                        {/* Latest Course */}
-                                        {Array.isArray(latest) &&
+                                        {latest.length > 0 ? (
                                             latest.map((latepost) => (
-                                                <div className="latest d-flex flex-row align-items-start justify-content-start">
+                                                <div 
+                                                    className="latest d-flex flex-row align-items-start justify-content-start"
+                                                    key={latepost.id}
+                                                >
                                                     <div className="latest_image">
                                                         <div>
                                                             <img
@@ -234,7 +277,10 @@ const DetailNews = ({ post, latest }) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            ))}
+                                            ))
+                                        ) : (
+                                            <div className="text-muted">No latest news</div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
