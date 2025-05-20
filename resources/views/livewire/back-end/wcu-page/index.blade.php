@@ -5,13 +5,20 @@ use Mary\Traits\Toast;
 use App\Models\WhyChooseUs;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new #[Title('Why Choose Us')] class extends Component {
-    use Toast, ManageDatas, WithPagination;
+    use Toast, ManageDatas, WithPagination, WithFileUploads;
 
     public string $search = '';
+
+    public array $config = [
+        'guides' => false,
+        'aspectRatio' => 1,
+    ];
 
     public bool $drawer = false;
     public bool $myModal = false;
@@ -28,21 +35,37 @@ new #[Title('Why Choose Us')] class extends Component {
     //var
     public string $title = '';
     public string $description = '';
-    public string $icon = '';
+    public ?UploadedFile $icon = null;
+    public string $oldImage = '';
     public bool $status = true;
     public array $varWcu = ['recordId', 'title', 'description', 'icon', 'status'];
 
+    public function mount(): void
+    {
+        $this->oldImage = 'img/upload.png';
+    }
+
     public function save(): void
     {
+
         $this->setModel(new WhyChooseUs());
 
         $this->saveOrUpdate(
             validationRules: [
                 'title' => 'required|string|max:255',
                 'description' => 'required|string|max:255',
-                'icon' => 'required|string|max:255',
+                'icon' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
                 'status' => 'required|boolean',
-            ]
+            ],
+            beforeSave: function ($wcu, $component) {
+                if ($component->icon) {
+                    if (Storage::disk('public')->exists($component->icon)) {
+                        Storage::disk('public')->delete($component->icon);
+                    }
+
+                    $wcu->icon = $component->icon->store(path: 'images/wcu', options: 'public');
+                }
+            }
         );
 
         $this->unsetModel();
@@ -64,7 +87,14 @@ new #[Title('Why Choose Us')] class extends Component {
     public function delete(): void
     {
         $this->setModel(new WhyChooseUs());
-        $this->deleteData();
+        $this->deleteData(
+            beforeDelete: function ($id, $component) {
+                $wcu = WhyChooseUs::find($id);
+                if (Storage::disk('public')->exists($wcu->icon)) {
+                    Storage::disk('public')->delete($wcu->icon);
+                }
+            }
+        );
         $this->reset($this->varWcu);
         $this->unsetRecordId();
         $this->unsetModel();
@@ -99,7 +129,7 @@ new #[Title('Why Choose Us')] class extends Component {
             $wire.recordId = null;
             $wire.title = '';
             $wire.description = '';
-            $wire.icon = '';
+            $wire.icon = null;
             $wire.status = true;
             $wire.drawer = true;
             $wire.$refresh();
@@ -108,7 +138,7 @@ new #[Title('Why Choose Us')] class extends Component {
             $wire.recordId = wcu.id;
             $wire.title = wcu.title;
             $wire.description = wcu.description;
-            $wire.icon = wcu.icon;
+            $wire.icon = null;
             $wire.status = wcu.status;
             $wire.drawer = true;
             $wire.$refresh();
@@ -134,6 +164,9 @@ new #[Title('Why Choose Us')] class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
              with-pagination @row-click="$js.detail($event.detail)">
+            @scope('cell_icon', $data)
+                <img src="{{ asset('storage/' . $data['icon']) }}" alt="" style="width: 100px; height: auto">
+            @endscope
             @scope('cell_status', $data)
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
