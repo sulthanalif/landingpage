@@ -283,6 +283,17 @@ const Header = () => {
                                             </li>
                                             <li
                                                 className={
+                                                    url === "/career"
+                                                        ? "active"
+                                                        : ""
+                                                }
+                                            >
+                                                <Link href="/career">
+                                                    Career
+                                                </Link>
+                                            </li>
+                                            <li
+                                                className={
                                                     url === "/contact"
                                                         ? "active"
                                                         : ""

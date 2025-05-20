@@ -11,6 +11,7 @@ use App\Models\TuitionFee;
 use App\Models\WhyChooseUs;
 use Illuminate\Http\Request;
 use App\Models\Accreditation;
+use App\Models\Career;
 
 class LandingpageResponseController extends Controller
 {
@@ -101,6 +102,21 @@ class LandingpageResponseController extends Controller
             $post = Post::with(['category:id,name', 'user:name'])->where('status', true)->where('slug', $slug)->first();
 
             return $this->successResponse(data: compact('latest', 'post'));
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+    }
+
+    public function careers()
+    {
+        try {
+            $now = now();
+
+            $careers = Career::where('start_date', '<=', $now)
+                ->where('end_date', '>=', $now)
+                ->get();
+
+            return $this->successResponse(data: compact('careers'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }

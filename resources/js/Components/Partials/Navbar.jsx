@@ -83,6 +83,9 @@ const Navbar = ({ isActive, closeMenu }) => {
                             </div>
                         </li>
                         <li className="menu_mm">
+                            <Link href="/career">Career</Link>
+                        </li>
+                        <li className="menu_mm">
                             <Link href="/contact">Contact</Link>
                         </li>
                         <li className="menu_mm">

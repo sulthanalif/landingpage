@@ -21,6 +21,7 @@ Route::get('/curriculum', [LandingpageController::class, 'curriculum']);
 Route::get('/extracurricular', [LandingpageController::class, 'extracurricular']);
 Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademic']);
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
+Route::get('/career', [LandingpageController::class, 'career']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
 Route::get('/register', [RegisterController::class, 'index']);
 Route::get('/payment/{key}', [PaymentController::class, 'page'])->name('payment');

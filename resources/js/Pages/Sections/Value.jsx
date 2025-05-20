@@ -128,7 +128,7 @@ const Value = () => {
                                         <div className="card-body text-center p-4">
                                             <div className="feature-icon mb-4">
                                                 <img
-                                                    src="/landing/images/icon_value3.png"
+                                                    src={feature.icon ? `storage/${feature.icon}` : "/landing/images/icon_value3.png"}
                                                     alt={feature.title}
                                                     loading="lazy"
                                                     className="img-fluid"

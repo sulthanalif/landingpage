@@ -85,4 +85,9 @@ class LandingpageController extends Controller
     {
         return Inertia::render('AllActivity');
     }
+
+    public function career()
+    {
+        return Inertia::render('Career');
+    }
 }
