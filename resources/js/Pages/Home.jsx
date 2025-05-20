@@ -16,11 +16,11 @@ const Home = (props) => {
             <Layout>
                 <Hero />
                 <About />
-                <News posts={props.posts} />
+                <News />
                 <Value />
-                <Activity activities={props.activities} />
+                <Activity />
                 <Admission />
-                <Faq faqs={props.faqs} />
+                <Faq />
             </Layout>
         </>
     );

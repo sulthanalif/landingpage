@@ -683,7 +683,7 @@ section {
 
 .home {
     width: 100%;
-    height: 850px;
+    height: 100vh;
 }
 .home_slider_container {
     width: 100%;
@@ -705,7 +705,7 @@ section {
 }
 .home_slider_content {
     position: absolute;
-    top: 41%;
+    top: 40%;
     left: 0;
     width: 100%;
     height: auto;
@@ -863,6 +863,7 @@ section {
 *********************************/
 
 .features {
+    position: relative;
     width: 100%;
     background: #ffffff;
     padding-top: 93px;
@@ -903,6 +904,105 @@ section {
     width: 100%;
     border-radius: 2px;
     transition: all 0.3s ease-in-out;
+}
+
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.feature_slider-container.single-item .owl-stage {
+    display: flex;
+    justify-content: center;
+}
+
+.feature_slider-container.single-item .feature_slider_nav {
+    display: none;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 1rem;
+}
+
+.feature-icon img {
+    transition: transform 0.3s ease;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.feature-card:hover .feature-icon img {
+    transform: scale(1.1);
+}
+
+.feature-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.feature-text {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+}
+
+.feature_slider_nav {
+    position: absolute;
+    top: 55.8%;
+    width: 50px;
+    background: #b6b7bd;
+    border-radius: 50%;
+    text-align: center;
+    z-index: 10;
+    cursor: pointer;
+    -webkit-transition: all 200ms ease;
+    -moz-transition: all 200ms ease;
+    -ms-transition: all 200ms ease;
+    -o-transition: all 200ms ease;
+    transition: all 200ms ease;
+}
+.feature_slider_prev {
+    left: 75px;
+}
+.feature_slider_next {
+    right: 75px;
+}
+.feature_slider_nav i {
+    line-height: 50px;
+    color: #ffffff;
+    font-size: 22px;
+}
+.feature_slider_nav:hover {
+    background: #14bdee;
+}
+
+@media (max-width: 768px) {
+    .feature_slider-container.single-item .feature-card {
+        max-width: 100% !important;
+    }
+
+    .feature_slider-container {
+        padding: 0 30px;
+    }
+
+    .feature_slider_nav {
+        width: 30px;
+        height: 30px;
+    }
+
+    .feature_slider_nav i {
+        font-size: 1rem;
+    }
 }
 
 /*********************************
