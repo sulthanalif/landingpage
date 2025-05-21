@@ -28,87 +28,10 @@ new #[Title('Posts')] class extends Component {
 
     public ?UploadedFile $file = null;
 
-    public function modalUpload(): void
+    public function detail($slug): void
     {
-        $this->upload = true;
-        $this->reset('file');
+        $this->redirect(route('post.form', ['url_slug' => $slug]), navigate: true);
     }
-
-    public function downloadTemplate()
-    {
-        $file = public_path('templates/template-Post.xlsx');
-
-        if (!file_exists($file)) {
-            $this->error('File tidak ditemukan', position: 'toast-bottom');
-            return;
-        }
-
-        return Response::download($file);
-    }
-
-    public function import(): void
-    {
-        $this->validate([
-            'file' => 'required|mimes:xlsx',
-        ]);
-
-        try {
-            Excel::import(new PostImport(), $this->file);
-
-            $this->upload = false;
-            $this->reset('file');
-            $this->success('Data berhasil diupload', position: 'toast-bottom');
-        } catch (\Exception $e) {
-            $this->error('Data gagal diupload', position: 'toast-bottom');
-            Log::channel('debug')->error("message: {$e->getMessage()}  file: {$e->getFile()}  line: {$e->getLine()}");
-        }
-    }
-
-    public function export()
-    {
-        $datas = Post::all();
-        $datas = $datas->map(function ($Post) {
-            return [
-                'name' => $Post->name,
-                'status' => $Post->status == true ? 'Aktif' : 'Tidak aktif',
-                'created_at' => $Post->created_at->format('Y-m-d'),
-            ];
-        });
-
-        $headers = ['NAMA', 'STATUS', 'DIBUAT PADA'];
-
-        return Excel::download(new ExportDatas($datas, 'Data Post', $headers), 'Post_' . date('Y-m-d') . '.xlsx');
-    }
-
-    public function changeStatus(): void
-    {
-        foreach ($this->selected as $id) {
-            $sub = Post::find($id);
-            try {
-                DB::beginTransaction();
-                $sub->status = !$sub->status;
-                $sub->save();
-                DB::commit();
-
-                $this->success('Status berhasil diubah', position: 'toast-bottom');
-                $this->modalAlertWarning = false;
-                $this->reset('selected');
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::channel('debug')->error("message: '{$e->getMessage()}',  file: '{$e->getFile()}',  line: {$e->getLine()}");
-            }
-        }
-    }
-
-    public function delete():void
-    {
-        Post::whereIn('id', $this->selected)->delete();
-        $this->selected = [];
-        $this->modalAlertDelete = false;
-        $this->success('Data berhasil dihapus', position: 'toast-bottom');
-    }
-
-
 
     public function datas(): LengthAwarePaginator
     {
@@ -154,14 +77,14 @@ new #[Title('Posts')] class extends Component {
     <!-- HEADER -->
     <x-header title="Posts" separator>
         <x-slot:actions>
-            <div>
+            {{-- <div>
                 <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
                     icon="o-arrow-up-tray" />
             </div>
             <div>
                 <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
                     spinner='export' />
-            </div>
+            </div> --}}
             @can('post-create')
                 <x-button label="Create" link="{{ route('post.form') }}" responsive icon="o-plus" />
             @endcan
@@ -175,7 +98,7 @@ new #[Title('Posts')] class extends Component {
     <!-- TABLE  -->
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            wire:model.live="selected" selectable with-pagination>
+            with-pagination @row-click="$wire.detail($event.detail.slug)">
             @scope('cell_body', $data)
                 {{ Str::limit(strip_tags($data['body']), 25) }}
             @endscope
@@ -186,9 +109,9 @@ new #[Title('Posts')] class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
-            @scope('actions', $data)
+            {{-- @scope('actions', $data)
                 <x-button class="btn-primary btn-sm btn-ghost" link="{{ route('post.form', ['url_slug' => $data['slug']]) }}"><x-icon name="o-pencil" color="primary" /></x-button>
-            @endscope
+            @endscope --}}
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>

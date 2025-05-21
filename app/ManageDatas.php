@@ -101,11 +101,12 @@ trait ManageDatas
 
             $record->delete();
 
+            DB::commit();
+
             if ($afterDelete) {
                 $afterDelete($this->recordId, $this);
             }
 
-            DB::commit();
             $this->success('Data deleted.', position: 'toast-bottom');
         } catch (Throwable $th) {
             DB::rollBack();

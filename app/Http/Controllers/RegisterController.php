@@ -37,9 +37,11 @@ class RegisterController extends Controller
     public function countFee(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'jenjang' => 'required|string',
+            'level' => 'required|string',
             'table_id' => 'required|integer',
-            'discount_id' => 'required|integer',
+            'voucher_code' => 'required|integer',
+            'is_biduk' => 'required|boolean',
+            'cildren' => 'required|integer',
         ]);
 
         if ($validator->fails()) return response()->json($validator->errors(), 400);

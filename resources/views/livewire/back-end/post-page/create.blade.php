@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
 new #[Title('Form Post')] class extends Component {
     use Toast, ManageDatas, WithFileUploads;
 
+    public bool $modalAlertDelete = false;
+
     //url
     #[Url]
     public $url_slug = '';
@@ -26,15 +28,6 @@ new #[Title('Form Post')] class extends Component {
         'statusbar' => false,
     ];
 
-    // public array $configTinyMce = json_encode([
-    //     "plugins" => [
-    //         "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
-    //         "help", "image", "insertdatetime", "link", "lists", "media",
-    //         "preview", "searchreplace", "table", "visualblocks", "accordion"
-    //     ],
-    //     "height" => 1200,
-    //     "toolbar" => "undo redo |link image accordion | styles | bold italic underline strikethrough | align | bullist numlist",
-    // ]);
 
     //varPost
     public string $title = '';
@@ -134,10 +127,26 @@ new #[Title('Form Post')] class extends Component {
             afterSave: function ($post, $component) {
                 $this->success('Post berhasil disimpan', position: 'toast-bottom', redirectTo: route('post'));
             },
-
         );
 
-        // $this->reset($this->varPost);
+    }
+
+    public function delete(): void
+    {
+        $this->setModel(new Post());
+
+        $this->deleteData(
+            beforeDelete: function ($post, $component) {
+                if (Storage::disk('public')->exists($component->oldImage)) {
+                    Storage::disk('public')->delete($component->oldImage);
+                }
+            },
+            afterDelete: function ($post, $component) {
+                $this->success('Post berhasil dihapus', position: 'toast-bottom', redirectTo: route('post'));
+            }
+        );
+
+        $this->unsetModel();
     }
 }; ?>
 
@@ -196,15 +205,21 @@ new #[Title('Form Post')] class extends Component {
             <div >
                 <x-editor label="Description"  wire:model="body" :config="[
                     'toolbar' => 'undo redo |link image accordion | styles | bold italic underline strikethrough | align | bullist numlist',
-                    'plugins' => 'media',
+                    'plugins' => 'media autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen',
                     'statusbar' => false,
+                    'height' => 500,
                     'menubar' => true
                 ]"/>
             </div>
 
             <x-slot:actions>
+                @if ($recordId != null)
+                <x-button label="Delete" icon="o-trash" class="btn-error" wire:click="modalAlertDelete = true" spinner="delete" />
+                @endif
                 <x-button label="{{ $recordId != null ? 'Update' : 'Save' }}" icon="o-check" class="btn-primary" type="submit" spinner="save" />
             </x-slot:actions>
         </x-form>
     </x-card>
+
+    @include('livewire.alerts.alert-delete')
 </div>
