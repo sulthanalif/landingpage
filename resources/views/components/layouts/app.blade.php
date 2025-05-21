@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     {{-- TinyMCE --}}
-    <script src="https://cdn.tiny.cloud/1/08d4t4shdvti5w4vrql0voaztnvps1jtngr9iy40lozsy4jz/tinymce/6/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/{{ env('TINYMCE_KEY') }}/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
 
 

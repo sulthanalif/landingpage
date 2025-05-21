@@ -26,6 +26,16 @@ new #[Title('Form Post')] class extends Component {
         'statusbar' => false,
     ];
 
+    // public array $configTinyMce = json_encode([
+    //     "plugins" => [
+    //         "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
+    //         "help", "image", "insertdatetime", "link", "lists", "media",
+    //         "preview", "searchreplace", "table", "visualblocks", "accordion"
+    //     ],
+    //     "height" => 1200,
+    //     "toolbar" => "undo redo |link image accordion | styles | bold italic underline strikethrough | align | bullist numlist",
+    // ]);
+
     //varPost
     public string $title = '';
     public string $sub_title = '';
@@ -131,6 +141,20 @@ new #[Title('Form Post')] class extends Component {
     }
 }; ?>
 
+{{-- @script
+    <script>
+        tinymce.init({
+            selector: 'textarea#body',
+            plugins: [
+                "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
+                "help", "image", "insertdatetime", "link", "lists", "media",
+                "preview", "searchreplace", "table", "visualblocks", "accordion"
+                ],
+            toolbar: "undo redo |link image accordion | styles | bold italic underline strikethrough | align | bullist numlist",
+            });
+    </script>
+@endscript --}}
+
 <div>
     <!-- HEADER -->
     <x-header title="{{ $recordId != null ? 'Edit' : 'Create' }} Posts" separator>
@@ -169,7 +193,14 @@ new #[Title('Form Post')] class extends Component {
             </x-file>
             </div>
 
-            <x-editor wire:model="body" label="Body" />
+            <div >
+                <x-editor label="Description"  wire:model="body" :config="[
+                    'toolbar' => 'undo redo |link image accordion | styles | bold italic underline strikethrough | align | bullist numlist',
+                    'plugins' => 'media',
+                    'statusbar' => false,
+                    'menubar' => true
+                ]"/>
+            </div>
 
             <x-slot:actions>
                 <x-button label="{{ $recordId != null ? 'Update' : 'Save' }}" icon="o-check" class="btn-primary" type="submit" spinner="save" />
