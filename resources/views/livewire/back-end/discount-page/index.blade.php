@@ -38,7 +38,7 @@ new class extends Component {
         $this->saveOrUpdate(
             validationRules: [
                 'name' => 'required|string|max:255',
-                'percentage' => 'required',
+                'percentage' => 'required|numeric',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date',
             ],
