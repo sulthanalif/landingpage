@@ -5,6 +5,7 @@ use Mary\Traits\Toast;
 use App\Models\Discount;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new class extends Component {
@@ -23,6 +24,8 @@ new class extends Component {
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public int $perPage = 10;
 
+    public Collection $names;
+
     //var
     public string $name = '';
     public string $percentage = '';
@@ -31,9 +34,40 @@ new class extends Component {
     public bool $status = true;
     public array $varDiscount = ['recordId', 'name', 'percentage', 'start_date', 'end_date', 'status'];
 
+    public function mount(): void
+    {
+        $this->searchNameDiscount();
+    }
+
+    public function searchNameDiscount(string $value = '')
+    {
+        $options = collect([
+            ['id' => 'Biduk', 'name' => 'Biduk'],
+            ['id' => 'Cildren', 'name' => 'Cildren'],
+        ]);
+
+        $selectedOption = $options->firstWhere('id', $this->name);
+
+        $this->names = $options
+            ->filter(fn ($item) => str_contains(strtolower($item['name']), strtolower($value)))
+            ->when($selectedOption, fn ($collection) => $collection->prepend($selectedOption))
+            ->unique('id')
+            ->values();
+    }
+
     public function save(): void
     {
         $this->setModel(new Discount());
+
+        if($this->recordId == null) {
+            $exists = Discount::query()
+            ->where('name', $this->name)
+            ->where('start_date', '<=', $this->end_date)
+            ->where('end_date', '>=', $this->start_date)
+            ->exists();
+
+            if ($exists) $this->error('The discount period already exists'); return;
+        }
 
         $this->saveOrUpdate(
             validationRules: [

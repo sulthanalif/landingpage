@@ -73,6 +73,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Volt::route('/discount', 'back-end.discount-page.index')->middleware('can:discount-page')->name('discount');
         Volt::route('/career', 'back-end.career-page.index')->middleware('can:career-page')->name('career');
         Volt::route('/career/form', 'back-end.career-page.form')->name('career.form');
+        Volt::route('/campaign', 'back-end.campaign-page.index')->middleware('can:campaign-page')->name('campaign');
+        Volt::route('/campaign/form', 'back-end.campaign-page.form')->name('campaign.form');
 
         Volt::route('/user', 'back-end.user-page.index')->middleware('can:user-page')->name('user');
         Route::prefix('options')->middleware('can:options')->group(function () {

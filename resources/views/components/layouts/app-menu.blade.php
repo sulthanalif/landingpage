@@ -39,6 +39,9 @@
     @can('discount-page')
         <x-menu-item title="Discounts" icon="o-percent-badge" link="{{ route('discount') }}" />
     @endcan
+    @can('campaign-page')
+        <x-menu-item title="Campaigns" icon="o-megaphone" link="{{ route('campaign') }}" />
+    @endcan
     @can('career-page')
         <x-menu-item title="Careers" icon="o-briefcase" link="{{ route('career') }}" />
     @endcan

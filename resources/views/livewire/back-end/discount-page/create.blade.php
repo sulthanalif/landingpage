@@ -3,7 +3,15 @@
     <x-form wire:submit="save">
 
         <div>
-            <x-input label="Name" type="text" wire:model="name" />
+            <x-choices-offline
+                label="Name"
+                wire:model="name"
+                :options="$names"
+                placeholder="Search ..."
+                search-function="searchNameDiscount"
+                single
+                clearable
+                searchable required />
         </div>
 
         <div>
