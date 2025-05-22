@@ -50,6 +50,11 @@ new #[Title('Campaign')] class extends Component {
         $this->redirect(route('campaign.form', ['id' => $budgetPeriodCode]), navigate: true);
     }
 
+    public function voucherClaims(): void
+    {
+        $this->redirect(route('voucher-claims'), navigate: true);
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return Campaign::query()
@@ -93,6 +98,7 @@ new #[Title('Campaign')] class extends Component {
      <!-- HEADER -->
     <x-header title="Campaign" separator>
         <x-slot:actions>
+                <x-button label="Voucher Claims" @click="$wire.voucherClaims"  responsive spinner='voucherClaims'/>
             @can('campaign-create')
                 <x-button label="Create" @click="$wire.create" responsive icon="o-plus" spinner='create' />
             @endcan

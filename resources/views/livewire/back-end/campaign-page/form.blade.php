@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\DB;
 new #[Title('Form Campaign')] class extends Component {
     use Toast, WithPagination, ManageDatas, WithFileUploads;
 
+    public string $search = '';
+
     public string $name = '';
     public string $start_date = '';
     public string $end_date = '';
@@ -47,6 +49,13 @@ new #[Title('Form Campaign')] class extends Component {
         }
     }
 
+    public function updatedSearch(): void
+    {
+        if ($this->id) {
+            $this->edit();
+        }
+    }
+
     public function formatPercentage($value): string
     {
         if (is_string($value)) {
@@ -58,15 +67,24 @@ new #[Title('Form Campaign')] class extends Component {
 
     public function exportVoucher()
     {
+        $vouchers = Campaign::findOrFail($this->id)->vouchers()->get();
 
         if (count($this->voucherOrder) == 0) {
             $this->error('Data tidak ditemukan', position: 'toast-bottom');
         } else {
             try {
 
+                $data = $vouchers->map(function ($voucher) {
+                    return [
+                        'VOUHCER_CODE' => $voucher->code,
+                        'PERSENTASE' => $voucher->percentage,
+                        'IS_CLAIMED' => $voucher->is_claimed
+                    ];
+                });
+
                 $headers = ['VOUHCER_CODE', 'PERSENTASE', 'IS_CLAIMED'];
 
-                return Excel::download(new ExportDatas(collect($this->voucherOrder), 'Data Voucher', $headers), 'data-voucher-'. $this->name .'-'. date('d-m-Y') . '.xlsx');
+                return Excel::download(new ExportDatas(collect($data), 'Data Voucher', $headers), 'data-voucher-'. $this->name .'-'. date('d-m-Y') . '.xlsx');
             } catch (\Exception $e) {
                 \Log::channel('debug')->error("message: '{$e->getMessage()}',  file: '{$e->getFile()}',  line: {$e->getLine()}");
             }
@@ -85,9 +103,7 @@ new #[Title('Form Campaign')] class extends Component {
 
         $this->voucherOrder = $budgetPeriod->vouchers()
             ->where('status', true)
-            // ->where('is_claimed', false)
-            // ->where('is_locked', false)
-            // ->orderBy('ordinal', 'asc')
+            ->where('code', 'like', "%{$this->search}%")
             ->get()
             ->map(function ($voucher) {
                 return [
@@ -380,6 +396,7 @@ new #[Title('Form Campaign')] class extends Component {
                     @if ($this->id)
                         <x-button label="Export Voucher" icon="o-arrow-down-tray" wire:click="exportVoucher" spinner="exportVoucher" />
                     @endif
+                    <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
                 </x-slot:menu>
                 <div class="h-64 overflow-y-auto outline outline-red-500">
                     <div class="max-h-60 overflow-y-auto">

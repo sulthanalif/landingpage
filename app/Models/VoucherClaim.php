@@ -17,4 +17,9 @@ class VoucherClaim extends Model
     {
         return $this->belongsTo(Voucher::class);
     }
+
+    public function register()
+    {
+        return $this->belongsTo(Register::class);
+    }
 }
