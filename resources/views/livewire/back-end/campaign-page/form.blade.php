@@ -7,10 +7,12 @@ use App\Models\Voucher;
 use App\Models\Campaign;
 // use App\Traits\LogFormatter;
 // use App\Models\BudgetPeriod;
+use App\Exports\ExportDatas;
 use Livewire\Attributes\Url;
-use Livewire\Volt\Component;
 // use App\Traits\CreateOrUpdate;
+use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Collection;
@@ -29,6 +31,7 @@ new #[Title('Form Campaign')] class extends Component {
     // public Collection $dealersSearchable;
 
     public array $vouchers = [];
+    public array $voucherOrder = [];
     public int $total = 0;
 
     #[Url]
@@ -53,6 +56,23 @@ new #[Title('Form Campaign')] class extends Component {
         return is_int($value) ? (string) $value : rtrim(rtrim(number_format($value, 2, '.', ''), '0'), '.');
     }
 
+    public function exportVoucher()
+    {
+
+        if (count($this->voucherOrder) == 0) {
+            $this->error('Data tidak ditemukan', position: 'toast-bottom');
+        } else {
+            try {
+
+                $headers = ['VOUHCER_CODE', 'PERSENTASE', 'IS_CLAIMED'];
+
+                return Excel::download(new ExportDatas(collect($this->voucherOrder), 'Data Voucher', $headers), 'data-voucher-'. $this->name .'-'. date('d-m-Y') . '.xlsx');
+            } catch (\Exception $e) {
+                \Log::channel('debug')->error("message: '{$e->getMessage()}',  file: '{$e->getFile()}',  line: {$e->getLine()}");
+            }
+        }
+    }
+
     public function edit(): void
     {
         $budgetPeriod = Campaign::findOrFail($this->id);
@@ -62,6 +82,23 @@ new #[Title('Form Campaign')] class extends Component {
         $this->end_date = $budgetPeriod->end_date;
         // $this->budget = $budgetPeriod->budget;
         $this->status = $budgetPeriod->status;
+
+        $this->voucherOrder = $budgetPeriod->vouchers()
+            ->where('status', true)
+            // ->where('is_claimed', false)
+            // ->where('is_locked', false)
+            // ->orderBy('ordinal', 'asc')
+            ->get()
+            ->map(function ($voucher) {
+                return [
+                    'code' => $voucher->code,
+                    'percentage' => $this->formatPercentage($voucher->percentage),
+                    'is_claimed' => $voucher->is_claimed,
+                ];
+            })
+            // ->groupBy('is_claimed', 'desc')
+            ->values()
+            ->toArray();
 
         $vouchers = $budgetPeriod->vouchers()
             ->where('status', true)
@@ -280,7 +317,7 @@ new #[Title('Form Campaign')] class extends Component {
                             <th class="px-2 py-2 border-b">Jumlah Voucher</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
                         @forelse ($vouchers as $index => $voucher)
                             <tr>
                                 <td class="px-4 py-2 ">
@@ -335,6 +372,45 @@ new #[Title('Form Campaign')] class extends Component {
                 </table>
 
                 <x-button label="Tambah Voucher" icon="o-plus" class="w-full mt-3" @click="$wire.addVoucher" spinner="addVoucher" />
+            </x-card>
+        </div>
+        <div class="flex flex-col md:flex-row gap-4">
+            <x-card title="Voucher List" shadow class="w-full md:w-1/2">
+                <x-slot:menu>
+                    @if ($this->id)
+                        <x-button label="Export Voucher" icon="o-arrow-down-tray" wire:click="exportVoucher" spinner="exportVoucher" />
+                    @endif
+                </x-slot:menu>
+                <div class="h-64 overflow-y-auto outline outline-red-500">
+                    <div class="max-h-60 overflow-y-auto">
+                        <table class="w-full table-auto">
+                            <thead class="bg-gray-100 sticky top-0 z-10 text-left">
+                                <tr class="">
+                                    <th class="px-4 py-2 border-b">Kode Voucher</th>
+                                    <th class="px-4 py-2 border-b">Discount (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($voucherOrder as $index => $voucher)
+                                    <tr style="{{ $voucher['is_claimed'] ? 'background-color: #FFC0CB;' : '' }}">
+                                        <td class="px-4 py-2">
+                                            {{ $voucher['code'] }}
+                                        </td>
+                                        <td class="px-4 py-2">
+                                            {{ $voucher['percentage'] }}%
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="px-4 py-4 text-center text-gray-500">
+                                            <x-icon name="o-cube" label="It is empty." />
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </x-card>
         </div>
         <x-slot:actions>

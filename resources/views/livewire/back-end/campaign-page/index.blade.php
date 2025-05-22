@@ -114,7 +114,11 @@ new #[Title('Campaign')] class extends Component {
                 <p>{{ \Carbon\Carbon::parse($data->end_date)->locale('id_ID')->isoFormat('D MMMM Y') }}</p>
             @endscope
             @scope('cell_status', $data)
-                <p>{{ $data->status ? 'Aktif' : 'Tidak Aktif' }}</p>
+                @if ($data['status'])
+                    <span class="text-green-500">Aktif</span>
+                @else
+                    <span class="text-red-500">Tidak aktif</span>
+                @endif
             @endscope
             {{-- @scope('actions', $data)
                 <div class="flex gap-2">
