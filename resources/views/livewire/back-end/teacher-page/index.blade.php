@@ -15,11 +15,8 @@ new #[Title('Teachers')] class extends Component {
     public string $search = '';
 
     public array $config = [
-        'plugins' => 'autoresize',
-        'guides' => false,
-        'min_height' => 500,
-        'max_height' => 500,
-        'statusbar' => false,
+        'guides' => true,
+        'aspectRatio' => 1,
     ];
 
     public bool $drawer = false;
@@ -38,10 +35,11 @@ new #[Title('Teachers')] class extends Component {
     public string $name = '';
     public string $email = '';
     public string $category = '';
+    public string $description = '';
     public bool $status = true;
     public ?\Illuminate\Http\UploadedFile $image = null;
     public ?\Illuminate\Http\UploadedFile $logo = null;
-    public array $varTeacher = ['recordId', 'code_id', 'name', 'email', 'category', 'status', 'image', 'logo'];
+    public array $varTeacher = ['recordId', 'code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description'];
     public string $oldImage = '';
     public string $oldLogo = '';
 
@@ -57,13 +55,14 @@ new #[Title('Teachers')] class extends Component {
 
         $this->saveOrUpdate(
             validationRules: [
-                'code_id' => ['required', 'string', 'unique:teachers,code_id'],
+                'code_id' => ['required', 'string', 'unique:teachers,code_id' . ($this->recordId ? ',' . $this->recordId : '')],
                 'name' => ['required', 'string'],
-                'email' => ['required', 'string', 'email', 'unique:teachers,email'],
+                'email' => ['required', 'string', 'email', 'unique:teachers,email' . ($this->recordId ? ',' . $this->recordId : '')],
                 'category' => ['required', 'string'],
                 'status' => ['required', 'boolean'],
-                'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-                'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+                'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+                'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+                'description' => ['required', 'string', 'max:500'],
             ],
 
             beforeSave: function ($teacher, $component) {
@@ -133,7 +132,7 @@ new #[Title('Teachers')] class extends Component {
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'category', 'label' => 'Category'],
             ['key' => 'image', 'label' => 'Image'],
-            ['key' => 'logo', 'label' => 'Logo'],
+            ['key' => 'logo', 'label' => 'Maskot'],
             ['key' => 'status', 'label' => 'Status'],
             ['key' => 'created_at', 'label' => 'Created At'],
         ];
@@ -157,6 +156,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.email = '';
             $wire.category = '';
             $wire.status = true;
+            $wire.description = '';
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -168,6 +168,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.email = teacher.email;
             $wire.category = teacher.category;
             $wire.status = teacher.status;
+            $wire.description = teacher.description;
             $wire.drawer = true;
             $wire.$refresh();
         })

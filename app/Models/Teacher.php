@@ -15,6 +15,7 @@ class Teacher extends Model
         'category',
         'logo',
         'image',
+        'description',
         'status',
     ];
 }

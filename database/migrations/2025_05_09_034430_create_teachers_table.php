@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('category');
             $table->string('logo')->nullable();
             $table->string('image')->nullable();
+            $table->text('description')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

@@ -18,18 +18,22 @@
             <x-input label="Category" type="text" wire:model="category" required/>
         </div>
 
+        <div>
+            <x-textarea wire:model="description" label="Description" rows="3" />
+        </div>
+
         <div class="grid grid-cols-2 mt-3">
             <div>
                 <x-file label='Image' wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
                 change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
-                crop-save-text="Crop" :crop-config="$config">
+                crop-save-text="Crop" :crop-config="$config" hint="image size max 5mb">
                     <img id="previewImage" src="{{ asset($oldImage) }}" class="h-40 rounded-lg"  />
                 </x-file>
             </div>
             <div>
-                <x-file label='logo' wire:model="logo" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
+                <x-file label='Maskot' wire:model="logo" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
                 change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
-                crop-save-text="Crop" :crop-config="$config">
+                crop-save-text="Crop" :crop-config="$config" hint="image size max 5mb">
                     <img id="previewImage" src="{{ asset($oldLogo) }}" class="h-40 rounded-lg"  />
                 </x-file>
             </div>
