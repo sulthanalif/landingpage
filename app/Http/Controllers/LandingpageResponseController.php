@@ -19,8 +19,8 @@ class LandingpageResponseController extends Controller
     public function getDataHome()
     {
         try {
-            $posts = Post::with(['category:id,name', 'user:name'])->where('status', true)->paginate(5);
-            $activities = Activity::latest()->where('status', true)->paginate(5);
+            $posts = Post::with(['category:id,name', 'user:name'])->where('status', true)->latest()->paginate(5);
+            $activities = Activity::latest()->where('status', true)->latest()->paginate(5);
             $faqs = Question::where('status', true)->get();
             $wcus = WhyChooseUs::where('status', true)->get();
 
