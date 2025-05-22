@@ -40,7 +40,7 @@ const Value = () => {
             const featureSlider = $(".feature_slider").owlCarousel({
                 loop: features.length > 4,
                 autoplay: features.length > 4,
-                autoplayTimeout: 5000,
+                autoplayTimeout: 2000,
                 dots: false,
                 smartSpeed: 1200,
                 center: features.length === 1,
@@ -149,13 +149,13 @@ const Value = () => {
 
                         {features.length > 4 && (
                             <>
-                                <div className="feature_slider_nav feature_slider_prev">
+                                <div className="feature_slider_nav feature_slider_prev d-none d-lg-block">
                                     <i
                                         className="fa fa-angle-left"
                                         aria-hidden="true"
                                     />
                                 </div>
-                                <div className="feature_slider_nav feature_slider_next">
+                                <div className="feature_slider_nav feature_slider_next d-none d-lg-block">
                                     <i
                                         className="fa fa-angle-right"
                                         aria-hidden="true"
@@ -167,14 +167,8 @@ const Value = () => {
                 ) : (
                     <div className="row">
                         <div className="col-12 text-center py-5">
-                            <div className="alert alert-warning">
-                                No values available.
-                                <button
-                                    onClick={handleRefresh}
-                                    className="btn btn-link"
-                                >
-                                    Refresh
-                                </button>
+                            <div className="alert alert-primary">
+                                <h3>No values available.</h3>
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,21 @@
 import React from "react";
 
 const TeacherItem = ({ teacher }) => {
+    const limitText = (html, limit = 100) => {
+        if (!html) return "";
+
+        const sanitizedHtml = html.replace(/<img[^>]*>/g, "");
+
+        const tempElement = document.createElement("div");
+        tempElement.innerHTML = sanitizedHtml;
+        const textContent =
+            tempElement.textContent || tempElement.innerText || "";
+
+        return textContent.length > limit
+            ? textContent.substring(0, limit) + "..."
+            : textContent;
+    };
+
     return (
         <>
             <a
@@ -26,7 +41,12 @@ const TeacherItem = ({ teacher }) => {
                         <h3 className="teacher-name text-capitalize">
                             {teacher.name}
                         </h3>
-                        <p className="teacher-position text-secondary">{teacher.email}</p>
+                        <p
+                            className="teacher-position text-secondary text-justify"
+                            dangerouslySetInnerHTML={{
+                                __html: limitText(teacher.description),
+                            }}
+                        />
                     </div>
                 </div>
             </a>
@@ -73,7 +93,7 @@ const TeacherItem = ({ teacher }) => {
                                         />
                                     </div>
                                     <div className="mt-3 text-center">
-                                        <h4 className="mb-1">{teacher.name}</h4>
+                                        <h4 className="mb-2">{teacher.name}</h4>
                                         <span className="badge badge-pill badge-primary px-3 py-2">
                                             {teacher.code_id}
                                         </span>
@@ -81,14 +101,14 @@ const TeacherItem = ({ teacher }) => {
                                 </div>
                                 <div className="col-md-7">
                                     <div className="pl-md-3">
-                                        <h5 className="text-primary mb-3">
+                                        <h4 className="text-primary mb-2">
                                             About Me
-                                        </h5>
+                                        </h4>
                                         <p
-                                            className="text-muted mb-4"
+                                            className="text-muted mb-4 text-justify"
                                             style={{ lineHeight: "1.8" }}
                                         >
-                                            {teacher.bio ||
+                                            {teacher.description ||
                                                 "No biography available yet."}
                                         </p>
                                     </div>

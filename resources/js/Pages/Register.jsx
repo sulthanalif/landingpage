@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import { Link, useForm } from "@inertiajs/react";
+import useApi from "../Hooks/response";
 
 const Register = () => {
     useEffect(() => {
@@ -30,15 +31,27 @@ const Register = () => {
         };
     }, []);
 
-    // State untuk modal
     const [showModal, setShowModal] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
 
-    // Inertia useForm hook untuk handle form submission
+    const {
+        data: types,
+        loading,
+        error,
+        get: getTypes,
+    } = useApi("dataRegister");
+
+    const discounts = types?.discounts;
+
+    useEffect(() => {
+        getTypes();
+    }, []);
+
     const { data, setData, post, processing, errors, reset } = useForm({
         // Tab 1: Student Personal Data
+        table_id: "",
         level: "",
         name: "",
         gender: "",
@@ -50,6 +63,7 @@ const Register = () => {
         previous_school: "",
         hobbi: "",
         achievement: "",
+        discount_id: "",
 
         // Tab 2: Student Parent Data
         father_name: "",
@@ -69,6 +83,41 @@ const Register = () => {
         student_residence_status: "",
         student_address: "",
     });
+
+    const [programs, setPrograms] = useState([]);
+    const [levels, setLevels] = useState([]);
+    const [selectedProgram, setSelectedProgram] = useState(null);
+
+    useEffect(() => {
+        if (types?.types) {
+            setPrograms(types.types);
+        }
+    }, [types]);
+
+    useEffect(() => {
+        if (data.table_id && programs.length > 0) {
+            const selectedProgram = programs.find(
+                (p) => p.table.id?.toString() === data.table_id.toString()
+            );
+
+            setSelectedProgram(selectedProgram);
+
+            if (selectedProgram?.rows) {
+                const levels = selectedProgram.rows.map((r) => r);
+
+                if (levels.length > 0) {
+                    setLevels(levels || []);
+                } else {
+                    setLevels([]);
+                }
+            } else {
+                setData("level", "");
+            }
+        } else {
+            setSelectedProgram(null);
+            setData("level", "");
+        }
+    }, [data.table_id, programs, setData]);
 
     useEffect(() => {
         if (data.same_with_father && data.father_address) {
@@ -106,58 +155,106 @@ const Register = () => {
         if (activeTab > 0) setActiveTab(activeTab - 1);
     };
 
-    const handleSubmit = (e) => {
+    const { get: getFeeCalculation } = useApi("/countFee");
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = {
-            ...data,
-            // Konversi tanggal ke format Y-m-d
-            date_of_birth: data.date_of_birth
-                ? new Date(data.date_of_birth).toISOString().split("T")[0]
-                : "",
-            father_date_of_birth: data.father_date_of_birth
-                ? new Date(data.father_date_of_birth)
-                      .toISOString()
-                      .split("T")[0]
-                : "",
-            mother_date_of_birth: data.mother_date_of_birth
-                ? new Date(data.mother_date_of_birth)
-                      .toISOString()
-                      .split("T")[0]
-                : "",
-        };
+        try {
+            // 1. Validasi data yang diperlukan untuk countFee
+            if (!data.table_id || !data.level || !data.discount_id) {
+                throw new Error("Program, level, dan discount harus dipilih");
+            }
 
-        post('/register', {
-            data: formData,
-            preserveScroll: true,
-            onSuccess: () => {
-                setModalTitle("Registration Successful");
+            // 2. Hitung biaya terlebih dahulu
+            const feeResponse = await getFeeCalculation({
+                jenjang: data.level,
+                table_id: data.table_id,
+                discount_id: data.discount_id,
+            });
+
+            if (feeResponse.error) {
+                setModalTitle("Fee Calculation Failed");
                 setModalMessage(
-                    "Your registration has been submitted successfully. We will contact you soon."
-                );
-                setIsSuccess(true);
-                setShowModal(true);
-                reset();
-            },
-            onError: (errors) => {
-                setModalTitle("Registration Failed");
-                setModalMessage(
-                    "Please check your form and try again. " +
-                        (errors.message || Object.values(errors).join(" "))
+                    feeResponse.error.response?.data?.message ||
+                        feeResponse.error.message ||
+                        "Failed to calculate payment amount. Please try again."
                 );
                 setIsSuccess(false);
                 setShowModal(true);
+                return;
+            }
 
-                // Scroll ke field yang error
-                if (Object.keys(errors).length > 0) {
-                    const firstErrorField = Object.keys(errors)[0];
-                    document.getElementById(firstErrorField)?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center",
-                    });
-                }
-            },
-        });
+            const feeData = feeResponse.data.data;
+
+            // 3. Siapkan data form dengan hasil perhitungan biaya
+            const formData = {
+                ...data,
+                amount: feeData.amount,
+                discount: feeData.discount,
+                total: feeData.total,
+                // Konversi tanggal ke format Y-m-d
+                date_of_birth: data.date_of_birth
+                    ? new Date(data.date_of_birth).toISOString().split("T")[0]
+                    : "",
+                father_date_of_birth: data.father_date_of_birth
+                    ? new Date(data.father_date_of_birth)
+                          .toISOString()
+                          .split("T")[0]
+                    : "",
+                mother_date_of_birth: data.mother_date_of_birth
+                    ? new Date(data.mother_date_of_birth)
+                          .toISOString()
+                          .split("T")[0]
+                    : "",
+            };
+
+            // 4. Kirim data pendaftaran
+            post("/register", {
+                data: formData,
+                preserveScroll: true,
+                onSuccess: () => {
+                    setModalTitle("Registration Successful");
+                    setModalMessage(
+                        `Your registration has been submitted successfully. Total payment: Rp ${feeData.total.toLocaleString(
+                            "id-ID"
+                        )}. We will contact you soon.`
+                    );
+                    setIsSuccess(true);
+                    setShowModal(true);
+                    reset();
+                },
+                onError: (errors) => {
+                    setModalTitle("Registration Failed");
+                    setModalMessage(
+                        "Please check your form and try again. " +
+                            (errors.message || Object.values(errors).join(" "))
+                    );
+                    setIsSuccess(false);
+                    setShowModal(true);
+
+                    // Scroll ke field yang error
+                    if (Object.keys(errors).length > 0) {
+                        const firstErrorField = Object.keys(errors)[0];
+                        document
+                            .getElementById(firstErrorField)
+                            ?.scrollIntoView({
+                                behavior: "smooth",
+                                block: "center",
+                            });
+                    }
+                },
+            });
+        } catch (error) {
+            setModalTitle("Fee Calculation Failed");
+            setModalMessage(
+                error.response?.data?.message ||
+                    error.message ||
+                    "Failed to calculate payment amount. Please try again."
+            );
+            setIsSuccess(false);
+            setShowModal(true);
+        }
     };
 
     const handleCloseModal = () => {
@@ -240,63 +337,143 @@ const Register = () => {
                                         {/* Tab 1: Student Personal Data */}
                                         {activeTab === 0 && (
                                             <>
-                                                <div className="form-group">
-                                                    <label htmlFor="level">
-                                                        Registered Level{" "}
-                                                        <span className="text-danger">
-                                                            *
-                                                        </span>
-                                                    </label>
-                                                    <select
-                                                        className={`form-control ${
-                                                            errors.level
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
-                                                        id="level"
-                                                        value={data.level}
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "level",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        required
-                                                    >
-                                                        <option
-                                                            selected
-                                                            disabled
-                                                        >
-                                                            ---Select Registered
-                                                            Level---
-                                                        </option>
-                                                        {[
-                                                            "KB",
-                                                            "TKA",
-                                                            "TKB",
-                                                            "SD1",
-                                                            "SD2",
-                                                            "SD3",
-                                                            "SD4",
-                                                            "SD5",
-                                                            "SD6",
-                                                            "SMP1",
-                                                            "SMP2",
-                                                            "SMP3",
-                                                            "SMA1",
-                                                            "SMA2",
-                                                            "SMA3",
-                                                        ].map((lvl) => (
-                                                            <option key={lvl}>
-                                                                {lvl}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    {errors.level && (
-                                                        <div className="invalid-feedback">
-                                                            {errors.level}
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="table_id">
+                                                                Registered
+                                                                Program{" "}
+                                                                <span className="text-danger">
+                                                                    *
+                                                                </span>
+                                                            </label>
+                                                            <select
+                                                                className={`form-control ${
+                                                                    errors.table_id
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="table_id"
+                                                                value={
+                                                                    data.table_id
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "table_id",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
+                                                            >
+                                                                <option
+                                                                    value=""
+                                                                    disabled
+                                                                >
+                                                                    ---Select
+                                                                    Registered
+                                                                    Program---
+                                                                </option>
+                                                                {programs?.map(
+                                                                    (
+                                                                        program
+                                                                    ) => (
+                                                                        <option
+                                                                            key={
+                                                                                program
+                                                                                    .table
+                                                                                    .id
+                                                                            }
+                                                                            value={
+                                                                                program
+                                                                                    .table
+                                                                                    .id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                program
+                                                                                    .table
+                                                                                    .name
+                                                                            }
+                                                                        </option>
+                                                                    )
+                                                                )}
+                                                            </select>
+                                                            {errors.table_id && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.table_id
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                    )}
+                                                    </div>
+
+                                                    <div className="col-lg-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="level">
+                                                                Registered Level{" "}
+                                                                <span className="text-danger">
+                                                                    *
+                                                                </span>
+                                                            </label>
+                                                            <select
+                                                                className={`form-control ${
+                                                                    errors.level
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="level"
+                                                                value={
+                                                                    data.level
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "level",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
+                                                            >
+                                                                <option
+                                                                    value=""
+                                                                    disabled
+                                                                >
+                                                                    {levels.length >
+                                                                    0
+                                                                        ? "---Select Registered Level---"
+                                                                        : data.table_id
+                                                                        ? "No levels available"
+                                                                        : "---Select Program First---"}
+                                                                </option>
+                                                                {levels.map(
+                                                                    (
+                                                                        row,
+                                                                        index
+                                                                    ) => (
+                                                                        <option
+                                                                            key={`${row.level}-${index}`}
+                                                                            value={
+                                                                                row.level
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                row.level
+                                                                            }
+                                                                        </option>
+                                                                    )
+                                                                )}
+                                                            </select>
+                                                            {errors.level && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.level
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 <div className="form-group">
@@ -359,7 +536,7 @@ const Register = () => {
                                                                 required
                                                             >
                                                                 <option
-                                                                    selected
+                                                                    value={""}
                                                                     disabled
                                                                 >
                                                                     ---Select
@@ -409,7 +586,7 @@ const Register = () => {
                                                                 required
                                                             >
                                                                 <option
-                                                                    selected
+                                                                    value={""}
                                                                     disabled
                                                                 >
                                                                     ---Select
@@ -594,39 +771,108 @@ const Register = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="form-group">
-                                                    <label htmlFor="previous-school">
-                                                        Previous School Name{" "}
-                                                        <span className="text-danger">
-                                                            *
-                                                        </span>
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        className={`form-control ${
-                                                            errors.previous_school
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
-                                                        id="previous_school"
-                                                        value={
-                                                            data.previous_school
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "previous_school",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        required
-                                                    />
-                                                    {errors.previous_school && (
-                                                        <div className="invalid-feedback">
-                                                            {
-                                                                errors.previous_school
-                                                            }
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="previous-school">
+                                                                Previous School
+                                                                Name{" "}
+                                                                <span className="text-danger">
+                                                                    *
+                                                                </span>
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                className={`form-control ${
+                                                                    errors.previous_school
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="previous_school"
+                                                                value={
+                                                                    data.previous_school
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "previous_school",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
+                                                            />
+                                                            {errors.previous_school && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.previous_school
+                                                                    }
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                    )}
+                                                    </div>
+
+                                                    <div className="col-lg-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="discount_id">
+                                                                Refference{" "}
+                                                                <span className="text-danger">
+                                                                    *
+                                                                </span>
+                                                            </label>
+                                                            <select
+                                                                className={`form-control ${
+                                                                    errors.discount_id
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="discount_id"
+                                                                value={
+                                                                    data.discount_id
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "discount_id",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required
+                                                            >
+                                                                <option
+                                                                    value=""
+                                                                    disabled
+                                                                >
+                                                                    ---Select
+                                                                    Refference---
+                                                                </option>
+                                                                {discounts?.map(
+                                                                    (
+                                                                        discount
+                                                                    ) => (
+                                                                        <option
+                                                                            key={
+                                                                                discount.id
+                                                                            }
+                                                                            value={
+                                                                                discount.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                discount.name
+                                                                            }
+                                                                        </option>
+                                                                    )
+                                                                )}
+                                                            </select>
+                                                            {errors.discount_id && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.discount_id
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 <div className="form-group">

@@ -79,7 +79,7 @@ const Activity = () => {
                             </div>
                         </>
                     ) : (
-                        <div className="col-lg-12 course_col">
+                        <div className="col-lg-12 course_col py-5">
                             <div className="course">
                                 <div className="course_body">
                                     <h3 className="course_title text-center">

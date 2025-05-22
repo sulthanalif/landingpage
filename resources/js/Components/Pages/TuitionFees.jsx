@@ -39,11 +39,22 @@ const TuitionFees = () => {
                     return {
                         tableInfo: table.table,
                         columns,
-                        data: table.rows.map(row => {
+                        data: table.rows.map((row) => {
                             const transformedRow = {};
-                            table.columns.forEach(col => {
-                                const key = col.label.toLowerCase().replace(/\s+/g, "_");
-                                transformedRow[key] = row[Object.keys(row).find(k => k.toLowerCase().replace(/\s+/g, "_") === key)];
+                            table.columns.forEach((col) => {
+                                const key = col.label
+                                    .toLowerCase()
+                                    .replace(/\s+/g, "_");
+                                transformedRow[key] =
+                                    row[
+                                        Object.keys(row).find(
+                                            (k) =>
+                                                k
+                                                    .toLowerCase()
+                                                    .replace(/\s+/g, "_") ===
+                                                key
+                                        )
+                                    ];
                             });
                             return transformedRow;
                         }),
@@ -84,8 +95,10 @@ const TuitionFees = () => {
                     className="col-lg-6 about_col about_col_left mb-4"
                 >
                     <div className="about_item card p-3 h-100">
-                        <div className="about_item_title text-center mt-0 mb-3">
-                            <h3>{table.tableInfo.name}</h3>
+                        <div className="card-header about_item_title text-center mt-0 mb-3">
+                            <h4 className="text-primary">
+                                {table.tableInfo.name}
+                            </h4>
                         </div>
                         <div className="table-responsive">
                             <DataTable
@@ -97,6 +110,13 @@ const TuitionFees = () => {
                                 select={{
                                     style: "os",
                                     items: "row",
+                                }}
+                                options={{
+                                    headerCallback: function (thead) {
+                                        $(thead)
+                                            .find("th")
+                                            .addClass("bg-primary text-center text-white");
+                                    },
                                 }}
                                 language={{
                                     loadingRecords:

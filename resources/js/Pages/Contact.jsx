@@ -357,7 +357,7 @@ const Contact = () => {
                                                     <div className="map_container">
                                                         <div id="map">
                                                             <iframe
-                                                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7933.974303374864!2d106.706299!3d-6.132428!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a02a474c9b185%3A0xe3042c977b79a3ce!2sSekolah%20glbl!5e0!3m2!1sen!2sid!4v1746177407164!5m2!1sen!2sid"
+                                                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d991.7458580171236!2d106.7057622!3d-6.132928!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a0365f7c151b3%3A0xbe58ad1e5471319c!2sLia%20Stephanie%20Catholic%20National%20School%20(LSCNS)!5e0!3m2!1sid!2sid!4v1747846623575!5m2!1sid!2sid"
                                                                 width="100%"
                                                                 height="100%"
                                                                 style={{

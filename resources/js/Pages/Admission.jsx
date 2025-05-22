@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
 import DataTable from "datatables.net-react";
@@ -105,12 +105,14 @@ const Admission = () => {
                                             fosters the academic, emotional, and
                                             character development of students.
                                         </p>
-                                        <h4 className="text-center py-4">
+                                        <h3 className="text-center py-4">
                                             <strong>
-                                                Tuition Fee Structure for the
-                                                2025/2026 Academic Year
+                                                Tuition Fee Structure for the{" "}
+                                                {new Date().getFullYear()}/
+                                                {new Date().getFullYear() + 1}{" "}
+                                                Academic Year
                                             </strong>
-                                        </h4>
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
@@ -146,6 +148,12 @@ const Admission = () => {
 };
 
 const Guidelines = () => {
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const handlePlayClick = () => {
+        setIsPlaying(true);
+    };
+
     return (
         <>
             <div className="feature">
@@ -302,25 +310,49 @@ const Guidelines = () => {
                         </div>
                         {/* Feature Video */}
                         <div className="col-lg-6 feature_col">
-                            <div className="feature_video d-flex flex-column align-items-center justify-content-center">
-                                <div
-                                    className="feature_video_background"
-                                    style={{
-                                        backgroundImage: "url(img/logo.png)",
-                                    }}
-                                />
-                                <a
-                                    className="vimeo feature_video_button"
-                                    href="https://drive.google.com/file/d/1BhaAAwv7EYI25llurS_OqPZcSGP0EL2n/view?usp=drive_link"
-                                    title="Teaching and Learning Activities (Entrepreneur Got Talent)"
-                                    target="_blank"
-                                >
-                                    <img
-                                        src="/landing/images/play.png"
-                                        alt=""
-                                    />
-                                </a>
-                            </div>
+                            {!isPlaying ? (
+                                <>
+                                    <div className="feature_video d-flex flex-column align-items-center justify-content-center">
+                                        <div
+                                            className="feature_video_background"
+                                            style={{
+                                                backgroundImage:
+                                                    "url(img/logo.png)",
+                                            }}
+                                        />
+                                        <button
+                                            onClick={handlePlayClick}
+                                            className="vimeo feature_video_button"
+                                            title="Teaching and Learning Activities (Entrepreneur Got Talent)"
+                                            aria-label="Play video"
+                                            style={{
+                                                cursor: "pointer",
+                                                zIndex: 1,
+                                                transition:
+                                                    "transform 0.3s ease",
+                                                background: "none",
+                                                border: "none",
+                                            }}
+                                        >
+                                            <img
+                                                src="/landing/images/play.png"
+                                                alt="Play button"
+                                            />
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="video-container">
+                                    <iframe
+                                        width="100%"
+                                        height="350"
+                                        src="https://www.youtube.com/embed/iw0sC4Cj3HE?autoplay=1"
+                                        title="YouTube video player"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                            )}
                             <div className="feature-content mt-2">
                                 <div className="feature_note">
                                     <h4>Important Notes</h4>
