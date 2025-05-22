@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\Logout;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\CareerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ContactUsController;
@@ -21,7 +22,7 @@ Route::get('/curriculum', [LandingpageController::class, 'curriculum']);
 Route::get('/extracurricular', [LandingpageController::class, 'extracurricular']);
 Route::get('/calendar-academic', [LandingpageController::class, 'calendarAcademic']);
 Route::get('/accreditation', [LandingpageController::class, 'accreditation']);
-Route::get('/career', [LandingpageController::class, 'career']);
+Route::get('/career', [CareerController::class, 'page']);
 Route::get('/contact', [LandingpageController::class, 'contact']);
 Route::get('/register', [RegisterController::class, 'index']);
 Route::get('/payment/{key}', [PaymentController::class, 'page'])->name('payment');
@@ -77,6 +78,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Volt::route('/campaign/form', 'back-end.campaign-page.form')->name('campaign.form');
         Volt::route('/voucher-claims', 'back-end.campaign-page.voucherclaims')->middleware('can:campaign-page')->name('voucher-claims');
         Volt::route('/extracurricular', 'back-end.extra-page.index')->middleware('can:extra-page')->name('extra');
+        Volt::route('/career/register', 'back-end.career-page.register')->middleware('can:career-page')->name('career.register');
 
         Volt::route('/user', 'back-end.user-page.index')->middleware('can:user-page')->name('user');
         Route::prefix('options')->middleware('can:options')->group(function () {

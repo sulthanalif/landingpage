@@ -21,4 +21,9 @@ class Career extends Model
         'start_date',
         'end_date',
     ];
+
+    public function carrerRegisters()
+    {
+        return $this->hasMany(CarrerRegister::class);
+    }
 }

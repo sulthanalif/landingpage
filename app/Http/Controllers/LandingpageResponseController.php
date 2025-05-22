@@ -108,22 +108,6 @@ class LandingpageResponseController extends Controller
         }
     }
 
-    public function careers()
-    {
-        try {
-            $now = now();
-
-            $careers = Career::where('start_date', '<=', $now)
-                ->where('end_date', '>=', $now)
-                ->latest()
-                ->get();
-
-            return $this->successResponse(data: compact('careers'));
-        } catch (\Throwable $th) {
-            return $this->errorResponse($th);
-        }
-    }
-
     public function extra()
     {
         try {

@@ -33,6 +33,11 @@ new class extends Component {
         $this->redirect(route('career.form', ['slug' => $slug]), navigate: true);
     }
 
+    public function registration(): void
+    {
+        $this->redirect(route('career.register'), navigate: true);
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return Career::query()
@@ -72,6 +77,8 @@ new class extends Component {
     <!-- HEADER -->
     <x-header title="Careers" separator>
         <x-slot:actions>
+            <x-button label="Registration" @click="$wire.registration" responsive icon="o-user-plus" spinner="registration" />
+
             @can('career-create')
                 <x-button label="Create" @click="$wire.create" responsive icon="o-plus" spinner="create" />
             @endcan

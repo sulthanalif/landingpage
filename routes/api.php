@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CareerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LandingpageResponseController;
@@ -18,7 +19,6 @@ Route::get('/calendars', [LandingpageResponseController::class, 'calendars']);
 Route::get('/accreditations', [LandingpageResponseController::class, 'accreditations']);
 Route::get('/posts', [LandingpageResponseController::class, 'posts']);
 Route::get('/post/{slug}', [LandingpageResponseController::class, 'detailPost']);
-Route::get('/careers', [LandingpageResponseController::class, 'careers']);
 Route::get('/extra', [LandingpageResponseController::class, 'extra']);
 
 Route::get('/dataRegister', [RegisterController::class, 'getData']);
@@ -26,3 +26,6 @@ Route::get('/countFee', [RegisterController::class, 'countFee']);
 
 Route::get('/payment/getData/{key}', [PaymentController::class, 'getData']);
 Route::post('/payment', [PaymentController::class, 'store']);
+
+Route::get('/careers', [CareerController::class, 'getData']);
+Route::post('/careers/{career}', [CareerController::class, 'store']);
