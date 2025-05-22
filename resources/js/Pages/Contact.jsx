@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import { Link, useForm } from "@inertiajs/react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Contact = () => {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
     const [showModal, setShowModal] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
@@ -304,6 +306,7 @@ const Contact = () => {
                                                     </div>
                                                 )}
                                             </div>
+                                            <ReCAPTCHA sitekey={siteKey} />
                                             <div>
                                                 <button
                                                     type="submit"

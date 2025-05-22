@@ -183,7 +183,7 @@ const SchoolProgram = () => {
                                         backgroundImage: "url(/img/logo.png)",
                                     }}
                                 />
-                                <a
+                                {/* <a
                                     className="vimeo feature_video_button"
                                     href="https://drive.google.com/file/d/14SY6mxL8ly_iRpHK-a82wyRlOlQGQIJq/view?usp=drive_link"
                                     title="Teaching and Learning Activities (Entrepreneur Got Talent)"
@@ -193,7 +193,7 @@ const SchoolProgram = () => {
                                         src="/landing/images/play.png"
                                         alt=""
                                     />
-                                </a>
+                                </a> */}
                             </div>
                         </div>
                     </div>
@@ -261,8 +261,8 @@ const OurGoal = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-5 about_col about_col_left card py-4 mx-lg-4">
-                            <div className="about_item">
+                        <div className="col-lg-5 about_col about_col_left card d-flex flex-column py-4 mx-lg-4">
+                            <div className="about_item pb-4 flex-grow-1">
                                 <div className="about_item_image">
                                     <img
                                         src="/landing/images/edexcel.jpg"
@@ -328,9 +328,17 @@ const OurGoal = () => {
                                     </p>
                                 </div>
                             </div>
+                            <div className="card-footer text-right mt-auto">
+                                <Link
+                                    href="/story"
+                                    className="btn btn-primary"
+                                >
+                                    View Activities
+                                </Link>
+                            </div>
                         </div>
-                        <div className="col-lg-5 about_col about_col_left card py-4 mx-lg-4">
-                            <div className="about_item">
+                        <div className="col-lg-5 about_col about_col_left card d-flex flex-column py-4 mx-lg-4">
+                            <div className="about_item pb-4 flex-grow-1">
                                 <div className="about_item_image">
                                     <img
                                         src="/landing/images/ib-curriculum.jpg"
@@ -400,6 +408,14 @@ const OurGoal = () => {
                                         </ul>
                                     </p>
                                 </div>
+                            </div>
+                            <div className="card-footer text-right mt-auto">
+                                <Link
+                                    href="/story"
+                                    className="btn btn-primary"
+                                >
+                                    View Activities
+                                </Link>
                             </div>
                         </div>
                         <div className="col-lg-12 about_col about_col_left">

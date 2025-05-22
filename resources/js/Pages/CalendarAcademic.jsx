@@ -169,6 +169,7 @@ const CalendarAcademic = ({ calendars }) => {
                                         // eventContent={renderEventContent}
                                         eventClick={handleEventClick}
                                         eventDisplay="block"
+                                        height={"auto"}
                                     />
                                 </div>
                             </div>
