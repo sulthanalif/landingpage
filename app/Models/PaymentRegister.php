@@ -13,7 +13,8 @@ class PaymentRegister extends Model
     protected $fillable = [
         'key',
         'register_id',
-        'discount',
+        'discount_biduk',
+        'discount_lscs',
         'amount',
         'total',
         'status',
@@ -27,5 +28,10 @@ class PaymentRegister extends Model
     public function detail(): HasMany
     {
         return $this->hasMany(PaymentRegisterDetail::class);
+    }
+
+    public function vouchers(): HasMany
+    {
+        return $this->hasMany(PaymentRegisterVoucher::class);
     }
 }

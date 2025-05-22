@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('key', 20)->unique();
             $table->foreignId('register_id')->constrained()->onDelete('cascade');
-            $table->decimal('discount', 4, 2);
+            $table->decimal('discount_biduk', 4, 2);
+            $table->decimal('discount_lscs', 4, 2);
             $table->decimal('amount', 10, 2);
             $table->decimal('total', 10, 2);
             $table->boolean('status')->default(false);

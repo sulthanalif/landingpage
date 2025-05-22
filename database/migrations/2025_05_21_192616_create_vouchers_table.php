@@ -20,6 +20,13 @@ return new class extends Migration
             $table->boolean('is_claimed')->default(false);
             $table->timestamps();
         });
+
+        Schema::create('payment_register_vouchers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('payment_register_id')->constrained()->onDelete('cascade');
+            $table->foreignId('voucher_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**

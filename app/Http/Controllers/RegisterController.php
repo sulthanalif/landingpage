@@ -116,7 +116,7 @@ class RegisterController extends Controller
 
             if (!$discount_biduk) return response()->json(['message' => 'Discount Biduk not found'], 404);
 
-            if (!$discount_cildren) return response()->json(['message' => 'Discount Cildren not found'], 404);
+            if (!$discount_cildren) return response()->json(['message' => 'Discount LSCS not found'], 404);
 
             if (!$discount_voucher) return response()->json(['message' => 'Voucher not found'], 404);
 
@@ -127,8 +127,9 @@ class RegisterController extends Controller
                 'amount' => $total,
                 'discount' => [
                     'biduk' => $discount_biduk ?? 0,
-                    'cildren' => $discount_cildren ?? 0,
+                    'lscs' => $discount_cildren ?? 0,
                     'voucher' => [
+                        'code' => $discount_voucher->code,
                         'campaign_name' => $discount_voucher->campaign->name,
                         'percentage' => $discount_voucher->percentage
                     ] ?? null
@@ -188,8 +189,10 @@ class RegisterController extends Controller
             'student_residence_status' => 'required',
 
             'amount' => 'required|numeric',
-            'discount' => 'required|numeric',
             'total' => 'required|numeric',
+            'discount_biduk' => 'nullable|numrtic',
+            'discount_lscs' => 'nullable|numeric',
+            'vouchers' => 'nullable|array'
         ]);
 
         try {
@@ -200,12 +203,24 @@ class RegisterController extends Controller
                 $key = Str::random(20);
             } while (PaymentRegister::where('key', $key)->exists());
 
-            $register->paymentRegister()->create([
+            $paymentRegister = $register->paymentRegister()->create([
                 'key' => $key,
                 'amount' => $request->amount,
-                'discount' => $request->discount,
+                'discount_biduk' => $request->discount_biduk,
+                'discount_lscs' => $request->discount_lscs,
                 'total' => $request->total
             ]);
+
+
+
+            if ($request->vouchers) {
+                foreach ($request->vouchers as $voucher) {
+                    $idVoucher = Voucher::where('code', $voucher['code'])->first();
+                    if ($idVoucher) $paymentRegister->vouchers()->create([
+                        'voucher_id' => $idVoucher,
+                    ]);
+                }
+            }
 
             DB::commit();
             return Inertia::render('Register')->with('success', 'Data berhasil disimpan');
