@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Voucher;
 use App\Models\Discount;
 use App\Models\Register;
 use App\Models\TuitionFee;
@@ -48,8 +49,10 @@ class RegisterController extends Controller
 
         try {
             $table_id = $request->input('table_id');
-            $jenjang_value = $request->input('jenjang');
-            $discount_id = $request->input('discount_id');
+            $jenjang_value = $request->input('level');
+            $is_biduk = $request->input('is_biduk');
+            $voucher_code = $request->input('voucher_code');
+            $cildren = $request->input('cildren');
 
             $table = TuitionFee::getAllTable()
                 ->firstWhere('table.id', (int) $table_id);
@@ -90,16 +93,46 @@ class RegisterController extends Controller
                 }
             }
 
-            $discount = Discount::find($discount_id);
+            $discount_biduk = 0;
+            $discount_cildren = 0;
+            if ($is_biduk) {
+                $discount_biduk = Discount::where('name', 'Biduk')->where('status', true)->first()->percentage;
+            }
 
-            if (!$discount) return response()->json(['message' => 'Discount not found'], 404);
+            if ($cildren > 0) {
+                $discount_cildren = Discount::where('name', 'Cildren')->where('status', true)->first()->percentage;
+            }
 
-            if($discount) $total_discount = $total - ($total * ($discount->percentage / 100));
+            $discount_voucher = Voucher::with('campaign')
+                ->whereHas('campaign', function ($query) {
+                    $query->where('status', true)
+                        ->where('start_date', '<=', now())
+                        ->where('end_date', '>=', now());
+                })
+                ->where('code', $voucher_code)
+                ->where('status', true)
+                ->where('is_claimed', false)
+                ->first();
+
+            if (!$discount_biduk) return response()->json(['message' => 'Discount Biduk not found'], 404);
+
+            if (!$discount_cildren) return response()->json(['message' => 'Discount Cildren not found'], 404);
+
+            if (!$discount_voucher) return response()->json(['message' => 'Voucher not found'], 404);
+
+            $total_discount = $total - ($total * ($discount_biduk / 100)) - ($total * ($discount_cildren / 100) - ($total * ($discount_voucher->percentage / 100)));
 
             return $this->successResponse(data: [
                 'level' => $jenjang_value,
                 'amount' => $total,
-                'discount' => $discount?->percentage,
+                'discount' => [
+                    'discount_biduk' => $discount_biduk ?? 0,
+                    'discount_cildren' => $discount_cildren ?? 0,
+                    'discount_voucher' => [
+                        'campaign_name' => $discount_voucher->campaign->name,
+                        'percentage' => $discount_voucher->percentage
+                    ] ?? null
+                ],
                 'total' => $total_discount
             ]);
         } catch (\Throwable $th) {
