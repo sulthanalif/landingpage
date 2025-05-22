@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Career;
 use App\Models\Teacher;
 use App\Models\Activity;
 use App\Models\Calendar;
@@ -11,7 +12,7 @@ use App\Models\TuitionFee;
 use App\Models\WhyChooseUs;
 use Illuminate\Http\Request;
 use App\Models\Accreditation;
-use App\Models\Career;
+use App\Models\Extracurricular;
 
 class LandingpageResponseController extends Controller
 {
@@ -114,9 +115,21 @@ class LandingpageResponseController extends Controller
 
             $careers = Career::where('start_date', '<=', $now)
                 ->where('end_date', '>=', $now)
+                ->latest()
                 ->get();
 
             return $this->successResponse(data: compact('careers'));
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+    }
+
+    public function extra()
+    {
+        try {
+            $extracurriculars = Extracurricular::where('status', true)->latest()->get();
+
+            return $this->successResponse(data: compact('extracurriculars'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }

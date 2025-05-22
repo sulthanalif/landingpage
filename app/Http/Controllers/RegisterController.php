@@ -126,9 +126,9 @@ class RegisterController extends Controller
                 'level' => $jenjang_value,
                 'amount' => $total,
                 'discount' => [
-                    'discount_biduk' => $discount_biduk ?? 0,
-                    'discount_cildren' => $discount_cildren ?? 0,
-                    'discount_voucher' => [
+                    'biduk' => $discount_biduk ?? 0,
+                    'cildren' => $discount_cildren ?? 0,
+                    'voucher' => [
                         'campaign_name' => $discount_voucher->campaign->name,
                         'percentage' => $discount_voucher->percentage
                     ] ?? null

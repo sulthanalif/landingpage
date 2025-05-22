@@ -18,6 +18,9 @@
     @can('activity-page')
         <x-menu-item title="Activities" icon="o-camera" link="{{ route('activity') }}" />
     @endcan
+    @can('extra-page')
+        <x-menu-item title="Extracurricular" icon="o-paint-brush" link="{{ route('extra') }}" />
+    @endcan
     @can('wcu-page')
         <x-menu-item title="WCU" icon="o-question-mark-circle" link="{{ route('wcu') }}" />
     @endcan

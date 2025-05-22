@@ -19,6 +19,7 @@ Route::get('/accreditations', [LandingpageResponseController::class, 'accreditat
 Route::get('/posts', [LandingpageResponseController::class, 'posts']);
 Route::get('/post/{slug}', [LandingpageResponseController::class, 'detailPost']);
 Route::get('/careers', [LandingpageResponseController::class, 'careers']);
+Route::get('/extra', [LandingpageResponseController::class, 'extra']);
 
 Route::get('/dataRegister', [RegisterController::class, 'getData']);
 Route::get('/countFee', [RegisterController::class, 'countFee']);
