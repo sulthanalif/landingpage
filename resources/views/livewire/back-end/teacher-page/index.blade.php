@@ -83,7 +83,7 @@ new #[Title('Teachers')] class extends Component {
             },
         );
 
-        $this->reset(['code_id', 'name', 'email', 'category', 'status', 'image', 'logo']);
+        $this->reset(['code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description']);
         $this->unsetModel();
         $this->unsetRecordId();
         $this->drawer = false;

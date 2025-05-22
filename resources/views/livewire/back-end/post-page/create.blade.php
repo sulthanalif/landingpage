@@ -33,12 +33,13 @@ new #[Title('Form Post')] class extends Component {
     public string $title = '';
     public string $sub_title = '';
     public string $slug = '';
+    public string $published_at = '';
     public string $body = '';
     public ?UploadedFile $image = null;
     public string $oldImage = '';
     public int $user_id = 0;
     public bool $status = true;
-    public array $varPost = ['oldImage', 'recordId', 'title', 'sub_title', 'slug', 'body', 'image', 'category_searchable_id', 'user_id', 'status'];
+    public array $varPost = ['oldImage', 'recordId', 'title', 'sub_title', 'slug', 'body', 'image', 'category_searchable_id', 'user_id', 'status', 'published_at'];
 
     //select status
     public array $selectStatus = [['id' => true, 'name' => 'Active'], ['id' => false, 'name' => 'Inactive']];
@@ -56,13 +57,15 @@ new #[Title('Form Post')] class extends Component {
             $this->recordId = $post->id;
             $this->title = $post->title;
             $this->sub_title = $post->sub_title;
+            $this->published_at = $post->published_at;
             $this->slug = $post->slug;
             $this->body = $post->body;
-            $this->oldImage = 'storage/'.$post->image;
+            $this->oldImage = $post->image ? 'storage/'.$post->image : 'img/upload.png';
             $this->category_searchable_id = $post->category_id;
             $this->status = $post->status;
         } else {
             $this->oldImage = 'img/upload.png';
+            $this->published_at = date('Y-m-d');
         }
 
         $this->searchCategory();
@@ -105,6 +108,7 @@ new #[Title('Form Post')] class extends Component {
                 'user_id' => 'required|exists:users,id',
                 'status' => 'required|boolean',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'published_at' => 'required|date',
             ],
 
             beforeSave: function ($post, $component) {
@@ -115,6 +119,7 @@ new #[Title('Form Post')] class extends Component {
                 $post->category_id = $component->category_searchable_id;
                 $post->user_id = $component->user_id;
                 $post->status = $component->status;
+                $post->published_at = $component->published_at;
                 if ($component->image) {
                     if (Storage::disk('public')->exists($component->image)) {
                         Storage::disk('public')->delete($component->image);
@@ -191,15 +196,19 @@ new #[Title('Form Post')] class extends Component {
                 searchable
                 required/>
 
-                <x-select label="Status" :options="$selectStatus" wire:model="status" required />
+                <x-datepicker label="Publish Date" wire:model="published_at" icon="o-calendar" />
             </div>
 
-            <div class="flex justify-center my-3">
+            <div class="grid md:grid-cols-2 gap-5 ">
                 <x-file label='Cover Image' wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
                 change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
                 crop-save-text="Crop" :crop-config="$config">
-                <img id="previewImage" src="{{ asset($oldImage) }}" class="h-40 rounded-lg"  />
-            </x-file>
+                    <img id="previewImage" src="{{ asset($oldImage) }}" class="h-40 rounded-lg"  />
+                </x-file>
+
+                <div class="mt-3">
+                    <x-toggle label="Status" wire:model="status" hint="if status is true, post will be published" />
+                </div>
             </div>
 
             <div >

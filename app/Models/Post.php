@@ -21,6 +21,7 @@ class Post extends Model
         'category_id',
         'user_id',
         'status',
+        'published_at'
     ];
 
     public function category()

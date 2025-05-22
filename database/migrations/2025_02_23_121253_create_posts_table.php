@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('status')->default(true);
+            $table->timestamp('published_at')->default(now());
             $table->softDeletes();
             $table->timestamps();
         });
