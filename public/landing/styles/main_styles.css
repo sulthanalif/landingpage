@@ -256,6 +256,37 @@ section {
     top: -10px;
 }
 
+.header.hide {
+    transform: translateY(-100%);
+}
+
+.header.show {
+    transform: translateY(0);
+}
+
+.footer-sticky {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.footer-hidden {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.footer-static {
+    position: static;
+    box-shadow: none;
+}
+
 /*********************************
 3.1 Top Bar
 *********************************/

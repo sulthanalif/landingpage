@@ -56,6 +56,7 @@ const Register = () => {
         name: "",
         gender: "",
         religion: "",
+        is_biduk: false,
         place_of_birth: "",
         date_of_birth: "",
         phone: "",
@@ -82,6 +83,9 @@ const Register = () => {
         mother_address: "",
         student_residence_status: "",
         student_address: "",
+        voucher_code: "",
+        is_child_lscs: false,
+        children: [{ name: "", class_level: "" }],
     });
 
     const [programs, setPrograms] = useState([]);
@@ -140,6 +144,21 @@ const Register = () => {
         data.mother_address,
     ]);
 
+    const handleChildChange = (index, field, value) => {
+        const updatedChildren = [...data.children];
+        updatedChildren[index][field] = value;
+        setData("children", updatedChildren);
+    };
+
+    const addChild = () => {
+        setData("children", [...data.children, { name: "", class_level: "" }]);
+    };
+
+    const removeChild = (index) => {
+        const updatedChildren = data.children.filter((_, i) => i !== index);
+        setData("children", updatedChildren);
+    };
+
     const [activeTab, setActiveTab] = useState(0);
     const tabs = [
         "Student Personal Data",
@@ -162,15 +181,17 @@ const Register = () => {
 
         try {
             // 1. Validasi data yang diperlukan untuk countFee
-            if (!data.table_id || !data.level || !data.discount_id) {
+            if (!data.table_id || !data.level || !data.voucher_code) {
                 throw new Error("Program, level, dan discount harus dipilih");
             }
 
             // 2. Hitung biaya terlebih dahulu
             const feeResponse = await getFeeCalculation({
-                jenjang: data.level,
+                level: data.level,
                 table_id: data.table_id,
-                discount_id: data.discount_id,
+                is_biduk: data.is_biduk ? 1 : 0,
+                cildren: data.children.length,
+                voucher_code: data.voucher_code,
             });
 
             if (feeResponse.error) {
@@ -191,7 +212,9 @@ const Register = () => {
             const formData = {
                 ...data,
                 amount: feeData.amount,
-                discount: feeData.discount,
+                discount_biduk: feeData.discount.biduk,
+                discount_lscs: feeData.discount.lscs,
+                vouchers: feeData.discount.voucher,
                 total: feeData.total,
                 // Konversi tanggal ke format Y-m-d
                 date_of_birth: data.date_of_birth
@@ -215,11 +238,37 @@ const Register = () => {
                 preserveScroll: true,
                 onSuccess: () => {
                     setModalTitle("Registration Successful");
-                    setModalMessage(
-                        `Your registration has been submitted successfully. Total payment: Rp ${feeData.total.toLocaleString(
-                            "id-ID"
-                        )}. We will contact you soon.`
-                    );
+                    setModalMessage(`
+                        <p>Your registration has been submitted successfully. This is a summary of the registration:</p>
+                        <ul>
+                            <li><strong>Name:</strong> ${data.name}</li>
+                            <li><strong>Email:</strong> ${data.email}</li>
+                            <li><strong>Phone:</strong> ${data.phone}</li>
+                            <li><strong>Amount:</strong> Rp ${feeData.amount.toLocaleString(
+                                "id-ID"
+                            )}</li>
+                            <li><strong>Discounts:</strong>
+                                <ul>
+                                    <li>Biduk: Rp ${feeData.discount.biduk.toLocaleString(
+                                        "id-ID"
+                                    )}</li>
+                                    <li>LSCS: Rp ${feeData.discount.lscs.toLocaleString(
+                                        "id-ID"
+                                    )}</li>
+                                    <li>Voucher: Rp ${feeData.discount.voucher.toLocaleString(
+                                        "id-ID"
+                                    )}</li>
+                                </ul>
+                            </li>
+                            <li><strong>Total Amount:</strong> Rp ${feeData.amount.toLocaleString(
+                                "id-ID"
+                            )}</li>
+                            <li><strong>Total Payment:</strong> Rp ${feeData.total.toLocaleString(
+                                "id-ID"
+                            )}</li>
+                        </ul>
+                        <p>We will contact you soon.</p>
+                    `);
                     setIsSuccess(true);
                     setShowModal(true);
                     reset();
@@ -619,6 +668,33 @@ const Register = () => {
                                                     </div>
                                                 </div>
 
+                                                {data.religion ===
+                                                    "Catholic" && (
+                                                    <div className="form-check ml-4">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            id="is_biduk"
+                                                            checked={
+                                                                data.is_biduk
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "is_biduk",
+                                                                    e.target
+                                                                        .checked
+                                                                )
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="form-check-label"
+                                                            htmlFor="is_biduk"
+                                                        >
+                                                            Is a Biduk
+                                                        </label>
+                                                    </div>
+                                                )}
+
                                                 <div className="row">
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
@@ -707,7 +783,7 @@ const Register = () => {
                                                                 </span>
                                                             </label>
                                                             <input
-                                                                type="text"
+                                                                type="number"
                                                                 className={`form-control ${
                                                                     errors.phone
                                                                         ? "is-invalid"
@@ -738,7 +814,10 @@ const Register = () => {
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
                                                             <label htmlFor="email">
-                                                                Email
+                                                                Email{" "}
+                                                                <span className="text-danger">
+                                                                    *
+                                                                </span>
                                                             </label>
                                                             <input
                                                                 type="email"
@@ -771,108 +850,39 @@ const Register = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="row">
-                                                    <div className="col-lg-6">
-                                                        <div className="form-group">
-                                                            <label htmlFor="previous-school">
-                                                                Previous School
-                                                                Name{" "}
-                                                                <span className="text-danger">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className={`form-control ${
-                                                                    errors.previous_school
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
-                                                                id="previous_school"
-                                                                value={
-                                                                    data.previous_school
-                                                                }
-                                                                onChange={(e) =>
-                                                                    setData(
-                                                                        "previous_school",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                required
-                                                            />
-                                                            {errors.previous_school && (
-                                                                <div className="invalid-feedback">
-                                                                    {
-                                                                        errors.previous_school
-                                                                    }
-                                                                </div>
-                                                            )}
+                                                <div className="form-group">
+                                                    <label htmlFor="previous-school">
+                                                        Previous School Name{" "}
+                                                        <span className="text-danger">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        className={`form-control ${
+                                                            errors.previous_school
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                        }`}
+                                                        id="previous_school"
+                                                        value={
+                                                            data.previous_school
+                                                        }
+                                                        onChange={(e) =>
+                                                            setData(
+                                                                "previous_school",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        required
+                                                    />
+                                                    {errors.previous_school && (
+                                                        <div className="invalid-feedback">
+                                                            {
+                                                                errors.previous_school
+                                                            }
                                                         </div>
-                                                    </div>
-
-                                                    <div className="col-lg-6">
-                                                        <div className="form-group">
-                                                            <label htmlFor="discount_id">
-                                                                Refference{" "}
-                                                                <span className="text-danger">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <select
-                                                                className={`form-control ${
-                                                                    errors.discount_id
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
-                                                                id="discount_id"
-                                                                value={
-                                                                    data.discount_id
-                                                                }
-                                                                onChange={(e) =>
-                                                                    setData(
-                                                                        "discount_id",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                required
-                                                            >
-                                                                <option
-                                                                    value=""
-                                                                    disabled
-                                                                >
-                                                                    ---Select
-                                                                    Refference---
-                                                                </option>
-                                                                {discounts?.map(
-                                                                    (
-                                                                        discount
-                                                                    ) => (
-                                                                        <option
-                                                                            key={
-                                                                                discount.id
-                                                                            }
-                                                                            value={
-                                                                                discount.id
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                discount.name
-                                                                            }
-                                                                        </option>
-                                                                    )
-                                                                )}
-                                                            </select>
-                                                            {errors.discount_id && (
-                                                                <div className="invalid-feedback">
-                                                                    {
-                                                                        errors.discount_id
-                                                                    }
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="form-group">
@@ -1476,6 +1486,164 @@ const Register = () => {
                                                                 }
                                                             </div>
                                                         )}
+                                                    </div>
+                                                )}
+
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="voucher_code">
+                                                                Voucher/Code
+                                                                Event
+                                                            </label>
+                                                            <input
+                                                                type="voucher_code"
+                                                                className={`form-control ${
+                                                                    errors.voucher_code
+                                                                        ? "is-invalid"
+                                                                        : "text-secondary"
+                                                                }`}
+                                                                id="voucher_code"
+                                                                value={
+                                                                    data.voucher_code
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "voucher_code",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            />
+                                                            {errors.voucher_code && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.voucher_code
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-lg-6">
+                                                        <div className="form-check ml-4">
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="checkbox"
+                                                                id="is_child_lscs"
+                                                                checked={
+                                                                    data.is_child_lscs
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "is_child_lscs",
+                                                                        e.target
+                                                                            .checked
+                                                                    )
+                                                                }
+                                                            />
+                                                            <label
+                                                                className="form-check-label"
+                                                                htmlFor="is_child_lscs"
+                                                            >
+                                                                Having a child
+                                                                attending LSCS
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {data.is_child_lscs && (
+                                                    <div className="form-group">
+                                                        <label>
+                                                            <strong>
+                                                                Children
+                                                                Information
+                                                            </strong>
+                                                        </label>
+                                                        {data.children.map(
+                                                            (child, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="row mb-2"
+                                                                >
+                                                                    <div className="col-md-5">
+                                                                        <input
+                                                                            type="text"
+                                                                            className={`form-control ${
+                                                                                errors.children
+                                                                                    ? "is-invalid"
+                                                                                    : "text-secondary"
+                                                                            }`}
+                                                                            placeholder="Child's Name"
+                                                                            value={
+                                                                                child.name
+                                                                            }
+                                                                            onChange={(
+                                                                                e
+                                                                            ) =>
+                                                                                handleChildChange(
+                                                                                    index,
+                                                                                    "name",
+                                                                                    e
+                                                                                        .target
+                                                                                        .value
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-md-5">
+                                                                        <input
+                                                                            type="text"
+                                                                            className={`form-control ${
+                                                                                errors.children
+                                                                                    ? "is-invalid"
+                                                                                    : "text-secondary"
+                                                                            }`}
+                                                                            placeholder="Class/Level"
+                                                                            value={
+                                                                                child.class_level
+                                                                            }
+                                                                            onChange={(
+                                                                                e
+                                                                            ) =>
+                                                                                handleChildChange(
+                                                                                    index,
+                                                                                    "class_level",
+                                                                                    e
+                                                                                        .target
+                                                                                        .value
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-md-2">
+                                                                        {data
+                                                                            .children
+                                                                            .length >
+                                                                            1 && (
+                                                                            <button
+                                                                                type="button"
+                                                                                className="btn btn-danger"
+                                                                                onClick={() =>
+                                                                                    removeChild(
+                                                                                        index
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                Remove
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        )}
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-secondary mt-2"
+                                                            onClick={addChild}
+                                                        >
+                                                            Add Another Child
+                                                        </button>
                                                     </div>
                                                 )}
                                             </>

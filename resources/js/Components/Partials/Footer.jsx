@@ -1,44 +1,83 @@
 import { Link } from "@inertiajs/react";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Footer = () => {
+    const footerRef = useRef(null);
+    const [visible, setVisible] = useState(false);
+    const [isAtBottom, setIsAtBottom] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const footer = footerRef.current;
+            if (!footer) return;
+
+            const footerHeight = footer.offsetHeight;
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const bodyHeight = document.body.scrollHeight;
+
+            const nearBottom =
+                scrollY + windowHeight >= bodyHeight - footerHeight;
+
+            if (scrollY < 100) {
+                setVisible(false); // sticky footer tidak muncul
+                setIsAtBottom(false); // static footer tidak muncul
+            } else if (nearBottom) {
+                setVisible(false); // sticky footer disembunyikan
+                setIsAtBottom(true); // tampilkan static footer
+            } else {
+                setVisible(true); // tampilkan sticky footer
+                setIsAtBottom(false); // sembunyikan static footer
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
         <>
-            <footer className="footer">
-                <div
-                    className="footer_background"
-                    style={{
-                        backgroundImage: "url(/landing/images/footer_bg.jpg)",
-                    }}
-                />
-                <div className="container">
-                    <div className="row footer_row">
-                        <div className="col">
-                            <div className="footer_content">
-                                <div className="row">
-                                    <div className="col-lg-3 footer_col">
-                                        {/* Footer About */}
-                                        <div className="footer_section footer_about">
-                                            <div className="footer_logo_container">
-                                                <Link
-                                                    href="/"
-                                                    className="d-flex align-items-center"
-                                                >
-                                                    <img
-                                                        src="/img/logo.png"
-                                                        className="img-fluid"
-                                                        style={{
-                                                            maxWidth: "70px",
-                                                            maxHeight: "auto",
-                                                        }}
-                                                        alt="logo"
-                                                    />
-                                                    <div className="footer_logo_text">
-                                                        LS<span>CS</span>
+            {isAtBottom ? (
+                <>
+                    <footer ref={footerRef} className="footer footer-static">
+                        <div
+                            className="footer_background"
+                            style={{
+                                backgroundImage:
+                                    "url(/landing/images/footer_bg.jpg)",
+                            }}
+                        />
+                        <div className="container">
+                            <div className="row footer_row">
+                                <div className="col">
+                                    <div className="footer_content">
+                                        <div className="row">
+                                            <div className="col-lg-3 footer_col">
+                                                {/* Footer About */}
+                                                <div className="footer_section footer_about">
+                                                    <div className="footer_logo_container">
+                                                        <Link
+                                                            href="/"
+                                                            className="d-flex align-items-center"
+                                                        >
+                                                            <img
+                                                                src="/img/logo.png"
+                                                                className="img-fluid"
+                                                                style={{
+                                                                    maxWidth:
+                                                                        "70px",
+                                                                    maxHeight:
+                                                                        "auto",
+                                                                }}
+                                                                alt="logo"
+                                                            />
+                                                            <div className="footer_logo_text">
+                                                                LS
+                                                                <span>CS</span>
+                                                            </div>
+                                                        </Link>
                                                     </div>
-                                                </Link>
-                                            </div>
-                                            {/* <div className="footer_about_text">
+                                                    {/* <div className="footer_about_text">
                                                 <p>
                                                     Jalan Taman Surya 5 Blok EE2
                                                     No.20-27, RT.2/RW.3,
@@ -47,148 +86,180 @@ const Footer = () => {
                                                     Khusus Ibukota Jakarta 11830
                                                 </p>
                                             </div> */}
-                                            <div className="footer_social">
-                                                <ul>
-                                                    <li>
-                                                        <a href="https://www.facebook.com/pages/category/Community/Lia-Stephanie-School-115071265257740/" target="_blank">
-                                                            <i
-                                                                className="fa fa-facebook"
-                                                                aria-hidden="true"
-                                                            />
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="https://www.instagram.com/liastephanieschool/" target="_blank">
-                                                            <i
-                                                                className="fa fa-instagram"
-                                                                aria-hidden="true"
-                                                            />
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="https://wa.me/+628118880678" target="_blank">
-                                                            <i
-                                                                className="fa fa-whatsapp"
-                                                                aria-hidden="true"
-                                                            />
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="https://lsgs.quintal.id/" target="_blank">
-                                                            <i
-                                                                className="fa fa-leanpub"
-                                                                aria-hidden="true"
-                                                            />
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                    <div className="footer_social">
+                                                        <ul>
+                                                            <li>
+                                                                <a
+                                                                    href="https://www.facebook.com/pages/category/Community/Lia-Stephanie-School-115071265257740/"
+                                                                    target="_blank"
+                                                                >
+                                                                    <i
+                                                                        className="fa fa-facebook"
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a
+                                                                    href="https://www.instagram.com/liastephanieschool/"
+                                                                    target="_blank"
+                                                                >
+                                                                    <i
+                                                                        className="fa fa-instagram"
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a
+                                                                    href="https://wa.me/+628118880678"
+                                                                    target="_blank"
+                                                                >
+                                                                    <i
+                                                                        className="fa fa-whatsapp"
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a
+                                                                    href="https://lsgs.quintal.id/"
+                                                                    target="_blank"
+                                                                >
+                                                                    <i
+                                                                        className="fa fa-leanpub"
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 footer_col">
-                                        {/* Footer links */}
-                                        <div className="footer_section footer_links">
-                                            <div className="footer_title">
-                                                Menu
+                                            <div className="col-lg-4 footer_col">
+                                                {/* Footer links */}
+                                                <div className="footer_section footer_links">
+                                                    <div className="footer_title">
+                                                        Menu
+                                                    </div>
+                                                    <div className="footer_links_container">
+                                                        <ul>
+                                                            <li>
+                                                                <Link href="/">
+                                                                    Home
+                                                                </Link>
+                                                            </li>
+                                                            <li>
+                                                                <Link href="#">
+                                                                    About
+                                                                </Link>
+                                                            </li>
+                                                            <li>
+                                                                <Link href="#">
+                                                                    News
+                                                                </Link>
+                                                            </li>
+                                                            <li>
+                                                                <Link href="#">
+                                                                    Values
+                                                                </Link>
+                                                            </li>
+                                                            <li>
+                                                                <Link href="#">
+                                                                    Activities
+                                                                </Link>
+                                                            </li>
+                                                            <li>
+                                                                <Link href="#">
+                                                                    Admission
+                                                                </Link>
+                                                            </li>
+                                                            <li>
+                                                                <Link href="#">
+                                                                    FAQs
+                                                                </Link>
+                                                            </li>
+                                                            <li>
+                                                                <Link href="#">
+                                                                    Contact
+                                                                </Link>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="footer_links_container">
-                                                <ul>
-                                                    <li>
-                                                        <Link href="/">
-                                                            Home
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="#">
-                                                            About
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="#">
-                                                            News
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="#">
-                                                            Values
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="#">
-                                                            Activities
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="#">
-                                                            Admission
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="#">
-                                                            FAQs
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="#">
-                                                            Contact
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 footer_col">
-                                        {/* Footer Contact */}
-                                        <div className="footer_section footer_contact">
-                                            <div className="footer_title">
-                                                Contact Us
-                                            </div>
-                                            <div className="footer_contact_info">
-                                                <ul>
-                                                    <li>
-                                                        Email:
-                                                        marketing@lscs.sch.id
-                                                    </li>
-                                                    <li>
-                                                        Tel: 0811-8880-678
-                                                    </li>
-                                                    <li>
-                                                        Jalan Taman Surya 5 Blok
-                                                        EE2 No.20-27, RT.2/RW.3,
-                                                        Pegadungan, Kec.
-                                                        Kalideres, Kota Jakarta
-                                                        Barat, Daerah Khusus
-                                                        Ibukota Jakarta 11830
-                                                    </li>
-                                                </ul>
+                                            <div className="col-lg-4 footer_col">
+                                                {/* Footer Contact */}
+                                                <div className="footer_section footer_contact">
+                                                    <div className="footer_title">
+                                                        Contact Us
+                                                    </div>
+                                                    <div className="footer_contact_info">
+                                                        <ul>
+                                                            <li>
+                                                                Email:
+                                                                marketing@lscs.sch.id
+                                                            </li>
+                                                            <li>
+                                                                Tel:
+                                                                0811-8880-678
+                                                            </li>
+                                                            <li>
+                                                                Jalan Taman
+                                                                Surya 5 Blok EE2
+                                                                No.20-27,
+                                                                RT.2/RW.3,
+                                                                Pegadungan, Kec.
+                                                                Kalideres, Kota
+                                                                Jakarta Barat,
+                                                                Daerah Khusus
+                                                                Ibukota Jakarta
+                                                                11830
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="row copyright_row">
-                        <div className="col">
-                            <div className="copyright d-flex flex-lg-row flex-column align-items-center justify-content-start">
-                                <div className="cr_text">
-                                    Copyright © All rights reserved.
-                                </div>
-                                <div className="ml-lg-auto cr_links">
-                                    <ul className="cr_list">
-                                        <li>
-                                            <a href="#">Terms of Use</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Privacy Policy</a>
-                                        </li>
-                                    </ul>
+                            <div className="row copyright_row">
+                                <div className="col">
+                                    <div className="copyright d-flex flex-lg-row flex-column align-items-center justify-content-center">
+                                        <div className="cr_text">
+                                            Copyright © All rights reserved.
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </footer>
+                    </footer>
+                </>
+            ) : (
+                <>
+                    <footer
+                        ref={footerRef}
+                        className={`footer-sticky position-fixed ${visible ? "" : "d-none"}`}
+                    >
+                        <div
+                            className="copyright d-flex flex-lg-row flex-column align-items-center justify-content-center"
+                            style={{
+                                backgroundImage:
+                                    "url(/landing/images/footer_bg.jpg)",
+                                transform: "translateY(0%)",
+                                opacity: 1,
+                                transition:
+                                    "transform 0.3s ease-in-out, opacity 0.3s ease-in-out",
+                            }}
+                        >
+                            <div className="cr_text">
+                                Copyright © All rights reserved.
+                            </div>
+                        </div>
+                    </footer>
+                </>
+            )}
         </>
     );
 };

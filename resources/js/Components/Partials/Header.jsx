@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 
 const Header = () => {
@@ -14,9 +14,45 @@ const Header = () => {
         setIsNavbarActive(false);
     };
 
+    const [visible, setVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+    const [timeoutId, setTimeoutId] = useState(null);
+
+    const controlNavbar = () => {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY) {
+            // Scroll ke bawah
+            setVisible(false);
+        } else {
+            // Scroll ke atas
+            setVisible(true);
+        }
+
+        setLastScrollY(currentScrollY);
+
+        // Reset navbar muncul jika user berhenti scroll
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        const id = setTimeout(() => {
+            setVisible(true);
+        }, 150); // 150ms setelah scroll berhenti
+        setTimeoutId(id);
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", controlNavbar);
+
+        return () => {
+            window.removeEventListener("scroll", controlNavbar);
+            if (timeoutId) clearTimeout(timeoutId);
+        };
+    }, [lastScrollY, timeoutId]);
+
     return (
         <>
-            <header className="header">
+            <header className={`header ${visible ? "show" : "hide"}`}>
                 {/* Top Bar */}
                 <div className="top_bar">
                     <div className="top_bar_container">
