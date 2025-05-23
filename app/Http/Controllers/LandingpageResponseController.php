@@ -12,6 +12,7 @@ use App\Models\TuitionFee;
 use App\Models\WhyChooseUs;
 use Illuminate\Http\Request;
 use App\Models\Accreditation;
+use App\Models\Category;
 use App\Models\Extracurricular;
 
 class LandingpageResponseController extends Controller
@@ -88,9 +89,10 @@ class LandingpageResponseController extends Controller
     public function posts()
     {
         try {
+            $categories = Category::where('status', true)->get();
             $posts = Post::with(['category:id,name', 'user:name'])->where('status', true)->latest()->get();
 
-            return $this->successResponse(data: compact('posts'));
+            return $this->successResponse(data: compact('posts', 'categories'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }
@@ -99,10 +101,12 @@ class LandingpageResponseController extends Controller
     public function detailPost($slug)
     {
         try {
+            $upcomings = Post::with(['category:id,name', 'user:name'])->where('status', true)->where('published_at', '>', date('Y-m-d'))->get();
             $latest = Post::with(['category:id,name', 'user:name'])->where('status', true)->latest()->limit(3)->get();
             $post = Post::with(['category:id,name', 'user:name'])->where('status', true)->where('slug', $slug)->first();
+            $categories = Category::withCount('posts')->where('status', true)->get();
 
-            return $this->successResponse(data: compact('latest', 'post'));
+            return $this->successResponse(data: compact('latest', 'post', 'categories', 'upcomings'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }

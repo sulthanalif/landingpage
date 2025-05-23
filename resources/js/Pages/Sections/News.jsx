@@ -122,12 +122,12 @@ const News = () => {
                                         <div className="news_post_meta">
                                             <ul>
                                                 <li>
-                                                    <a href="#">
+                                                    <Link href={`/news?categoryId=${encodeURIComponent(posts.data[0]?.category.id)}`}>
                                                         {
                                                             posts.data[0]
                                                                 ?.category.name
                                                         }
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                                 <li>
                                                     <a href="#">

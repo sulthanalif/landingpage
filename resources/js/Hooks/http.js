@@ -28,6 +28,7 @@ const http = axios.create({
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        "Content-Type": "multipart/form-data",
     },
     withCredentials: true,
 });

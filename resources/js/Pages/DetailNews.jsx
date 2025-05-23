@@ -64,7 +64,9 @@ const DetailNews = ({ slug }) => {
 
     const { data, loading, error, get: getData } = useApi(`post/${slug}`);
     const post = data?.post;
-    const latest = data?.latest || [];    
+    const latest = data?.latest || [];
+    const categories = data?.categories || [];
+    const upcomings = data?.upcomings || [];
 
     const handleRefresh = () => {
         getData();
@@ -86,7 +88,7 @@ const DetailNews = ({ slug }) => {
         return (
             <Layout>
                 <div className="alert alert-danger">
-                    Failed to load news data. 
+                    Failed to load news data.
                     <button onClick={handleRefresh}>Try again</button>
                 </div>
             </Layout>
@@ -124,7 +126,9 @@ const DetailNews = ({ slug }) => {
                         <div className="col-lg-8">
                             {post ? (
                                 <div className="blog_content">
-                                    <div className="blog_title">{post.title}</div>
+                                    <div className="blog_title">
+                                        {post.title}
+                                    </div>
                                     <div className="blog_meta">
                                         <ul>
                                             <li>
@@ -132,16 +136,22 @@ const DetailNews = ({ slug }) => {
                                                 <a href="#">
                                                     {new Date(
                                                         post.updated_at
-                                                    ).toLocaleDateString("en-US", {
-                                                        month: "long",
-                                                        day: "numeric",
-                                                        year: "numeric",
-                                                    })}
+                                                    ).toLocaleDateString(
+                                                        "en-US",
+                                                        {
+                                                            month: "long",
+                                                            day: "numeric",
+                                                            year: "numeric",
+                                                        }
+                                                    )}
                                                 </a>
                                             </li>
                                             {post.category && (
                                                 <li>
-                                                    In <a href="#">{post.category.name}</a>
+                                                    In{" "}
+                                                    <Link href={`/news?categoryId=${encodeURIComponent(post.category.id)}`}>
+                                                        {post.category.name}
+                                                    </Link>
                                                 </li>
                                             )}
                                         </ul>
@@ -165,9 +175,11 @@ const DetailNews = ({ slug }) => {
                                     />
                                 </div>
                             ) : (
-                                <div className="alert alert-warning">Post not found</div>
+                                <div className="alert alert-warning">
+                                    Post not found
+                                </div>
                             )}
-                            
+
                             <div className="blog_extra d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
                                 <div className="blog_social ml-lg-auto">
                                     <span>Follow Us: </span>
@@ -224,10 +236,65 @@ const DetailNews = ({ slug }) => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         {/* Blog Sidebar */}
                         <div className="col-lg-4">
                             <div className="sidebar">
+                                {/* Upcoming News */}
+                                <div className="sidebar_section">
+                                    <div className="sidebar_section_title">
+                                        Upcoming News
+                                    </div>
+                                    <div className="sidebar_latest">
+                                        {upcomings.length > 0 ? (
+                                            upcomings.map((data) => (
+                                                <div
+                                                    className="latest d-flex flex-row align-items-start justify-content-start"
+                                                    key={data.id}
+                                                >
+                                                    <div className="latest_image">
+                                                        <div>
+                                                            <img
+                                                                src={
+                                                                    data.image
+                                                                        ? `/storage/${data.image}`
+                                                                        : "/landing/images/event_1.jpg"
+                                                                }
+                                                                alt={data.title}
+                                                                loading="lazy"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="latest_content">
+                                                        <div className="latest_title">
+                                                            <Link
+                                                                href={`/news/${data.slug}`}
+                                                            >
+                                                                {data.title}
+                                                            </Link>
+                                                        </div>
+                                                        <div className="latest_date">
+                                                            {new Date(
+                                                                data.updated_at
+                                                            ).toLocaleDateString(
+                                                                "en-US",
+                                                                {
+                                                                    month: "long",
+                                                                    day: "numeric",
+                                                                    year: "numeric",
+                                                                }
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="text-muted">
+                                                No latest news
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                                 {/* Latest News */}
                                 <div className="sidebar_section">
                                     <div className="sidebar_section_title">
@@ -236,7 +303,7 @@ const DetailNews = ({ slug }) => {
                                     <div className="sidebar_latest">
                                         {latest.length > 0 ? (
                                             latest.map((latepost) => (
-                                                <div 
+                                                <div
                                                     className="latest d-flex flex-row align-items-start justify-content-start"
                                                     key={latepost.id}
                                                 >
@@ -279,8 +346,31 @@ const DetailNews = ({ slug }) => {
                                                 </div>
                                             ))
                                         ) : (
-                                            <div className="text-muted">No latest news</div>
+                                            <div className="text-muted">
+                                                No latest news
+                                            </div>
                                         )}
+                                    </div>
+                                </div>
+                                {/* Categories */}
+                                <div className="sidebar_section">
+                                    <div className="sidebar_section_title">
+                                        Categories
+                                    </div>
+                                    <div className="sidebar_categories">
+                                        <ul className="categories_list">
+                                            {categories.map((category) => (
+                                                <li key={category.id}>
+                                                    <Link
+                                                        className="clearfix"
+                                                        href={`/news?categoryId=${encodeURIComponent(category.id)}`}
+                                                    >
+                                                        {category.name}
+                                                        <span>({category.posts_count})</span>
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>

@@ -1070,6 +1070,54 @@ section {
     }
 }
 
+.file-upload-container {
+    display: flex;
+    flex-direction: column;
+    margin: 16px 0;
+    font-family: Arial, sans-serif;
+}
+
+.file-upload-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 7px 10px;
+    padding-bottom: 0px;
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.file-upload-button {
+    color: white;
+    padding: 4px 7px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.70rem;
+    transition: background-color 0.3s ease;
+}
+
+.file-upload-filename {
+    font-size: 0.70rem;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-upload-input {
+    display: none;
+}
+
 /*********************************
 8. Courses
 *********************************/
