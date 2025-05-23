@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Career;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use App\Models\CareerRegister;
@@ -22,10 +23,28 @@ new #[Title('Career Registration')] class extends Component {
     public int $perPage = 10;
 
     public array $model;
+    public string $career_title = '';
 
     public function back(): void
     {
         $this->redirect(route('career'), navigate: true);
+    }
+
+    public function getCareerTitle(): void
+    {
+        $this->career_title = Career::find($this->model['career_id'])->title;
+    }
+
+    public function downloadCv()
+    {
+        $file = public_path('storage/' . $this->model['cv']);
+
+        if (!file_exists($file)) {
+            $this->error('File tidak ditemukan', position: 'toast-bottom');
+            return;
+        }
+
+        return Response::download($file);
     }
 
     public function datas(): LengthAwarePaginator
@@ -50,7 +69,7 @@ new #[Title('Career Registration')] class extends Component {
         return [
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'phone', 'label' => 'Phone'],
+            ['key' => 'phone_number', 'label' => 'Phone'],
             ['key' => 'career_title', 'label' => 'Career', 'sortable' => true],
             ['key' => 'created_at', 'label' => 'Created At'],
         ];
@@ -70,9 +89,11 @@ new #[Title('Career Registration')] class extends Component {
     <script>
         $js('detail', (register) => {
             $wire.model = register;
-            console.log($wire.model);
+            $wire.getCareerTitle();
+            // console.log($wire.model);
 
-            $wire.drawer = true;
+
+            $wire.myModal = true;
             $wire.$refresh();
         })
     </script>
@@ -110,7 +131,56 @@ new #[Title('Career Registration')] class extends Component {
         </x-table>
     </x-card>
 
-    <x-modal wire:model="myModal"  box-class="w-12/12 md:w-8/12 lg:w-6/12 xl:w-4/12">
-        Hello!
+    <x-modal
+        wire:model="myModal"
+        title="Detail"
+        box-class="w-full h-fit max-w-[800px]"
+        without-trap-focus
+    >
+        <div wire:loading.remove='model'>
+            <div class="grid grid-cols-2 gap-5">
+                <div class="space-y-2 text-sm text-gray-700">
+                    <div class="flex">
+                        <span class="w-40 font-semibold">Name</span>
+                        <span>: {{ $model['name'] ?? '' }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="w-40 font-semibold">Email</span>
+                        <span>: {{ $model['email'] ?? '' }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="w-40 font-semibold">Phone Number</span>
+                        <span>: {{ $model['phone_number'] ?? '' }}</span>
+                    </div>
+
+                </div>
+                <div class="space-y-2 text-sm text-gray-700">
+                    <div class="flex">
+                        <span class="w-40 font-semibold">Location</span>
+                        <span>: {{ $model['location'] ?? '' }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="w-40 font-semibold">Birth Date</span>
+                        <span>: {{ $model ? \Carbon\Carbon::parse($model['birth_date'] ?? '')->format('d F Y') : '' }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="w-40 font-semibold">Career Register</span>
+                        <span>: {{ $career_title ?? '' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5">
+                <div class="bg-gray-50 border border-gray-200 rounded p-3">
+                    {{ $model['description'] ?? '' }}
+                </div>
+            </div>
+
+        </div>
+        <div class="w-full h-full flex justify-center items-center ">
+            <x-loading class="loading-dots py-5" wire:loading='model' />
+        </div>
+        <x-slot:actions>
+            <x-button wire:loading.remove='model' class="btn-primary" label="Download CV" icon="o-arrow-down-tray" @click="$wire.downloadCv" />
+        </x-slot:actions>
     </x-modal>
 </div>
