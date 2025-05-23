@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Career;
 use Illuminate\Http\Request;
+use App\Models\CareerRegister;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 
 class CareerController extends Controller
@@ -35,9 +38,6 @@ class CareerController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|email',
-            'career_id' => 'required|integer|exists:careers,id',
-            'name' => 'required|string',
-            'email' => 'required|email',
             'location' => 'required|string',
             'birth_date' => 'required|date',
             'description' => 'required|string',
@@ -58,7 +58,7 @@ class CareerController extends Controller
             }
 
             $careerRegister = CareerRegister::create([
-                'career_id'     => $request->input('career_id'),
+                'career_id'     => $career->id,
                 'name'          => $request->input('name'),
                 'email'         => $request->input('email'),
                 'location'      => $request->input('location'),

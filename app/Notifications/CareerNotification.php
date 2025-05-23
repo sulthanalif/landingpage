@@ -39,10 +39,10 @@ class CareerNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject($this->career['name'] . ' - ' . $this->register['name'])
+                    ->subject($this->career['title'] . ' - ' . $this->register['name'])
                     ->greeting("From {$this->register['name']} ({$this->register['email']})")
                     ->line($this->register['description'])
-                    ->action('Go to website', route('register.career'));
+                    ->action('Go to website', route('career.register'));
                     // ->line('Thank you for using our application!');
     }
 
