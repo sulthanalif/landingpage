@@ -107,7 +107,7 @@ new #[Title('Form Post')] class extends Component {
                 'category_searchable_id' => 'required|exists:categories,id',
                 'user_id' => 'required|exists:users,id',
                 'status' => 'required|boolean',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'image' => $this->recordId ? 'nullable' : 'required'.'|image|mimes:jpeg,png,jpg,webp|max:2048',
                 'published_at' => 'required|date',
             ],
 

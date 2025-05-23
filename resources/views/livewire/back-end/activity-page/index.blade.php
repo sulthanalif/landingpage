@@ -53,7 +53,7 @@ new #[Title('Activities')] class extends Component {
                 'title' => ['required', 'string', 'max:255'],
                 'date' => ['required', 'date'],
                 'status' => ['required', 'boolean'],
-                'file' => ['required', 'mimes:jpeg,png,jpg,mp4', 'max:50400']
+                'file' => [$this->recordId ? 'nullable' : 'required', 'mimes:jpeg,png,jpg,mp4', 'max:50400']
             ],
 
             beforeSave: function ($activity, $component) {

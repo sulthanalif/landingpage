@@ -54,7 +54,7 @@ new #[Title('Why Choose Us')] class extends Component {
             validationRules: [
                 'title' => 'required|string|max:255',
                 'description' => 'required|string|max:255',
-                'icon' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'icon' => $this->recordId ? 'nullable' : 'required'.'|image|mimes:jpeg,png,jpg,webp|max:2048',
                 'status' => 'required|boolean',
             ],
             beforeSave: function ($wcu, $component) {

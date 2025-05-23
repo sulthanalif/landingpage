@@ -46,7 +46,7 @@ new #[Title('Extracurricular')] class extends Component {
             validationRules: [
                 'name' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string', 'max:255'],
-                'image' => ['required', 'mimes:jpeg,png,jpg', 'max:2048'],
+                'image' => [$this->recordId ? 'nullable' : 'required', 'mimes:jpeg,png,jpg', 'max:10240'],
                 'status' => ['required', 'boolean'],
             ],
             beforeSave: function ($extra, $component) {
@@ -60,7 +60,7 @@ new #[Title('Extracurricular')] class extends Component {
             }
         );
 
-        $this->resetModel();
+        $this->unsetModel();
         $this->drawer = false;
     }
 
