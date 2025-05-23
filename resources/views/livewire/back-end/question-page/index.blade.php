@@ -34,74 +34,6 @@ new #[Title('Questions')] class extends Component {
     //select status
     public array $selectStatus = [['id' => true, 'name' => 'Aktif'], ['id' => false, 'name' => 'Tidak aktif']];
 
-    public function create(): void
-    {
-        $this->drawer = true;
-        $this->reset($this->varQuestion);
-    }
-
-    public function detail($id): void
-    {
-        $this->reset($this->varQuestion);
-        $sub = Question::find($id);
-        $this->recordId = $sub->id;
-        $this->question = $sub->question;
-        $this->answer = $sub->answer;
-        $this->status = $sub->status;
-        $this->drawer = true;
-    }
-
-    public function modalUpload(): void
-    {
-        $this->upload = true;
-        $this->reset('file');
-    }
-
-    public function downloadTemplate()
-    {
-        $file = public_path('templates/template-Question.xlsx');
-
-        if (!file_exists($file)) {
-            $this->error('File tidak ditemukan', position: 'toast-bottom');
-            return;
-        }
-
-        return Response::download($file);
-    }
-
-    public function import(): void
-    {
-        $this->validate([
-            'file' => 'required|mimes:xlsx',
-        ]);
-
-        try {
-            Excel::import(new QuestionImport(), $this->file);
-
-            $this->upload = false;
-            $this->reset('file');
-            $this->success('Data berhasil diupload', position: 'toast-bottom');
-        } catch (\Exception $e) {
-            $this->error('Data gagal diupload', position: 'toast-bottom');
-            Log::channel('debug')->error("message: {$e->getMessage()}  file: {$e->getFile()}  line: {$e->getLine()}");
-        }
-    }
-
-    public function export()
-    {
-        $datas = Question::all();
-        $datas = $datas->map(function ($Question) {
-            return [
-                'name' => $Question->name,
-                'status' => $Question->status == true ? 'Aktif' : 'Tidak aktif',
-                'created_at' => $Question->created_at->format('Y-m-d'),
-            ];
-        });
-
-        $headers = ['NAMA', 'STATUS', 'DIBUAT PADA'];
-
-        return Excel::download(new ExportDatas($datas, 'Data Question', $headers), 'Question_' . date('Y-m-d') . '.xlsx');
-    }
 
     public function save(): void
     {
@@ -120,25 +52,7 @@ new #[Title('Questions')] class extends Component {
         $this->drawer = false;
     }
 
-    public function changeStatus(): void
-    {
-        foreach ($this->selected as $id) {
-            $sub = Question::find($id);
-            try {
-                DB::beginTransaction();
-                $sub->status = !$sub->status;
-                $sub->save();
-                DB::commit();
 
-                $this->success('Status berhasil diubah', position: 'toast-bottom');
-                $this->modalAlertWarning = false;
-                $this->reset('selected');
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::channel('debug')->error("message: '{$e->getMessage()}',  file: '{$e->getFile()}',  line: {$e->getLine()}");
-            }
-        }
-    }
 
     public function delete(): void
     {
@@ -182,20 +96,34 @@ new #[Title('Questions')] class extends Component {
 
 }; ?>
 
+@script
+    <script>
+        $js('create', () => {
+            $wire.recordId = null;
+            $wire.question = '';
+            $wire.answer = '';
+            $wire.status = true;
+            $wire.drawer = true;
+            $wire.$refresh();
+        })
+
+        $js('detail', (question) => {
+            $wire.recordId = question.id;
+            $wire.question = question.question;
+            $wire.answer = question.answer;
+            $wire.status = question.status;
+            $wire.drawer = true;
+            $wire.$refresh();
+        })
+    </script>
+@endscript
+
 <div>
     <!-- HEADER -->
     <x-header title="Questions" separator>
         <x-slot:actions>
-            <div>
-                <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
-                    icon="o-arrow-up-tray" />
-            </div>
-            <div>
-                <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
-                    spinner='export' />
-            </div>
             @can('question-create')
-                <x-button label="Create" @click="$wire.create" responsive icon="o-plus" />
+                <x-button label="Create" @click="$js.create" responsive icon="o-plus" />
             @endcan
         </x-slot:actions>
     </x-header>
@@ -207,7 +135,7 @@ new #[Title('Questions')] class extends Component {
     <!-- TABLE  -->
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            wire:model.live="selected" selectable with-pagination>
+            with-pagination @row-click="$js.detail($event.detail)">
             @scope('cell_answer', $data)
                 {{ Str::limit(strip_tags($data['answer']), 70) }}
             @endscope

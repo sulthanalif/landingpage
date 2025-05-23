@@ -55,12 +55,14 @@ new class extends Component {
             ->values();
     }
 
-    public function save(): void
+    public function save()
     {
         $this->setModel(new Discount());
 
+
         $exists = Discount::query()
             ->when($this->recordId, fn ($q) => $q->where('id', '!=', $this->recordId))
+            ->where('name', $this->name)
             ->where(function ($q) {
                 $q->where('start_date', '<=', $this->end_date)
                 ->where('end_date', '>=', $this->start_date);
@@ -68,8 +70,8 @@ new class extends Component {
             ->exists();
 
         if ($exists) {
-            $this->error('Periode discount dengan nama yang sama sudah ada.', position: 'toast-bottom');
-            return;
+            return $this->error('Periode discount dengan nama yang sama sudah ada.', position: 'toast-bottom');
+
         }
 
         $this->saveOrUpdate(
