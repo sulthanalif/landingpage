@@ -19,7 +19,7 @@ new class extends Component {
 
     public array $columns = [];
     public string $newColumnLabel = '';
-    public string $newColumnName = '';
+    // public string $newColumnName = '';
 
 
     public array $rows = [];
@@ -50,6 +50,10 @@ new class extends Component {
             $this->name = $table->name;
             $this->slug = $table->slug;
             $this->status = $table->status;
+        } else {
+            $this->newColumnLabel = 'Jenjang';
+            // $this->newColumnName = 'level';
+            $this->addColumn();
         }
 
         // dd($this->columns, $this->rows);
@@ -57,14 +61,14 @@ new class extends Component {
 
     public function addColumn()
     {
-        if (!$this->newColumnLabel || !$this->newColumnName) {
-            $this->error('Column label and name are required!');
+        if (!$this->newColumnLabel) {
+            $this->error('Column label are required!');
             return;
         }
 
         $this->columns[] = [
             'label' => $this->newColumnLabel,
-            'name' => Str::slug($this->newColumnName, '_'),
+            'name' => $this->newColumnLabel === 'Jenjang' ? 'level' : Str::slug($this->newColumnLabel, '_'),
         ];
 
         foreach ($this->rows as &$row) {
@@ -72,7 +76,7 @@ new class extends Component {
         }
 
         $this->newColumnLabel = '';
-        $this->newColumnName = '';
+        // $this->newColumnName = '';
     }
 
     public function removeColumn($index)
@@ -242,9 +246,9 @@ new class extends Component {
                 <x-card title="Columns">
                     <x-input label="Column Label" wire:model="newColumnLabel" />
 
-                    <div class="mt-3">
+                    {{-- <div class="mt-3">
                         <x-input label="Column Name" wire:model="newColumnName"  />
-                    </div>
+                    </div> --}}
 
                     <x-button label="Add Column" wire:click="addColumn" class="mt-3" />
 
@@ -252,7 +256,11 @@ new class extends Component {
                         @foreach($columns as $i => $col)
                             <li class="flex justify-between items-center border p-2 rounded">
                                 <span>{{ $col['label'] }} ({{ $col['name'] }})</span>
-                                <x-button label='x' size="xs" color="red" wire:click="removeColumn({{ $i }})" />
+                                @if ($col['name'] != 'level')
+                                    <x-button icon="o-trash" class="btn-sm btn-error text-white" wire:click="removeColumn({{ $i }})"  />
+                                @else
+                                    <p class="text-xs text-green-500">Primary Key</p>
+                                @endif
                             </li>
                         @endforeach
                     </ul>
@@ -286,7 +294,7 @@ new class extends Component {
                                         </td>
                                     @endforeach
                                     <td class="border text-center">
-                                        <x-button label='x' class="btn-error btn-sm" wire:click="removeRow({{ $rowIndex }})" />
+                                        <x-button icon="o-trash" class="btn-error btn-sm text-white" wire:click="removeRow({{ $rowIndex }})" />
                                     </td>
                                 </tr>
                             @endforeach

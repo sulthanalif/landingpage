@@ -69,7 +69,7 @@ class RegisterController extends Controller
                 return response()->json(['message' => 'Label column not found'], 404);
             }
 
-            $jenjangKey = Str::slug($labelColumn['label'], '_');
+            $jenjangKey = $labelColumn['name'];
 
             // Cari row berdasarkan value jenjang
             $targetRow = collect($table['rows'])
@@ -130,6 +130,7 @@ class RegisterController extends Controller
             $total_discount = $total - $a - $b - $c;
 
             return $this->successResponse(data: [
+                'program' => $table['table']['name'],
                 'level' => $jenjang_value,
                 'amount' => $total,
                 'discount' => [
