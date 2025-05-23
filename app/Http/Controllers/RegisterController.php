@@ -190,7 +190,7 @@ class RegisterController extends Controller
 
             'amount' => 'required|numeric',
             'total' => 'required|numeric',
-            'discount_biduk' => 'nullable|numrtic',
+            'discount_biduk' => 'nullable|numeric',
             'discount_lscs' => 'nullable|numeric',
             'vouchers' => 'nullable|array'
         ]);
@@ -211,14 +211,14 @@ class RegisterController extends Controller
                 'total' => $request->total
             ]);
 
-
-
             if ($request->vouchers) {
                 foreach ($request->vouchers as $voucher) {
                     $idVoucher = Voucher::where('code', $voucher['code'])->first();
-                    if ($idVoucher) $paymentRegister->vouchers()->create([
-                        'voucher_id' => $idVoucher,
-                    ]);
+                    if ($idVoucher) {
+                        $paymentRegister->vouchers()->create([
+                            'voucher_id' => $idVoucher->id,
+                        ]);
+                    }
                 }
             }
 
@@ -226,12 +226,13 @@ class RegisterController extends Controller
             return Inertia::render('Register')->with('success', 'Data berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
-            return Inertia::render('Register')->with('error', 'Data gagal disimpan, '.$e->getMessage());
             Log::channel('debug')->error('Error: ' . $e->getMessage(), [
                 'request' => $request->all(),
                 'trace' => $e->getTrace(),
                 'line' => $e->getLine(),
             ]);
+            return Inertia::render('Register')->with('error', 'Data gagal disimpan, '.$e->getMessage());
         }
     }
+
 }

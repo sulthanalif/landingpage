@@ -59,22 +59,26 @@ new class extends Component {
     {
         $this->setModel(new Discount());
 
-        if($this->recordId == null) {
-            $exists = Discount::query()
-            ->where('name', $this->name)
-            ->where('start_date', '<=', $this->end_date)
-            ->where('end_date', '>=', $this->start_date)
+        $exists = Discount::query()
+            ->when($this->recordId, fn ($q) => $q->where('id', '!=', $this->recordId))
+            ->where(function ($q) {
+                $q->where('start_date', '<=', $this->end_date)
+                ->where('end_date', '>=', $this->start_date);
+            })
             ->exists();
 
-            if ($exists) $this->error('The discount period already exists'); return;
+        if ($exists) {
+            $this->error('Periode discount dengan nama yang sama sudah ada.', position: 'toast-bottom');
+            return;
         }
 
         $this->saveOrUpdate(
             validationRules: [
                 'name' => 'required|string|max:255',
                 'percentage' => 'required|numeric',
-                'start_date' => 'required|date',
-                'end_date' => 'required|date',
+                'start_date' => 'required|date|before_or_equal:end_date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'status' => 'required|boolean',
             ],
         );
 
