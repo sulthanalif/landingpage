@@ -47,4 +47,9 @@ class Register extends Model
     {
         return $this->hasOne(PaymentRegister::class);
     }
+
+    public function voucherClaim(): HasOne
+    {
+        return $this->hasOne(VoucherClaim::class);
+    }
 }

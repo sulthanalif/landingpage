@@ -8,6 +8,7 @@ use App\Models\Discount;
 use App\Models\Register;
 use App\Models\TuitionFee;
 use Illuminate\Support\Str;
+use App\Models\VoucherClaim;
 use Illuminate\Http\Request;
 use App\Models\PaymentRegister;
 use Illuminate\Support\Facades\DB;
@@ -169,7 +170,7 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         //testing
-        // return response()->json($request->all());
+        // return response()->json($request->vouchers);
 
         $validate = $request->validate([
             'level' => 'required',
@@ -220,13 +221,25 @@ class RegisterController extends Controller
             ]);
 
             if ($request->vouchers) {
-                foreach ($request->vouchers as $voucher) {
-                    $idVoucher = Voucher::where('code', $voucher)->first();
-                    if ($idVoucher) {
-                        $paymentRegister->vouchers()->create([
-                            'voucher_id' => $idVoucher->id,
-                        ]);
-                    }
+                foreach ($request->vouchers as  $voucher) {
+                    // return response()->json($voucher['code']);
+                    $idVoucher = Voucher::where('code', $voucher['code'])->first();
+                    if (!$idVoucher) return response()->json(['message' => 'Voucher not found'], 404);
+
+                    if ($idVoucher->is_claimed) return response()->json(['message' => 'Voucher already claimed'], 400);
+
+                    $success = $paymentRegister->vouchers()->create([
+                        'voucher_id' => $idVoucher->id,
+                    ]);
+
+                    if (!$success) return response()->json(['message' => 'Voucher already claimed'], 400);
+
+                    $idVoucher->is_claimed = true;
+                    $idVoucher->save();
+
+                    $register->voucherClaim()->create([
+                        'voucher_id' => $idVoucher->id
+                    ]);
                 }
             }
 
