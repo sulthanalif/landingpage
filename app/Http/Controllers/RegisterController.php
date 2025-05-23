@@ -40,7 +40,7 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'level' => 'required|string',
             'table_id' => 'required|integer',
-            'voucher_code' => 'nullable|integer',
+            'voucher_code' => 'nullable|string',
             'is_biduk' => 'nullable|boolean',
             'cildren' => 'nullable|integer',
         ]);
@@ -124,8 +124,8 @@ class RegisterController extends Controller
             }
 
             $a = ($total * ($discount_biduk / 100));
-            $b = ($total * ($discount_cildren / 100));
-            $c = ($total * ($discount_voucher?->percentage / 100));
+            $b = ($total * (($discount_cildren / 100)  * $cildren));
+            $c = $voucher_code ? ($total * ($discount_voucher->percentage / 100)) : 0;
 
             $total_discount = $total - $a - $b - $c;
 
@@ -135,11 +135,11 @@ class RegisterController extends Controller
                 'discount' => [
                     'biduk' => $discount_biduk ?? 0,
                     'lscs' => $discount_cildren ?? 0,
-                    'voucher' => [
-                        'code' => $discount_voucher->code,
-                        'campaign_name' => $discount_voucher->campaign->name,
-                        'percentage' => $discount_voucher->percentage
-                    ] ?? null
+                    'voucher' => $voucher_code ? [
+                        'code' => $discount_voucher?->code,
+                        'campaign_name' => $discount_voucher?->campaign->name,
+                        'percentage' => $discount_voucher?->percentage
+                    ] : null
                 ],
                 'total' => $total_discount
             ]);

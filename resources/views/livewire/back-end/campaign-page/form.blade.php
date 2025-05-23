@@ -390,15 +390,15 @@ new #[Title('Form Campaign')] class extends Component {
                 <x-button label="Tambah Voucher" icon="o-plus" class="w-full mt-3" @click="$wire.addVoucher" spinner="addVoucher" />
             </x-card>
         </div>
-        <div class="flex flex-col md:flex-row gap-4">
-            <x-card title="Voucher List" shadow class="w-full md:w-1/2">
+        <div class="w-full">
+            <x-card title="Voucher List" shadow class="w-full ">
                 <x-slot:menu>
                     @if ($this->id)
                         <x-button label="Export Voucher" icon="o-arrow-down-tray" wire:click="exportVoucher" spinner="exportVoucher" />
                     @endif
                     <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
                 </x-slot:menu>
-                <div class="h-64 overflow-y-auto outline outline-red-500">
+                <div class="h-64 overflow-y-auto ">
                     <div class="max-h-60 overflow-y-auto">
                         <table class="w-full table-auto">
                             <thead class="bg-gray-100 sticky top-0 z-10 text-left">
