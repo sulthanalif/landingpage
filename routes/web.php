@@ -31,9 +31,9 @@ Route::get('/news', [LandingpageController::class, 'allNews']);
 Route::get('/news/{slug}', [LandingpageController::class, 'detailNews']);
 Route::get('/activities', [LandingpageController::class, 'allActivities']);
 
-Route::post('/send-mail', [ContactUsController::class, 'store'])->name('send-mail');
 
-Route::post('/register', [RegisterController::class, 'store'])->name('register');
+
+
 
 
 // Route::get('/tuition-fees', function () {

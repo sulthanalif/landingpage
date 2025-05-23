@@ -44,7 +44,7 @@ class ContactUsController extends Controller
                 Notification::route('mail', 'information@mail.com')->notify(new \App\Notifications\ContactNotification($validated));
             }
 
-            return Inertia::render('Contact')->with('success', 'Data berhasil disimpan');
+            return $this->successResponse(data: $validated, message: 'Pesan berhasil dikirim');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::channel('debug')->error('Error: ' . $e->getMessage(), [

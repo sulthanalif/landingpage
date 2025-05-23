@@ -221,7 +221,7 @@ class RegisterController extends Controller
 
             if ($request->vouchers) {
                 foreach ($request->vouchers as $voucher) {
-                    $idVoucher = Voucher::where('code', $voucher['code'])->first();
+                    $idVoucher = Voucher::where('code', $voucher)->first();
                     if ($idVoucher) {
                         $paymentRegister->vouchers()->create([
                             'voucher_id' => $idVoucher->id,
@@ -231,7 +231,7 @@ class RegisterController extends Controller
             }
 
             DB::commit();
-            return Inertia::render('Register')->with('success', 'Data berhasil disimpan');
+            return $this->successResponse(data: $register , message: 'Data berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::channel('debug')->error('Error: ' . $e->getMessage(), [
@@ -239,7 +239,7 @@ class RegisterController extends Controller
                 'trace' => $e->getTrace(),
                 'line' => $e->getLine(),
             ]);
-            return Inertia::render('Register')->with('error', 'Data gagal disimpan, '.$e->getMessage());
+            return $this->errorResponse($e);
         }
     }
 

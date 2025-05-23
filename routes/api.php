@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\LandingpageResponseController;
 
 // Route::get('/user', function (Request $request) {
@@ -21,8 +22,11 @@ Route::get('/posts', [LandingpageResponseController::class, 'posts']);
 Route::get('/post/{slug}', [LandingpageResponseController::class, 'detailPost']);
 Route::get('/extra', [LandingpageResponseController::class, 'extra']);
 
+Route::post('/send-mail', [ContactUsController::class, 'store']);
+
 Route::get('/dataRegister', [RegisterController::class, 'getData']);
 Route::get('/countFee', [RegisterController::class, 'countFee']);
+Route::post('/register', [RegisterController::class, 'store']);
 
 Route::get('/payment/getData/{key}', [PaymentController::class, 'getData']);
 Route::post('/payment', [PaymentController::class, 'store']);
