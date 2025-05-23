@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
-import { Link, useForm } from "@inertiajs/react";
+import { Link, router, useForm } from "@inertiajs/react";
 import useApi from "../Hooks/response";
+import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Register = () => {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+    const [recaptchaToken, setRecaptchaToken] = useState(null);
+
     useEffect(() => {
         const link1 = document.createElement("link");
         link1.rel = "stylesheet";
@@ -36,6 +41,51 @@ const Register = () => {
     const [modalMessage, setModalMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
 
+    const { data, setData, post, processing, errors, reset, transform } =
+        useForm({
+            // Tab 1: Student Personal Data
+            table_id: "",
+            level: "",
+            name: "",
+            gender: "",
+            religion: "",
+            is_biduk: false,
+            place_of_birth: "",
+            date_of_birth: "",
+            phone: "",
+            email: "",
+            previous_school: "",
+            hobbi: "",
+            achievement: "",
+            discount_id: "",
+
+            // Tab 2: Student Parent Data
+            father_name: "",
+            place_of_birth_father: "",
+            date_of_birth_father: "",
+            mother_name: "",
+            place_of_birth_mother: "",
+            date_of_birth_mother: "",
+            number_of_siblings: "",
+            phone_parent: "",
+            email_parent: "",
+
+            // Tab 3: Student Address Data
+            father_address: "",
+            same_with_father: true,
+            mother_address: "",
+            student_residence_status: "",
+            student_address: "",
+            voucher_code: "",
+            is_child_lscs: false,
+            children: [{ name: "", class_level: "" }],
+            amount: "",
+            discount_biduk: "",
+            discount_lscs: "",
+            vouchers: "",
+            total: "",
+        });
+
     const {
         data: types,
         loading,
@@ -43,50 +93,9 @@ const Register = () => {
         get: getTypes,
     } = useApi("dataRegister");
 
-    const discounts = types?.discounts;
-
     useEffect(() => {
         getTypes();
     }, []);
-
-    const { data, setData, post, processing, errors, reset } = useForm({
-        // Tab 1: Student Personal Data
-        table_id: "",
-        level: "",
-        name: "",
-        gender: "",
-        religion: "",
-        is_biduk: false,
-        place_of_birth: "",
-        date_of_birth: "",
-        phone: "",
-        email: "",
-        previous_school: "",
-        hobbi: "",
-        achievement: "",
-        discount_id: "",
-
-        // Tab 2: Student Parent Data
-        father_name: "",
-        place_of_birth_father: "",
-        date_of_birth_father: "",
-        mother_name: "",
-        place_of_birth_mother: "",
-        date_of_birth_mother: "",
-        number_of_siblings: "",
-        phone_parent: "",
-        email_parent: "",
-
-        // Tab 3: Student Address Data
-        father_address: "",
-        same_with_father: true,
-        mother_address: "",
-        student_residence_status: "",
-        student_address: "",
-        voucher_code: "",
-        is_child_lscs: false,
-        children: [{ name: "", class_level: "" }],
-    });
 
     const [programs, setPrograms] = useState([]);
     const [levels, setLevels] = useState([]);
@@ -175,14 +184,33 @@ const Register = () => {
     };
 
     const { get: getFeeCalculation } = useApi("/countFee");
+    const { post: postRegister } = useApi("/register", { fetchOnMount: false });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!recaptchaToken) {
+            setModalTitle("Error");
+            setModalMessage("Please complete the reCAPTCHA before submitting.");
+            setIsSuccess(false);
+            setShowModal(true);
+            return;
+        }
+
         try {
             // 1. Validasi data yang diperlukan untuk countFee
-            if (!data.table_id || !data.level || !data.voucher_code) {
-                throw new Error("Program, level, dan discount harus dipilih");
+            if (!data.table_id || !data.level) {
+                throw new Error("Program and level must be selected");
+            }
+
+            if (data.is_child_lscs && data.children.length === 0) {
+                throw new Error("Minimum 1 child must be filled");
+            }
+
+            let childrenDiscount = 0;
+
+            if (data.is_child_lscs) {
+                childrenDiscount = data.children.length;
             }
 
             // 2. Hitung biaya terlebih dahulu
@@ -190,7 +218,7 @@ const Register = () => {
                 level: data.level,
                 table_id: data.table_id,
                 is_biduk: data.is_biduk ? 1 : 0,
-                cildren: data.children.length,
+                cildren: childrenDiscount,
                 voucher_code: data.voucher_code,
             });
 
@@ -206,17 +234,21 @@ const Register = () => {
                 return;
             }
 
-            const feeData = feeResponse.data.data;
+            const feeData = feeResponse;
+
+            if (!feeData || feeData.amount == null || feeData.total == null) {
+                throw new Error("Fee calculation result is invalid");
+            }
 
             // 3. Siapkan data form dengan hasil perhitungan biaya
-            const formData = {
+            let formDataToSend = {
                 ...data,
                 amount: feeData.amount,
                 discount_biduk: feeData.discount.biduk,
                 discount_lscs: feeData.discount.lscs,
                 vouchers: feeData.discount.voucher,
                 total: feeData.total,
-                // Konversi tanggal ke format Y-m-d
+                // konversi tanggal ke format YYYY-MM-DD
                 date_of_birth: data.date_of_birth
                     ? new Date(data.date_of_birth).toISOString().split("T")[0]
                     : "",
@@ -233,76 +265,94 @@ const Register = () => {
             };
 
             // 4. Kirim data pendaftaran
-            post("/register", {
-                data: formData,
-                preserveScroll: true,
-                onSuccess: () => {
-                    setModalTitle("Registration Successful");
-                    setModalMessage(`
-                        <p>Your registration has been submitted successfully. This is a summary of the registration:</p>
-                        <ul>
-                            <li><strong>Name:</strong> ${data.name}</li>
-                            <li><strong>Email:</strong> ${data.email}</li>
-                            <li><strong>Phone:</strong> ${data.phone}</li>
-                            <li><strong>Amount:</strong> Rp ${feeData.amount.toLocaleString(
-                                "id-ID"
-                            )}</li>
-                            <li><strong>Discounts:</strong>
-                                <ul>
-                                    <li>Biduk: Rp ${feeData.discount.biduk.toLocaleString(
-                                        "id-ID"
-                                    )}</li>
-                                    <li>LSCS: Rp ${feeData.discount.lscs.toLocaleString(
-                                        "id-ID"
-                                    )}</li>
-                                    <li>Voucher: Rp ${feeData.discount.voucher.toLocaleString(
-                                        "id-ID"
-                                    )}</li>
-                                </ul>
-                            </li>
-                            <li><strong>Total Amount:</strong> Rp ${feeData.amount.toLocaleString(
-                                "id-ID"
-                            )}</li>
-                            <li><strong>Total Payment:</strong> Rp ${feeData.total.toLocaleString(
-                                "id-ID"
-                            )}</li>
-                        </ul>
-                        <p>We will contact you soon.</p>
-                    `);
-                    setIsSuccess(true);
-                    setShowModal(true);
-                    reset();
-                },
-                onError: (errors) => {
-                    setModalTitle("Registration Failed");
-                    setModalMessage(
-                        "Please check your form and try again. " +
-                            (errors.message || Object.values(errors).join(" "))
-                    );
-                    setIsSuccess(false);
-                    setShowModal(true);
+            try {
+                const registerResponse = await postRegister(formDataToSend);
 
-                    // Scroll ke field yang error
-                    if (Object.keys(errors).length > 0) {
-                        const firstErrorField = Object.keys(errors)[0];
-                        document
-                            .getElementById(firstErrorField)
-                            ?.scrollIntoView({
-                                behavior: "smooth",
-                                block: "center",
-                            });
-                    }
-                },
-            });
+                setModalTitle("Registration Successful");
+                setModalMessage(`
+                    <p>Your registration has been submitted successfully. This is a summary of the registration:</p>
+                    <ul>
+                        <li><strong>Name:</strong> ${data.name || "-"}</li>
+                        <li><strong>Email:</strong> ${data.email || "-"}</li>
+                        <li><strong>Phone:</strong> ${data.phone || "-"}</li>
+                        <li><strong>Amount:</strong> Rp ${
+                            feeData?.amount != null
+                                ? feeData.amount.toLocaleString("id-ID")
+                                : "0"
+                        }</li>
+                        <li><strong>Discounts:</strong>
+                            <ul>
+                                <li>Biduk: ${
+                                    feeData?.discount?.biduk != null
+                                        ? `${parseFloat(
+                                              feeData.discount.biduk
+                                          ).toFixed(2)}%`
+                                        : "0%"
+                                }</li>
+                                <li>LSCS: ${
+                                    feeData?.discount?.lscs != null
+                                        ? `${parseFloat(
+                                              feeData.discount.lscs
+                                          ).toFixed(2)}%`
+                                        : "0%"
+                                }</li>
+                                <li>Voucher: ${
+                                    feeData?.discount?.voucher != null
+                                        ? `${parseFloat(
+                                              feeData.discount.voucher
+                                          ).toFixed(2)}%`
+                                        : "0%"
+                                }</li>
+                            </ul>
+                        </li>
+                        <li><strong>Total Payment:</strong> Rp ${
+                            feeData?.total != null
+                                ? feeData.total.toLocaleString("id-ID")
+                                : "0"
+                        }</li>
+                    </ul>
+                    <p>We will contact you soon.</p>
+                    `);
+                setIsSuccess(true);
+                setShowModal(true);
+                reset();
+            } catch (error) {
+                setModalTitle("Registration Failed");
+                setModalMessage(
+                    error.response?.data?.message ||
+                        error.message ||
+                        "Failed to submit registration. Please try again."
+                );
+                setIsSuccess(false);
+                setShowModal(true);
+            }
         } catch (error) {
-            setModalTitle("Fee Calculation Failed");
-            setModalMessage(
-                error.response?.data?.message ||
-                    error.message ||
-                    "Failed to calculate payment amount. Please try again."
-            );
-            setIsSuccess(false);
-            setShowModal(true);
+            setModalTitle("Registration Failed");
+
+            const errors = error.response?.data?.errors;
+            if (errors) {
+                let errorMessage = "Please check the following errors:\n";
+                for (const field in errors) {
+                    errorMessage += `- ${errors[field]}\n`;
+                }
+                setModalMessage(errorMessage);
+                setIsSuccess(false);
+                setShowModal(true);
+
+                const firstErrorField = Object.keys(errors)[0];
+                document.getElementById(firstErrorField)?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            } else {
+                setModalMessage(
+                    error.response?.data?.message ||
+                        error.message ||
+                        "Something went wrong."
+                );
+                setIsSuccess(false);
+                setShowModal(true);
+            }
         }
     };
 
@@ -1646,6 +1696,16 @@ const Register = () => {
                                                         </button>
                                                     </div>
                                                 )}
+
+                                                <ReCAPTCHA
+                                                    sitekey={siteKey}
+                                                    onChange={(token) =>
+                                                        setRecaptchaToken(token)
+                                                    }
+                                                    onExpired={() =>
+                                                        setRecaptchaToken(null)
+                                                    }
+                                                />
                                             </>
                                         )}
                                     </div>
@@ -1706,7 +1766,11 @@ const Register = () => {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <p>{modalMessage}</p>
+                                <p
+                                    dangerouslySetInnerHTML={{
+                                        __html: modalMessage,
+                                    }}
+                                />
                                 {!isSuccess && errors && (
                                     <ul className="text-danger">
                                         {Object.entries(errors).map(

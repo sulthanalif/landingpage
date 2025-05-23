@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
-import http from "./http";
+import http from "./http"; // pastikan axios instance di sini
 
-export default function useApi(endpoint) {
+export default function useApi(endpoint, options = { fetchOnMount: true }) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const get = async (params = {}) => {
+        setLoading(true);
+        setError(null);
         try {
-            setLoading(true);
-            const response = await http.get(`${endpoint}`, {
-                params,
-            });
-            setData(response.data?.data || response.data);
-            return response.data;
+            const response = await http.get(endpoint, { params });
+            const result = response.data?.data ?? response.data;
+            setData(result);
+            return result;
         } catch (err) {
             setError(err.response?.data?.message || err.message);
             throw err;
@@ -23,16 +23,13 @@ export default function useApi(endpoint) {
     };
 
     const post = async (payload, config = {}) => {
+        setLoading(true);
+        setError(null);
         try {
-            setLoading(true);
-            const response = await http.post(`${endpoint}`, payload, config);
-            setData((prev) => {
-                if (Array.isArray(prev)) {
-                    return [...prev, response.data?.data];
-                }
-                return response.data?.data || response.data;
-            });
-            return response.data;
+            const response = await http.post(endpoint, payload, config);
+            const result = response.data?.data ?? response.data;
+            setData(result);
+            return result;
         } catch (err) {
             setError(err.response?.data?.message || err.message);
             throw err;
@@ -42,7 +39,7 @@ export default function useApi(endpoint) {
     };
 
     useEffect(() => {
-        if (endpoint) {
+        if (options.fetchOnMount && endpoint) {
             get();
         }
     }, [endpoint]);

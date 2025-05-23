@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import { Link, useForm } from "@inertiajs/react";
 import ReCAPTCHA from "react-google-recaptcha";
+import useApi from "../Hooks/response";
 
 const Contact = () => {
     const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+    const [recaptchaToken, setRecaptchaToken] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         to: "hrd",
         email: "",
@@ -52,42 +54,55 @@ const Contact = () => {
         };
     }, []);
 
-    const handleSubmit = (e) => {
+    const { post: postContact } = useApi("/send-mail", { fetchOnMount: false });
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        post("/send-mail", {
-            data: data,
-            preserveScroll: true,
-            onSuccess: () => {
-                setModalTitle("Success");
-                setModalMessage("Your message has been sent successfully!");
-                setIsSuccess(true);
-                setShowModal(true);
-                reset();
-            },
-            onError: (errors) => {
-                setModalTitle("Error");
-                const errorMessage =
-                    errors.message ||
-                    (typeof errors === "string"
-                        ? errors
-                        : "Message failed to sent");
+        if (!recaptchaToken) {
+            setModalTitle("Error");
+            setModalMessage("Please complete the reCAPTCHA before submitting.");
+            setIsSuccess(false);
+            setShowModal(true);
+            return;
+        }
 
-                setModalMessage(
-                    "Please check your form and try again. " + errorMessage
-                );
+        try {
+            const contactResponse = await postContact(data);
+
+            setModalTitle("Success");
+            setModalMessage("Your message has been sent successfully!");
+            setIsSuccess(true);
+            setShowModal(true);
+            reset();
+        } catch (error) {
+            setModalTitle("Message Failed To Sent");
+
+            const errors = error.response?.data?.errors;
+            if (errors) {
+                let errorMessage = "Please check the following errors:\n";
+                for (const field in errors) {
+                    errorMessage += `- ${errors[field]}\n`;
+                }
+                setModalMessage(errorMessage);
                 setIsSuccess(false);
                 setShowModal(true);
 
-                if (Object.keys(errors).length > 0) {
-                    const firstErrorField = Object.keys(errors)[0];
-                    document.getElementById(firstErrorField)?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center",
-                    });
-                }
-            },
-        });
+                const firstErrorField = Object.keys(errors)[0];
+                document.getElementById(firstErrorField)?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            } else {
+                setModalMessage(
+                    error.response?.data?.message ||
+                        error.message ||
+                        "Something went wrong."
+                );
+                setIsSuccess(false);
+                setShowModal(true);
+            }
+        }
     };
 
     const handleCloseModal = () => {
@@ -180,7 +195,10 @@ const Contact = () => {
                                                             )
                                                         }
                                                     >
-                                                        <option selected disabled>
+                                                        <option
+                                                            selected
+                                                            disabled
+                                                        >
                                                             --Select message
                                                             destination--
                                                         </option>
@@ -306,7 +324,15 @@ const Contact = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <ReCAPTCHA sitekey={siteKey} />
+                                            <ReCAPTCHA
+                                                sitekey={siteKey}
+                                                onChange={(token) =>
+                                                    setRecaptchaToken(token)
+                                                }
+                                                onExpired={() =>
+                                                    setRecaptchaToken(null)
+                                                }
+                                            />
                                             <div>
                                                 <button
                                                     type="submit"
