@@ -40,9 +40,9 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'level' => 'required|string',
             'table_id' => 'required|integer',
-            'voucher_code' => 'required|integer',
-            'is_biduk' => 'required|boolean',
-            'cildren' => 'required|integer',
+            'voucher_code' => 'nullable|integer',
+            'is_biduk' => 'nullable|boolean',
+            'cildren' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) return response()->json($validator->errors(), 400);
@@ -95,32 +95,39 @@ class RegisterController extends Controller
 
             $discount_biduk = 0;
             $discount_cildren = 0;
+            $discount_voucher = null;
             if ($is_biduk) {
                 $discount_biduk = Discount::where('name', 'Biduk')->where('status', true)->first()->percentage;
+
+                if (!$discount_biduk) return response()->json(['message' => 'Discount Biduk not found'], 404);
             }
 
             if ($cildren > 0) {
                 $discount_cildren = Discount::where('name', 'Cildren')->where('status', true)->first()->percentage;
+
+                if (!$discount_cildren) return response()->json(['message' => 'Discount LSCS not found'], 404);
             }
 
-            $discount_voucher = Voucher::with('campaign')
-                ->whereHas('campaign', function ($query) {
-                    $query->where('status', true)
-                        ->where('start_date', '<=', now())
-                        ->where('end_date', '>=', now());
-                })
-                ->where('code', $voucher_code)
-                ->where('status', true)
-                ->where('is_claimed', false)
-                ->first();
 
-            if (!$discount_biduk) return response()->json(['message' => 'Discount Biduk not found'], 404);
+            if ($voucher_code) {
+                $discount_voucher = Voucher::with('campaign')
+                    ->whereHas('campaign', function ($query) {
+                        $query->where('status', true)
+                            ->where('start_date', '<=', now())
+                            ->where('end_date', '>=', now());
+                    })
+                    ->where('code', $voucher_code)
+                    ->where('status', true)
+                    ->where('is_claimed', false)
+                    ->first();
+                if (!$discount_voucher) return response()->json(['message' => 'Voucher not found'], 404);
+            }
 
-            if (!$discount_cildren) return response()->json(['message' => 'Discount LSCS not found'], 404);
+            $a = ($total * ($discount_biduk / 100));
+            $b = ($total * ($discount_cildren / 100));
+            $c = ($total * ($discount_voucher?->percentage / 100));
 
-            if (!$discount_voucher) return response()->json(['message' => 'Voucher not found'], 404);
-
-            $total_discount = $total - ($total * ($discount_biduk / 100)) - ($total * ($discount_cildren / 100) - ($total * ($discount_voucher->percentage / 100)));
+            $total_discount = $total - $a - $b - $c;
 
             return $this->successResponse(data: [
                 'level' => $jenjang_value,
