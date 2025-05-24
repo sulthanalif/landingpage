@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             QuestionSeeder::class,
             DiscountSeeder::class,
             CalendarSeeder::class,
+            TitleTuitionFeeSeeder::class
         ]);
     }
 }

@@ -7,13 +7,14 @@ use App\Models\Career;
 use App\Models\Teacher;
 use App\Models\Activity;
 use App\Models\Calendar;
+use App\Models\Category;
 use App\Models\Question;
 use App\Models\TuitionFee;
 use App\Models\WhyChooseUs;
 use Illuminate\Http\Request;
 use App\Models\Accreditation;
-use App\Models\Category;
 use App\Models\Extracurricular;
+use App\Models\TitleTuitionFee;
 
 class LandingpageResponseController extends Controller
 {
@@ -57,8 +58,9 @@ class LandingpageResponseController extends Controller
     {
         try {
             $tuitionFees = TuitionFee::getAllTable();
+            $title = TitleTuitionFee::first()->value;
 
-            return $this->successResponse(data: compact('tuitionFees'));
+            return $this->successResponse(data: compact('tuitionFees', 'title'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }

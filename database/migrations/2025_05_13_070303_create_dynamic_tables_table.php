@@ -42,6 +42,12 @@ return new class extends Migration
             $table->text('value')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('titles', function (Blueprint $table) {
+            $table->id();
+            $table->string('value');
+            $table->timestamps();
+        });
     }
 
     /**

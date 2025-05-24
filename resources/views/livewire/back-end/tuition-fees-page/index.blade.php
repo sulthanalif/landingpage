@@ -3,6 +3,7 @@
 use Mary\Traits\Toast;
 use App\Models\DynamicTable;
 use Livewire\Volt\Component;
+use App\Models\TitleTuitionFee;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new class extends Component {
@@ -22,6 +23,14 @@ new class extends Component {
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public int $perPage = 10;
 
+    //var
+    public string $title = '';
+
+    public function mount(): void
+    {
+        $this->title = TitleTuitionFee::first()->value;
+    }
+
     public function create(): void
     {
         $this->redirect(route('tuition-fees.form'), navigate: true);
@@ -30,6 +39,14 @@ new class extends Component {
     public function detail(DynamicTable $dynamicTable): void
     {
         $this->redirect(route('tuition-fees.detail', $dynamicTable->slug), navigate: true);
+    }
+
+    public function saveTitle(): void
+    {
+        $title = TitleTuitionFee::first();
+        $title->value = $this->title;
+        $title->save();
+        $this->success('Title saved successfully', position: 'toast-bottom');
     }
 
     public function datas(): LengthAwarePaginator
@@ -72,7 +89,18 @@ new class extends Component {
         </x-slot:actions>
     </x-header>
 
-    <div class="flex justify-end items-center gap-5">
+    <div class="flex justify-between items-center gap-5">
+        <div >
+            <x-form wire:submit='saveTitle'>
+                <div class="flex items-center gap-2 ">
+                    {{-- Input akan mengisi ruang kosong --}}
+                    <x-input placeholder="Title..." wire:model="title" class="w-[600px]" />
+
+                    {{-- Tombol ukurannya otomatis (sesuai label) --}}
+                    <x-button label="Save" class="btn-primary whitespace-nowrap" type="submit" spinner="saveTitle" />
+                </div>
+            </x-form>
+        </div>
         <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
     </div>
 
