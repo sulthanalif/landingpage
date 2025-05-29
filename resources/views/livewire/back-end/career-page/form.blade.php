@@ -117,9 +117,7 @@ new class extends Component {
             ],
 
             beforeSave: function ($career, $component) {
-               if ($component->formCreate) {
-                    $career->slug = Str::slug($component->title);
-               }
+                $career->slug = Str::slug($component->title);
             },
         );
 
