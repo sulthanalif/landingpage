@@ -66,7 +66,7 @@ const Header = () => {
                                                     Have any questions?
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li className="notranslate">
                                                 <i
                                                     className="fa fa-phone"
                                                     aria-hidden="true"
@@ -79,7 +79,7 @@ const Header = () => {
                                                     0811-8880-678
                                                 </a>
                                             </li>
-                                            <li>
+                                            <li className="notranslate">
                                                 <i
                                                     className="fa fa-envelope-o"
                                                     aria-hidden="true"
@@ -179,7 +179,7 @@ const Header = () => {
                                             </div> */}
                                         </Link>
                                     </div>
-                                    <nav className="main_nav_contaner ml-auto">
+                                    <nav className="main_nav_contaner ml-auto notranslate">
                                         <ul className="main_nav">
                                             <li
                                                 className={

@@ -86,37 +86,6 @@ const Admission = () => {
                             </div>
                         </div>
                         <div className="row about_row">
-                            <div className="col-lg-12 about_col about_col_left">
-                                <div className="about_item">
-                                    <div className="about_item_text">
-                                        <p>
-                                            At Lia Stephanie, we understand that
-                                            choosing an education is a
-                                            significant decision for every
-                                            family. Therefore, we are committed
-                                            to providing transparency and
-                                            flexibility in our fee structure, so
-                                            you can plan your child's education
-                                            carefully.
-                                            <br />
-                                            The listed fees reflect the quality
-                                            of education, adequate facilities,
-                                            and a learning environment that
-                                            fosters the academic, emotional, and
-                                            character development of students.
-                                        </p>
-                                        <h3 className="text-center py-4">
-                                            <strong>
-                                                Tuition Fee Structure for the{" "}
-                                                {new Date().getFullYear()}/
-                                                {new Date().getFullYear() + 1}{" "}
-                                                Academic Year
-                                            </strong>
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-
                             <TuitionFees />
 
                             <div className="col-lg-12 about_col about_col_left">

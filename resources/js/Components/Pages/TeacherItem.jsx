@@ -65,7 +65,7 @@ const TeacherItem = ({ teacher }) => {
                                 className="modal-title"
                                 id={`teacher-${teacher.id}-label`}
                             >
-                                Teacher Detail
+                                Detail
                             </h5>
                             <button
                                 type="button"
@@ -95,7 +95,7 @@ const TeacherItem = ({ teacher }) => {
                                     <div className="mt-3 text-center">
                                         <h4 className="mb-2">{teacher.name}</h4>
                                         <span className="badge badge-pill badge-primary px-3 py-2">
-                                            {teacher.code_id}
+                                            {teacher.position}
                                         </span>
                                     </div>
                                 </div>

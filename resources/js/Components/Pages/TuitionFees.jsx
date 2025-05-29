@@ -18,6 +18,8 @@ const TuitionFees = () => {
     const [error, setError] = useState(null);
     const { data: tuitionFees, get: getTuitionFees } = useApi("tuition-fees");
 
+    console.log(tuitionFees);
+
     useEffect(() => {
         getTuitionFees();
     }, []);
@@ -29,8 +31,8 @@ const TuitionFees = () => {
                 const formattedTables = tuitionDatas.map((table) => {
                     const columns = table.columns
                         .map((col) => ({
-                            title: col.label,
-                            data: col.label.toLowerCase().replace(/\s+/g, "_"),
+                            title: col.name,
+                            data: col.name.toLowerCase().replace(/\s+/g, "_"),
                             className: "text-nowrap",
                             order: col.order,
                         }))
@@ -42,7 +44,7 @@ const TuitionFees = () => {
                         data: table.rows.map((row) => {
                             const transformedRow = {};
                             table.columns.forEach((col) => {
-                                const key = col.label
+                                const key = col.name
                                     .toLowerCase()
                                     .replace(/\s+/g, "_");
                                 transformedRow[key] =
@@ -89,6 +91,30 @@ const TuitionFees = () => {
 
     return (
         <>
+            <div className="col-lg-12 about_col about_col_left">
+                <div className="about_item">
+                    <div className="about_item_text">
+                        <p>
+                            At Lia Stephanie, we understand that choosing an
+                            education is a significant decision for every
+                            family. Therefore, we are committed to providing
+                            transparency and flexibility in our fee structure,
+                            so you can plan your child's education carefully.
+                            <br />
+                            The listed fees reflect the quality of education,
+                            adequate facilities, and a learning environment that
+                            fosters the academic, emotional, and character
+                            development of students.
+                        </p>
+                        <h3 className="text-center py-4">
+                            <strong>
+                                {tuitionFees.title}
+                            </strong>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
             {tables.map((table) => (
                 <div
                     key={table.tableInfo.id}
@@ -115,7 +141,9 @@ const TuitionFees = () => {
                                     headerCallback: function (thead) {
                                         $(thead)
                                             .find("th")
-                                            .addClass("bg-primary text-center text-white");
+                                            .addClass(
+                                                "bg-primary text-center text-white"
+                                            );
                                     },
                                 }}
                                 language={{

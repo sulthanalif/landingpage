@@ -16,7 +16,7 @@ const Navbar = ({ isActive, closeMenu }) => {
                     </div>
                 </div>
                 <nav className="menu_nav">
-                    <ul className="menu_mm">
+                    <ul className="menu_mm notranslate">
                         <li className="menu_mm">
                             <Link href="/">Home</Link>
                         </li>
@@ -95,7 +95,7 @@ const Navbar = ({ isActive, closeMenu }) => {
                 </nav>
                 <div className="menu_nav mt-5">
                     <ul className="menu_mm">
-                        <li>
+                        <li className="notranslate">
                             <i className="fa fa-phone" aria-hidden="true" />
                             <a
                                 href="tel:08118880678"
@@ -105,7 +105,7 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 0811-8880-678
                             </a>
                         </li>
-                        <li>
+                        <li className="notranslate">
                             <i
                                 className="fa fa-envelope-o"
                                 aria-hidden="true"
@@ -120,9 +120,12 @@ const Navbar = ({ isActive, closeMenu }) => {
                         </li>
                     </ul>
                     <div className="d-flex justify-content-end align-items-center">
-                        <Link
-                            href="#"
-                            className="d-flex align-items-center ml-2 mr-4 text-dark"
+                        <button
+                            onClick={() => window.changeLanguage("en")}
+                            className="d-flex align-items-center ml-2 mr-4 text-dark notranslate"
+                            style={{
+                                textDecoration: "none",
+                            }}
                         >
                             <img
                                 src="/img/en.svg"
@@ -134,11 +137,14 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 alt="EN"
                             />
                             EN
-                        </Link>
-                        |
-                        <Link
-                            href="#"
-                            className="d-flex align-items-center ml-2 mr-4 text-dark"
+                        </button>
+                        <span className="notranslate">|</span>
+                        <button
+                            onClick={() => window.changeLanguage("id")}
+                            className="d-flex align-items-center ml-2 mr-4 text-dark notranslate"
+                            style={{
+                                textDecoration: "none",
+                            }}
                         >
                             <img
                                 src="/img/id.svg"
@@ -150,7 +156,7 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 alt="EN"
                             />
                             ID
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </div>
