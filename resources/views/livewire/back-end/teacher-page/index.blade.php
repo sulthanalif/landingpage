@@ -27,7 +27,7 @@ new #[Title('Teachers')] class extends Component {
 
     //table
     public array $selected = [];
-    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
+    public array $sortBy = ['column' => 'order', 'direction' => 'asc'];
     public int $perPage = 5;
 
     //var
@@ -139,10 +139,12 @@ new #[Title('Teachers')] class extends Component {
     public function headers(): array
     {
         return [
-            ['key' => 'code_id', 'label' => 'Teacher ID'],
+            // ['key' => 'code_id', 'label' => 'Teacher ID'],
+            ['key' => 'order', 'label' => 'Order'],
             ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'email', 'label' => 'Email'],
+            // ['key' => 'email', 'label' => 'Email'],
             ['key' => 'category', 'label' => 'Category'],
+            ['key' => 'position', 'label' => 'Position'],
             ['key' => 'image', 'label' => 'Image'],
             ['key' => 'logo', 'label' => 'Maskot'],
             ['key' => 'status', 'label' => 'Status'],
