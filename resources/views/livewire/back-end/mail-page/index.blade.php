@@ -31,6 +31,8 @@ new #[Title('Mails')] class extends Component {
 
         if (!in_array($role, ['super-admin', 'admin'])) {
             $query->where('to', $role);
+        } else if (in_array($role, ['admin'])) {
+            $query->where('to', 'information');
         }
 
         return $query->where(function ($query) {

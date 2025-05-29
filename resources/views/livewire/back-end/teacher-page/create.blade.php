@@ -19,6 +19,14 @@
         </div>
 
         <div>
+            <x-input label="Position" type="text" wire:model="position" required/>
+        </div>
+
+        <div>
+            <x-input label="Order to" type="number" wire:model="order" required/>
+        </div>
+
+        <div>
             <x-textarea wire:model="description" label="Description" rows="3" />
         </div>
 

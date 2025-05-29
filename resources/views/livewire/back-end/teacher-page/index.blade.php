@@ -36,6 +36,8 @@ new #[Title('Teachers')] class extends Component {
     public string $email = '';
     public string $category = '';
     public string $description = '';
+    public string $position = '';
+    public int $order = 0;
     public bool $status = true;
     public ?\Illuminate\Http\UploadedFile $image = null;
     public ?\Illuminate\Http\UploadedFile $logo = null;
@@ -45,8 +47,16 @@ new #[Title('Teachers')] class extends Component {
 
     public function mount()
     {
-            $this->oldImage = 'img/upload.png';
-            $this->oldLogo = 'img/upload.png';
+        $this->oldImage = 'img/upload.png';
+        $this->oldLogo = 'img/upload.png';
+
+        $this->getLast();
+    }
+
+    public function getLast(): void
+    {
+        $lastTeacher = Teacher::orderBy('order', 'desc')->first();
+        $this->order = $lastTeacher ? $lastTeacher->order + 1 : 1;
     }
 
     public function save(): void
@@ -62,7 +72,9 @@ new #[Title('Teachers')] class extends Component {
                 'status' => ['required', 'boolean'],
                 'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
                 'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
-                'description' => ['required', 'string', 'max:500'],
+                'description' => ['required', 'string', 'max:1000'],
+                'position' => ['required', 'string'],
+                'order' => ['required', 'integer', 'unique:teachers,order' . ($this->recordId ? ',' . $this->recordId : '')],
             ],
 
             beforeSave: function ($teacher, $component) {
@@ -83,7 +95,7 @@ new #[Title('Teachers')] class extends Component {
             },
         );
 
-        $this->reset(['code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description']);
+        $this->reset(['code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description', 'position', 'order']);
         $this->unsetModel();
         $this->unsetRecordId();
         $this->drawer = false;
@@ -157,6 +169,8 @@ new #[Title('Teachers')] class extends Component {
             $wire.category = '';
             $wire.status = true;
             $wire.description = '';
+            $wire.position = '';
+            $wire.getLast();
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -169,6 +183,8 @@ new #[Title('Teachers')] class extends Component {
             $wire.category = teacher.category;
             $wire.status = teacher.status;
             $wire.description = teacher.description;
+            $wire.position = teacher.position;
+            $wire.order = teacher.order;
             $wire.drawer = true;
             $wire.$refresh();
         })

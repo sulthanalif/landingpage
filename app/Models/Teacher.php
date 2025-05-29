@@ -13,6 +13,8 @@ class Teacher extends Model
         'name',
         'email',
         'category',
+        'position',
+        'order',
         'logo',
         'image',
         'description',

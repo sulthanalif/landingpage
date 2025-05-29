@@ -46,7 +46,7 @@ class LandingpageResponseController extends Controller
     public function teachers()
     {
         try {
-            $teachers = Teacher::where('status', true)->get();
+            $teachers = Teacher::where('status', true)->orderBy('order', 'asc')->get();
 
             return $this->successResponse(data: compact('teachers'));
         } catch (\Throwable $th) {

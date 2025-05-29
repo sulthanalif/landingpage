@@ -157,14 +157,6 @@ class UserSeeder extends Seeder
             'tuition-fees-create',
             'tuition-fees-edit',
             'tuition-fees-delete',
-            'discount-page',
-            'discount-create',
-            'discount-edit',
-            'discount-delete',
-            'campaign-page',
-            'campaign-create',
-            'campaign-edit',
-            'campaign-delete',
             'extra-page',
             'extra-create',
             'extra-edit',
@@ -186,6 +178,10 @@ class UserSeeder extends Seeder
             'category-delete',
             'mail-page',
             'mail-show',
+            'campaign-page',
+            'campaign-create',
+            'campaign-edit',
+            'campaign-delete',
         ];
         $marketing->givePermissionTo($marketingPermissions);
 
@@ -195,6 +191,10 @@ class UserSeeder extends Seeder
             'master',
             'mail-page',
             'mail-show',
+            'career-page',
+            'career-create',
+            'career-edit',
+            'career-delete',
         ];
         $hrd->givePermissionTo($hrdPermissions);
 

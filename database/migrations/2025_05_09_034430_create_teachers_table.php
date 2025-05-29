@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('category');
+            $table->string('position');
+            $table->integer('order')->default(0);
             $table->string('logo')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
