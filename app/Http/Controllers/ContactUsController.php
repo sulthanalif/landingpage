@@ -37,11 +37,11 @@ class ContactUsController extends Controller
             DB::commit();
 
             if ($validated['to'] == 'hrd') {
-                Notification::route('mail', 'hrd@mail.com')->notify(new \App\Notifications\ContactNotification($validated));
+                Notification::route('mail', 'hrd@lscs.sch.id')->notify(new \App\Notifications\ContactNotification($validated));
             } elseif ($validated['to'] == 'marketing') {
-                Notification::route('mail', 'marketing@mail.com')->notify(new \App\Notifications\ContactNotification($validated));
+                Notification::route('mail', 'marketing@lscs.sch.id')->notify(new \App\Notifications\ContactNotification($validated));
             } elseif ($validated['to'] == 'information') {
-                Notification::route('mail', 'information@mail.com')->notify(new \App\Notifications\ContactNotification($validated));
+                Notification::route('mail', 'info@lscs.sch.id')->notify(new \App\Notifications\ContactNotification($validated));
             }
 
             return $this->successResponse(data: $validated, message: 'Pesan berhasil dikirim');
