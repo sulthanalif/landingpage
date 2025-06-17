@@ -10,8 +10,8 @@ const Layout = ({ children }) => {
 
             <div className="">{children}</div>
 
-            <Footer />
             <FloatingWhatsApp />
+            <Footer />
         </div>
     );
 };
