@@ -22,6 +22,20 @@ class Career extends Model
         'end_date',
     ];
 
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+
+    protected $appends = [
+        'is_active',
+    ];
+
+    public function getIsActiveAttribute(): bool
+    {
+        return $this->start_date <= now() && $this->end_date >= now();
+    }
+
     public function carrerRegisters()
     {
         return $this->hasMany(CarrerRegister::class);
