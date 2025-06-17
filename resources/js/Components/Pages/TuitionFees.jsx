@@ -18,8 +18,6 @@ const TuitionFees = () => {
     const [error, setError] = useState(null);
     const { data: tuitionFees, get: getTuitionFees } = useApi("tuition-fees");
 
-    console.log(tuitionFees);
-
     useEffect(() => {
         getTuitionFees();
     }, []);

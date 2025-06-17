@@ -11,4 +11,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        chunkSizeWarningLimit: 1000, // Menaikkan batas peringatan menjadi 1000 KB (1MB)
+    },
 });

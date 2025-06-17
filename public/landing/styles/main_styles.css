@@ -1941,8 +1941,13 @@ section {
     border-radius: 5px; /* Slightly rounded corners */
     transition: background-color 0.3s ease; /* Smooth hover effect */
     cursor: pointer;
+    box-sizing: border-box;
 }
-
+.tab-pane {
+    /* --- PERBAIKAN DI SINI --- */
+    box-sizing: border-box; /* Tambahkan untuk konsistensi */
+    /* --- AKHIR PERBAIKAN --- */
+}
 .footer_nav_links .footer_link:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
 }
@@ -2152,10 +2157,11 @@ section {
     position: fixed; /* Membuat elemen tetap di layar */
     bottom: 20px; /* Jarak dari bawah */
     right: 20px; /* Jarak dari kanan */
-    z-index: 1000; /* Memastikan elemen berada di atas elemen lain */
+    z-index: 9999; /* Memastikan elemen berada di atas elemen lain */
     display: flex;
     flex-direction: column-reverse; /* Mengatur item agar tersusun vertikal (menu di atas tombol) */
     align-items: flex-end; /* Menyelaraskan item ke kanan */
+    box-sizing: border-box;
 }
 
 /* Tombol utama WhatsApp */
@@ -2172,10 +2178,12 @@ section {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
     cursor: pointer; /* Mengubah kursor menjadi pointer saat di-hover */
     transition: transform 0.3s ease-in-out; /* Transisi untuk efek hover */
+    box-sizing: border-box;
 }
 
 .whatsapp-button:hover {
     transform: scale(1.05); /* Sedikit membesar saat di-hover */
+    background-color: #1b9247;
 }
 
 /* Opsi menu yang muncul saat tombol diklik */
@@ -2192,6 +2200,7 @@ section {
 
     /* Animasi muncul dari bawah */
     animation: slideUp 0.3s ease-out forwards;
+    box-sizing: border-box;
 }
 
 /* Animasi untuk menu */
@@ -2214,6 +2223,7 @@ section {
     cursor: pointer; /* Kursor pointer */
     transition: background-color 0.2s ease; /* Transisi hover */
     border-bottom: 1px solid #eee; /* Garis pemisah antar item */
+    box-sizing: border-box;
 }
 
 .whatsapp-options .option-item:last-child {
