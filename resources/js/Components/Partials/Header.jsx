@@ -72,7 +72,7 @@ const Header = () => {
                                                     aria-hidden="true"
                                                 />
                                                 <a
-                                                    href="tel:08118880678"
+                                                    href="https://wa.me/628118880678"
                                                     className="text-light ml-2"
                                                     target="_blank"
                                                 >
@@ -166,10 +166,10 @@ const Header = () => {
                                     <div className="logo_container">
                                         <Link href="/">
                                             <img
-                                                src="/img/logo.png"
+                                                src="/img/logo-panjang.png"
                                                 className="img-fluid"
                                                 style={{
-                                                    maxWidth: "70px",
+                                                    maxWidth: "170px",
                                                     maxHeight: "auto",
                                                 }}
                                                 alt="logo"

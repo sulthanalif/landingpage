@@ -5,6 +5,13 @@ const Footer = () => {
     const footerRef = useRef(null);
     const [visible, setVisible] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(false);
+    // State to keep track of the active tab, 'marketing' is active by default
+    const [activeTab, setActiveTab] = useState('marketing');
+
+    // Function to handle tab clicks
+    const handleTabClick = (tabId) => {
+        setActiveTab(tabId);
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -44,7 +51,7 @@ const Footer = () => {
                             className="footer_background"
                             style={{
                                 backgroundImage:
-                                    "url(/landing/images/footer_bg.jpg)",
+                                    "url(/img/banner-resize.png)",
                             }}
                         />
                         <div className="container">
@@ -52,7 +59,7 @@ const Footer = () => {
                                 <div className="col">
                                     <div className="footer_content">
                                         <div className="row">
-                                            <div className="col-lg-3 footer_col">
+                                            <div className="col-lg-4 footer_col">
                                                 {/* Footer About */}
                                                 <div className="footer_section footer_about">
                                                     <div className="footer_logo_container">
@@ -77,15 +84,15 @@ const Footer = () => {
                                                             </div>
                                                         </Link>
                                                     </div>
-                                                    {/* <div className="footer_about_text">
-                                                <p>
-                                                    Jalan Taman Surya 5 Blok EE2
-                                                    No.20-27, RT.2/RW.3,
-                                                    Pegadungan, Kec. Kalideres,
-                                                    Kota Jakarta Barat, Daerah
-                                                    Khusus Ibukota Jakarta 11830
-                                                </p>
-                                            </div> */}
+                                                    <div className="footer_about_text">
+                                                        <p className="text-secondary">
+                                                            Jalan Taman Surya 5 Blok EE2
+                                                            No.20-27, RT.2/RW.3,
+                                                            Pegadungan, Kec. Kalideres,
+                                                            Kota Jakarta Barat, Daerah
+                                                            Khusus Ibukota Jakarta 11830
+                                                        </p>
+                                                    </div>
                                                     <div className="footer_social">
                                                         <ul>
                                                             <li>
@@ -150,37 +157,37 @@ const Footer = () => {
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <Link href="#">
+                                                                <Link href="/about">
                                                                     About
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <Link href="#">
+                                                                <Link href="/news">
                                                                     News
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <Link href="#">
-                                                                    Values
+                                                                <Link href="/teacher">
+                                                                    Teacher
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <Link href="#">
+                                                                <Link href="/story">
                                                                     Activities
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <Link href="#">
+                                                                <Link href="/admission">
                                                                     Admission
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <Link href="#">
-                                                                    FAQs
+                                                                <Link href="/curriculum">
+                                                                    Curriculum
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <Link href="#">
+                                                                <Link href="/contact">
                                                                     Contact
                                                                 </Link>
                                                             </li>
@@ -195,28 +202,73 @@ const Footer = () => {
                                                         Contact Us
                                                     </div>
                                                     <div className="footer_contact_info">
-                                                        <ul>
-                                                            <li>
-                                                                Email:
-                                                                marketing@lscs.sch.id
+                                                        <ul className="footer_nav_links" id="myTab" role="tablist">
+                                                            <li> {/* Wrap buttons in <li> for semantically correct ul */}
+                                                                <a
+                                                                    className={`footer_link ${activeTab === 'marketing' ? 'active' : ''}`}
+                                                                    id="marketing-tab"
+                                                                    data-toggle="tab" // Keep for Bootstrap CSS, but logic is handled by React
+                                                                    data-target="#marketing"
+                                                                    type="button"
+                                                                    role="tab"
+                                                                    aria-controls="marketing"
+                                                                    aria-selected={activeTab === 'marketing'}
+                                                                    onClick={() => handleTabClick('marketing')}
+                                                                >
+                                                                    Marketing
+                                                                </a>
                                                             </li>
                                                             <li>
-                                                                Tel:
-                                                                0811-8880-678
-                                                            </li>
-                                                            <li>
-                                                                Jalan Taman
-                                                                Surya 5 Blok EE2
-                                                                No.20-27,
-                                                                RT.2/RW.3,
-                                                                Pegadungan, Kec.
-                                                                Kalideres, Kota
-                                                                Jakarta Barat,
-                                                                Daerah Khusus
-                                                                Ibukota Jakarta
-                                                                11830
+                                                                <a
+                                                                    className={`footer_link ${activeTab === 'info' ? 'active' : ''}`}
+                                                                    id="info-tab"
+                                                                    data-toggle="tab" // Keep for Bootstrap CSS, but logic is handled by React
+                                                                    data-target="#info"
+                                                                    type="button"
+                                                                    role="tab"
+                                                                    aria-controls="info"
+                                                                    aria-selected={activeTab === 'info'}
+                                                                    onClick={() => handleTabClick('info')}
+                                                                >
+                                                                    Info
+                                                                </a>
                                                             </li>
                                                         </ul>
+
+                                                        <div className="tab-content" id="myTabContent">
+                                                            <div
+                                                                className={`tab-pane fade ${activeTab === 'marketing' ? 'show active' : ''}`}
+                                                                id="marketing"
+                                                                role="tabpanel"
+                                                                aria-labelledby="marketing-tab"
+                                                            >
+                                                                <ul>
+                                                                    <li>Email: marketing@lscs.sch.id</li>
+                                                                    <li>Tel: 0811-8880-678</li>
+                                                                    <li>
+                                                                        Jalan Taman Surya 5 Blok EE2 No.20-27, RT.2/RW.3,
+                                                                        Pegadungan, Kec. Kalideres, Kota Jakarta Barat, Daerah
+                                                                        Khusus Ibukota Jakarta 11830
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div
+                                                                className={`tab-pane fade ${activeTab === 'info' ? 'show active' : ''}`}
+                                                                id="info"
+                                                                role="tabpanel"
+                                                                aria-labelledby="info-tab"
+                                                            >
+                                                                <ul>
+                                                                    <li>Email: info@lscs.sch.id</li>
+                                                                    <li>Tel: 0813-1060-2143</li>
+                                                                    <li>
+                                                                        Jalan Taman Surya 5 Blok EE2 No.20-27, RT.2/RW.3,
+                                                                        Pegadungan, Kec. Kalideres, Kota Jakarta Barat, Daerah
+                                                                        Khusus Ibukota Jakarta 11830
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -246,7 +298,7 @@ const Footer = () => {
                             className="copyright d-flex flex-lg-row flex-column align-items-center justify-content-center"
                             style={{
                                 backgroundImage:
-                                    "url(/landing/images/footer_bg.jpg)",
+                                    "url(/img/banner-resize.png)",
                                 transform: "translateY(0%)",
                                 opacity: 1,
                                 transition:

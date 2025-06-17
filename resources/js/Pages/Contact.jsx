@@ -96,8 +96,8 @@ const Contact = () => {
             } else {
                 setModalMessage(
                     error.response?.data?.message ||
-                        error.message ||
-                        "Something went wrong."
+                    error.message ||
+                    "Something went wrong."
                 );
                 setIsSuccess(false);
                 setShowModal(true);
@@ -154,11 +154,10 @@ const Contact = () => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        className={`comment_input ${
-                                                            errors.name
-                                                                ? "is-invalid"
-                                                                : ""
-                                                        }`}
+                                                        className={`comment_input ${errors.name
+                                                            ? "is-invalid"
+                                                            : ""
+                                                            }`}
                                                         required
                                                         value={data.name}
                                                         onChange={(e) =>
@@ -181,11 +180,10 @@ const Contact = () => {
                                                     <select
                                                         name="to"
                                                         id="to"
-                                                        className={`comment_input ${
-                                                            errors.to
-                                                                ? "is-invalid"
-                                                                : ""
-                                                        }`}
+                                                        className={`comment_input ${errors.to
+                                                            ? "is-invalid"
+                                                            : ""
+                                                            }`}
                                                         required
                                                         value={data.to}
                                                         onChange={(e) =>
@@ -226,11 +224,10 @@ const Contact = () => {
                                                     </div>
                                                     <input
                                                         type="email"
-                                                        className={`comment_input ${
-                                                            errors.email
-                                                                ? "is-invalid"
-                                                                : ""
-                                                        }`}
+                                                        className={`comment_input ${errors.email
+                                                            ? "is-invalid"
+                                                            : ""
+                                                            }`}
                                                         required
                                                         value={data.email}
                                                         onChange={(e) =>
@@ -252,11 +249,10 @@ const Contact = () => {
                                                     </div>
                                                     <input
                                                         type="number"
-                                                        className={`comment_input ${
-                                                            errors.phone
-                                                                ? "is-invalid"
-                                                                : ""
-                                                        }`}
+                                                        className={`comment_input ${errors.phone
+                                                            ? "is-invalid"
+                                                            : ""
+                                                            }`}
                                                         required
                                                         value={data.phone}
                                                         onChange={(e) =>
@@ -279,11 +275,10 @@ const Contact = () => {
                                                 </div>
                                                 <input
                                                     type="text"
-                                                    className={`comment_input ${
-                                                        errors.subject
-                                                            ? "is-invalid"
-                                                            : ""
-                                                    }`}
+                                                    className={`comment_input ${errors.subject
+                                                        ? "is-invalid"
+                                                        : ""
+                                                        }`}
                                                     required
                                                     value={data.subject}
                                                     onChange={(e) =>
@@ -304,11 +299,10 @@ const Contact = () => {
                                                     Message
                                                 </div>
                                                 <textarea
-                                                    className={`comment_input comment_textarea ${
-                                                        errors.message
-                                                            ? "is-invalid"
-                                                            : ""
-                                                    }`}
+                                                    className={`comment_input comment_textarea ${errors.message
+                                                        ? "is-invalid"
+                                                        : ""
+                                                        }`}
                                                     required
                                                     value={data.message}
                                                     onChange={(e) =>
@@ -354,26 +348,35 @@ const Contact = () => {
                                         </div>
                                         <div className="contact_info_text">
                                             <p>
-                                                It is a long established fact
-                                                that a reader will be distracted
-                                                by the readable content of a
-                                                page when looking at its layout.
+                                                Lia Stephanie School continues to be committed to providing holistic education, preparing students not only to excel in knowledge but also to have strong character and firm faith, ready to face the challenges of the future.
                                             </p>
                                         </div>
                                         <div className="contact_info_location">
                                             <div className="contact_info_location_title">
                                                 Jakarta Office
                                             </div>
-                                            <ul className="location_list">
-                                                <li>
-                                                    Jalan Taman Surya 5 Blok EE2
-                                                    No.20-27, RT.2/RW.3,
-                                                    Pegadungan, Kec. Kalideres,
-                                                    Kota Jakarta Barat, Daerah
-                                                    Khusus Ibukota Jakarta 11830
-                                                </li>
-                                                <li>0811-8880-678</li>
+                                            <p>
+                                                Jalan Taman Surya 5 Blok EE2
+                                                No.20-27, RT.2/RW.3,
+                                                Pegadungan, Kec. Kalideres,
+                                                Kota Jakarta Barat, Daerah
+                                                Khusus Ibukota Jakarta 11830
+                                            </p>
+                                            <p className="mb-0">
+                                                Contactable Email:
+                                            </p>
+                                            <ul className="contact_list_number">
+                                                <li>info@lscs.sch.id</li>
                                                 <li>marketing@lscs.sch.id</li>
+                                            </ul>
+                                            <br />
+                                            <p>
+                                                Contactable Number:
+                                            </p>
+                                            <ul className="contact_list_number">
+                                                <li>(021) 54390371 (Foundation Number)</li>
+                                                <li>0813-1060-2143 (Administrative Number)</li>
+                                                <li>0811-8880-678 (Marketing Number)</li>
                                             </ul>
                                         </div>
 
@@ -440,9 +443,8 @@ const Contact = () => {
                             <div className="modal-footer">
                                 <button
                                     type="button"
-                                    className={`btn ${
-                                        isSuccess ? "btn-success" : "btn-danger"
-                                    }`}
+                                    className={`btn ${isSuccess ? "btn-success" : "btn-danger"
+                                        }`}
                                     onClick={handleCloseModal}
                                 >
                                     OK

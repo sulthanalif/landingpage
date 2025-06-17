@@ -52,283 +52,262 @@ const About = () => {
                     </div>
                 </div>
 
-                <div className="features pt-0">
-                    <div className="container">
-                        <div className="row features_row">
-                            <div className="col-lg-6">
-                                <img
-                                    src="/landing/images/our_history.png"
-                                    alt=""
-                                    loading="lazy"
-                                    className="img-fluid mx-auto d-block"
-                                />
+                <HistorySection />
+
+                <ValueSection />
+
+                <CoreValueSection />
+            </Layout>
+        </>
+    );
+};
+
+const HistorySection = () => {
+    return (
+        <div className="features pt-0">
+            <div className="container">
+                <div className="row features_row">
+                    <div className="col-lg-6">
+                        <img
+                            src="/landing/images/our_history.png"
+                            alt=""
+                            loading="lazy"
+                            className="img-fluid mx-auto d-block"
+                        />
+                    </div>
+                    <div className="col-lg-6 feature_col">
+                        <div className="feature trans_400 py-5">
+                            <h2 className="feature_title">
+                                Lia Stephanie School Profile: Cultivating Character and Faith for a Bright Future
+                            </h2>
+                            <hr className="feature_line" />
+                            <div className="feature_text mt-3 text-justify">
+                                <p>
+                                    Lia Stephanie School, a dedicated educational institution under the auspices of the Lia Stephanie Education Foundation, is committed to providing quality education focused on the academic, character, and spiritual development of students. Strategically located at Taman Surya V Blok EE2 No. 20-27, Pegadungan, Kalideres District, West Jakarta, the school offers a conducive and inspiring learning environment for its students. With the motto "Cultivate Character, Nurture Faith," Lia Stephanie School is committed to being a second home for students, a place where they can learn and grow into better individuals. This institution also strives to provide the right educational platform to develop students' potential both academically and non-academically, as well as to enhance the professionalism of teachers and staff.
+                                </p>
                             </div>
-                            <div className="col-lg-6 feature_col">
-                                <div className="feature trans_400">
-                                    <h2 className="feature_title">
-                                        Our History
-                                    </h2>
-                                    <hr className="feature_line" />
-                                    <div className="feature_text mt-3 text-justify">
-                                        <p>
-                                            Lia Stephanie Catholic School (LSCS)
-                                            was established by Lia Stephanie
-                                            Foundation in 1999. Initially, the
-                                            school was located in a small
-                                            shophouse in West Jakarta with the
-                                            primary focus in providing quality
-                                            early childhood education programs.
-                                            Three school levels were offered at
-                                            the same time, ie Nursery, Playgroup
-                                            and Kindergarten with fewer than 10
-                                            students enrolled.
-                                        </p>
-                                        <p>
-                                            After 3 years of growing and
-                                            nurturing young students, LSCS
-                                            managed to increase students
-                                            enrolment and decide to expand to a
-                                            bigger capacity. The building was
-                                            still within a short distance (less
-                                            than 3 km away) from its previous
-                                            location and would be home to LSCS’
-                                            students for a few years to come.
-                                        </p>
-                                        <p>
-                                            As demands for quality education
-                                            continued to rise, LSCS then built
-                                            another school in 2004 to
-                                            accommodate the need for elementary
-                                            level students. Later in 2009, LSCS
-                                            also extended its provision for
-                                            Junior and Senior High School
-                                            programs by expanding to a bigger
-                                            facility at Taman Surya V, West
-                                            Jakarta.
-                                        </p>
-                                        <p>
-                                            Since its inception, LSCS has
-                                            committed to a pedagogical and
-                                            Christian philosophy that speaks for
-                                            parents and children. Despite its
-                                            humble beginning, LSCS is now one of
-                                            the leading Catholic schools in West
-                                            Jakarta region with over 150
-                                            graduates, pursuing higher academic
-                                            levels in Indonesia or worldwide.
-                                        </p>
-                                    </div>
-                                </div>
+                            <h2 className="feature_title mt-5">
+                                History and Development
+                            </h2>
+                            <hr className="feature_line" />
+                            <div className="feature_text mt-3 text-justify">
+                                <p>
+                                    Founded in 1999, Lia Stephanie School began its journey by focusing on early childhood education. Along with increasing public trust and the need for continuous quality education, the school developed rapidly. The Primary School (SD) level began operations around 2003-2004, followed by the establishment of the Junior High School (SMP) and Senior High School (SMA) in 2009. To answer global challenges, SDS Lia Stephanie Global School was then established in 2019, offering an international curriculum.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    )
+}
 
-                {/* <div className="feature">
-                    <div
-                        className="feature_background"
-                        style={{
-                            backgroundImage:
-                                "url(/landing/images/courses_background.jpg)",
-                        }}
-                    />
-                    <div className="container">
-                        <div className="row">
-                            <div className="col">
-                                <div className="section_title_container text-center">
-                                    <h2 className="section_title">
-                                        Our History
-                                    </h2>
-                                    <div className="section_subtitle">
-                                        <p>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit. Donec
-                                            vel gravida arcu. Vestibulum
-                                            feugiat, sapien ultrices fermentum
-                                            congue, quam velit venenatis sem
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row feature_row">
-                            <div className="col-lg-6 feature_col">
-                                <div className="feature_content">
-                                    <div className="accordions">
-                                        <div className="elements_accordions">
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center active">
-                                                    <div>
-                                                        Award for Best School
-                                                        2017
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        You’re learning from the
-                                                        best.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        Our degrees are
-                                                        recognized worldwide.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="accordion_container">
-                                                <div className="accordion d-flex flex-row align-items-center">
-                                                    <div>
-                                                        We encourage our
-                                                        students to go global.
-                                                    </div>
-                                                </div>
-                                                <div className="accordion_panel">
-                                                    <p>
-                                                        Lorem Ipsum has been the
-                                                        industry's standard
-                                                        dummy text ever since
-                                                        the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 feature_col">
-                                <div className="feature_video d-flex flex-column align-items-center justify-content-center">
-                                    <div
-                                        className="feature_video_background"
-                                        style={{
-                                            backgroundImage:
-                                                "url(/landing/images/our_history.png)",
-                                        }}
-                                    />
-                                    <a
-                                        className="vimeo feature_video_button"
-                                        href="https://player.vimeo.com/video/99340873?title=0"
-                                        title="OH, PORTUGAL - IN 4K - Basti Hansen - Stock Footage"
-                                    >
-                                        <img src="/landing/images/play.png" alt="" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
-
-                <div className="about">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col">
-                                <div className="section_title_container text-center">
-                                    <h2 className="section_title">
-                                        Our Visions and Missions
-                                    </h2>
-                                    {/* <div className="section_subtitle">
+const ValueSection = () => {
+    return (
+        <div className="about">
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <div className="section_title_container text-center">
+                            <h2 className="section_title">
+                                Vision, Mission, and Values
+                            </h2>
+                            {/* <div className="section_subtitle">
                                         <p>
                                             Lorem ipsum dolor sit amet,
                                             consectetur adipiscing elit. Donec
                                             vel gravida arcu Vestibulum
                                         </p>
                                     </div> */}
-                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row features_row">
+                    <div className="col-lg-6 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
+                            <div className="card-body text-center p-4">
+                                <h3 className="feature-title h5 mb-3">
+                                    Our Vision
+                                </h3>
+                                <p className="feature-text mb-0 text-justify font-italic">
+                                    "To produce the nation's successors who bring change to the world with a global perspective, entrepreneurial spirit, and character in the Catholic faith."
+                                </p>
                             </div>
                         </div>
-                        <div className="row about_row">
-                            <div className="col-lg-5 about_col about_col_left">
-                                <div className="about_item">
-                                    <div className="about_item_title">
-                                        <a href="#">Our Visions</a>
-                                    </div>
-                                    <div className="about_item_text">
-                                        <p>
-                                            To develop a religious, innovative
-                                            and creative mindset through
-                                            learning in school. Meanwhile, our
-                                            goal is to provide guidance for our
-                                            students in order to achieve the
-                                            future helps by the help of our
-                                            teachers together with God’s Grace.
-                                        </p>
-                                    </div>
-                                </div>
+                    </div>
+                    <div className="col-lg-6 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
+                            <div className="card-body text-center p-4">
+                                <h3 className="feature-title h5 mb-3">
+                                    Our Mission
+                                </h3>
+                                <p className="feature-text mb-0 text-justify">
+                                    <ul className="feature_list_number">
+                                        <li>Developing students' talents to become creative, innovative, and resilient individuals for the glory of God, through an open curriculum and life-skill development.</li>
+                                        <li>Arousing Pancasila values in students, for the creation of a caring, tolerant, and well-mannered society through P5 learning.</li>
+                                        <li>Forming innovative, transformative, creative, and critical students through an open learning system between students and teaching staff.</li>
+                                        <li>Cultivating resilience and ethical values of integrity in students through transformative learning integrated with intellectual, spiritual, and emotional intelligence.</li>
+                                        <li>Becoming the school of choice for students that offers real community learning experiences in society, keeping up with the times.</li>
+                                    </ul>
+                                </p>
                             </div>
-                            <div className="col-lg-7 about_col about_col_middle">
-                                <div className="about_item">
-                                    {/* <div className="about_item_image">
-                                        <img src="images/about_2.jpg" alt="" />
-                                    </div> */}
-                                    <div className="about_item_title">
-                                        <a href="#">Our Missions</a>
-                                    </div>
-                                    <div className="about_item_text">
-                                        <p>
-                                            To be a second home for the students
-                                            where they can learn and train to
-                                            become a better person. Second is to
-                                            provide facilities for the teachers
-                                            and staffs to improve their skills,
-                                            professionalism and willing to
-                                            serve. Third is to provide a proper
-                                            educational platform to develop the
-                                            students in both academic and
-                                            non-academic.
-                                        </p>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-6 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
+                            <div className="card-body text-center p-4">
+                                <h3 className="feature-title h5 mb-3">
+                                    Our Objectives
+                                </h3>
+                                <p className="feature-text mb-0 text-justify">
+                                    <ul className="feature_list_number">
+                                        <li>To become an Entrepreneurial School that creates resilient students and provides solutions to the community in facing changing times.</li>
+                                        <li>To provide integrated and realistic education for students to find their passion, identity, and life purpose.</li>
+                                        <li>To produce world-class students who still maintain Catholic and apostolic human values and have a high national spirit.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-6 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
+                            <div className="card-body text-center p-4">
+                                <h3 className="feature-title h5 mb-3">
+                                    Our Values
+                                </h3>
+                                <p className="feature-text mb-0 text-justify">
+                                    <ul className="feature_list_circle">
+                                        <li><strong>E</strong>ncouraging students to become the best version of themselves</li>
+                                        <li><strong>N</strong>ourishing every student's development</li>
+                                        <li><strong>T</strong>idy and disciplined</li>
+                                        <li><strong>R</strong>especting everyone</li>
+                                        <li><strong>E</strong>laborating every program with vendors</li>
+                                        <li><strong>P</strong>utting God first in everyday life</li>
+                                        <li><strong>R</strong>esponsible in all works I do</li>
+                                        <li><strong>E</strong>xcellent in every responsibility I am trusted</li>
+                                        <li><strong>N</strong>ever delaying what needs to be done</li>
+                                        <li><strong>E</strong>veryone is important regardless of age and position in our school</li>
+                                        <li><strong>U</strong>nity and diversity</li>
+                                        <li><strong>R</strong>easoning in every action I make</li>
+                                    </ul>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </Layout>
-        </>
-    );
-};
+            </div>
+        </div>
+    )
+}
+
+const CoreValueSection = () => {
+    return (
+        <div className="about">
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <div className="section_title_container text-center">
+                            <h2 className="section_title">
+                                Core Values
+                            </h2>
+                            <div className="section_subtitle">
+                                <p>
+                                    Lia Stephanie School upholds the values of
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row mt-5">
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/icon_value1.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Quality of Education
+                                </h3>
+                                <p className="feature-text mb-0">
+                                    Providing the best educational standards.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/icon_value2.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Innovation
+                                </h3>
+                                <p className="feature-text mb-0">
+                                    Continuously innovating in teaching and learning methods.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/icon_value3.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Integrity & Responsibility
+                                </h3>
+                                <p className="feature-text mb-0">
+                                    Instilling honesty and a sense of responsibility.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/icon_value4.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Spirituality
+                                </h3>
+                                <p className="feature-text mb-0">
+                                    Developing students' spiritual side.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 export default About;

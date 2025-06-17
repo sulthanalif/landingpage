@@ -1927,6 +1927,30 @@ section {
 .footer_contact_info ul li:not(:last-child) {
     margin-bottom: 15px;
 }
+.footer_nav_links {
+    display: flex; /* Arranges links horizontally */
+    gap: 20px; /* Space between links */
+    margin-bottom: 5px; /* Space below links */
+}
+
+.footer_nav_links .footer_link {
+    text-decoration: none; /* Remove underline */
+    color: #fff; /* White text color (assuming dark background) */
+    font-weight: bold;
+    padding: 8px 15px; /* Add some padding for clickable area */
+    border-radius: 5px; /* Slightly rounded corners */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    cursor: pointer;
+}
+
+.footer_nav_links .footer_link:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
+}
+
+.footer_nav_links .footer_link.active {
+    background-color: #007bff; /* Example active state background */
+    color: #fff;
+}
 .footer_links {
     padding-left: 80px;
 }
@@ -2120,5 +2144,111 @@ section {
 
     .cta-button {
         width: 100%;
+    }
+}
+
+/* Container utama untuk floating WhatsApp */
+.floating-whatsapp-container {
+    position: fixed; /* Membuat elemen tetap di layar */
+    bottom: 20px; /* Jarak dari bawah */
+    right: 20px; /* Jarak dari kanan */
+    z-index: 1000; /* Memastikan elemen berada di atas elemen lain */
+    display: flex;
+    flex-direction: column-reverse; /* Mengatur item agar tersusun vertikal (menu di atas tombol) */
+    align-items: flex-end; /* Menyelaraskan item ke kanan */
+}
+
+/* Tombol utama WhatsApp */
+.whatsapp-button {
+    background-color: #25d366; /* Warna hijau WhatsApp */
+    color: white;
+    width: 60px; /* Ukuran tombol */
+    height: 60px;
+    border-radius: 50%; /* Membuat tombol bulat */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px; /* Ukuran ikon WhatsApp */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+    cursor: pointer; /* Mengubah kursor menjadi pointer saat di-hover */
+    transition: transform 0.3s ease-in-out; /* Transisi untuk efek hover */
+}
+
+.whatsapp-button:hover {
+    transform: scale(1.05); /* Sedikit membesar saat di-hover */
+}
+
+/* Opsi menu yang muncul saat tombol diklik */
+.whatsapp-options {
+    background-color: #fff; /* Latar belakang putih untuk menu */
+    border-radius: 10px; /* Sudut melengkung */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Bayangan yang lebih jelas */
+    padding: 10px 0;
+    margin-bottom: 15px; /* Jarak antara menu dan tombol WhatsApp */
+    width: 250px; /* Lebar menu */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Memastikan konten tidak keluar dari border-radius */
+
+    /* Animasi muncul dari bawah */
+    animation: slideUp 0.3s ease-out forwards;
+}
+
+/* Animasi untuk menu */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Setiap item di dalam menu opsi */
+.whatsapp-options .option-item {
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column; /* Label dan kontak tersusun vertikal */
+    cursor: pointer; /* Kursor pointer */
+    transition: background-color 0.2s ease; /* Transisi hover */
+    border-bottom: 1px solid #eee; /* Garis pemisah antar item */
+}
+
+.whatsapp-options .option-item:last-child {
+    border-bottom: none; /* Hapus garis di item terakhir */
+}
+
+.whatsapp-options .option-item:hover {
+    background-color: #f0f0f0; /* Latar belakang abu-abu muda saat di-hover */
+}
+
+.whatsapp-options .option-label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.whatsapp-options .option-contact {
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Responsif untuk layar lebih kecil */
+@media (max-width: 768px) {
+    .floating-whatsapp-container {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .whatsapp-button {
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+    }
+
+    .whatsapp-options {
+        width: 220px;
     }
 }

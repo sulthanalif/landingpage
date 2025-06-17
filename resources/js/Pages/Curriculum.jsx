@@ -56,6 +56,8 @@ const Curriculum = () => {
                 <SchoolProgram />
 
                 <OurGoal />
+
+                <AdvantageSection />
             </Layout>
         </>
     );
@@ -77,13 +79,11 @@ const SchoolProgram = () => {
                         <div className="col">
                             <div className="section_title_container text-center">
                                 <h2 className="section_title">
-                                    Lia Stephanie Education Programs
+                                    Educational Programs and Curriculum
                                 </h2>
                                 <div className="section_subtitle">
                                     <p className="font-italic">
-                                        Forming a Generation that Fears God,
-                                        Loves Fellow Humans and the Environment,
-                                        is Creative, and Entrepreneurial
+                                        Lia Stephanie School offers comprehensive education levels from Pre-School, Primary School (SD), Junior High School (SMP), to Senior High School (SMA). There are two main tracks in its educational system
                                     </p>
                                 </div>
                             </div>
@@ -93,80 +93,35 @@ const SchoolProgram = () => {
                         {/* Feature Content */}
                         <div className="col-lg-6 feature_col">
                             <div className="feature_content">
-                                <h3 className="mb-3">Our Learning Approach</h3>
+                                {/* <h3 className="mb-3">Our Learning Approach</h3> */}
                                 {/* Accordions */}
                                 <div className="accordions">
                                     <div className="elements_accordions">
                                         <div className="accordion_container">
                                             <div className="accordion d-flex flex-row align-items-center active">
-                                                <div>Integrated Curriculum</div>
+                                                <div>Lia Stephanie Catholic School</div>
                                             </div>
                                             <div className="accordion_panel">
-                                                <p>
-                                                    Combines the National
-                                                    Curriculum with a
-                                                    21st-century learning
-                                                    approach:{" "}
-                                                    <i>
-                                                        critical thinking,
-                                                        collaboration,
-                                                        creativity,
-                                                    </i>{" "}
-                                                    and
-                                                    <i>communication</i>.
-                                                </p>
+                                                <ul>
+                                                    <li>Uses the National Curriculum (Curriculum 2013 and Merdeka Curriculum).</li>
+                                                    <li>Emphasis on a scientific approach, critical thinking skills, and character building.</li>
+                                                    <li>Daily "spiritual breakfast" program at the primary level for faith formation.</li>
+                                                    <li>Development of public speaking skills is a priority at the junior high level.</li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div className="accordion_container">
                                             <div className="accordion d-flex flex-row align-items-center">
                                                 <div>
-                                                    Technology Integration
+                                                    Lia Stephanie Global School
                                                 </div>
                                             </div>
                                             <div className="accordion_panel">
-                                                <p>
-                                                    Students are accustomed to
-                                                    using digital devices to
-                                                    support the learning
-                                                    process, from e-learning,
-                                                    hybrid classes, to online
-                                                    learning platforms.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="accordion_container">
-                                            <div className="accordion d-flex flex-row align-items-center">
-                                                <div>
-                                                    Project-Based Learning
-                                                </div>
-                                            </div>
-                                            <div className="accordion_panel">
-                                                <p>
-                                                    Trains students to
-                                                    understand concepts, solve
-                                                    real-world problems, and
-                                                    present the results of their
-                                                    work independently or in
-                                                    teams.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="accordion_container">
-                                            <div className="accordion d-flex flex-row align-items-center">
-                                                <div>
-                                                    Character Education & Global
-                                                    Insight
-                                                </div>
-                                            </div>
-                                            <div className="accordion_panel">
-                                                <p>
-                                                    Through social, religious,
-                                                    and international programs,
-                                                    we instill moral values and
-                                                    foster a global perspective
-                                                    in students from an early
-                                                    age.
-                                                </p>
+                                                <ul>
+                                                    <li>For Pre-School and Primary School levels, it implements the International Baccalaureate (IB) Primary Years Programme (PYP).</li>
+                                                    <li>Still integrates the National Curriculum (Curriculum 2013) with English as the language of instruction for certain subjects such as Science, Mathematics, Religion, and Social Sciences.</li>
+                                                    <li>Creates a full English-speaking environment at the Pre-School level.</li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -283,49 +238,48 @@ const OurGoal = () => {
                                         material and relevant skills. Suitable
                                         for students who wish to continue their
                                         education at top world universities.{" "}
-                                        <br />
-                                        <strong>Key Stages:</strong>
-                                        <ul>
-                                            <li>
-                                                <strong>
-                                                    Lower Secondary (Key Stage
-                                                    3)
-                                                </strong>
-                                                – Ages 11-14 years
-                                            </li>
-                                            <li>
-                                                <strong>
-                                                    IGCSE (Key Stage 4)
-                                                </strong>
-                                                – Ages 14-16 years
-                                            </li>
-                                            <li>
-                                                <strong>
-                                                    A-Level (Key Stage 5)
-                                                </strong>
-                                                – Ages 16-18 years
-                                            </li>
-                                        </ul>
-                                        <strong>Edexcel Advantages:</strong>
-                                        <ul>
-                                            <li>
-                                                Relevant and well-structured
-                                                learning materials
-                                            </li>
-                                            <li>
-                                                Internationally benchmarked
-                                                assessment
-                                            </li>
-                                            <li>
-                                                Focus on analytical and academic
-                                                skills
-                                            </li>
-                                            <li>
-                                                Recognized by over 150 countries
-                                                and leading universities
-                                            </li>
-                                        </ul>
                                     </p>
+                                    <strong>Key Stages:</strong>
+                                    <ul>
+                                        <li>
+                                            <strong>
+                                                Lower Secondary (Key Stage
+                                                3)
+                                            </strong>
+                                            – Ages 11-14 years
+                                        </li>
+                                        <li>
+                                            <strong>
+                                                IGCSE (Key Stage 4)
+                                            </strong>
+                                            – Ages 14-16 years
+                                        </li>
+                                        <li>
+                                            <strong>
+                                                A-Level (Key Stage 5)
+                                            </strong>
+                                            – Ages 16-18 years
+                                        </li>
+                                    </ul>
+                                    <strong>Edexcel Advantages:</strong>
+                                    <ul>
+                                        <li>
+                                            Relevant and well-structured
+                                            learning materials
+                                        </li>
+                                        <li>
+                                            Internationally benchmarked
+                                            assessment
+                                        </li>
+                                        <li>
+                                            Focus on analytical and academic
+                                            skills
+                                        </li>
+                                        <li>
+                                            Recognized by over 150 countries
+                                            and leading universities
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             <div className="card-footer text-right mt-auto">
@@ -362,51 +316,51 @@ const OurGoal = () => {
                                         emphasis on inquiry, life skills, and
                                         global social awareness. We offer the
                                         following IB programmes:
-                                        <ul>
-                                            <li>
-                                                <strong>
-                                                    Primary Years Programme
-                                                    (PYP)
-                                                </strong>
-                                                – Ages 3-12 years
-                                            </li>
-                                            <li>
-                                                <strong>
-                                                    Middle Years Programme (MYP)
-                                                </strong>
-                                                – Ages 11-16 years
-                                            </li>
-                                            <li>
-                                                <strong>
-                                                    Diploma Programme (DP)
-                                                </strong>
-                                                – Ages 16-19 years
-                                            </li>
-                                        </ul>
-                                        <strong>IB Philosophy:</strong>
-                                        <ul>
-                                            <li>
-                                                <i>Inquiry-based learning</i>
-                                                (student-centered, based on
-                                                curiosity)
-                                            </li>
-                                            <li>
-                                                Focus on developing inquiring,
-                                                reflective, and caring learners
-                                            </li>
-                                            <li>
-                                                Emphasis on interdisciplinary
-                                                learning in science, social
-                                                studies, and humanities
-                                            </li>
-                                            <li>
-                                                Posters
-                                                international-mindedness,
-                                                empathy, and global
-                                                responsibility
-                                            </li>
-                                        </ul>
                                     </p>
+                                    <ul>
+                                        <li>
+                                            <strong>
+                                                Primary Years Programme
+                                                (PYP)
+                                            </strong>
+                                            – Ages 3-12 years
+                                        </li>
+                                        <li>
+                                            <strong>
+                                                Middle Years Programme (MYP)
+                                            </strong>
+                                            – Ages 11-16 years
+                                        </li>
+                                        <li>
+                                            <strong>
+                                                Diploma Programme (DP)
+                                            </strong>
+                                            – Ages 16-19 years
+                                        </li>
+                                    </ul>
+                                    <strong>IB Philosophy:</strong>
+                                    <ul>
+                                        <li>
+                                            <i>Inquiry-based learning</i>
+                                            (student-centered, based on
+                                            curiosity)
+                                        </li>
+                                        <li>
+                                            Focus on developing inquiring,
+                                            reflective, and caring learners
+                                        </li>
+                                        <li>
+                                            Emphasis on interdisciplinary
+                                            learning in science, social
+                                            studies, and humanities
+                                        </li>
+                                        <li>
+                                            Posters
+                                            international-mindedness,
+                                            empathy, and global
+                                            responsibility
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             <div className="card-footer text-right mt-auto">
@@ -443,5 +397,217 @@ const OurGoal = () => {
         </>
     );
 };
+
+const AdvantageSection = () => {
+    return (
+        <div className="feature">
+            <div
+                className="feature_background"
+                style={{
+                    backgroundImage:
+                        "url(/landing/images/courses_background.jpg)",
+                }}
+            />
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <div className="section_title_container text-center">
+                            <h2 className="section_title">
+                                School Facilities
+                            </h2>
+                            <div className="section_subtitle">
+                                <p>
+                                    To support optimal teaching and learning processes, Lia Stephanie School provides various adequate facilities, including
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row mt-5">
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/facilities/icon_classroom.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Comfortable classrooms
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/facilities/icon_laboratory.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Laboratories (Science, Computer, Language)
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/facilities/icon_library.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Library
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/icon_value4.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Prayer room
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/facilities/icon_uks.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    School Health Unit (UKS) room
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/facilities/icon_sporty.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Play area and sports facilities
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/facilities/icon_canteen.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Canteen
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                            <div className="card-body text-center p-4">
+                                <div className="feature-icon mb-4">
+                                    <img
+                                        src="/landing/images/facilities/icon_internet.png"
+                                        alt="caption"
+                                        loading="lazy"
+                                        className="img-fluid"
+                                        style={{ height: "60px" }}
+                                    />
+                                </div>
+                                <h3 className="feature-title h5 mb-3">
+                                    Internet access
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row features_row my-5">
+                    <div className="col-lg-6 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
+                            <div className="card-body text-center p-4">
+                                <h3 className="feature-title h5 mb-3">
+                                    Flagship Programs
+                                </h3>
+                                <p className="feature-text mb-0 text-justify">
+                                    <ul className="feature_list_circle">
+                                        <li>Comprehensive and competency-based curriculum.</li>
+                                        <li>Diverse extracurricular programs, such as sports, arts, and science clubs.</li>
+                                        <li>Character and leadership development activities.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-6 pb-3">
+                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
+                            <div className="card-body text-center p-4">
+                                <h3 className="feature-title h5 mb-3">
+                                    Advantages
+                                </h3>
+                                <p className="feature-text mb-0 text-justify">
+                                    <ul className="feature_list_circle">
+                                        <li>Conducive and supportive learning environment.</li>
+                                        <li>Qualified and experienced teachers.</li>
+                                        <li>Focus on student character and skill development.</li>
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 export default Curriculum;

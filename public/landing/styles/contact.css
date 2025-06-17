@@ -951,6 +951,14 @@ section
 	font-size: 14px;
 	color: #5e6271;
 }
+.contact_list_number {
+    list-style-type: dot;
+    padding-left: 25px;
+}
+.contact_list_circle {
+    list-style-type: circle;
+    padding-left: 25px;
+}
 .location_list li:not(:last-child)
 {
 	margin-bottom: 9px;

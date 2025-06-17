@@ -1,6 +1,7 @@
 import React from "react";
 import Footer from "./Partials/Footer";
 import Header from "./Partials/Header";
+import FloatingWhatsApp from "./Partials/FloatingWhatsapp";
 
 const Layout = ({ children }) => {
     return (
@@ -10,6 +11,7 @@ const Layout = ({ children }) => {
             <div className="">{children}</div>
 
             <Footer />
+            <FloatingWhatsApp />
         </div>
     );
 };

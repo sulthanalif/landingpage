@@ -847,6 +847,14 @@ section {
     list-style-type: circle;
     padding-left: 25px;
 }
+.feature_list_number {
+    list-style-type: dot;
+    padding-left: 25px;
+}
+.feature_list_circle {
+    list-style-type: circle;
+    padding-left: 25px;
+}
 .elements_accordions {
 }
 .accordion_container {
