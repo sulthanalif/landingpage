@@ -1927,35 +1927,6 @@ section {
 .footer_contact_info ul li:not(:last-child) {
     margin-bottom: 15px;
 }
-.footer_nav_links {
-    display: flex; /* Arranges links horizontally */
-    gap: 20px; /* Space between links */
-    margin-bottom: 5px; /* Space below links */
-}
-
-.footer_nav_links .footer_link {
-    text-decoration: none; /* Remove underline */
-    color: #fff; /* White text color (assuming dark background) */
-    font-weight: bold;
-    padding: 8px 15px; /* Add some padding for clickable area */
-    border-radius: 5px; /* Slightly rounded corners */
-    transition: background-color 0.3s ease; /* Smooth hover effect */
-    cursor: pointer;
-    box-sizing: border-box;
-}
-.tab-pane {
-    /* --- PERBAIKAN DI SINI --- */
-    box-sizing: border-box; /* Tambahkan untuk konsistensi */
-    /* --- AKHIR PERBAIKAN --- */
-}
-.footer_nav_links .footer_link:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
-}
-
-.footer_nav_links .footer_link.active {
-    background-color: #007bff; /* Example active state background */
-    color: #fff;
-}
 .footer_links {
     padding-left: 80px;
 }
@@ -2152,16 +2123,68 @@ section {
     }
 }
 
+/* Reset box-sizing untuk konsistensi */
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+.footer_nav_links .footer_link:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
+}
+
+.footer_nav_links .footer_link.active {
+    background-color: #007bff; /* Example active state background */
+    color: #fff;
+}
+.footer_nav_links {
+    display: -webkit-box; /* Fallback untuk browser lama */
+    display: -ms-flexbox; /* Fallback untuk IE10 */
+    display: flex; /* Arranges links horizontally */
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    gap: 20px;
+    margin-bottom: 5px; /* Space below links */
+}
+
+/* Fallback untuk gap property */
+.footer_nav_links > .footer_link:not(:last-child) {
+    margin-right: 20px;
+}
+
+.footer_nav_links .footer_link {
+    text-decoration: none; /* Remove underline */
+    color: #fff; /* White text color (assuming dark background) */
+    font-weight: bold;
+    padding: 8px 15px; /* Add some padding for clickable area */
+    border-radius: 5px; /* Slightly rounded corners */
+    -webkit-transition: background-color 0.3s ease; /* Safari */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    cursor: pointer;
+}
+
+.tab-pane {
+    /* Pastikan konsistensi box model */
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 /* Container utama untuk floating WhatsApp */
 .floating-whatsapp-container {
     position: fixed; /* Membuat elemen tetap di layar */
     bottom: 20px; /* Jarak dari bawah */
     right: 20px; /* Jarak dari kanan */
     z-index: 9999; /* Memastikan elemen berada di atas elemen lain */
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: column-reverse;
     flex-direction: column-reverse; /* Mengatur item agar tersusun vertikal (menu di atas tombol) */
+    -webkit-box-align: end;
+    -ms-flex-align: end;
     align-items: flex-end; /* Menyelaraskan item ke kanan */
-    box-sizing: border-box;
 }
 
 /* Tombol utama WhatsApp */
@@ -2171,17 +2194,25 @@ section {
     width: 60px; /* Ukuran tombol */
     height: 60px;
     border-radius: 50%; /* Membuat tombol bulat */
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     font-size: 30px; /* Ukuran ikon WhatsApp */
+    -webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
     cursor: pointer; /* Mengubah kursor menjadi pointer saat di-hover */
+    -webkit-transition: -webkit-transform 0.3s ease-in-out; /* Safari */
     transition: transform 0.3s ease-in-out; /* Transisi untuk efek hover */
-    box-sizing: border-box;
 }
 
 .whatsapp-button:hover {
+    -webkit-transform: scale(1.05); /* Safari */
     transform: scale(1.05); /* Sedikit membesar saat di-hover */
     background-color: #1b9247;
 }
@@ -2190,27 +2221,48 @@ section {
 .whatsapp-options {
     background-color: #fff; /* Latar belakang putih untuk menu */
     border-radius: 10px; /* Sudut melengkung */
+    -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Bayangan yang lebih jelas */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Bayangan yang lebih jelas */
     padding: 10px 0;
     margin-bottom: 15px; /* Jarak antara menu dan tombol WhatsApp */
     width: 250px; /* Lebar menu */
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     overflow: hidden; /* Memastikan konten tidak keluar dari border-radius */
 
     /* Animasi muncul dari bawah */
+    -webkit-animation: slideUp 0.3s ease-out forwards;
     animation: slideUp 0.3s ease-out forwards;
-    box-sizing: border-box;
 }
 
 /* Animasi untuk menu */
-@keyframes slideUp {
+@-webkit-keyframes slideUp {
     from {
         opacity: 0;
+        -webkit-transform: translateY(20px);
         transform: translateY(20px);
     }
     to {
         opacity: 1;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateY(0);
         transform: translateY(0);
     }
 }
@@ -2218,12 +2270,17 @@ section {
 /* Setiap item di dalam menu opsi */
 .whatsapp-options .option-item {
     padding: 12px 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column; /* Label dan kontak tersusun vertikal */
     cursor: pointer; /* Kursor pointer */
+    -webkit-transition: background-color 0.2s ease; /* Safari */
     transition: background-color 0.2s ease; /* Transisi hover */
     border-bottom: 1px solid #eee; /* Garis pemisah antar item */
-    box-sizing: border-box;
 }
 
 .whatsapp-options .option-item:last-child {
