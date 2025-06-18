@@ -16,7 +16,12 @@ new #[Title('Extracurricular')] class extends Component {
 
     public array $config = [
         'guides' => false,
-        'aspectRatio' => 1,
+        'aspectRatio' => 4/3, // Set to landscape ratio (4:3)
+        'viewMode' => 1,
+        'responsive' => true,
+        'dragMode' => 'move',
+        'cropBoxMovable' => true,
+        'cropBoxResizable' => true,
     ];
 
     public bool $drawer = false;

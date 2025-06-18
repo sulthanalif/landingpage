@@ -18,6 +18,9 @@
         </div>
 
         <x-slot:actions>
+            @if ($this->recordId != null)
+                <x-button label="Delete" icon="o-trash" class="btn-danger" wire:click="modalAlertDelete = true" spinner wire:loading.attr="disabled" />
+            @endif
             <x-button label="{{ $this->recordId != null ? 'Update' : 'Save' }}" icon="o-check" class="btn-primary" type="submit" spinner="save" />
         </x-slot:actions>
     </x-form>

@@ -5,7 +5,7 @@
         <div>
             <x-file label='Image' wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
             change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
-            crop-save-text="Crop" :crop-config="$config">
+            crop-save-text="Crop" :crop-config="$config" hint="Image ratio (4:3), Max 10MB">
                 <img id="previewImage" src="{{ asset($oldImage) }}" class="h-40 rounded-lg"  />
             </x-file>
         </div>
