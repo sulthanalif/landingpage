@@ -72,11 +72,11 @@ const Header = () => {
                                                     aria-hidden="true"
                                                 />
                                                 <a
-                                                    href="https://wa.me/628118880678"
+                                                    href="https://wa.me/62081310602143"
                                                     className="text-light ml-2"
                                                     target="_blank"
                                                 >
-                                                    0811-8880-678
+                                                    0813-1060-2143
                                                 </a>
                                             </li>
                                             <li className="notranslate">
@@ -85,11 +85,11 @@ const Header = () => {
                                                     aria-hidden="true"
                                                 />
                                                 <a
-                                                    href="mailto:marketing@lscs.sch.id"
+                                                    href="mailto:info@lscs.sch.id"
                                                     className="text-light ml-2"
                                                     target="_blank"
                                                 >
-                                                    marketing@lscs.sch.id
+                                                    info@lscs.sch.id
                                                 </a>
                                             </li>
                                         </ul>
@@ -169,7 +169,7 @@ const Header = () => {
                                                 src="/img/logo-panjang.png"
                                                 className="img-fluid"
                                                 style={{
-                                                    maxWidth: "170px",
+                                                    maxWidth: "150px",
                                                     maxHeight: "auto",
                                                 }}
                                                 alt="logo"

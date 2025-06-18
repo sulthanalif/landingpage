@@ -51,7 +51,7 @@ const Footer = () => {
                             className="footer_background"
                             style={{
                                 backgroundImage:
-                                    "url(/img/banner-resize.png)",
+                                    "url(/img/footer_bg_resize.png)",
                             }}
                         />
                         <div className="container">
@@ -59,7 +59,7 @@ const Footer = () => {
                                 <div className="col">
                                     <div className="footer_content">
                                         <div className="row">
-                                            <div className="col-lg-4 footer_col">
+                                            <div className="col-lg-5 footer_col">
                                                 {/* Footer About */}
                                                 <div className="footer_section footer_about">
                                                     <div className="footer_logo_container">
@@ -69,13 +69,7 @@ const Footer = () => {
                                                         >
                                                             <img
                                                                 src="/img/logo.png"
-                                                                className="img-fluid"
-                                                                style={{
-                                                                    maxWidth:
-                                                                        "70px",
-                                                                    maxHeight:
-                                                                        "auto",
-                                                                }}
+                                                                className="img-fluid footer_logo"
                                                                 alt="logo"
                                                             />
                                                             <div className="footer_logo_text">
@@ -84,7 +78,7 @@ const Footer = () => {
                                                             </div>
                                                         </Link>
                                                     </div>
-                                                    <div className="footer_about_text">
+                                                    {/* <div className="footer_about_text">
                                                         <p className="text-secondary">
                                                             Jalan Taman Surya 5 Blok EE2
                                                             No.20-27, RT.2/RW.3,
@@ -92,7 +86,7 @@ const Footer = () => {
                                                             Kota Jakarta Barat, Daerah
                                                             Khusus Ibukota Jakarta 11830
                                                         </p>
-                                                    </div>
+                                                    </div> */}
                                                     <div className="footer_social">
                                                         <ul>
                                                             <li>
@@ -195,7 +189,7 @@ const Footer = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-lg-4 footer_col">
+                                            <div className="col-lg-3 footer_col">
                                                 {/* Footer Contact */}
                                                 <div className="footer_section footer_contact">
                                                     <div className="footer_title">
@@ -295,7 +289,7 @@ const Footer = () => {
                         className={`footer-sticky position-fixed ${visible ? "" : "d-none"}`}
                     >
                         <div
-                            className="copyright d-flex flex-lg-row flex-column align-items-center justify-content-center"
+                            className="copyright d-flex flex-lg-row flex-row align-items-center justify-content-center pt-3"
                             style={{
                                 backgroundImage:
                                     "url(/img/banner-resize.png)",

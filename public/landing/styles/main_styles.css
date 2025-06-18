@@ -274,6 +274,9 @@ section {
     transform: translateY(0);
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     opacity: 1;
+    padding: 0;
+    height: 50px;
+    max-height: none;
 }
 
 .footer-hidden {
@@ -1102,12 +1105,12 @@ section {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.70rem;
+    font-size: 0.7rem;
     transition: background-color 0.3s ease;
 }
 
 .file-upload-filename {
-    font-size: 0.70rem;
+    font-size: 0.7rem;
     color: #555;
     white-space: nowrap;
     overflow: hidden;
@@ -1964,8 +1967,11 @@ section {
     margin-bottom: 10px;
 }
 .copyright {
-    height: 54px;
+    padding-top: 17px;
+    padding-bottom: 30px;
     border-top: solid 1px #353a49;
+    background-size: cover;
+    background-position: center;
 }
 .cr_list li {
     display: inline-block;
@@ -2085,6 +2091,11 @@ section {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
+.footer_logo {
+    max-width: 180px;
+    max-height: auto;
+}
+
 /* Animations */
 @keyframes float {
     0% {
@@ -2121,10 +2132,16 @@ section {
     .cta-button {
         width: 100%;
     }
+
+    .footer_logo {
+        max-width: 150px;
+    }
 }
 
 /* Reset box-sizing untuk konsistensi */
-*, *:before, *:after {
+*,
+*:before,
+*:after {
     box-sizing: border-box;
 }
 
@@ -2305,7 +2322,7 @@ section {
 /* Responsif untuk layar lebih kecil */
 @media (max-width: 768px) {
     .floating-whatsapp-container {
-        bottom: 15px;
+        bottom: 35px;
         right: 15px;
     }
 
