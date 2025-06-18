@@ -146,28 +146,10 @@ new #[Title('Questions')] class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
-            @scope('actions', $data)
-                <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
-            @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
         </x-table>
-        @if ($this->selected)
-            <div class="flex justify-end items-center gap-2">
-                @can('question-delete')
-                    <div class="mt-3 flex justify-end">
-                        <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
-                            class="text-red-500" wire:loading.attr="disabled" />
-                    </div>
-                @endcan
-                <div class="mt-3 flex justify-end">
-                    <x-button label="Change Status" icon="o-arrow-path-rounded-square"
-                        wire:click="modalAlertWarning = true" spinner class="text-blue-500"
-                        wire:loading.attr="disabled" />
-                </div>
-            </div>
-        @endif
     </x-card>
 
     <!-- DRAWER CREATE -->
