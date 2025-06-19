@@ -135,20 +135,9 @@ const SchoolProgram = () => {
                                 <div
                                     className="feature_video_background"
                                     style={{
-                                        backgroundImage: "url(/img/logo.png)",
+                                        backgroundImage: "url(/img/logo-content.png)",
                                     }}
                                 />
-                                {/* <a
-                                    className="vimeo feature_video_button"
-                                    href="https://drive.google.com/file/d/14SY6mxL8ly_iRpHK-a82wyRlOlQGQIJq/view?usp=drive_link"
-                                    title="Teaching and Learning Activities (Entrepreneur Got Talent)"
-                                    target="_blank"
-                                >
-                                    <img
-                                        src="/landing/images/play.png"
-                                        alt=""
-                                    />
-                                </a> */}
                             </div>
                         </div>
                     </div>
@@ -205,7 +194,7 @@ const OurGoal = () => {
                                         quality education equips children for a
                                         global future. Therefore, our
                                         international programs,{" "}
-                                        <strong>Edexcel</strong> and
+                                        <strong>Nasional Edexcel</strong> and
                                         <strong>
                                             International Baccalaureate (IB)
                                         </strong>{" "}
@@ -225,7 +214,7 @@ const OurGoal = () => {
                                     />
                                 </div>
                                 <div className="about_item_title">
-                                    <p>Edexcel Curriculum</p>
+                                    <p>Nasional Edexcel Programme</p>
                                     <small className="font-italic">
                                         Academically Challenging British
                                         Curriculum for Global Citizens

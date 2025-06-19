@@ -9,8 +9,10 @@
     <title>{{ env('APP_NAME', 'Laravel') }}</title>
 
     <!-- Favicon -->
-    <link href="{{ asset('img/logo.png') }}" rel="icon" type="image/x-icon">
-
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/favicon_io/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('img/favicon_io/site.webmanifest') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ asset('landing/styles/bootstrap4/bootstrap.min.css') }}">
     <link href="{{ asset('landing/plugins/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet"
@@ -31,11 +33,11 @@
         .goog-te-balloon-frame,
         .goog-te-menu-frame,
         .skiptranslate {
-        display: none !important;
+            display: none !important;
         }
 
         body {
-        top: 0px !important;
+            top: 0px !important;
         }
     </style>
 
@@ -52,13 +54,12 @@
     <!-- Google Translate Script -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-            {
-                pageLanguage: 'en',
-                includedLanguages: 'en,id',
-                autoDisplay: false
-            },
-            'google_translate_element'
+            new google.translate.TranslateElement({
+                    pageLanguage: 'en',
+                    includedLanguages: 'en,id',
+                    autoDisplay: false
+                },
+                'google_translate_element'
             );
         }
 

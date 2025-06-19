@@ -201,10 +201,10 @@ const Contact = () => {
                                                             destination--
                                                         </option>
                                                         <option value="hrd">
-                                                            HRD
+                                                            Recruitment
                                                         </option>
                                                         <option value="marketing">
-                                                            Marketing
+                                                            Admission
                                                         </option>
                                                         <option value="information">
                                                             Information
@@ -362,21 +362,22 @@ const Contact = () => {
                                                 Kota Jakarta Barat, Daerah
                                                 Khusus Ibukota Jakarta 11830
                                             </p>
-                                            <p className="mb-0">
-                                                Contactable Email:
-                                            </p>
+                                            <h4 className="mb-2 mt-3 font-weight-bold">
+                                                Email:
+                                            </h4>
                                             <ul className="contact_list_number">
                                                 <li>info@lscs.sch.id</li>
                                                 <li>marketing@lscs.sch.id</li>
+                                                <li>hrd@lscs.sch.id</li>
                                             </ul>
                                             <br />
-                                            <p>
-                                                Contactable Number:
-                                            </p>
+                                            <h4 className="mb-2 font-weight-bold">
+                                                Call Us:
+                                            </h4>
                                             <ul className="contact_list_number">
-                                                <li>(021) 54390371 (Foundation Number)</li>
-                                                <li>0813-1060-2143 (Administrative Number)</li>
-                                                <li>0811-8880-678 (Marketing Number)</li>
+                                                <li>(021) 54390371 (Office Number)</li>
+                                                <li>0813-1060-2143 (Info Admin Number)</li>
+                                                <li>0811-8880-678 (Admission Number)</li>
                                             </ul>
                                         </div>
 

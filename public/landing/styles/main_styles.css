@@ -2257,6 +2257,54 @@ section {
     animation: slideUp 0.3s ease-out forwards;
 }
 
+/* Container utama untuk floating register */
+.floating-register-container {
+    position: fixed; /* Membuat elemen tetap di layar */
+    bottom: 20px; /* Jarak dari bawah */
+    right: 90px; /* Jarak dari kanan */
+    z-index: 9999; /* Memastikan elemen berada di atas elemen lain */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse; /* Mengatur item agar tersusun vertikal (menu di atas tombol) */
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end; /* Menyelaraskan item ke kanan */
+}
+
+/* Tombol utama register */
+.register-button {
+    background-color: #007bff; /* Warna hijau register */
+    color: white;
+    width: 60px; /* Ukuran tombol */
+    height: 60px;
+    border-radius: 50%; /* Membuat tombol bulat */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 30px; /* Ukuran ikon register */
+    -webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+    cursor: pointer; /* Mengubah kursor menjadi pointer saat di-hover */
+    -webkit-transition: -webkit-transform 0.3s ease-in-out; /* Safari */
+    transition: transform 0.3s ease-in-out; /* Transisi untuk efek hover */
+}
+
+.register-button:hover {
+    -webkit-transform: scale(1.05); /* Safari */
+    transform: scale(1.05); /* Sedikit membesar saat di-hover */
+    background-color: #0069d8;
+}
+
 /* Animasi untuk menu */
 @-webkit-keyframes slideUp {
     from {
@@ -2334,5 +2382,16 @@ section {
 
     .whatsapp-options {
         width: 220px;
+    }
+
+    .floating-register-container {
+        bottom: 35px;
+        right: 75px;
+    }
+
+    .register-button {
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
     }
 }

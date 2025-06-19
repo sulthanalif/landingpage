@@ -209,7 +209,7 @@ const Footer = () => {
                                                                     aria-selected={activeTab === 'marketing'}
                                                                     onClick={() => handleTabClick('marketing')}
                                                                 >
-                                                                    Marketing
+                                                                    Admission
                                                                 </a>
                                                             </li>
                                                             <li>

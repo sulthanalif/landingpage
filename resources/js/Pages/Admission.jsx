@@ -11,6 +11,7 @@ import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-responsive-dt/css/responsive.dataTables.min.css";
 import "datatables.net-select-dt/css/select.dataTables.min.css";
 import TuitionFees from "../Components/Pages/TuitionFees";
+import FloatingRegister from "../Components/Pages/FloatingRegister";
 
 DataTable.use(DT);
 
@@ -111,6 +112,8 @@ const Admission = () => {
                 </div>
 
                 <SimulationFees />
+
+                <FloatingRegister />
             </Layout>
         </>
     );
@@ -118,6 +121,11 @@ const Admission = () => {
 
 const Guidelines = () => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+        setIsPlaying(true);
+    }, []);
 
     const handlePlayClick = () => {
         setIsPlaying(true);
@@ -286,7 +294,7 @@ const Guidelines = () => {
                                             className="feature_video_background"
                                             style={{
                                                 backgroundImage:
-                                                    "url(img/logo.png)",
+                                                    "url(img/logo-content.png)",
                                             }}
                                         />
                                         <button
@@ -313,6 +321,7 @@ const Guidelines = () => {
                             ) : (
                                 <div className="video-container">
                                     <iframe
+                                        ref={videoRef}
                                         width="100%"
                                         height="350"
                                         src="https://www.youtube.com/embed/iw0sC4Cj3HE?autoplay=1"

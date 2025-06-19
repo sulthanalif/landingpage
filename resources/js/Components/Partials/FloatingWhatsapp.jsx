@@ -47,7 +47,7 @@ const FloatingWhatsApp = () => {
             {isOpen && (
                 <div className="whatsapp-options">
                     <div className="option-item" onClick={() => window.open(getWhatsAppLink(contacts.marketing.phone, 'Halo, saya ingin bertanya tentang Marketing.'), '_blank')}>
-                        <span className="option-label">Marketing</span>
+                        <span className="option-label">Admission</span>
                         <span className="option-contact">{contacts.marketing.phone}</span>
                     </div>
                     <div className="option-item" onClick={() => window.open(getWhatsAppLink(contacts.info.phone, 'Halo, saya ingin bertanya tentang Info Umum.'), '_blank')}>
