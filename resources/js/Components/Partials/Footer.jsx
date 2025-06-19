@@ -68,7 +68,7 @@ const Footer = () => {
                                                             className="d-flex align-items-center"
                                                         >
                                                             <img
-                                                                src="/img/logo.png"
+                                                                src="/img/logo-content.png"
                                                                 className="img-fluid footer_logo"
                                                                 alt="logo"
                                                             />
