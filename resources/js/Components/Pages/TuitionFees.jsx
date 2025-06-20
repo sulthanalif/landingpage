@@ -29,7 +29,7 @@ const TuitionFees = () => {
                 const formattedTables = tuitionDatas.map((table) => {
                     const columns = table.columns
                         .map((col) => ({
-                            title: col.name,
+                            title: col.label,
                             data: col.name.toLowerCase().replace(/\s+/g, "_"),
                             className: "text-nowrap",
                             order: col.order,
