@@ -116,7 +116,7 @@ const TuitionFees = () => {
             {tables.map((table) => (
                 <div
                     key={table.tableInfo.id}
-                    className="col-lg-6 about_col about_col_left mb-4"
+                    className="col-lg-12 about_col about_col_left mb-4"
                 >
                     <div className="about_item card p-3 h-100">
                         <div className="card-header about_item_title text-center mt-0 mb-3">

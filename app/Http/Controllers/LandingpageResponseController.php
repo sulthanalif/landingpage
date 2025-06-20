@@ -57,7 +57,19 @@ class LandingpageResponseController extends Controller
     public function tableFees()
     {
         try {
-            $tuitionFees = TuitionFee::getAllTable();
+            $tuitionFees = TuitionFee::getAllTable()->map(function ($item) {
+                // Ubah semua nilai angka dalam setiap baris menjadi format Rupiah
+                $item['rows'] = collect($item['rows'])->map(function ($row) {
+                    foreach ($row as $key => $value) {
+                        if (is_numeric($value) && $key !== 'level') {
+                            $row[$key] = 'Rp. ' . number_format((int) $value, 0, ',', '.');
+                        }
+                    }
+                    return $row;
+                });
+                return $item;
+            });
+            
             $title = TitleTuitionFee::first()->value;
 
             return $this->successResponse(data: compact('tuitionFees', 'title'));
