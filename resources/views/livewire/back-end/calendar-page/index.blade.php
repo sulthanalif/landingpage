@@ -224,7 +224,7 @@ new #[Title('Calendars')] class extends Component {
 
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            wire:model.live="selected" selectable with-pagination @row-click="$js.detail($event.detail)">
+            wire:model.live="selected" selectable with-pagination >
             @scope('cell_css', $data)
                 <x-badge value="{{ $data['css'] }}" class="!bg-{{ $data['css'] }}" />
             @endscope
@@ -235,9 +235,9 @@ new #[Title('Calendars')] class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
-            {{-- @scope('actions', $data)
-                <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
-            @endscope --}}
+            @scope('actions', $data)
+            <x-button icon="o-pencil" class="btn-sm" wire:click="$js.detail({{ $data }})" />
+            @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
