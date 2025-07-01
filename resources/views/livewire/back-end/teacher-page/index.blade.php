@@ -7,6 +7,8 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new #[Title('Teachers')] class extends Component {
@@ -101,21 +103,47 @@ new #[Title('Teachers')] class extends Component {
         $this->drawer = false;
     }
 
+    public function changeStatus(): void
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($this->selected as $id) {
+                $teacher = Teacher::find($id);
+                $teacher->status = !$teacher->status;
+                $teacher->save();
+            }
+
+            DB::commit();
+            $this->success('Status Berhasil Diubah.', position: 'toast-bottom');
+            $this->reset('selected', 'modalAlertWarning');
+        } catch (\Exception $th) {
+            DB::rollBack();
+            $this->error('Status Gagal Diubah.', position: 'toast-bottom');
+            Log::error($th);
+        }
+    }
+
     public function delete(): void
     {
         $this->setModel(new Teacher());
-        $this->deleteData(
-            beforeDelete: function ($id, $component) {
-                $teacher = Teacher::find($id);
-                if ($teacher->image) {
-                    Storage::disk('public')->delete($teacher->image);
-                }
-                if ($teacher->logo) {
-                    Storage::disk('public')->delete($teacher->logo);
-                }
-            },
-        );
+        foreach ($this->selected as $id) {
+            $this->recordId = $id;
+            $this->deleteData(
+                beforeDelete: function ($id, $component) {
+                    $teacher = Teacher::find($id);
+                    if ($teacher->image) {
+                        Storage::disk('public')->delete($teacher->image);
+                    }
+                    if ($teacher->logo) {
+                        Storage::disk('public')->delete($teacher->logo);
+                    }
+                },
+            );
+            $this->reset('recordId');
+        }
 
+        $this->reset('selected');
         $this->reset($this->varTeacher);
         $this->unsetRecordId();
         $this->unsetModel();
@@ -210,7 +238,8 @@ new #[Title('Teachers')] class extends Component {
     <!-- TABLE  -->
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-             with-pagination @row-click="$js.detail($event.detail)">
+             with-pagination wire:model.live="selected"
+             selectable>
             @scope('cell_image', $data)
                 <img src="{{ asset('storage/' . $data['image']) }}" alt="" style="width: 100px; height: auto">
             @endscope
@@ -224,11 +253,14 @@ new #[Title('Teachers')] class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
+            @scope('actions', $data)
+                <x-button icon="o-pencil" class="btn-sm" wire:click="$js.detail({{ $data }})" />
+            @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
         </x-table>
-        {{-- @if ($this->selected)
+        @if ($selected)
             <div class="flex justify-end items-center gap-2">
                 @can('post-delete')
                     <div class="mt-3 flex justify-end">
@@ -242,7 +274,7 @@ new #[Title('Teachers')] class extends Component {
                         wire:loading.attr="disabled" />
                 </div>
             </div>
-        @endif --}}
+        @endif
     </x-card>
 
     <!-- DRAWER CREATE -->

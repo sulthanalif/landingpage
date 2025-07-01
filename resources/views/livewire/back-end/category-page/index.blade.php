@@ -229,7 +229,7 @@ new #[Title('Categories')] class extends Component {
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
         </x-table>
-        @if ($this->selected)
+        {{-- @if ($this->selected)
             <div class="flex justify-end items-center gap-2">
                 @can('category-delete')
                     <div class="mt-3 flex justify-end">
@@ -243,7 +243,7 @@ new #[Title('Categories')] class extends Component {
                         wire:loading.attr="disabled" />
                 </div>
             </div>
-        @endif
+        @endif --}}
     </x-card>
 
     <!-- DRAWER CREATE -->
