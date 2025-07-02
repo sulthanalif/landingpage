@@ -2370,8 +2370,8 @@ section {
 /* Responsif untuk layar lebih kecil */
 @media (max-width: 768px) {
     .floating-whatsapp-container {
-        bottom: 35px;
-        right: 15px;
+        bottom: 60px;
+        right: 30px;
     }
 
     .whatsapp-button {
@@ -2385,8 +2385,8 @@ section {
     }
 
     .floating-register-container {
-        bottom: 35px;
-        right: 75px;
+        bottom: 120px;
+        right: 30px;
     }
 
     .register-button {
