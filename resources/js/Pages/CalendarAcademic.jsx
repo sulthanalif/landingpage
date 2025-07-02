@@ -5,8 +5,9 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import useApi from "../Hooks/response";
 
-const CalendarAcademic = ({ calendars }) => {
+const CalendarAcademic = () => {
     useEffect(() => {
         const link1 = document.createElement("link");
         link1.rel = "stylesheet";
@@ -36,7 +37,13 @@ const CalendarAcademic = ({ calendars }) => {
 
     // const events = [{ title: "Meeting", start: new Date(), color: "#378006" }];
 
-    const calendarData = calendars || [];
+    const { data: calendars, get: getCalendars } = useApi("calendars");
+
+    useEffect(() => {
+        getCalendars();
+    }, []);
+
+    const calendarData = Array.isArray(calendars?.calendars) ? calendars.calendars : [];
 
     const events = calendarData
         .map((calendar) => {
@@ -200,10 +207,10 @@ function renderEventContent(eventInfo) {
 
 function handleEventClick(info) {
     const start = info.event.start?.toLocaleDateString() || 'N/A';
-    const end = info.event.end ? 
-        new Date(info.event.end.getTime() - 86400000).toLocaleDateString() : 
+    const end = info.event.end ?
+        new Date(info.event.end.getTime() - 86400000).toLocaleDateString() :
         start;
-    
+
     alert(
         `Event: ${info.event.title}\n` +
         `Start: ${start}\n` +
