@@ -324,7 +324,7 @@ const Guidelines = () => {
                                         ref={videoRef}
                                         width="100%"
                                         height="350"
-                                        src="https://www.youtube.com/embed/iw0sC4Cj3HE?autoplay=1"
+                                        src="https://www.youtube.com/embed/qyDALPmpyv0?autoplay=1"
                                         title="YouTube video player"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen
