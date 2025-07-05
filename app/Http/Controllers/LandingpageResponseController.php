@@ -8,6 +8,7 @@ use App\Models\Teacher;
 use App\Models\Activity;
 use App\Models\Calendar;
 use App\Models\Category;
+use App\Models\Facility;
 use App\Models\Question;
 use App\Models\TuitionFee;
 use App\Models\WhyChooseUs;
@@ -69,7 +70,7 @@ class LandingpageResponseController extends Controller
                 });
                 return $item;
             });
-            
+
             $title = TitleTuitionFee::first()->value;
 
             return $this->successResponse(data: compact('tuitionFees', 'title'));
@@ -132,6 +133,17 @@ class LandingpageResponseController extends Controller
             $extracurriculars = Extracurricular::where('status', true)->latest()->get();
 
             return $this->successResponse(data: compact('extracurriculars'));
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+    }
+
+    public function facilities()
+    {
+        try {
+            $facilities = Facility::where('status', true)->latest()->get();
+
+            return $this->successResponse(data: compact('facilities'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }

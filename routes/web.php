@@ -56,6 +56,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::prefix('master')->middleware('can:master')->group(function () {
         Volt::route('/category', 'back-end.category-page.index')->middleware('can:category-page')->name('category');
+        Volt::route('/facility', 'back-end.facilities-page.index')->middleware('can:facility-page')->name('facility');
         Volt::route('/post', 'back-end.post-page.index')->middleware('can:post-page')->name('post');
         Volt::route('/post/form', 'back-end.post-page.create')->name('post.form');
         Volt::route('/mail', 'back-end.mail-page.index')->middleware('can:mail-page')->name('mail');

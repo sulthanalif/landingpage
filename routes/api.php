@@ -21,6 +21,7 @@ Route::get('/accreditations', [LandingpageResponseController::class, 'accreditat
 Route::get('/posts', [LandingpageResponseController::class, 'posts']);
 Route::get('/post/{slug}', [LandingpageResponseController::class, 'detailPost']);
 Route::get('/extra', [LandingpageResponseController::class, 'extra']);
+Route::get('/facilities', [LandingpageResponseController::class, 'facilities']);
 
 Route::post('/send-mail', [ContactUsController::class, 'store']);
 

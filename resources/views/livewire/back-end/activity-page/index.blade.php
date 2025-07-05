@@ -35,10 +35,12 @@ new #[Title('Activities')] class extends Component {
     //varActivity
     public string $title = '';
     public string $date = '';
+    public string $description = '';
+    public string $category = 'foto';
     public ?UploadedFile $file = null;
     public bool $status = true;
 
-    public array $varActivity = ['recordId', 'title', 'date', 'file', 'status'];
+    public array $varActivity = ['recordId', 'title', 'date', 'file', 'status', 'description', 'category'];
 
     //select status
     public array $selectStatus = [['id' => true, 'name' => 'Aktif'], ['id' => false, 'name' => 'Tidak aktif']];
@@ -53,6 +55,8 @@ new #[Title('Activities')] class extends Component {
                 'title' => ['required', 'string', 'max:255'],
                 'date' => ['required', 'date'],
                 'status' => ['required', 'boolean'],
+                'description' => ['required', 'string'],
+                'category' => ['required', 'in:foto,video'],
                 'file' => [$this->recordId ? 'nullable' : 'required', 'mimes:jpeg,png,jpg,mp4', 'max:50400']
             ],
 
@@ -115,7 +119,13 @@ new #[Title('Activities')] class extends Component {
 
     public function headers(): array
     {
-        return [['key' => 'title', 'label' => 'Title'], ['key' => 'date', 'label' => 'Date'], ['key' => 'status', 'label' => 'Status'], ['key' => 'created_at', 'label' => 'Created At']];
+        return [
+            ['key' => 'title', 'label' => 'Title'],
+            ['key' => 'date', 'label' => 'Date'],
+            ['key' => 'category', 'label' => 'Category'],
+            ['key' => 'status', 'label' => 'Status'],
+            ['key' => 'created_at', 'label' => 'Created At'],
+        ];
     }
 
     public function with(): array
@@ -133,6 +143,8 @@ new #[Title('Activities')] class extends Component {
             $wire.recordId = null;
             $wire.title = '';
             $wire.date = '';
+            $wire.description = '';
+            $wire.category = 'foto';
             $wire.file = null;
             $wire.status = true;
             $wire.drawer = true;
@@ -143,6 +155,8 @@ new #[Title('Activities')] class extends Component {
             $wire.recordId = activity.id;
             $wire.title = activity.title;
             $wire.date = activity.date;
+            $wire.description = activity.description;
+            $wire.category = activity.category;
             $wire.file = null;
             $wire.status = activity.status;
             $wire.drawer = true;

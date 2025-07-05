@@ -11,6 +11,17 @@
             <x-input label="Title" type="text" wire:model="title" />
         </div>
 
+        <div>
+            <x-textarea label="Description" wire:model="description" rows='3' />
+        </div>
+
+        <div>
+            <x-select label="Category" :options="[
+                ['id' => 'foto', 'name' => 'Foto'],
+                ['id' => 'video', 'name' => 'Video'],
+            ]" wire:model="category" />
+        </div>
+
         <div class="flex justify-between items-center">
             <x-file wire:model="file" label="File" hint="Only Video/Image" accept="video/mp4, image/png, image/jpeg, image/jpg" />
             @if ($this->recordId)
