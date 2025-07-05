@@ -117,6 +117,7 @@ new #[Title('Calendars')] class extends Component {
             $this->success('Category created successfully', position: 'toast-bottom');
             $this->reset('name', 'color');
             $this->colors = Color::all();
+            $this->searchCategory();
         } catch (\Exception $th) {
             DB::rollBack();
             $this->error('Error creating category', position: 'toast-bottom');
