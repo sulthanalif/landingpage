@@ -11,12 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('colors', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('css')->nullable();
+            $table->string('code')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
             $table->string('label');
             $table->string('description')->nullable();
-            $table->string('css')->nullable();
-            $table->string('code')->nullable();
+            $table->foreignId('color_id')->constrained('colors')->cascadeOnUpdate()->cascadeOnDelete();
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('status')->default(true);

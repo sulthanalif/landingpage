@@ -9,10 +9,14 @@ class Calendar extends Model
     protected $fillable = [
         'label',
         'description',
-        'css',
-        'code',
+        'color_id',
         'start_date',
         'end_date',
         'status'
     ];
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
+    }
 }

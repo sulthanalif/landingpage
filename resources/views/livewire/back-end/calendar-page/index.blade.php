@@ -1,12 +1,15 @@
 <?php
 
 use App\ManageDatas;
+use App\Models\Color;
 use Mary\Traits\Toast;
 use App\Models\Calendar;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new #[Title('Calendars')] class extends Component {
@@ -33,17 +36,35 @@ new #[Title('Calendars')] class extends Component {
     public string $start_date = '';
     public string $end_date = '';
     public bool $status = true;
-    public array $varCalendar = ['recordId', 'label', 'description', 'css', 'start_date', 'end_date', 'status'];
+    public array $varCalendar = ['recordId', 'label', 'description', 'color_id', 'start_date', 'end_date', 'status'];
 
     // Selected option
-    public ?string $css = null;
+    public ?int $color_id = null;
+    public Collection $categoriesSearchable;
     public Collection $colorsSearchable;
+
+    public string $name = '';
+    public ?string $color = null;
+
+    public Collection $colors;
 
     public function mount(): void
     {
         $this->searchColor();
+        $this->searchCategory();
 
+        $this->colors = Color::all();
         $this->events();
+    }
+
+    public function searchCategory(string $value = '')
+    {
+        $selectedOptions = Color::where('id', $this->color_id)->get();
+
+        $this->categoriesSearchable = Color::query()
+            ->where('name', 'like', '%'.$value.'%')
+            ->get()
+            ->merge($selectedOptions);
     }
 
     public function searchColor(string $value = '')
@@ -65,7 +86,7 @@ new #[Title('Calendars')] class extends Component {
             ['id' => 'bg-stone-500', 'name' => 'Stone', 'code' => '#78716c'],
         ]);
 
-        $selectedOption = $colors->firstWhere('id', $this->css);
+        $selectedOption = $colors->firstWhere('id', $this->color);
 
         $filtered = $colors->filter(function ($item) use ($value) {
             return str_contains(strtolower($item['name']), strtolower($value));
@@ -73,6 +94,34 @@ new #[Title('Calendars')] class extends Component {
 
         $this->colorsSearchable = $filtered->when($selectedOption, fn ($col) => $col->push($selectedOption))->unique('id');
 
+    }
+
+    public function saveColor(): void
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            Color::create([
+                'name' => $this->name,
+                'css' => $this->color,
+                'code' => $this->colorsSearchable->firstWhere('id', $this->color)['code'],
+            ]);
+
+            DB::commit();
+
+            $this->success('Category created successfully', position: 'toast-bottom');
+            $this->reset('name', 'color');
+            $this->colors = Color::all();
+        } catch (\Exception $th) {
+            DB::rollBack();
+            $this->error('Error creating category', position: 'toast-bottom');
+            Log::channel('debug')->error($th->getMessage());
+        }
     }
 
     public function save(): void
@@ -83,20 +132,35 @@ new #[Title('Calendars')] class extends Component {
             validationRules: [
                 'label' => 'required|string|max:255',
                 'description' => 'required|string|max:255',
-                'css' => 'required|string|max:255',
+                'color_id' => 'required|integer',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date',
                 'status' => 'required|boolean',
             ],
-            beforeSave: function ($calendar, $component) {
-                $calendar->code = $this->colorsSearchable->firstWhere('id', $component->css)['code'];
-            },
             afterSave: function ($calendar, $component) {
                 $component->drawer = false;
             }
         );
         $this->reset($this->varCalendar);
         $this->unsetModel();
+    }
+
+    public function deleteColor($id): void
+    {
+        try {
+            DB::beginTransaction();
+
+            Color::query()->where('id', $id)->delete();
+
+            DB::commit();
+
+            $this->success('Category deleted successfully', position: 'toast-bottom');
+            $this->colors = Color::all();
+        } catch (\Exception $th) {
+            DB::rollBack();
+            $this->error('Error deleting Category', position: 'toast-bottom');
+            Log::channel('debug')->error($th->getMessage());
+        }
     }
 
     public function delete(): void
@@ -143,7 +207,7 @@ new #[Title('Calendars')] class extends Component {
             return [
                 'label' => $calendar->label,
                 'description' => $calendar->description,
-                'css' => '!'.$calendar->css,
+                'css' => '!'.$calendar->color->css,
                 'range' => [
                     $calendar->start_date,
                     $calendar->end_date
@@ -157,11 +221,12 @@ new #[Title('Calendars')] class extends Component {
         return [
             ['key' => 'label', 'label' => 'Label'],
             ['key' => 'description', 'label' => 'Description'],
-            ['key' => 'css', 'label' => 'CSS'],
+            ['key' => 'css', 'label' => 'Category'],
+            ['key' => 'color', 'label' => 'Color'],
             ['key' => 'start_date', 'label' => 'Start Date'],
             ['key' => 'end_date', 'label' => 'End Date'],
             ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'created_at', 'label' => 'Created At']
+            // ['key' => 'created_at', 'label' => 'Created At']
         ];
     }
 
@@ -184,7 +249,7 @@ new #[Title('Calendars')] class extends Component {
             $wire.recordId = null;
             $wire.label = '';
             $wire.description = '';
-            $wire.css = '';
+            $wire.color_id = '';
             $wire.start_date = '';
             $wire.end_date = '';
             $wire.status = true;
@@ -194,7 +259,7 @@ new #[Title('Calendars')] class extends Component {
             $wire.recordId = calendar.id;
             $wire.label = calendar.label;
             $wire.description = calendar.description;
-            $wire.css = calendar.css;
+            $wire.color_id = calendar.color_id;
             $wire.start_date = calendar.start_date;
             $wire.end_date = calendar.end_date;
             $wire.status = calendar.status;
@@ -228,7 +293,14 @@ new #[Title('Calendars')] class extends Component {
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             wire:model.live="selected" selectable with-pagination >
             @scope('cell_css', $data)
-                <x-badge value="{{ $data['css'] }}" class="!bg-{{ $data['css'] }}" />
+            <div class="">
+                {{ $data->color->name }}
+            </div>
+            @endscope
+            @scope('cell_color', $data)
+            <div class="">
+                <div class="w-4 h-4 rounded-full {{ $data->color->css }}"></div>
+            </div>
             @endscope
             @scope('cell_status', $data)
                 @if ($data['status'])
