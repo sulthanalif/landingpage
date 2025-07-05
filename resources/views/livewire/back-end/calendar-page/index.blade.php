@@ -42,25 +42,27 @@ new #[Title('Calendars')] class extends Component {
     public function mount(): void
     {
         $this->searchColor();
+
+        $this->events();
     }
 
     public function searchColor(string $value = '')
     {
         $colors = collect([
-            ['id' => 'red-200', 'name' => 'Red', 'code' => '#ef4444'],
-            ['id' => 'green-200', 'name' => 'Green', 'code' => '#22c55e'],
-            ['id' => 'blue-200', 'name' => 'Blue', 'code' => '#3b82f6'],
-            ['id' => 'amber-200', 'name' => 'Amber', 'code' => '#f59e0b'],
-            ['id' => 'cyan-200', 'name' => 'Cyan', 'code' => '#06b6d4'],
-            ['id' => 'lime-200', 'name' => 'Lime', 'code' => '#84cc16'],
-            ['id' => 'indigo-200', 'name' => 'Indigo', 'code' => '#6366f1'],
-            ['id' => 'pink-200', 'name' => 'Pink', 'code' => '#ec4899'],
-            ['id' => 'teal-200', 'name' => 'Teal', 'code' => '#14b8a6'],
-            ['id' => 'rose-200', 'name' => 'Rose', 'code' => '#f43f5e'],
-            ['id' => 'gray-200', 'name' => 'Gray', 'code' => '#9ca3af'],
-            ['id' => 'zinc-200', 'name' => 'Zinc', 'code' => '#71717a'],
-            ['id' => 'neutral-200', 'name' => 'Neutral', 'code' => '#737373'],
-            ['id' => 'stone-200', 'name' => 'Stone', 'code' => '#78716c'],
+            ['id' => 'bg-red-500', 'name' => 'Red', 'code' => '#ef4444'],
+            ['id' => 'bg-green-500', 'name' => 'Green', 'code' => '#22c55e'],
+            ['id' => 'bg-blue-500', 'name' => 'Blue', 'code' => '#3b82f6'],
+            ['id' => 'bg-amber-500', 'name' => 'Amber', 'code' => '#f59e0b'],
+            ['id' => 'bg-cyan-500', 'name' => 'Cyan', 'code' => '#06b6d4'],
+            ['id' => 'bg-lime-500', 'name' => 'Lime', 'code' => '#84cc16'],
+            ['id' => 'bg-indigo-500', 'name' => 'Indigo', 'code' => '#6366f1'],
+            ['id' => 'bg-pink-500', 'name' => 'Pink', 'code' => '#ec4899'],
+            ['id' => 'bg-teal-500', 'name' => 'Teal', 'code' => '#14b8a6'],
+            ['id' => 'bg-rose-500', 'name' => 'Rose', 'code' => '#f43f5e'],
+            ['id' => 'bg-gray-500', 'name' => 'Gray', 'code' => '#9ca3af'],
+            ['id' => 'bg-zinc-500', 'name' => 'Zinc', 'code' => '#71717a'],
+            ['id' => 'bg-neutral-500', 'name' => 'Neutral', 'code' => '#737373'],
+            ['id' => 'bg-stone-500', 'name' => 'Stone', 'code' => '#78716c'],
         ]);
 
         $selectedOption = $colors->firstWhere('id', $this->css);
@@ -141,7 +143,7 @@ new #[Title('Calendars')] class extends Component {
             return [
                 'label' => $calendar->label,
                 'description' => $calendar->description,
-                'css' => '!bg-'.$calendar->css,
+                'css' => '!'.$calendar->css,
                 'range' => [
                     $calendar->start_date,
                     $calendar->end_date

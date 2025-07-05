@@ -17,7 +17,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Ujian Tengah Semester',
                 'description' => 'Pelaksanaan Ujian Tengah Semester untuk seluruh siswa.',
-                'css' => 'red-200',
+                'css' => 'bg-red-500',
                 'code' => '#ef4444',
                 'start_date' => '2025-03-10',
                 'end_date' => '2025-03-14',
@@ -25,7 +25,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Libur Hari Raya Idul Fitri',
                 'description' => 'Libur nasional dalam rangka Hari Raya Idul Fitri.',
-                'css' => 'green-200',
+                'css' => 'bg-green-500',
                 'code' => '#22c55e',
                 'start_date' => '2025-04-01',
                 'end_date' => '2025-04-10',
@@ -33,7 +33,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Outing Class ke Museum Nasional',
                 'description' => 'Kegiatan belajar di luar kelas ke Museum Nasional untuk siswa kelas 4-6.',
-                'css' => 'blue-200',
+                'css' => 'bg-blue-500',
                 'code' => '#3b82f6',
                 'start_date' => '2025-02-20',
                 'end_date' => '2025-02-20',
@@ -41,7 +41,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Penerimaan Rapor Semester Genap',
                 'description' => 'Orang tua/wali murid mengambil rapor di sekolah.',
-                'css' => 'amber-200',
+                'css' => 'bg-amber-500',
                 'code' => '#f59e0b',
                 'start_date' => '2025-06-21',
                 'end_date' => '2025-06-21',
@@ -49,7 +49,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Hari Guru Nasional',
                 'description' => 'Peringatan Hari Guru Nasional, kegiatan upacara dan apresiasi guru.',
-                'css' => 'pink-200',
+                'css' => 'bg-pink-500',
                 'code' => '#ec4899',
                 'start_date' => '2025-11-25',
                 'end_date' => '2025-11-25',
@@ -57,7 +57,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Class Meeting Semester Ganjil',
                 'description' => 'Kegiatan non-akademik pasca ujian semester berupa lomba dan permainan.',
-                'css' => 'teal-200',
+                'css' => 'bg-teal-500',
                 'code' => '#14b8a6',
                 'start_date' => '2025-12-15',
                 'end_date' => '2025-12-19',
@@ -65,7 +65,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Workshop Guru dan Staff',
                 'description' => 'Pelatihan peningkatan kapasitas untuk guru dan staff sekolah.',
-                'css' => 'cyan-200',
+                'css' => 'bg-cyan-500',
                 'code' => '#06b6d4',
                 'start_date' => '2025-07-01',
                 'end_date' => '2025-07-03',
@@ -73,7 +73,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'MPLS (Masa Pengenalan Lingkungan Sekolah)',
                 'description' => 'Kegiatan orientasi untuk siswa baru.',
-                'css' => 'lime-200',
+                'css' => 'bg-lime-500',
                 'code' => '#84cc16',
                 'start_date' => '2025-07-15',
                 'end_date' => '2025-07-17',
@@ -81,7 +81,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Try Out Ujian Nasional',
                 'description' => 'Simulasi ujian nasional untuk kelas akhir.',
-                'css' => 'indigo-200',
+                'css' => 'bg-indigo-500',
                 'code' => '#6366f1',
                 'start_date' => '2025-05-05',
                 'end_date' => '2025-05-07',
@@ -89,7 +89,7 @@ class CalendarSeeder extends Seeder
             [
                 'label' => 'Perayaan Hari Kemerdekaan',
                 'description' => 'Lomba dan upacara dalam rangka Hari Kemerdekaan RI.',
-                'css' => 'rose-200',
+                'css' => 'bg-rose-500',
                 'code' => '#f43f5e',
                 'start_date' => '2025-08-17',
                 'end_date' => '2025-08-17',

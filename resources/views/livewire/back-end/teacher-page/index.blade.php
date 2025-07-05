@@ -36,7 +36,7 @@ new #[Title('Teachers')] class extends Component {
     public string $code_id = '';
     public string $name = '';
     public string $email = '';
-    public string $category = '';
+    public string $category = 'Management';
     public string $description = '';
     public string $position = '';
     public int $order = 0;
@@ -196,7 +196,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.code_id = '';
             $wire.name = '';
             $wire.email = '';
-            $wire.category = '';
+            $wire.category = 'Management';
             $wire.status = true;
             $wire.description = '';
             $wire.position = '';

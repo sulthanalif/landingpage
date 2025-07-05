@@ -15,7 +15,11 @@
         </div>
 
         <div>
-            <x-input label="Category" type="text" wire:model="category" required/>
+            <x-select label="Category" :options="[
+                ['id' => 'Management', 'name' => 'Management'],
+                ['id' => 'Educational personel', 'name' => 'Educational personel'],
+                ['id' => 'Non-staff', 'name' => 'Non-staff'],
+            ]" wire:model="category" />
         </div>
 
         <div>
