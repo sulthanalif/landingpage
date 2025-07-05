@@ -82,7 +82,17 @@ class LandingpageResponseController extends Controller
     public function calendars()
     {
         try {
-            $calendars = Calendar::where('status', true)->get();
+            $calendars = Calendar::where('status', true)->get()->map(function ($calendar) {
+                return [
+                    'id' => $calendar->id,
+                    'description' => $calendar->description,
+                    'css' => $calendar->color->css,
+                    'code' => $calendar->color->code,
+                    'category' => $calendar->color->name,
+                    'start_date' => $calendar->start_date,
+                    'end_date' => $calendar->end_date,
+                ];
+            });
 
             return $this->successResponse(data: compact('calendars'));
         } catch (\Throwable $th) {
