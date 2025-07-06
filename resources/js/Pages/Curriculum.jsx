@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
+import useApi from "../Hooks/response";
 
 const Curriculum = () => {
     useEffect(() => {
@@ -388,6 +389,12 @@ const OurGoal = () => {
 };
 
 const AdvantageSection = () => {
+    const { data: facilities, get: getFacilities } = useApi("facilities");
+
+    useEffect(() => {
+        getFacilities();
+    }, []);
+
     return (
         <div className="feature">
             <div
@@ -414,150 +421,29 @@ const AdvantageSection = () => {
                 </div>
 
                 <div className="row mt-5">
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/facilities/icon_classroom.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
+                    {facilities?.facilities.map((facility) => (
+                        <div className="col-lg-4 pb-3" key={facility.id}>
+                            <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                                <div className="card-body text-center p-4">
+                                    <div className="feature-image mb-4">
+                                        <img
+                                            src={facility.image ? `storage/${facility.image}` : "/landing/images/facilities/icon_classroom.png"}
+                                            alt={facility.title}
+                                            loading="lazy"
+                                            className="img-fluid"
+                                            style={{ height: "200px" }}
+                                        />
+                                    </div>
+                                    <h3 className="feature-title h5 mb-3">
+                                        {facility.title}
+                                    </h3>
+                                    <p className="feature-text mb-0">
+                                        {facility.description}
+                                    </p>
                                 </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    Comfortable classrooms
-                                </h3>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/facilities/icon_laboratory.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
-                                </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    Laboratories (Science, Computer, Language)
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/facilities/icon_library.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
-                                </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    Library
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/icon_value4.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
-                                </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    Prayer room
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/facilities/icon_uks.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
-                                </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    School Health Unit (UKS) room
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/facilities/icon_sporty.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
-                                </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    Play area and sports facilities
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/facilities/icon_canteen.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
-                                </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    Canteen
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                            <div className="card-body text-center p-4">
-                                <div className="feature-icon mb-4">
-                                    <img
-                                        src="/landing/images/facilities/icon_internet.png"
-                                        alt="caption"
-                                        loading="lazy"
-                                        className="img-fluid"
-                                        style={{ height: "60px" }}
-                                    />
-                                </div>
-                                <h3 className="feature-title h5 mb-3">
-                                    Internet access
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
 
                 <div className="row features_row my-5">
@@ -567,13 +453,11 @@ const AdvantageSection = () => {
                                 <h3 className="feature-title h5 mb-3">
                                     Flagship Programs
                                 </h3>
-                                <p className="feature-text mb-0 text-justify">
-                                    <ul className="feature_list_circle">
-                                        <li>Comprehensive and competency-based curriculum.</li>
-                                        <li>Diverse extracurricular programs, such as sports, arts, and science clubs.</li>
-                                        <li>Character and leadership development activities.</li>
-                                    </ul>
-                                </p>
+                                <ul className="feature-text mb-0 text-justify feature_list_circle">
+                                    <li>Comprehensive and competency-based curriculum.</li>
+                                    <li>Diverse extracurricular programs, such as sports, arts, and science clubs.</li>
+                                    <li>Character and leadership development activities.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -583,13 +467,11 @@ const AdvantageSection = () => {
                                 <h3 className="feature-title h5 mb-3">
                                     Advantages
                                 </h3>
-                                <p className="feature-text mb-0 text-justify">
-                                    <ul className="feature_list_circle">
-                                        <li>Conducive and supportive learning environment.</li>
-                                        <li>Qualified and experienced teachers.</li>
-                                        <li>Focus on student character and skill development.</li>
-                                    </ul>
-                                </p>
+                                <ul className="feature-text mb-0 text-justify feature_list_circle">
+                                    <li>Conducive and supportive learning environment.</li>
+                                    <li>Qualified and experienced teachers.</li>
+                                    <li>Focus on student character and skill development.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>

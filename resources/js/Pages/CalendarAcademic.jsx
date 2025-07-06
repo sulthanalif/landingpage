@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../Components/Layout";
 import { Link, usePage } from "@inertiajs/react";
 import FullCalendar from "@fullcalendar/react";
@@ -8,30 +8,50 @@ import interactionPlugin from "@fullcalendar/interaction";
 import useApi from "../Hooks/response";
 
 const CalendarAcademic = () => {
+    const styleRefs = useRef([]);
+    const scriptRefs = useRef([]);
+
     useEffect(() => {
-        const link1 = document.createElement("link");
-        link1.rel = "stylesheet";
-        link1.type = "text/css";
-        link1.href = "/landing/styles/about.css";
+        const addFile = (type, attributes, target) => {
+            const file = document.createElement(type);
+            Object.entries(attributes).forEach(([key, value]) => {
+                file[key] = value;
+            });
+            target.appendChild(file);
+            return file;
+        };
 
-        const link2 = document.createElement("link");
-        link2.rel = "stylesheet";
-        link2.type = "text/css";
-        link2.href = "/landing/styles/about_responsive.css";
+        styleRefs.current = [
+            addFile(
+                "link",
+                { rel: "stylesheet", href: "/landing/styles/about.css" },
+                document.head
+            ),
+            addFile(
+                "link",
+                {
+                    rel: "stylesheet",
+                    href: "/landing/styles/about_responsive.css",
+                },
+                document.head
+            ),
+        ];
 
-        document.head.appendChild(link1);
-        document.head.appendChild(link2);
-
-        const script = document.createElement("script");
-        script.src = "/landing/js/about.js";
-        script.async = true;
-
-        document.body.appendChild(script);
+        scriptRefs.current = [
+            addFile(
+                "script",
+                { src: "/landing/js/about.js", async: true },
+                document.body
+            ),
+        ];
 
         return () => {
-            document.head.removeChild(link1);
-            document.head.removeChild(link2);
-            document.body.removeChild(script);
+            styleRefs.current.forEach(
+                (file) => file && file.parentNode.removeChild(file)
+            );
+            scriptRefs.current.forEach(
+                (file) => file && file.parentNode.removeChild(file)
+            );
         };
     }, []);
 
@@ -106,6 +126,23 @@ const CalendarAcademic = () => {
         return colorMap[cssClass] || "#378006";
     }
 
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const uniqueCategories = [];
+        const seen = new Set();
+
+        calendarData.forEach(item => {
+            const key = item.category + "-" + item.code;
+            if (!seen.has(key)) {
+                uniqueCategories.push({ category: item.category, code: item.code });
+                seen.add(key);
+            }
+        });
+
+        setCategories(uniqueCategories);
+    }, [calendarData]);
+
     return (
         <>
             <Layout>
@@ -146,17 +183,27 @@ const CalendarAcademic = () => {
                                     </h2>
                                     <div className="section_subtitle">
                                         <p>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit. Donec
-                                            vel gravida arcu. Vestibulum
-                                            feugiat, sapien ultrices fermentum
-                                            congue, quam velit venenatis sem
+                                            The following is the academic calendar at our school.
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="row feature_row">
+                        <div className="row feature_row mt-3">
+                            <div className="mb-3">
+                                <h4>Kategori Kalender:</h4>
+                                <ul className="category-list pt-0">
+                                    {categories.map((item, index) => (
+                                        <li key={index} className="category-item">
+                                            <div
+                                                className="category-color"
+                                                style={{ backgroundColor: item.code }}
+                                            />
+                                            <p className="category-name">{item.category}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                             <div className="col-lg-12 feature_col">
                                 <div className="feature_content">
                                     <FullCalendar
