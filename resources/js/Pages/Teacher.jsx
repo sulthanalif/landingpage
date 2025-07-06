@@ -148,9 +148,11 @@ const Teacher = () => {
                                                     a.name.localeCompare(b.name)
                                                 )
                                                 .map((teacher) => (
-                                                    <TeacherItem
-                                                        teacher={teacher}
-                                                    />
+                                                    <>
+                                                        <TeacherItem
+                                                            teacher={teacher}
+                                                        />
+                                                    </>
                                                 ))}
                                         </div>
                                     </div>

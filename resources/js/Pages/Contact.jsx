@@ -14,7 +14,7 @@ const Contact = () => {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
-        to: "hrd",
+        to: "marketing",
         email: "",
         phone: "",
         subject: "",
@@ -200,14 +200,14 @@ const Contact = () => {
                                                             --Select message
                                                             destination--
                                                         </option>
-                                                        <option value="hrd">
-                                                            Recruitment
-                                                        </option>
                                                         <option value="marketing">
                                                             Admission
                                                         </option>
                                                         <option value="information">
                                                             Information
+                                                        </option>
+                                                        <option value="hrd">
+                                                            Recruitment
                                                         </option>
                                                     </select>
                                                     {errors.to && (

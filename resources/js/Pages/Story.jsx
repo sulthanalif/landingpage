@@ -80,6 +80,32 @@ const Story = () => {
         };
     }, []);
 
+    const activityDatas = activities && activities.activities ? activities.activities : [];
+
+    const groupedActivities = activityDatas.reduce((groups, activity) => {
+        const category = activity.category || "Uncategorized";
+        if (!groups[category]) {
+            groups[category] = [];
+        }
+        groups[category].push(activity);
+        return groups;
+    }, {});
+
+    const sortedCategories = Object.keys(groupedActivities).sort((a, b) => {
+        const order = [];
+        const indexA = order.indexOf(a);
+        const indexB = order.indexOf(b);
+
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
+
+    const datas = {
+        grouped: groupedActivities,
+        sorted: sortedCategories,
+    };
+
     const handleRefresh = () => {
         getActivities();
     };
@@ -159,14 +185,24 @@ const Story = () => {
                             <div className="alert alert-danger">{error}</div>
                         </div>
                     ) : activities && activities.activities.length > 0 ? (
-                        <>
-                            {" "}
-                            <div className="row courses_row">
-                                {activities.activities.map((activity) => (
-                                    <ActivityItem key={activity.id} activity={activity} />
-                                ))}
+                        sortedCategories.map((category) => (
+                            <div key={category} className="col-12 mb-5">
+                                <h3 className="category-title">
+                                    # {category}
+                                </h3>
+                                <div className="row courses_row">
+                                    {groupedActivities[category]
+                                        .sort((a, b) => {
+                                            const nameA = (a.name || "").toString();
+                                            const nameB = (b.name || "").toString();
+                                            return nameA.localeCompare(nameB);
+                                        })
+                                        .map((activity) => (
+                                            <ActivityItem key={activity.id} activity={activity} />
+                                        ))}
+                                </div>
                             </div>
-                        </>
+                        ))
                     ) : (
                         <div className="col-lg-12 course_col">
                             <div className="course">
@@ -179,8 +215,8 @@ const Story = () => {
                         </div>
                     )}
                 </div>
-            </div>
-        </Layout>
+            </div >
+        </Layout >
     );
 };
 

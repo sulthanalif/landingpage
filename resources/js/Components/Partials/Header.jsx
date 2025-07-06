@@ -92,6 +92,19 @@ const Header = () => {
                                                     info@lscs.sch.id
                                                 </a>
                                             </li>
+                                            <li className="notranslate">
+                                                <a
+                                                    href="https://lsgs.quintal.id/"
+                                                    className="text-light ml-2"
+                                                    target="_blank"
+                                                >
+                                                    <i
+                                                        className="fa fa-leanpub mr-2"
+                                                        aria-hidden="true"
+                                                    />
+                                                    Login
+                                                </a>
+                                            </li>
                                         </ul>
                                         <div className="top_bar_login ml-auto">
                                             <div className="login_button">
@@ -191,8 +204,8 @@ const Header = () => {
                                             <li
                                                 className={
                                                     url === "/about" ||
-                                                    url === "/story" ||
-                                                    url === "/teacher"
+                                                        url === "/story" ||
+                                                        url === "/teacher"
                                                         ? "nav-item dropdown active"
                                                         : "nav-item dropdown"
                                                 }
@@ -253,10 +266,10 @@ const Header = () => {
                                             <li
                                                 className={
                                                     url === "/curriculum" ||
-                                                    url ===
+                                                        url ===
                                                         "/calendar-academic" ||
-                                                    url === "/accreditation" ||
-                                                    url === "/extracurricular"
+                                                        url === "/accreditation" ||
+                                                        url === "/extracurricular"
                                                         ? "nav-item dropdown active"
                                                         : "nav-item dropdown"
                                                 }
@@ -274,7 +287,7 @@ const Header = () => {
                                                     <Link
                                                         className={
                                                             url ===
-                                                            "/curriculum"
+                                                                "/curriculum"
                                                                 ? "dropdown-item active"
                                                                 : "dropdown-item text-dark"
                                                         }
@@ -285,7 +298,7 @@ const Header = () => {
                                                     <Link
                                                         className={
                                                             url ===
-                                                            "/calendar-academic"
+                                                                "/calendar-academic"
                                                                 ? "dropdown-item active"
                                                                 : "dropdown-item text-dark"
                                                         }
@@ -296,7 +309,7 @@ const Header = () => {
                                                     <Link
                                                         className={
                                                             url ===
-                                                            "/extracurricular"
+                                                                "/extracurricular"
                                                                 ? "dropdown-item active"
                                                                 : "dropdown-item text-dark"
                                                         }
@@ -307,7 +320,7 @@ const Header = () => {
                                                     <Link
                                                         className={
                                                             url ===
-                                                            "/accreditation"
+                                                                "/accreditation"
                                                                 ? "dropdown-item active"
                                                                 : "dropdown-item text-dark"
                                                         }

@@ -1048,9 +1048,11 @@ section {
 
 .teacher-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); */
+    grid-template-columns: repeat(6, 1fr);
     gap: 30px;
     padding: 0 20px;
+    align-items: stretch;
 }
 
 .teacher-card {
@@ -1060,6 +1062,7 @@ section {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
+    height: 100%;
 }
 
 .teacher-card:hover {
@@ -1085,7 +1088,7 @@ section {
 }
 
 .teacher-card:hover .teacher-photo {
-	cursor: pointer;
+    cursor: pointer;
     transform: scale(1.05);
 }
 
@@ -1093,21 +1096,22 @@ section {
     position: absolute;
     bottom: 15px;
     right: 15px;
-    width: 75px;
-    height: 75px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
     filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
     transition: all 0.3s ease;
 }
 
 .teacher-card:hover .teacher-mascot {
-	cursor: pointer;
+    cursor: pointer;
     transform: scale(1.1) rotate(5deg);
 }
 
 .teacher-info {
     padding: 20px;
     text-align: center;
+    flex: 1;
 }
 
 .teacher-name {
@@ -1124,7 +1128,7 @@ section {
 
 .teacher-card h3:hover {
     color: #14bdee;
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .teacher-position {
@@ -1147,13 +1151,14 @@ section {
     }
 
     .teacher-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        /* grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 480px) {
     .teacher-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(1, 1fr);
         max-width: 350px;
         margin: 0 auto;
     }
