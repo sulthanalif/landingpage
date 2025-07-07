@@ -141,6 +141,7 @@ new #[Title('Facility')] class extends Component {
             $wire.title = facility.title;
             $wire.description = facility.description;
             document.getElementById('previewImage').src = '/storage/' + facility.image;
+            $wire.image = null;
             // $wire.oldImage = facility.image;
             // $wire.image = facility.image;
             $wire.status = facility.status;

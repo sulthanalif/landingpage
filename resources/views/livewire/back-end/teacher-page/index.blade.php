@@ -200,6 +200,8 @@ new #[Title('Teachers')] class extends Component {
             $wire.getLast();
             document.getElementById('previewImage').src = '/' + $wire.oldImage;
             document.getElementById('previewImage2').src = '/' + $wire.oldLogo;
+            $wire.image = null;
+            $wire.logo = null;
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -211,7 +213,9 @@ new #[Title('Teachers')] class extends Component {
             $wire.email = teacher.email;
             $wire.category = teacher.category;
             document.getElementById('previewImage').src = '/storage/' + teacher.image;
-            document.getElementById('previewImage2').src = '/storage/' + teacher.logo;
+            document.getElementById('previewImage2').src = '/storage/' + teacher.logo;\
+            $wire.image = null;
+            $wire.logo = null;
             $wire.status = teacher.status;
             $wire.description = teacher.description;
             $wire.position = teacher.position;
