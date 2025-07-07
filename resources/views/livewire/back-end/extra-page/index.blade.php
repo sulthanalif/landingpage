@@ -105,6 +105,7 @@ new #[Title('Extracurricular')] class extends Component {
         $js('create', () => {
             $wire.name = '';
             $wire.description = '';
+            document.getElementById('previewImage').src = '/' + $wire.oldImage;
             $wire.image = null;
             $wire.status = true;
             $wire.drawer = true;
@@ -116,6 +117,7 @@ new #[Title('Extracurricular')] class extends Component {
             $wire.name = extra.name;
             $wire.description = extra.description;
             $wire.image = null;
+            document.getElementById('previewImage').src = '/storage/' + extra.image;
             $wire.status = extra.status;
             $wire.drawer = true;
             $wire.$refresh();

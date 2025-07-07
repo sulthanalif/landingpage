@@ -44,14 +44,11 @@ new #[Title('Teachers')] class extends Component {
     public ?\Illuminate\Http\UploadedFile $image = null;
     public ?\Illuminate\Http\UploadedFile $logo = null;
     public array $varTeacher = ['recordId', 'code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description'];
-    public string $oldImage = '';
-    public string $oldLogo = '';
+    public string $oldImage = 'img/upload.png';
+    public string $oldLogo = 'img/upload.png';
 
     public function mount()
     {
-        $this->oldImage = 'img/upload.png';
-        $this->oldLogo = 'img/upload.png';
-
         $this->getLast();
     }
 
@@ -201,6 +198,8 @@ new #[Title('Teachers')] class extends Component {
             $wire.description = '';
             $wire.position = '';
             $wire.getLast();
+            document.getElementById('previewImage').src = '/' + $wire.oldImage;
+            document.getElementById('previewImage2').src = '/' + $wire.oldLogo;
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -211,6 +210,8 @@ new #[Title('Teachers')] class extends Component {
             $wire.name = teacher.name;
             $wire.email = teacher.email;
             $wire.category = teacher.category;
+            document.getElementById('previewImage').src = '/storage/' + teacher.image;
+            document.getElementById('previewImage2').src = '/storage/' + teacher.logo;
             $wire.status = teacher.status;
             $wire.description = teacher.description;
             $wire.position = teacher.position;

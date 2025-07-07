@@ -46,7 +46,7 @@
                 <x-file label='Maskot' wire:model="logo" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
                 change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
                 crop-save-text="Crop" :crop-config="$config" hint="image size max 5mb">
-                    <img id="previewImage" src="{{ asset($oldLogo) }}" class="h-40 rounded-lg"  />
+                    <img id="previewImage2" src="{{ asset($oldLogo) }}" class="h-40 rounded-lg"  />
                 </x-file>
             </div>
         </div>

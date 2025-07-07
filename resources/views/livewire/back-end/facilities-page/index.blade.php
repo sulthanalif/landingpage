@@ -6,10 +6,11 @@ use App\Models\Facility;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new #[Title('Facility')] class extends Component {
     use Toast, ManageDatas, WithPagination, WithFileUploads;
 
     public string $search = '';
@@ -32,15 +33,10 @@ new class extends Component {
 
     //var
     public string $title = '';
-    public string $oldImage = '';
+    public string $oldImage = 'img/upload.png';
     public string $description = '';
     public ?UploadedFile $image = null;
     public bool $status = true;
-
-    public function mount(): void
-    {
-        $this->oldImage = 'img/upload.png';
-    }
 
     public function save(): void
     {
@@ -131,18 +127,21 @@ new class extends Component {
             $wire.recordId = '';
             $wire.title = '';
             $wire.description = '';
-            $wire.oldImage = '';
+            $wire.oldImage = 'img/upload.png';
             $wire.image = null;
             $wire.status = true;
             $wire.drawer = true;
             $wire.$refresh();
+            document.getElementById('previewImage').src = '/' + $wire.oldImage;
+            // console.log($wire.image, $wire.oldImage);
         })
 
         $js('detail', (facility) => {
             $wire.recordId = facility.id;
             $wire.title = facility.title;
             $wire.description = facility.description;
-            $wire.oldImage = facility.image;
+            document.getElementById('previewImage').src = '/storage/' + facility.image;
+            // $wire.oldImage = facility.image;
             // $wire.image = facility.image;
             $wire.status = facility.status;
             $wire.drawer = true;
@@ -202,7 +201,7 @@ new class extends Component {
                 <x-file label='Image' wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
                 change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
                 crop-save-text="Crop" :crop-config="$config" hint="image size max 5mb">
-                    <img id="previewImage" src="{{ asset($oldImage) }}" class="h-40 rounded-lg"  />
+                    <img id="previewImage" src="{{ asset($oldImage ?? 'img/upload.png') }}" class="h-40 rounded-lg"  />
                 </x-file>
             </div>
 

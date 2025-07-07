@@ -36,14 +36,9 @@ new #[Title('Why Choose Us')] class extends Component {
     public string $title = '';
     public string $description = '';
     public ?UploadedFile $icon = null;
-    public string $oldImage = '';
+    public string $oldImage = 'img/upload.png';
     public bool $status = true;
     public array $varWcu = ['recordId', 'title', 'description', 'icon', 'status'];
-
-    public function mount(): void
-    {
-        $this->oldImage = 'img/upload.png';
-    }
 
     public function save(): void
     {
@@ -131,6 +126,7 @@ new #[Title('Why Choose Us')] class extends Component {
             $wire.description = '';
             $wire.icon = null;
             $wire.status = true;
+            document.getElementById('previewImage').src = '/' + $wire.oldImage;
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -140,6 +136,7 @@ new #[Title('Why Choose Us')] class extends Component {
             $wire.description = wcu.description;
             $wire.icon = null;
             $wire.status = wcu.status;
+            document.getElementById('previewImage').src = '/storage/' + wcu.icon;
             $wire.drawer = true;
             $wire.$refresh();
         })
