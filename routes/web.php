@@ -62,6 +62,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Volt::route('/mail', 'back-end.mail-page.index')->middleware('can:mail-page')->name('mail');
         Volt::route('/mail/show', 'back-end.mail-page.show')->middleware('can:mail-page')->name('mail.show');
         Volt::route('/activity', 'back-end.activity-page.index')->middleware('can:activity-page')->name('activity');
+        Volt::route('/activity/{activity}/show', 'back-end.activity-page.show-activity')->middleware('can:activity-page')->name('activity.show');
+        Volt::route('/activity/{activity}/form-sub', 'back-end.activity-page.form-sub')->middleware('can:activity-page')->name('activity.form-sub');
+
         Volt::route('/question', 'back-end.question-page.index')->middleware('can:question-page')->name('question');
         Volt::route('/enrollment', 'back-end.enrollment-page.index')->middleware('can:enrollment-page')->name('enrollment');
         VOlt::route('/enrollment/{register}/detail', 'back-end.enrollment-page.detail')->middleware('can:enrollment-page')->name('enrollment.detail');

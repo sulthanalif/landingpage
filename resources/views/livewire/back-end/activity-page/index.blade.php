@@ -15,7 +15,13 @@ new #[Title('Activities')] class extends Component {
     use Toast, ManageDatas, WithPagination, WithFileUploads;
 
     public array $config = [
-        'guides' => false,
+        'guides' => true,
+        'aspectRatio' => 3/4, // Set to portrait ratio (3:4)
+        'viewMode' => 1,
+        'responsive' => true,
+        'dragMode' => 'move',
+        'cropBoxMovable' => true,
+        'cropBoxResizable' => true,
     ];
 
     public string $search = '';
@@ -33,17 +39,23 @@ new #[Title('Activities')] class extends Component {
     public int $perPage = 5;
 
     //varActivity
-    public string $title = '';
+    public string $label = '';
     public string $date = '';
     public string $description = '';
     public string $category = 'foto';
-    public ?UploadedFile $file = null;
+    public ?UploadedFile $image = null;
+    public string $oldImage = 'img/upload.png';
     public bool $status = true;
 
-    public array $varActivity = ['recordId', 'title', 'date', 'file', 'status', 'description', 'category'];
+    public array $varActivity = ['recordId', 'label', 'date', 'image', 'oldImage', 'status', 'description', 'category'];
 
     //select status
     public array $selectStatus = [['id' => true, 'name' => 'Aktif'], ['id' => false, 'name' => 'Tidak aktif']];
+
+    public function show(Activity $activity): void
+    {
+        $this->redirect(route('activity.show', $activity), navigate: true);
+    }
 
 
     public function save(): void
@@ -52,21 +64,21 @@ new #[Title('Activities')] class extends Component {
 
         $this->saveOrUpdate(
             validationRules: [
-                'title' => ['required', 'string', 'max:255'],
-                'date' => ['required', 'date'],
+                'label' => ['required', 'string', 'max:255'],
+                // 'date' => ['required', 'date'],
                 'status' => ['required', 'boolean'],
                 'description' => ['required', 'string'],
-                'category' => ['required', 'in:foto,video'],
-                'file' => [$this->recordId ? 'nullable' : 'required', 'mimes:jpeg,png,jpg,mp4', 'max:50400']
+                // 'category' => ['required', 'in:foto,video'],
+                'image' => [$this->recordId ? 'nullable' : 'required', 'mimes:jpeg,png,jpg,mp4', 'max:50400']
             ],
 
             beforeSave: function ($activity, $component) {
-                if ($component->file) {
-                    if (Storage::disk('public')->exists($component->file)) {
-                        Storage::disk('public')->delete($component->file);
+                if ($component->image) {
+                    if (Storage::disk('public')->exists($component->image)) {
+                        Storage::disk('public')->delete($component->image);
                     }
 
-                    $activity->file = $component->file->store(path: 'files/activity', options: 'public');
+                    $activity->image = $component->image->store(path: 'files/activity', options: 'public');
                 }
             }
         );
@@ -84,8 +96,8 @@ new #[Title('Activities')] class extends Component {
         $this->deleteData(
             beforeDelete: function ($id, $component) {
                 $activity = Activity::find($id);
-                if ($activity->file) {
-                    Storage::disk('public')->delete($activity->file);
+                if ($activity->image) {
+                    Storage::disk('public')->delete($activity->image);
                 }
             },
         );
@@ -96,22 +108,11 @@ new #[Title('Activities')] class extends Component {
         $this->drawer = false;
     }
 
-    public function downloadFile()
-    {
-        $file = public_path('storage/' . Activity::find($this->recordId)->file);
-
-        if (!file_exists($file)) {
-            $this->error('File tidak ditemukan', position: 'toast-bottom');
-        } else {
-            return response()->download($file);
-        }
-    }
-
     public function datas(): LengthAwarePaginator
     {
         return Activity::query()
             ->where(function ($query) {
-                $query->where('title', 'like', "%{$this->search}%");
+                $query->where('label', 'like', "%{$this->search}%");
             })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
@@ -120,9 +121,9 @@ new #[Title('Activities')] class extends Component {
     public function headers(): array
     {
         return [
-            ['key' => 'title', 'label' => 'Title'],
-            ['key' => 'date', 'label' => 'Date'],
-            ['key' => 'category', 'label' => 'Category'],
+            ['key' => 'label', 'label' => 'Label'],
+            ['key' => 'description', 'label' => 'Description'],
+            // ['key' => 'category', 'label' => 'Category'],
             ['key' => 'status', 'label' => 'Status'],
             ['key' => 'created_at', 'label' => 'Created At'],
         ];
@@ -139,25 +140,29 @@ new #[Title('Activities')] class extends Component {
 
 @script
     <script>
+        const previewImage = document.getElementById('previewImage');
+
         $js('create', () => {
+            previewImage.src = '/' + $wire.oldImage;
             $wire.recordId = null;
-            $wire.title = '';
-            $wire.date = '';
+            $wire.label = '';
+            // $wire.date = '';
             $wire.description = '';
-            $wire.category = 'foto';
-            $wire.file = null;
+            // $wire.category = 'foto';
+            $wire.image = null;
             $wire.status = true;
             $wire.drawer = true;
             $wire.$refresh();
         });
 
         $js('detail', (activity) => {
+            previewImage.src = 'storage/' + activity.image;
             $wire.recordId = activity.id;
-            $wire.title = activity.title;
-            $wire.date = activity.date;
+            $wire.label = activity.label;
+            // $wire.date = activity.date;
             $wire.description = activity.description;
-            $wire.category = activity.category;
-            $wire.file = null;
+            // $wire.category = activity.category;
+            $wire.image = null;
             $wire.status = activity.status;
             $wire.drawer = true;
             $wire.$refresh();
@@ -169,14 +174,6 @@ new #[Title('Activities')] class extends Component {
     <!-- HEADER -->
     <x-header title="Activities" separator>
         <x-slot:actions>
-            {{-- <div>
-                <x-button label="Upload" @click="$wire.modalUpload" class="!btn-primary" responsive
-                    icon="o-arrow-up-tray" />
-            </div>
-            <div>
-                <x-button label="Download" @click="$wire.export" class="!btn-primary" responsive icon="o-arrow-down-tray"
-                    spinner='export' />
-            </div> --}}
             @can('activity-create')
                 <x-button label="Create" @click="$js.create" responsive icon="o-plus" x-on:click="$wire.$refresh()" />
             @endcan
@@ -190,13 +187,19 @@ new #[Title('Activities')] class extends Component {
     <!-- TABLE  -->
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-            with-pagination @row-click="$js.detail($event.detail)">
+            with-pagination>
             @scope('cell_status', $data)
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
                 @else
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
+            @endscope
+            @scope('actions', $data)
+                <div class="flex gap-2">
+                    <x-button icon="o-pencil" class="btn-sm" wire:click="$js.detail({{ $data }})" />
+                    <x-button icon="o-eye" class="btn-sm" wire:click="show({{ $data->id }})"  spinner="show({{ $data->id }})"/>
+                </div>
             @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />

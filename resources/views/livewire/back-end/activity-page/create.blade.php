@@ -4,11 +4,7 @@
     <x-form wire:submit="save">
 
         <div>
-            <x-datepicker label="Date" wire:model="date" icon="o-calendar" />
-        </div>
-
-        <div>
-            <x-input label="Title" type="text" wire:model="title" />
+            <x-input label="Label" type="text" wire:model="label" />
         </div>
 
         <div>
@@ -16,17 +12,11 @@
         </div>
 
         <div>
-            <x-select label="Category" :options="[
-                ['id' => 'foto', 'name' => 'Foto'],
-                ['id' => 'video', 'name' => 'Video'],
-            ]" wire:model="category" />
-        </div>
-
-        <div class="flex justify-between items-center">
-            <x-file wire:model="file" label="File" hint="Only Video/Image" accept="video/mp4, image/png, image/jpeg, image/jpg" />
-            @if ($this->recordId)
-            <x-button label="Download File" @click="$wire.downloadFile" icon="o-arrow-down" class="btn-primary" spinner="downloadFile" />
-        @endif
+            <x-file label='Cover' wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp" crop-after-change
+            change-text="Change" crop-text="Crop" crop-title-text="Crop image" crop-cancel-text="Cancel"
+            crop-save-text="Crop" :crop-config="$config" hint="image size max 5mb">
+                <img id="previewImage" src="{{ asset($oldImage) }}" class="h-40 rounded-lg"  />
+            </x-file>
         </div>
 
         <div>

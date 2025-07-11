@@ -13,11 +13,24 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->date('date');
+            $table->string('label');
+            // $table->date('date');
             $table->string('description');
-            $table->enum('category', ['foto', 'video']);
-            $table->string('file');
+            // $table->enum('category', ['foto', 'video']);
+            $table->string('image');
+            $table->boolean('status')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('sub_activities', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('activity_id')->constrained('activities')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->date('date');
+            $table->string('title');
+            $table->string('description');
+            $table->string('image');
+            $table->json('library')->nullable();
+            $table->json('videos')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
@@ -29,5 +42,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('activities');
+        Schema::dropIfExists('sub_activities');
     }
 };

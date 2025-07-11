@@ -267,7 +267,7 @@ new #[Title('Teachers')] class extends Component {
         </x-table>
         @if ($selected)
             <div class="flex justify-end items-center gap-2">
-                @can('post-delete')
+                @can('teacher-delete')
                     <div class="mt-3 flex justify-end">
                         <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
                             class="text-red-500" wire:loading.attr="disabled" />

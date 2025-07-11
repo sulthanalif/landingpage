@@ -12,11 +12,16 @@ class Activity extends Model
     protected $table = 'activities';
 
     protected $fillable = [
-        'title',
-        'date',
+        'label',
+        // 'date',
         'description',
-        'category',
-        'file',
+        // 'category',
+        'image',
         'status',
     ];
+
+    public function subActivities()
+    {
+        return $this->hasMany(SubActivity::class);
+    }
 }
