@@ -4,6 +4,7 @@ use App\Models\Career;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use App\Models\CareerRegister;
+use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 new #[Title('Career Registration')] class extends Component {
@@ -22,8 +23,26 @@ new #[Title('Career Registration')] class extends Component {
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public int $perPage = 10;
 
+    public ?int $career_id = null;
+    public Collection $careers;
+
     public array $model;
     public string $career_title = '';
+
+    public function mount(): void
+    {
+        $this->searchCareer();
+    }
+
+    public function searchCareer(string $value = '')
+    {
+        $selectedOption = Career::where('id', $this->career_id)->get();
+
+        $this->careers = Career::query()
+            ->where('title', 'like', "%{$value}%")
+            ->get()
+            ->merge($selectedOption);
+    }
 
     public function back(): void
     {
@@ -53,12 +72,14 @@ new #[Title('Career Registration')] class extends Component {
 
         return CareerRegister::query()
             ->withAggregate('career', 'title')
+            ->when($this->career_id, function ($query) {
+                $query->whereHas('career', function ($query) {
+                    $query->where('id', $this->career_id);
+                });
+            })
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhereHas('career', function ($query) use ($search) {
-                        $query->where('title', 'like', "%{$search}%");
-                    });
+                    ->orWhere('email', 'like', "%{$search}%");
             })
             ->orderBy($this->sortBy['column'] ?? 'id', $this->sortBy['direction'] ?? 'asc')
             ->paginate($this->perPage ?? 10);
@@ -67,11 +88,11 @@ new #[Title('Career Registration')] class extends Component {
     public function headers(): array
     {
         return [
+            ['key' => 'created_at', 'label' => 'Date'],
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'phone_number', 'label' => 'Phone'],
             ['key' => 'career_title', 'label' => 'Career', 'sortable' => true],
-            ['key' => 'created_at', 'label' => 'Created At'],
         ];
     }
 
@@ -90,7 +111,7 @@ new #[Title('Career Registration')] class extends Component {
         $js('detail', (register) => {
             $wire.model = register;
             $wire.getCareerTitle();
-            // console.log($wire.model);
+            console.log($wire.model);
 
 
             $wire.myModal = true;
@@ -108,6 +129,23 @@ new #[Title('Career Registration')] class extends Component {
     </x-header>
 
     <div class="flex justify-end items-center gap-5">
+        <div class="w-60">
+            <x-choices
+            wire:model.live="career_id"
+            :options="$careers"
+            placeholder="Search Career ..."
+            search-function="searchCareer"
+            single
+            searchable
+            clearable>
+            @scope('item', $data)
+                <x-list-item :item="$data" value="title" />
+            @endscope
+            @scope('selection', $data)
+                {{ $data->title }}
+            @endscope
+            </x-choices>
+        </div>
         <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
     </div>
 
@@ -115,10 +153,10 @@ new #[Title('Career Registration')] class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             with-pagination @row-click="$js.detail($event.detail)">
-            {{-- @scope('cell_percentage', $data)
-                <p>{{ floatval($data['percentage']) }}%</p>
+            @scope('cell_created_at', $data)
+                <p>{{ \Carbon\Carbon::parse($data['created_at'] ?? '')->translatedFormat('d F Y H:i') }}</p>
             @endscope
-            @scope('cell_status', $data)
+            {{--  @scope('cell_status', $data)
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
                 @else
@@ -134,12 +172,17 @@ new #[Title('Career Registration')] class extends Component {
     <x-modal
         wire:model="myModal"
         title="Detail"
+        {{-- subtitle="" --}}
         box-class="w-full h-fit max-w-[800px]"
         without-trap-focus
     >
         <div wire:loading.remove='model'>
             <div class="grid grid-cols-2 gap-5">
                 <div class="space-y-2 text-sm text-gray-700">
+                    <div class="flex">
+                        <span class="w-40 font-semibold">Date</span>
+                        <span>: {{ $model ? \Carbon\Carbon::parse($model['created_at'] ?? '')->format('d F Y') : '' }}</span>
+                    </div>
                     <div class="flex">
                         <span class="w-40 font-semibold">Name</span>
                         <span>: {{ $model['name'] ?? '' }}</span>

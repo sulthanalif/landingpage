@@ -33,6 +33,10 @@ class Career extends Model
 
     public function getIsActiveAttribute(): bool
     {
+        if (is_null($this->end_date)) {
+            return $this->start_date <= now();
+        }
+
         return $this->start_date <= now() && $this->end_date >= now();
     }
 

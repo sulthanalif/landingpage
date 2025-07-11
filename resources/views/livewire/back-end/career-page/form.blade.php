@@ -30,9 +30,11 @@ new class extends Component {
     public int $salary_min = 0;
     public int $salary_max = 0;
     public string $start_date = '';
-    public string $end_date = '';
+    public $end_date;
 
-    public array $varCareer = ['recordId', 'slug', 'title', 'description', 'requirement', 'level', 'employment_type', 'location', 'salary_min', 'salary_max', 'start_date', 'end_date'];
+    public bool $is_period = false;
+
+    public array $varCareer = ['recordId', 'slug', 'title', 'description', 'is_period', 'requirement', 'level', 'employment_type', 'location', 'salary_min', 'salary_max', 'start_date', 'end_date'];
 
     public function mount()
     {
@@ -50,6 +52,10 @@ new class extends Component {
             $this->start_date = $career->start_date;
             $this->end_date = $career->end_date;
             $this->formCreate = false;
+
+            if ($this->end_date) {
+                $this->is_period = true;
+            }
         } else {
             $this->formCreate = true;
         }
@@ -102,22 +108,42 @@ new class extends Component {
     {
         $this->setModel(new Career());
 
-        $this->saveOrUpdate(
-            validationRules: [
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'requirement' => 'nullable|string',
-                'level' => 'required|in:fresh_graduate,experienced',
-                'employment_type' => 'required|in:full_time,part_time,contract,freelance,internship',
-                'location' => 'required|string|max:255',
-                'salary_min' => 'nullable|numeric',
-                'salary_max' => 'nullable|numeric',
-                'start_date' => 'required|date',
-                'end_date' => 'required|date',
-            ],
+        $rules = [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'requirement' => 'nullable|string',
+            'level' => 'required|in:fresh_graduate,experienced',
+            'employment_type' => 'required|in:full_time,part_time,contract,freelance,internship',
+            'location' => 'required|string|max:255',
+            'salary_min' => 'nullable|numeric',
+            'salary_max' => 'nullable|numeric',
+        ];
 
+        if($this->end_date) {
+            if ($this->is_period) {
+                $rules['start_date'] = 'nullable|date';
+                $rules['end_date'] = 'nullable|date|after_or_equal:start_date';
+            } else {
+                $rules['start_date'] = 'nullable|date';
+            }
+        } else {
+            $rules['start_date'] = 'nullable|date';
+        }
+
+
+        $this->saveOrUpdate(
+            validationRules: $rules,
+            // diff: ['end_date'],
             beforeSave: function ($career, $component) {
                 $career->slug = Str::slug($component->title);
+
+                if($component->is_period) {
+                    if($component->end_date) {
+                        $career->end_date = $component->end_date;
+                    }
+                } else {
+                    $career->end_date = null;
+                }
             },
         );
 
@@ -181,9 +207,17 @@ new class extends Component {
                 <x-input label="Salary Max" type="number" wire:model="salary_max" />
             </div>
 
-            <div class="grid grid-cols-2 gap-5">
-                <x-datepicker label="Start Date" wire:model="start_date" icon="o-calendar" />
-                <x-datepicker label="End Date" wire:model="end_date" icon="o-calendar" />
+            <div class="grid grid-cols-2 gap-5" x-data="{ show: false }" x-effect="show = $wire.is_period">
+                <div>
+                    <x-datepicker label="Start Date" wire:model="start_date" icon="o-calendar" />
+                </div>
+                <div x-show="show">
+                    <x-datepicker label="End Date" wire:model="end_date" icon="o-calendar" />
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <x-toggle label="Is Period?" wire:model="is_period" />
             </div>
 
             <div class="grid grid-cols-2 gap-5">

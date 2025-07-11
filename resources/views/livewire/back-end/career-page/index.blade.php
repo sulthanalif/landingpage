@@ -60,7 +60,7 @@ new class extends Component {
             ['key' => 'employment_type', 'label' => 'Employment Type'],
             ['key' => 'start_date', 'label' => 'Start Date'],
             ['key' => 'end_date', 'label' => 'End Date'],
-            ['key' => 'created_at', 'label' => 'Created At']
+            ['key' => 'is_active', 'label' => 'Status']
         ];
     }
 
@@ -93,11 +93,18 @@ new class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             with-pagination @row-click="$wire.detail($event.detail.slug)">
-            @scope('cell_percentage', $data)
-                <p>{{ floatval($data['percentage']) }}%</p>
+            @scope('cell_start_date', $data)
+                <p class="text-sm">{{ \Carbon\Carbon::parse($data->start_date)->locale('id_ID')->translatedFormat('d F Y') }}</p>
             @endscope
-            @scope('cell_status', $data)
-                @if ($data['status'])
+            @scope('cell_end_date', $data)
+                @if($data->end_date)
+                <p class="text-sm">{{ \Carbon\Carbon::parse($data->end_date)->locale('id_ID')->translatedFormat('d F Y') }}</p>
+                @else
+                -
+                @endif
+            @endscope
+            @scope('cell_is_active', $data)
+                @if ($data->is_active)
                     <span class="text-green-500">Aktif</span>
                 @else
                     <span class="text-red-500">Tidak aktif</span>
