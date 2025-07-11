@@ -213,7 +213,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.email = teacher.email;
             $wire.category = teacher.category;
             document.getElementById('previewImage').src = '/storage/' + teacher.image;
-            document.getElementById('previewImage2').src = '/storage/' + teacher.logo;\
+            document.getElementById('previewImage2').src = '/storage/' + teacher.logo;
             $wire.image = null;
             $wire.logo = null;
             $wire.status = teacher.status;
