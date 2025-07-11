@@ -19,5 +19,6 @@ class Teacher extends Model
         'image',
         'description',
         'status',
+        'notes',
     ];
 }

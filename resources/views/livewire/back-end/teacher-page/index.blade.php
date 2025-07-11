@@ -39,11 +39,12 @@ new #[Title('Teachers')] class extends Component {
     public string $category = 'Management';
     public string $description = '';
     public string $position = '';
+    public ?string $notes = null;
     public int $order = 0;
     public bool $status = true;
     public ?\Illuminate\Http\UploadedFile $image = null;
     public ?\Illuminate\Http\UploadedFile $logo = null;
-    public array $varTeacher = ['recordId', 'code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description'];
+    public array $varTeacher = ['recordId', 'notes', 'code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description'];
     public string $oldImage = 'img/upload.png';
     public string $oldLogo = 'img/upload.png';
 
@@ -91,6 +92,12 @@ new #[Title('Teachers')] class extends Component {
 
                     $teacher->logo = $component->logo->store(path: 'images', options: 'public');
                 }
+
+                if (!$component->status) {
+                    $teacher->notes = $component->notes;
+                } else {
+                    $teacher->notes = null;
+                }
             },
         );
 
@@ -108,12 +115,18 @@ new #[Title('Teachers')] class extends Component {
             foreach ($this->selected as $id) {
                 $teacher = Teacher::find($id);
                 $teacher->status = !$teacher->status;
+
+                if (!$teacher->status) {
+                    $teacher->notes = $this->notes;
+                } else {
+                    $teacher->notes = null;
+                }
                 $teacher->save();
             }
 
             DB::commit();
             $this->success('Status Berhasil Diubah.', position: 'toast-bottom');
-            $this->reset('selected', 'modalAlertWarning');
+            $this->reset('selected', 'modalAlertWarning', 'notes');
         } catch (\Exception $th) {
             DB::rollBack();
             $this->error('Status Gagal Diubah.', position: 'toast-bottom');
@@ -173,7 +186,7 @@ new #[Title('Teachers')] class extends Component {
             ['key' => 'image', 'label' => 'Image'],
             ['key' => 'logo', 'label' => 'Maskot'],
             ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'created_at', 'label' => 'Created At'],
+            ['key' => 'notes', 'label' => 'Notes'],
         ];
     }
 
@@ -197,6 +210,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.status = true;
             $wire.description = '';
             $wire.position = '';
+            $wire.notes = '';
             $wire.getLast();
             document.getElementById('previewImage').src = '/' + $wire.oldImage;
             document.getElementById('previewImage2').src = '/' + $wire.oldLogo;
@@ -220,6 +234,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.description = teacher.description;
             $wire.position = teacher.position;
             $wire.order = teacher.order;
+            $wire.notes = teacher.notes;
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -244,7 +259,9 @@ new #[Title('Teachers')] class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
              with-pagination wire:model.live="selected"
-             selectable>
+             selectable :row-decoration="[
+                'bg-error/20' => fn($data) => !$data->status,
+             ]">
             @scope('cell_image', $data)
                 <img src="{{ asset('storage/' . $data['image']) }}" alt="" style="width: 100px; height: auto">
             @endscope
@@ -257,6 +274,9 @@ new #[Title('Teachers')] class extends Component {
                 @else
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
+            @endscope
+            @scope('cell_notes', $data)
+                {{ $data->notes ?? '-' }}
             @endscope
             @scope('actions', $data)
                 <x-button icon="o-pencil" class="btn-sm" wire:click="$js.detail({{ $data }})" />
@@ -289,7 +309,26 @@ new #[Title('Teachers')] class extends Component {
     @include('livewire.alerts.alert-delete')
 
     <!-- MODAL ALERT WARNING -->
-    @include('livewire.alerts.alert-warning')
+    {{--  modal --}}
+    <x-modal wire:model="modalAlertWarning" class="backdrop-blur">
+        <x-form wire:submit="changeStatus" class="relative" no-separator>
+            <div class="flex justify-center items-center">
+                    <div class="mb-5 rounded-lg w-full text-center">
+                    <x-icon name="c-shield-exclamation" class="w-16 h-16 text-yellow-700 mx-auto mb-4" />
+                    <p class="text-center">Apakah anda yakin untuk Mengubah data ini?</p>
+                </div>
+            </div>
+            <div>
+                <x-textarea label="Notes" wire:model='notes' rows="3" hint="Please provide a reason for deactivating this teacher" />
+            </div>
+            <x-slot:actions>
+                <x-button label="Tidak" @click="$wire.modalAlertWarning = false" />
+                <x-button label="Ya" class="btn-primary" type="submit" spinner="changeStatus" />
+            </x-slot:actions>
+        </x-form>
+    </x-modal>
+
+
 
     <!-- MODAL UPLOAD FILE -->
     {{-- @include('livewire.modals.modal-upload-file') --}}

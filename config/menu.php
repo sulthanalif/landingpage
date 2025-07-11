@@ -93,17 +93,17 @@ return [
                 'link' => 'career'
             ],
             [
+                'can' => 'teacher-page',
+                'title' => 'Teachers',
+                'icon' => 'o-users',
+                'link' => 'teacher'
+            ],
+            [
                 'can' => 'user-page',
                 'title' => 'Users',
                 'icon' => 'o-users',
                 'link' => 'user'
             ],
-            [
-                'can' => 'teacher-page',
-                'title' => 'Teachers',
-                'icon' => 'o-users',
-                'link' => 'teacher'
-            ]
         ]
     ],
 
@@ -121,5 +121,4 @@ return [
         'icon' => 'o-user-plus',
         'link' => 'enrollment'
     ],
-
 ];

@@ -51,8 +51,13 @@
             </div>
         </div>
 
-        <div class="my-3">
-            <x-toggle label="Status" wire:model="status" hint="if checked, status will be active" />
+        <div class="lg:grid grid-cols-2 gap-2" x-data="{ showNotes: false }" x-effect="showNotes = !$wire.status">
+            <div class="my-3 lg:my-0">
+                <x-toggle label="Status" wire:model="status" hint="if checked, status will be active" />
+            </div>
+            <div x-show="showNotes">
+                <x-textarea label="Notes" wire:model="notes" rows="3" />
+            </div>
         </div>
 
         <x-slot:actions>

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('status')->default(true);
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }
