@@ -92,76 +92,10 @@ const Header = () => {
                                                     info@lscs.sch.id
                                                 </a>
                                             </li>
-                                            <li className="notranslate">
-                                                <a
-                                                    href="https://lsgs.quintal.id/"
-                                                    className="text-light ml-2"
-                                                    target="_blank"
-                                                >
-                                                    <i
-                                                        className="fa fa-leanpub mr-2"
-                                                        aria-hidden="true"
-                                                    />
-                                                    Login
-                                                </a>
-                                            </li>
                                         </ul>
                                         <div className="top_bar_login ml-auto">
                                             <div className="login_button">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <div
-                                                        className="d-flex justify-content-center align-items-center"
-                                                        translate="no"
-                                                    >
-                                                        <button
-                                                            onClick={() =>
-                                                                window.changeLanguage(
-                                                                    "en"
-                                                                )
-                                                            }
-                                                            className="btn btn-link text-dark d-flex align-items-center ml-2 mr-4 notranslate"
-                                                            style={{
-                                                                textDecoration:
-                                                                    "none",
-                                                            }}
-                                                        >
-                                                            <img
-                                                                src="/img/en.svg"
-                                                                className="img-fluid mr-1"
-                                                                style={{
-                                                                    maxHeight:
-                                                                        "25px",
-                                                                }}
-                                                                alt="EN"
-                                                            />
-                                                            EN
-                                                        </button>
-                                                        |
-                                                        <button
-                                                            onClick={() =>
-                                                                window.changeLanguage(
-                                                                    "id"
-                                                                )
-                                                            }
-                                                            className="btn btn-link text-dark d-flex align-items-center ml-2 mr-4 notranslate"
-                                                            style={{
-                                                                textDecoration:
-                                                                    "none",
-                                                            }}
-                                                        >
-                                                            <img
-                                                                src="/img/id.svg"
-                                                                className="img-fluid mr-1"
-                                                                style={{
-                                                                    maxHeight:
-                                                                        "25px",
-                                                                }}
-                                                                alt="ID"
-                                                            />
-                                                            ID
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                                <LanguageSwitcher />
                                             </div>
                                         </div>
                                     </div>
@@ -205,6 +139,7 @@ const Header = () => {
                                                 className={
                                                     url === "/about" ||
                                                         url === "/story" ||
+                                                        url === "/admission" ||
                                                         url === "/teacher"
                                                         ? "nav-item dropdown active"
                                                         : "nav-item dropdown"
@@ -250,18 +185,17 @@ const Header = () => {
                                                     >
                                                         Teacher
                                                     </Link>
+                                                    <Link
+                                                        className={
+                                                            url === "/admission"
+                                                                ? "dropdown-item active"
+                                                                : "dropdown-item text-dark"
+                                                        }
+                                                        href="/admission"
+                                                    >
+                                                        Our Guidelines
+                                                    </Link>
                                                 </div>
-                                            </li>
-                                            <li
-                                                className={
-                                                    url === "/admission"
-                                                        ? "active"
-                                                        : ""
-                                                }
-                                            >
-                                                <Link href="/admission">
-                                                    Admission
-                                                </Link>
                                             </li>
                                             <li
                                                 className={
@@ -332,6 +266,17 @@ const Header = () => {
                                             </li>
                                             <li
                                                 className={
+                                                    url === "/register"
+                                                        ? "active"
+                                                        : ""
+                                                }
+                                            >
+                                                <Link href="/register">
+                                                    Admission
+                                                </Link>
+                                            </li>
+                                            <li
+                                                className={
                                                     url === "/career"
                                                         ? "active"
                                                         : ""
@@ -350,17 +295,6 @@ const Header = () => {
                                             >
                                                 <Link href="/contact">
                                                     Contact
-                                                </Link>
-                                            </li>
-                                            <li
-                                                className={
-                                                    url === "/register"
-                                                        ? "active"
-                                                        : ""
-                                                }
-                                            >
-                                                <Link href="/register">
-                                                    Register
                                                 </Link>
                                             </li>
                                         </ul>
@@ -384,6 +318,84 @@ const Header = () => {
                 <Navbar isActive={isNavbarActive} closeMenu={closeNavbar} />
             </header>
         </>
+    );
+};
+
+const LanguageSwitcher = () => {
+    const [activeLang, setActiveLang] = useState("en");
+    const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        const lang = localStorage.getItem("lang") || "en";
+        setActiveLang(lang);
+    }, []);
+
+    const changeLanguage = (lang) => {
+        localStorage.setItem("lang", lang);
+        setActiveLang(lang);
+        window.changeLanguage(lang);
+        setIsOpen(false);
+    };
+
+    const getFlagSrc = (lang) => {
+        switch (lang) {
+            case "id":
+                return "/img/id.svg";
+            case "en":
+            default:
+                return "/img/en.svg";
+        }
+    };
+
+    return (
+        <div className="language-login-container d-flex align-items-center px-3 py-1">
+            {/* Tombol Login */}
+            <a
+                href="https://lms.lscs.sch.id/"
+                className="login-link d-flex align-items-center mr-3 ml-2"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <i className="fa fa-leanpub mr-2" />
+                Login
+            </a>
+
+            |
+            
+            {/* Tombol Bahasa */}
+            <div className="dropdown position-relative ml-1">
+                <button
+                    className="btn dropdown-toggle language-btn"
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    <img
+                        src={getFlagSrc(activeLang)}
+                        alt={activeLang}
+                        className="flag-icon"
+                    />
+                    <span>{activeLang === "en" ? "English" : "Bahasa"}</span>
+                </button>
+                {isOpen && (
+                    <div className="dropdown-menu show language-dropdown">
+                        <button
+                            className="dropdown-item d-flex align-items-center"
+                            onClick={() => changeLanguage("en")}
+                        >
+                            <img src="/img/en.svg" alt="English" className="flag-icon" />
+                            English
+                        </button>
+                        <button
+                            className="dropdown-item d-flex align-items-center"
+                            onClick={() => changeLanguage("id")}
+                        >
+                            <img src="/img/id.svg" alt="Bahasa" className="flag-icon" />
+                            Bahasa Indonesia
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 };
 

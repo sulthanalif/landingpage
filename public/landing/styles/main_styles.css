@@ -333,7 +333,7 @@ section {
     height: 100%;
 }
 .login_button {
-    width: 160px;
+    width: 230px;
     height: 100%;
     background: #f3f3f3;
     text-align: center;
@@ -345,6 +345,57 @@ section {
     line-height: 40px;
     color: #384158;
 }
+.language-login-container {
+    background-color: #f3f3f3;
+    border-radius: 6px;
+    height: 40px;
+}
+
+.language-btn {
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.language-btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.flag-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 160px;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.login-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: #002b4e;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-link:hover {
+    color: #0069d9;
+}
+
 
 /*********************************
 3.2 Header Content
@@ -2203,8 +2254,8 @@ section {
 /* Container utama untuk floating WhatsApp */
 .floating-whatsapp-container {
     position: fixed; /* Membuat elemen tetap di layar */
-    bottom: 20px; /* Jarak dari bawah */
-    right: 20px; /* Jarak dari kanan */
+    bottom: 60px; /* Jarak dari bawah */
+    right: 30px; /* Jarak dari kanan */
     z-index: 9999; /* Memastikan elemen berada di atas elemen lain */
     display: -webkit-box;
     display: -ms-flexbox;
@@ -2254,6 +2305,7 @@ section {
     border-radius: 10px; /* Sudut melengkung */
     -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Bayangan yang lebih jelas */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Bayangan yang lebih jelas */
+    z-index: 9999;
     padding: 10px 0;
     margin-bottom: 15px; /* Jarak antara menu dan tombol WhatsApp */
     width: 250px; /* Lebar menu */
@@ -2274,9 +2326,9 @@ section {
 /* Container utama untuk floating register */
 .floating-register-container {
     position: fixed; /* Membuat elemen tetap di layar */
-    bottom: 20px; /* Jarak dari bawah */
-    right: 90px; /* Jarak dari kanan */
-    z-index: 9999; /* Memastikan elemen berada di atas elemen lain */
+    bottom: 130px; /* Jarak dari bawah */
+    right: 30px; /* Jarak dari kanan */
+    z-index: 9998; /* Memastikan elemen berada di atas elemen lain */
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -2317,6 +2369,47 @@ section {
     -webkit-transform: scale(1.05); /* Safari */
     transform: scale(1.05); /* Sedikit membesar saat di-hover */
     background-color: #0069d8;
+}
+
+/* Tooltip container */
+.register-button .tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    max-width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    font-size: 0.875rem;
+    padding: 6px 10px;
+    border-radius: 4px;
+
+    position: absolute;
+    bottom: 125%; /* Di atas tombol */
+    left: 50%;
+    transform: translateX(-50%);
+
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+/* Tooltip arrow */
+.register-button .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* Di bawah tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+/* Show tooltip on hover */
+.register-button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* Animasi untuk menu */

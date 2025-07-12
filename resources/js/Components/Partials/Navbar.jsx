@@ -37,13 +37,13 @@ const Navbar = ({ isActive, closeMenu }) => {
                                 <Link className="dropdown-item" href="/story">
                                     Our Stories
                                 </Link>
-                                <Link className="dropdown-item" href="#">
-                                    Teacher Profile
+                                <Link className="dropdown-item" href="/teacher">
+                                    Teacher
+                                </Link>
+                                <Link className="dropdown-item" href="/admission">
+                                    Our Guidelines
                                 </Link>
                             </div>
-                        </li>
-                        <li className="menu_mm">
-                            <Link href="/admission">Admission</Link>
                         </li>
                         <li className="menu_mm dropdown">
                             <a
@@ -83,13 +83,13 @@ const Navbar = ({ isActive, closeMenu }) => {
                             </div>
                         </li>
                         <li className="menu_mm">
+                            <Link href="/register">Admission</Link>
+                        </li>
+                        <li className="menu_mm">
                             <Link href="/career">Career</Link>
                         </li>
                         <li className="menu_mm">
                             <Link href="/contact">Contact</Link>
-                        </li>
-                        <li className="menu_mm">
-                            <Link href="/register">Register</Link>
                         </li>
                     </ul>
                 </nav>

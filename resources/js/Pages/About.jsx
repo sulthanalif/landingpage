@@ -189,7 +189,7 @@ const ValueSection = () => {
                                         <li><strong>N</strong>ever delaying what needs to be done</li>
                                         <li><strong>E</strong>veryone is important regardless of age and position in our school</li>
                                         <li><strong>U</strong>nity and diversity</li>
-                                        <li><strong>R</strong>easoning in every action I make</li>
+                                        <li><strong>R</strong>eason in every action I make</li>
                                     </ul>
                                 </p>
                             </div>

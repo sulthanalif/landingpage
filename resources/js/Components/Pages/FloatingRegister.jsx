@@ -11,6 +11,7 @@ const FloatingRegister = () => {
             <Link href="/register">
                 <div className="register-button">
                     <img src="/landing/images/icon_register.png" alt="WhatsApp Icon" className="whatsapp-icon-image" style={{ width: '30px', height: '30px' }} />
+                    <span className="tooltip-text">Register now!</span>
                 </div>
             </Link>
         </div>
