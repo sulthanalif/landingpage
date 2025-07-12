@@ -36,7 +36,11 @@ class LandingpageResponseController extends Controller
     public function activities()
     {
         try {
-            $activities = Activity::where('status', true)->get();
+            $activities = Activity::with(['subActivities' => function($query) {
+                $query->where('status', true);
+            }])
+            ->where('status', true)
+            ->get();
 
             return $this->successResponse(data: compact('activities'));
         } catch (\Throwable $th) {
