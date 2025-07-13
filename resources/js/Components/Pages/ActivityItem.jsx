@@ -14,13 +14,13 @@ const ActivityItem = ({ activity }) => {
 
     return (
         <>
-            <div className="col-lg-4 course_col mr-auto mb-4" key={activity.id}>
+            <div className="col-lg-2 course_col mb-4" key={activity.id}>
                 <div
                     className="course feature trans_400"
                     onClick={handlePreview}
                     style={{ cursor: "pointer" }}
                 >
-                    <div className="course_image">
+                    <div className="course_image" style={{ height: "250px" }}>
                         {isVideo ? (
                             <video
                                 src={`/storage/${activity.file}`}
@@ -37,15 +37,15 @@ const ActivityItem = ({ activity }) => {
                                 }
                                 alt={activity.title}
                                 loading="lazy"
-                                style={{ width: "auto", height: "250px", objectFit: "cover" }}
+                                style={{ objectPosition: "50%", width: "100%", height: "250px", objectFit: "cover" }}
                             />
                         )}
                     </div>
-                    <div className="course_body">
+                    {/* <div className="course_body">
                         <h3 className="course_title text-center">
                             <a href="#">{activity.title}</a>
                         </h3>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

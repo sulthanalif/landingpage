@@ -197,6 +197,8 @@ const DetailStory = ({ id }) => {
                                                 No image found
                                             </div>
                                         )}
+                                    </div>
+                                    <div className="blog_image row">
                                         {activity.videos && (
                                             activity.videos.map(
                                                 (item, index) => {
