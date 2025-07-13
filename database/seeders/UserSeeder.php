@@ -219,10 +219,10 @@ class UserSeeder extends Seeder
         $hrd->givePermissionTo($hrdPermissions);
 
         $users = [
-            ['name' => 'Super Admin', 'email' => 'superadmin@gmail.com', 'password' => Hash::make('password'), 'role' => 'super-admin'],
-            ['name' => 'Admin', 'email' => 'admin@gmail.com', 'password' => Hash::make('password'), 'role' => 'admin'],
-            ['name' => 'Marketing', 'email' => 'marketing@gmail.com', 'password' => Hash::make('password'), 'role' => 'marketing'],
-            ['name' => 'HRD', 'email' => 'hrd@gmail.com', 'password' => Hash::make('password'), 'role' => 'hrd'],
+            ['name' => 'Super Admin', 'email' => 'superadmin@lscs.sch.id', 'password' => Hash::make('password'), 'role' => 'super-admin'],
+            ['name' => 'Admin', 'email' => 'admin@lscs.sch.id', 'password' => Hash::make('password'), 'role' => 'admin'],
+            ['name' => 'Marketing', 'email' => 'marketing@lscs.sch.id', 'password' => Hash::make('password'), 'role' => 'marketing'],
+            ['name' => 'HRD', 'email' => 'hrd@lscs.sch.id', 'password' => Hash::make('password'), 'role' => 'hrd'],
         ];
 
         foreach ($users as $user) {
