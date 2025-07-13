@@ -32,11 +32,6 @@ new #[Title('Form Sub Activity')] class extends Component {
     public array $configLib = [
         'guides' => true,
         'aspectRatio' => 4/3, // Set to landscape ratio (4:3)
-        'viewMode' => 1,
-        'responsive' => true,
-        'dragMode' => 'move',
-        'cropBoxMovable' => true,
-        'cropBoxResizable' => true,
     ];
 
     public Activity $activity;
@@ -276,7 +271,6 @@ new #[Title('Form Sub Activity')] class extends Component {
                         wire:model="files"
                         wire:library="library"
                         :preview="$library"
-                        label=""
                         change-text="Change"
                         crop-text="Crop"
                         remove-text="Remove"
