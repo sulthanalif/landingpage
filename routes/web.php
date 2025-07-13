@@ -16,6 +16,7 @@ use App\Http\Controllers\LandingpageResponseController;
 Route::get('/', [LandingpageController::class, 'index'])->name('homepage');
 Route::get('/about', [LandingpageController::class, 'about']);
 Route::get('/story', [LandingpageController::class, 'story']);
+Route::get('/story/{id}', [LandingpageController::class, 'detailStory']);
 Route::get('/teacher', [LandingpageController::class, 'teacher']);
 Route::get('/admission', [LandingpageController::class, 'admission']);
 Route::get('/curriculum', [LandingpageController::class, 'curriculum']);

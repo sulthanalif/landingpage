@@ -71,10 +71,43 @@ const AllActivity = () => {
             : textContent;
     };
 
-    const { data: activities, loading, error, get: getActivities } = useApi("activities");
-    
+    const { data: posts, loading, error, get: getPosts } = useApi("posts");
+
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [filteredPosts, setFilteredPosts] = useState([]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const categoryId = params.get("categoryId");
+
+        if (categoryId) {
+            setSelectedCategory(categoryId);
+        }
+    }, []);
+
+    // Filter data berdasarkan selectedCategory
+    useEffect(() => {
+        if (!selectedCategory) {
+            setFilteredPosts(posts?.posts || []);
+        } else {
+            setFilteredPosts(
+                posts?.posts?.filter(
+                    (post) => String(post.category.id) === selectedCategory
+                ) || []
+            );
+        }
+    }, [selectedCategory, posts]);
+
+    const handleCategoryChange = (e) => {
+        setSelectedCategory(e.target.value);
+    };
+
+    const handleCategoryClick = (categoryId) => {
+        setSelectedCategory(String(categoryId));
+    };
+
     const handleRefresh = () => {
-        getActivities();
+        getPosts();
     };
 
     return (
@@ -104,75 +137,145 @@ const AllActivity = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <div className="blog_post_container">
-                                {activities &&
-                                activities?.activities.length > 0 ? (
-                                    activities?.activities.map((activity) => (
-                                        <div
-                                            key={activity.id}
-                                            className="blog_post trans_200"
-                                        >
-                                            <div className="blog_post_image">
-                                                <img
-                                                    src={
-                                                        activity.image
-                                                            ? `/storage/${activity.image}`
-                                                            : "/landing/images/event_1.jpg"
-                                                    }
-                                                    alt={activity.title}
-                                                    loading="lazy"
-                                                />
-                                            </div>
-
-                                            {/* Konten Post */}
-                                            <div className="blog_post_body">
-                                                <div className="blog_post_title">
-                                                    <a href={`#`}>
-                                                        {activity.title}
-                                                    </a>
-                                                </div>
-                                                <div className="blog_post_meta">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="#">
-                                                                Admin
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                {new Date(
-                                                                    activity.date
-                                                                ).toLocaleDateString(
-                                                                    "en-US",
-                                                                    {
-                                                                        month: "long",
-                                                                        day: "numeric",
-                                                                        year: "numeric",
-                                                                    }
-                                                                )}
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-center">
-                                        No activities found.
+                            <div className="section_title_container text-center">
+                                <h2 className="section_title">Our News</h2>
+                                <div className="section_subtitle">
+                                    <p>
+                                        Stay updated with our latest articles
+                                        and insights.
                                     </p>
-                                )}
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* <div className="row">
-                        <div className="col text-center">
-                            <div className="load_more trans_200">
-                                <a href="#">Load More</a>
+                    <div className="row mt-2">
+                        <div className="col-lg-3 text-secondary">
+                            <select
+                                name="category"
+                                className="form-control text-secondary"
+                                value={selectedCategory}
+                                onChange={handleCategoryChange}
+                            >
+                                <option value="">All</option>
+                                {posts?.categories.map((category) => (
+                                    <option value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    {loading ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div
+                                className="spinner-border text-secondary"
+                                role="status"
+                            >
+                                <span className="sr-only">Loading...</span>
                             </div>
                         </div>
-                    </div> */}
+                    ) : error ? (
+                        <div className="col-lg-12 text-center py-5">
+                            <div className="alert alert-danger">{error}</div>
+                        </div>
+                    ) : filteredPosts.length > 0 ? (
+                        <>
+                            {" "}
+                            <div className="row courses_row">
+                                {filteredPosts.map((post) => (
+                                    <div
+                                        key={post.id}
+                                        className="blog_post trans_200 col-lg-4 col-md-6"
+                                    >
+                                        <div className="blog_post_image">
+                                            <img
+                                                src={
+                                                    post.image
+                                                        ? `/storage/${post.image}`
+                                                        : "/img/logo.png"
+                                                }
+                                                alt={post.title}
+                                                loading="lazy"
+                                                style={{
+                                                    width: "auto",
+                                                    height: "250px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                        </div>
+
+                                        {/* Konten Post */}
+                                        <div className="blog_post_body">
+                                            <div className="blog_post_title">
+                                                <Link
+                                                    href={`/news/${post.slug}`}
+                                                >
+                                                    {post.title}
+                                                </Link>
+                                            </div>
+                                            <div className="blog_post_meta">
+                                                <ul>
+                                                    <li>
+                                                        <a
+                                                            href="/news"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                handleCategoryClick(
+                                                                    post
+                                                                        .category
+                                                                        .id
+                                                                );
+                                                            }}
+                                                            style={{
+                                                                cursor: "pointer",
+                                                            }}
+                                                        >
+                                                            {post.category.name}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            {new Date(
+                                                                post.updated_at
+                                                            ).toLocaleDateString(
+                                                                "en-US",
+                                                                {
+                                                                    month: "long",
+                                                                    day: "numeric",
+                                                                    year: "numeric",
+                                                                }
+                                                            )}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="blog_post_text">
+                                                <p
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: limitText(
+                                                            post.body
+                                                        ),
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="col-lg-12 course_col mt-4">
+                            <div className="course">
+                                <div className="course_body">
+                                    <h3 className="course_title text-center">
+                                        No activities found.
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </Layout>

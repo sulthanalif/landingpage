@@ -31,6 +31,11 @@ class LandingpageController extends Controller
         return Inertia::render('Story');
     }
 
+    public function detailStory()
+    {
+        return Inertia::render('DetailStory');
+    }
+
     public function teacher()
     {
         return Inertia::render('Teacher');
