@@ -31,6 +31,9 @@ class UserSeeder extends Seeder
         //permission
         $permissions = [
             'dashboard',
+            'chart-student-registrations',
+            'chart-career-registrations',
+            // 'chart-careers',
             'master',
             'user-page',
             'user-create',
@@ -114,6 +117,9 @@ class UserSeeder extends Seeder
         $admin = Role::findByName('admin');
         $adminPermissions = [
             'dashboard',
+            'chart-student-registrations',
+            'chart-career-registrations',
+            // 'chart-careers',
             'master',
             'facility-page',
             'facility-create',
@@ -196,6 +202,8 @@ class UserSeeder extends Seeder
         $hrd = Role::findByName('hrd');
         $hrdPermissions = [
             'dashboard',
+            'chart-career-registrations',
+            // 'chart-careers',
             'master',
             'mail-page',
             'mail-show',

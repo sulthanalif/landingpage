@@ -12,6 +12,7 @@ use App\Models\Question;
 use App\Models\Register;
 use App\Models\TuitionFee;
 use Livewire\Volt\Component;
+use App\Models\CareerRegister;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Collection;
 
@@ -23,10 +24,15 @@ new #[Title('Dashboard')] class extends Component {
     public string $year = '';
     public Collection $years;
     public Collection $levels;
-    public string $level = 'all';
+    public Collection $careers;
+    public ?string $level = null;
+    public ?int $career = null;
 
     public function mount(): void
     {
+        $this->levels = collect(TuitionFee::getAllLevel());
+        $this->careers = collect(Career::all());
+        // dd($this->levels);
         $years = Register::selectRaw('YEAR(created_at) as year')
             ->distinct()
             ->get()
@@ -34,16 +40,7 @@ new #[Title('Dashboard')] class extends Component {
         $this->years = $years->isEmpty() ? collect([['id' => now()->year, 'name' => now()->year]]) : $years;
         $this->year = now()->year;
         $this->chart = $this->chartStudentRegistrations();
-        // dd(collect(range(1, 12))->map(function($month) {
-        //         return Register::whereMonth('created_at', $month)
-        //             ->whereYear('created_at', $this->year ?: now()->year)
-        //             ->when($this->level !== 'all', function($query) {
-        //                 $query->where('level', $this->level);
-        //             })
-        //             ->count();
-        //     })->toArray());
-        $this->levels = collect(TuitionFee::getAllLevel())->prepend(['id' => 'all', 'name' => 'all']);
-        // $this->searchLevel();
+        $this->chartRegCareer = $this->chartCareerRegistrations();
     }
 
     public function selectYear(string $year): void
@@ -52,11 +49,19 @@ new #[Title('Dashboard')] class extends Component {
         $this->chart = $this->chartStudentRegistrations();
     }
 
-    public function selectLeve(string $level): void
+    public function selectLevel($level): void
     {
-        $this->level = $level;
-        // $this->chart = null;
+        // dd('masuk');
+        $this->level = $level ?? null;
+        // $this->reset('chart');
         $this->chart = $this->chartStudentRegistrations();
+    }
+    public function selectCareer($id): void
+    {
+        $career = Career::find($id);
+        $this->career = $career ? $career->id : null;
+        // $this->reset('chart');
+        $this->chartRegCareer = $this->chartCareerRegistrations();
     }
 
     public function stats(): array
@@ -143,74 +148,156 @@ new #[Title('Dashboard')] class extends Component {
             'November',
             'Desember',
         ];
-        $data = collect(range(1, 12))->map(function($month) {
+        
+        $colors = [];
+
+        if ($this->level) {
+            $data = collect(range(1, 12))->map(function($month) {
                 return Register::whereMonth('created_at', $month)
                     ->whereYear('created_at', $this->year ?: now()->year)
-                    ->when($this->level !== 'all', function($query) {
+                    ->when($this->level, function($query) {
                         $query->where('level', $this->level);
                     })
                     ->count();
             })->toArray();
-        // [
-        //     100,
-        //     20,
-        //     0,
-        //     100,
-        //     100,
-        //     20,
-        //     0,
-        //     100,
-        //     100,
-        //     20,
-        //     0,
-        //     100,
-        // ];
-        $colors = [];
-        $backgroundColor = [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(201, 203, 207, 0.2)',
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 99, 132, 0.2)',
-        ];
-        $borderColors = array(
-            'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)',
-            'rgb(255, 205, 86)',
-            'rgb(75, 192, 192)',
-            'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)',
-            'rgb(201, 203, 207)',
-            'rgb(255, 205, 86)',
-            'rgb(255, 159, 64)',
-            'rgb(255, 99, 132)',
-        );
-        $datasets = [
-            [
-                'label' => 'Siswa',
-                'data' => $data,
-                'fill' => false,
-                'borderColor' => $borderColors,
-                'backgroundColor' => $backgroundColor,
-                'tension' => 0.1,
-            ],
-        ];
+
+            $datasets = [
+                [
+                    'label' => $this->level,
+                    'data' => $data,
+                    'fill' => false,
+                    // 'borderColor' => $borderColors,
+                    // 'backgroundColor' => $backgroundColor,
+                    'tension' => 0.1,
+                ],
+            ];
+        } else {
+            
+            $datasets = [];
+
+            foreach($this->levels as $level) {
+            $data = collect(range(1, 12))->map(function($month) use ($level) {
+                return Register::whereMonth('created_at', $month)
+                    ->whereYear('created_at', $this->year ?: now()->year)
+                    ->where('level', $level['id'])
+                    ->count();
+            })->toArray();
+
+                $datasets[] = [
+                    'label' => $level['id'],
+                    'data' => $data,
+                    'fill' => false,
+                    // 'borderColor' => $borderColors,
+                    // 'backgroundColor' => $backgroundColor,
+                    'tension' => 0.1,
+                ];
+            }
+        }
+        
         $chart = [];
-        $chart['type'] = 'bar';
+        $chart['type'] = 'line';
         $chart['data'] = [
             'labels' => $labels,
-            'datasets' => $datasets,
+            'datasets' => empty($datasets) ? [[
+                'label' => 'No Data',
+                'data' => array_fill(0, 12, 0),
+                'fill' => false,
+                'tension' => 0.1,
+            ]] : $datasets,
         ];
         $chart['options'] = [
             'responsive' => true,
             'plugins' => [
                 'legend' => [
+                    'display' => true,
+                ],
+                'title' => [
                     'display' => false,
+                    'text' => 'Pendaftaran Siswa Baru '. now()->year,
+                    'font' => [
+                        'size' => 20,
+                    ],
+                ],
+            ],
+        ];
+        return $chart;
+    }
+
+    public function chartCareerRegistrations(): array
+    {
+        $labels = [
+            'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember',
+        ];
+
+        $colors = [];
+
+        if ($this->career) {
+            $data = collect(range(1, 12))->map(function($month) {
+                return CareerRegister::whereMonth('created_at', $month)
+                    ->whereYear('created_at', $this->year ?: now()->year)
+                    ->count();
+            })->toArray();
+
+            $datasets = [
+                [
+                    'label' => Career::find($this->career)->title,
+                    'data' => $data,
+                    'fill' => false,
+                    // 'borderColor' => $borderColors,
+                    // 'backgroundColor' => $backgroundColor,
+                    'tension' => 0.1,
+                ],
+            ];
+        } else {
+            
+            $datasets = [];
+
+            foreach($this->careers as $career) {
+            $data = collect(range(1, 12))->map(function($month) use ($career) {
+                return CareerRegister::whereMonth('created_at', $month)
+                    ->whereYear('created_at', $this->year ?: now()->year)
+                    ->where('career_id', $career['id'])
+                    ->count();
+            })->toArray();
+
+                $datasets[] = [
+                    'label' => $career['title'],
+                    'data' => $data,
+                    'fill' => false,
+                    // 'borderColor' => $borderColors,
+                    // 'backgroundColor' => $backgroundColor,
+                    'tension' => 0.1,
+                ];
+            }
+        }
+        
+        $chart = [];
+        $chart['type'] = 'line';
+        $chart['data'] = [
+            'labels' => $labels,
+            'datasets' => empty($datasets) ? [[
+                'label' => 'No Data',
+                'data' => array_fill(0, 12, 0),
+                'fill' => false,
+                'tension' => 0.1,
+            ]] : $datasets,
+        ];
+        $chart['options'] = [
+            'responsive' => true,
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
                 ],
                 'title' => [
                     'display' => false,
@@ -246,16 +333,72 @@ new #[Title('Dashboard')] class extends Component {
                 @endif
             @endforeach
     </div>
-    @hasrole('super-admin|admin')
-    <x-card title="Statistik Pendaftaran Siswa Baru">
-        <x-slot:menu>
-            <x-select label="Jenjang" wire:model="level" :options="$levels" @change-selection="$wire.selectLeve($event.detail.value)" />
-        </x-slot:menu>
-        <div class="flex justify-center">
-            <div class="mt-5 w-[950px]">
-                <x-chart wire:model="chart" />
+    <div class="grid gap-4">
+        @can('chart-student-registrations')
+            <x-card title="Statistik Pendaftaran Siswa Baru">
+                <x-slot:menu>
+                    <div class="w-[300px]">
+                        <x-choices-offline
+                        wire:model="level"
+                        :options="$levels"
+                        placeholder="Search Jenjang ..."
+                        @change-selection="$wire.selectLevel($event.detail.value)"
+                        single
+                        searchable />
+                    </div>
+        
+                </x-slot:menu>
+                <div class="flex justify-center">
+                    <div class="mt-5 w-[950px]">
+                        <x-chart wire:model="chart" />
+                    </div>
+                </div>
+            </x-card>
+        @endcan
+        
+        @can('chart-career-registrations')
+            <x-card title="Statistik Pendaftaran Karir">
+                <x-slot:menu>
+                    <div class="w-[300px]">
+                        <x-choices-offline
+                        wire:model="career"
+                        :options="$careers"
+                        placeholder="Search Karir ..."
+                        option-label="title"
+                        @change-selection="$wire.selectCareer($event.detail.value)"
+                        single
+                        searchable />
+                    </div>
+        
+                </x-slot:menu>
+                <div class="flex justify-center">
+                    <div class="mt-5 w-[950px]">
+                        <x-chart wire:model="chartRegCareer" />
+                    </div>
+                </div>
+            </x-card>
+        @endcan
+        {{-- @can('chart-careers')
+        <x-card title="Diagram Karir Tersedia">
+            <x-slot:menu>
+                <div class="w-[300px]">
+                    <x-choices-offline
+                    wire:model="career"
+                    :options="$careers"
+                    placeholder="Search Karir ..."
+                    option-label="title"
+                    @change-selection="$wire.selectCareer($event.detail.value)"
+                    single
+                    searchable />
+                </div>
+    
+            </x-slot:menu>
+            <div class="flex justify-center">
+                <div class="mt-5 w-[950px]">
+                    <x-chart wire:model="chartRegCareer" />
+                </div>
             </div>
-        </div>
-    </x-card>
-    @endhasrole
+        </x-card>
+        @endcan --}}
+    </div>
 </div>
