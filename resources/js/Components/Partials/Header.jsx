@@ -348,7 +348,7 @@ const LanguageSwitcher = () => {
     };
 
     return (
-        <div className="language-login-container d-flex align-items-center px-3 py-1">
+        <div className="language-login-container d-flex align-items-center px-3 py-1 notranslate">
             {/* Tombol Login */}
             <a
                 href="https://lms.lscs.sch.id/"
@@ -374,7 +374,7 @@ const LanguageSwitcher = () => {
                         alt={activeLang}
                         className="flag-icon"
                     />
-                    <span>{activeLang === "en" ? "English" : "Bahasa"}</span>
+                    <span>{activeLang === "en" ? "English" : "Indonesia"}</span>
                 </button>
                 {isOpen && (
                     <div className="dropdown-menu show language-dropdown">
@@ -389,8 +389,8 @@ const LanguageSwitcher = () => {
                             className="dropdown-item d-flex align-items-center"
                             onClick={() => changeLanguage("id")}
                         >
-                            <img src="/img/id.svg" alt="Bahasa" className="flag-icon" />
-                            Bahasa Indonesia
+                            <img src="/img/id.svg" alt="Indonesia" className="flag-icon" />
+                            Indonesia
                         </button>
                     </div>
                 )}

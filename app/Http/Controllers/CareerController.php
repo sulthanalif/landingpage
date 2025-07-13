@@ -26,7 +26,7 @@ class CareerController extends Controller
                 ->get()
                 ->filter(function($career) {
                     return $career->is_active;
-                });
+                })->values();
 
             return $this->successResponse(data: compact('careers'));
         } catch (\Throwable $th) {

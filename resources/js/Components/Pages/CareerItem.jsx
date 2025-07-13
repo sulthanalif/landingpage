@@ -66,8 +66,8 @@ const CareerItem = ({ career }) => {
             } else {
                 setModalMessage(
                     error.response?.data?.message ||
-                        error.message ||
-                        "Something went wrong."
+                    error.message ||
+                    "Something went wrong."
                 );
                 setIsSuccess(false);
                 setShowModal(true);
@@ -113,14 +113,14 @@ const CareerItem = ({ career }) => {
                                     {career?.employment_type === "full_time"
                                         ? "Full Time"
                                         : career?.employment_type ===
-                                          "part_time"
-                                        ? "Part Time"
-                                        : career?.employment_type === "contract"
-                                        ? "Contract"
-                                        : career?.employment_type ===
-                                          "freelance"
-                                        ? "Freelance"
-                                        : "Internship"}
+                                            "part_time"
+                                            ? "Part Time"
+                                            : career?.employment_type === "contract"
+                                                ? "Contract"
+                                                : career?.employment_type ===
+                                                    "freelance"
+                                                    ? "Freelance"
+                                                    : "Internship"}
                                 </span>
                             </div>
                             <div className="p-1 bd-highlight">
@@ -195,7 +195,7 @@ const CareerItem = ({ career }) => {
                                         <span className="p-2 badge badge-secondary">
                                             <h5 className="text-light">
                                                 {career.level ==
-                                                "fresh_graduate"
+                                                    "fresh_graduate"
                                                     ? "Fresh Graduate"
                                                     : "Experienced"}
                                             </h5>
@@ -205,15 +205,15 @@ const CareerItem = ({ career }) => {
                                         <span className="p-2 badge badge-secondary">
                                             <h5 className="text-light">
                                                 {career?.employment_type ===
-                                                "full_time"
+                                                    "full_time"
                                                     ? "Full Time"
                                                     : career?.employment_type ===
-                                                      "part_time"
-                                                    ? "Part Time"
-                                                    : career?.employment_type ===
-                                                      "contract"
-                                                    ? "Contract"
-                                                    : "Freelance"}
+                                                        "part_time"
+                                                        ? "Part Time"
+                                                        : career?.employment_type ===
+                                                            "contract"
+                                                            ? "Contract"
+                                                            : "Freelance"}
                                             </h5>
                                         </span>
                                     </div>
@@ -294,6 +294,16 @@ const CareerItem = ({ career }) => {
                                 />
                             </div>
                         </div>
+                        <div className="modal-footer text-right">
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-primary"
+                                data-toggle="modal"
+                                data-target={`#apply-${career.id}`}
+                            >
+                                Apply Job
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -334,11 +344,10 @@ const CareerItem = ({ career }) => {
                                         <span className="text-danger">*</span>
                                     </label>
                                     <textarea
-                                        className={`form-control ${
-                                            errors.description
+                                        className={`form-control ${errors.description
                                                 ? "is-invalid"
                                                 : "text-secondary"
-                                        }`}
+                                            }`}
                                         id="description"
                                         rows={3}
                                         value={data.description}
@@ -368,11 +377,10 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="text"
-                                                className={`form-control ${
-                                                    errors.name
+                                                className={`form-control ${errors.name
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                }`}
+                                                    }`}
                                                 id="name"
                                                 value={data.name}
                                                 onChange={(e) =>
@@ -400,11 +408,10 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="date"
-                                                className={`form-control ${
-                                                    errors.birth_date
+                                                className={`form-control ${errors.birth_date
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                }`}
+                                                    }`}
                                                 id="birth_date"
                                                 value={data.birth_date}
                                                 onChange={(e) =>
@@ -435,11 +442,10 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="email"
-                                                className={`form-control ${
-                                                    errors.email
+                                                className={`form-control ${errors.email
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                }`}
+                                                    }`}
                                                 id="email"
                                                 value={data.email}
                                                 onChange={(e) =>
@@ -467,11 +473,10 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="number"
-                                                className={`form-control ${
-                                                    errors.phone_number
+                                                className={`form-control ${errors.phone_number
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                }`}
+                                                    }`}
                                                 id="phone_number"
                                                 value={data.phone_number}
                                                 onChange={(e) =>
@@ -502,11 +507,10 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="text"
-                                                className={`form-control ${
-                                                    errors.location
+                                                className={`form-control ${errors.location
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                }`}
+                                                    }`}
                                                 id="location"
                                                 value={data.location}
                                                 onChange={(e) =>
@@ -643,9 +647,8 @@ const CareerItem = ({ career }) => {
                         <div className="modal-footer">
                             <button
                                 type="button"
-                                className={`btn ${
-                                    isSuccess ? "btn-success" : "btn-danger"
-                                }`}
+                                className={`btn ${isSuccess ? "btn-success" : "btn-danger"
+                                    }`}
                                 onClick={handleCloseModal}
                             >
                                 OK

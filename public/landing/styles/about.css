@@ -1599,7 +1599,7 @@ section {
     flex-wrap: wrap;
     max-height: calc(2 * 60px); /* 2 baris @ 60px height */
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
     gap: 12px;
     padding: 10px 0;
     margin-top: 20px;

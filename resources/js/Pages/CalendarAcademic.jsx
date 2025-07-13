@@ -191,7 +191,7 @@ const CalendarAcademic = () => {
                         </div>
                         <div className="row feature_row mt-3">
                             <div className="mb-3">
-                                <h4>Kategori Kalender:</h4>
+                                <h4>Calendar Categories:</h4>
                                 <ul className="category-list pt-0">
                                     {categories.map((item, index) => (
                                         <li key={index} className="category-item">
@@ -204,6 +204,9 @@ const CalendarAcademic = () => {
                                     ))}
                                 </ul>
                             </div>
+                            <div className="mb-3">
+                                <h5 className="font-italic text-muted">Note: Tentative Schedule - We reserve the right to change or alter herein schedule as needed</h5>
+                            </div>
                             <div className="col-lg-12 feature_col">
                                 <div className="feature_content">
                                     <FullCalendar
@@ -213,9 +216,9 @@ const CalendarAcademic = () => {
                                             interactionPlugin,
                                         ]}
                                         headerToolbar={{
-                                            left: "prev,next today",
+                                            left: "prev,next",
                                             center: "title",
-                                            right: "dayGridMonth,timeGridWeek,timeGridDay",
+                                            right: "today",
                                         }}
                                         initialView="dayGridMonth"
                                         weekends={true}
