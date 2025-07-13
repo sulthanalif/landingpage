@@ -42,7 +42,7 @@
            </x-form>
         </x-card>
 
-        <x-card title="Tambah Permission">
+        {{-- <x-card title="Tambah Permission">
            <x-form wire:submit="savePermission">
                 <div>
                     <x-input label="Masukan Nama Permission.." type="text" wire:model="permissionName" inline />
@@ -51,5 +51,5 @@
                     <x-button label="Save" icon="o-check" class="btn-primary" type="submit" spinner="save" />
                 </x-slot:actions>
            </x-form>
-        </x-card>
+        </x-card> --}}
     </x-drawer>
