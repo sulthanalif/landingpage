@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Teacher extends Model
 {
@@ -19,6 +20,11 @@ class Teacher extends Model
         'image',
         'description',
         'status',
-        'notes',
+        'reson_id',
     ];
+
+    public function reason(): BelongsTo
+    {
+        return $this->belongsTo(Reason::class, 'reason_id', 'id');
+    }
 }

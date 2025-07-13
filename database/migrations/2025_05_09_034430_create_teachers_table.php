@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('reasons', function (Blueprint $table) {
+            $table->id();
+            $table->string('reason');
+            $table->string('css');
+            $table->string('code');
+            $table->timestamps();
+        });
+
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->string('code_id')->unique();
@@ -23,7 +31,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('status')->default(true);
-            $table->string('notes')->nullable();
+            $table->foreignId('reason_id')->nullable()->constrained('reasons')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -33,6 +41,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('reasons');
         Schema::dropIfExists('teachers');
     }
 };

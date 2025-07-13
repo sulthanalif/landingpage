@@ -10,6 +10,7 @@ use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Question;
 use App\Models\Register;
+use App\Models\TuitionFee;
 use Livewire\Volt\Component;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Collection;
@@ -17,9 +18,13 @@ use Illuminate\Support\Collection;
 new #[Title('Dashboard')] class extends Component {
 
     public array $chart = [];
+    public array $chartRegCareer = [];
+    public array $chartJob = [];
     public string $year = '';
     public Collection $years;
-    
+    public Collection $levels;
+    public string $level = 'all';
+
     public function mount(): void
     {
         $years = Register::selectRaw('YEAR(created_at) as year')
@@ -29,11 +34,28 @@ new #[Title('Dashboard')] class extends Component {
         $this->years = $years->isEmpty() ? collect([['id' => now()->year, 'name' => now()->year]]) : $years;
         $this->year = now()->year;
         $this->chart = $this->chartStudentRegistrations();
+        // dd(collect(range(1, 12))->map(function($month) {
+        //         return Register::whereMonth('created_at', $month)
+        //             ->whereYear('created_at', $this->year ?: now()->year)
+        //             ->when($this->level !== 'all', function($query) {
+        //                 $query->where('level', $this->level);
+        //             })
+        //             ->count();
+        //     })->toArray());
+        $this->levels = collect(TuitionFee::getAllLevel())->prepend(['id' => 'all', 'name' => 'all']);
+        // $this->searchLevel();
     }
 
     public function selectYear(string $year): void
     {
         $this->year = $year;
+        $this->chart = $this->chartStudentRegistrations();
+    }
+
+    public function selectLeve(string $level): void
+    {
+        $this->level = $level;
+        // $this->chart = null;
         $this->chart = $this->chartStudentRegistrations();
     }
 
@@ -102,7 +124,7 @@ new #[Title('Dashboard')] class extends Component {
             'role' => 'super-admin, admin, hrd',
             'icon' => 'users',
         ]
-       ]; 
+       ];
     }
 
     public function chartStudentRegistrations(): array
@@ -121,25 +143,28 @@ new #[Title('Dashboard')] class extends Component {
             'November',
             'Desember',
         ];
-        $data = [
-            collect(range(1, 12))->map(function($month) {
+        $data = collect(range(1, 12))->map(function($month) {
                 return Register::whereMonth('created_at', $month)
                     ->whereYear('created_at', $this->year ?: now()->year)
+                    ->when($this->level !== 'all', function($query) {
+                        $query->where('level', $this->level);
+                    })
                     ->count();
-            })->toArray(),
-            // 100,
-            // 20,
-            // 0,
-            // 100,
-            // 100,
-            // 20,
-            // 0,
-            // 100,
-            // 100,
-            // 20,
-            // 0,
-            // 100,
-        ];
+            })->toArray();
+        // [
+        //     100,
+        //     20,
+        //     0,
+        //     100,
+        //     100,
+        //     20,
+        //     0,
+        //     100,
+        //     100,
+        //     20,
+        //     0,
+        //     100,
+        // ];
         $colors = [];
         $backgroundColor = [
             'rgba(255, 99, 132, 0.2)',
@@ -155,7 +180,7 @@ new #[Title('Dashboard')] class extends Component {
         ];
         $borderColors = array(
             'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)', 
+            'rgb(255, 159, 64)',
             'rgb(255, 205, 86)',
             'rgb(75, 192, 192)',
             'rgb(54, 162, 235)',
@@ -192,7 +217,7 @@ new #[Title('Dashboard')] class extends Component {
                     'text' => 'Pendaftaran Siswa Baru '. now()->year,
                     'font' => [
                         'size' => 20,
-                    ], 
+                    ],
                 ],
             ],
         ];
@@ -210,6 +235,9 @@ new #[Title('Dashboard')] class extends Component {
 <div>
     <!-- HEADER -->
     <x-header title="Dashboard" separator>
+        <x-slot:actions>
+            <x-select label="Year" wire:model="year" :options="$years" @change-selection="$wire.selecYear($event.detail.value)" />
+        </x-slot:actions>
     </x-header>
     <div class="py-4 rounded-b-xl grid md:grid-cols-4 gap-5">
             @foreach ($stats as $stat)
@@ -221,7 +249,7 @@ new #[Title('Dashboard')] class extends Component {
     @hasrole('super-admin|admin')
     <x-card title="Statistik Pendaftaran Siswa Baru">
         <x-slot:menu>
-            <x-select label="Year" wire:model="year" :options="$years" @change-selection="wire.selecYear($event.detail.value)" />
+            <x-select label="Jenjang" wire:model="level" :options="$levels" @change-selection="$wire.selectLeve($event.detail.value)" />
         </x-slot:menu>
         <div class="flex justify-center">
             <div class="mt-5 w-[950px]">

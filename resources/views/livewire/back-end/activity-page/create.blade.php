@@ -19,8 +19,8 @@
             </x-file>
         </div>
 
-        <div>
-            <x-select label="Status" :options="$selectStatus" wire:model="status" />
+        <div class="my-3">
+            <x-toggle label="Status" wire:model="status" />
         </div>
 
         <x-slot:actions>

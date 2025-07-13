@@ -78,4 +78,44 @@ class TuitionFee extends DynamicTableRow
         });
     }
 
+    /**
+     * Get all unique levels from the first column of each table
+     */
+    public static function getAllLevel($name = null)
+    {
+        $tables = DynamicTable::with(['columns', 'rows.values.column'])->get();
+        $allLevels = collect();
+
+        foreach ($tables as $table) {
+            // Get the first column name
+            $firstColumn = $table->columns->sortBy('order')->first();
+            if (!$firstColumn) continue;
+
+            // Get all values from first column
+            $levels = self::where('table_id', $table->id)
+                ->with(['values.column'])
+                ->get()
+                ->map(function ($row) use ($firstColumn) {
+                    $level = $row->formatted_values[$firstColumn->name] ?? null;
+                    return ['id' => $level, 'name' => $level];
+                })
+                ->filter()
+                ->unique()
+                ->values();
+
+            $allLevels = $allLevels->merge($levels);
+        }
+
+        // Filter by name if provided
+        if ($name) {
+            return $allLevels->unique('name')
+                ->filter(function ($level) use ($name) {
+                    return str_contains(strtolower($level['name']), strtolower($name));
+                })
+                ->values();
+        }
+
+        return $allLevels->unique('name')->values();
+    }
+
 }

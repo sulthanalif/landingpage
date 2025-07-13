@@ -1,12 +1,14 @@
 <?php
 
 use App\ManageDatas;
+use App\Models\Reason;
 use Mary\Traits\Toast;
 use App\Models\Teacher;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -22,6 +24,7 @@ new #[Title('Teachers')] class extends Component {
     ];
 
     public bool $drawer = false;
+    public bool $drawerReason = false;
     public bool $myModal = false;
     public bool $modalAlertDelete = false;
     public bool $modalAlertWarning = false;
@@ -39,18 +42,67 @@ new #[Title('Teachers')] class extends Component {
     public string $category = 'Management';
     public string $description = '';
     public string $position = '';
-    public ?string $notes = null;
     public int $order = 0;
     public bool $status = true;
     public ?\Illuminate\Http\UploadedFile $image = null;
     public ?\Illuminate\Http\UploadedFile $logo = null;
-    public array $varTeacher = ['recordId', 'notes', 'code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description'];
+    public array $varTeacher = ['recordId', 'reason_id', 'code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description'];
     public string $oldImage = 'img/upload.png';
     public string $oldLogo = 'img/upload.png';
+
+    public Collection $reasonsSearchable;
+
+    public string $reason = '';
+    public ?string $color = null;
+
+    public ?int $reason_id = null;
+    public Collection $reasons;
 
     public function mount()
     {
         $this->getLast();
+        $this->searchColor();
+        $this->searchReason();
+        $this->reasons = collect(Reason::all());
+    }
+
+    public function searchColor(string $value = '')
+    {
+        $colors = collect([
+            ['id' => 'bg-red-500', 'name' => 'Red', 'code' => '#ef4444'],
+            ['id' => 'bg-green-500', 'name' => 'Green', 'code' => '#22c55e'],
+            ['id' => 'bg-blue-500', 'name' => 'Blue', 'code' => '#3b82f6'],
+            ['id' => 'bg-amber-500', 'name' => 'Amber', 'code' => '#f59e0b'],
+            ['id' => 'bg-cyan-500', 'name' => 'Cyan', 'code' => '#06b6d4'],
+            ['id' => 'bg-lime-500', 'name' => 'Lime', 'code' => '#84cc16'],
+            ['id' => 'bg-indigo-500', 'name' => 'Indigo', 'code' => '#6366f1'],
+            ['id' => 'bg-pink-500', 'name' => 'Pink', 'code' => '#ec4899'],
+            ['id' => 'bg-teal-500', 'name' => 'Teal', 'code' => '#14b8a6'],
+            ['id' => 'bg-rose-500', 'name' => 'Rose', 'code' => '#f43f5e'],
+            ['id' => 'bg-gray-500', 'name' => 'Gray', 'code' => '#9ca3af'],
+            ['id' => 'bg-zinc-500', 'name' => 'Zinc', 'code' => '#71717a'],
+            ['id' => 'bg-neutral-500', 'name' => 'Neutral', 'code' => '#737373'],
+            ['id' => 'bg-stone-500', 'name' => 'Stone', 'code' => '#78716c'],
+        ]);
+
+        $selectedOption = $colors->firstWhere('id', $this->color);
+
+        $filtered = $colors->filter(function ($item) use ($value) {
+            return str_contains(strtolower($item['name']), strtolower($value));
+        })->values();
+
+        $this->colorsSearchable = $filtered->when($selectedOption, fn ($col) => $col->push($selectedOption))->unique('id');
+
+    }
+
+    public function searchReason(string $value = '')
+    {
+        $selectedOptions = Reason::where('id', $this->reason_id)->get();
+
+        $this->reasonsSearchable = Reason::query()
+            ->where('reason', 'like', '%'.$value.'%')
+            ->get()
+            ->merge($selectedOptions);
     }
 
     public function getLast(): void
@@ -94,17 +146,63 @@ new #[Title('Teachers')] class extends Component {
                 }
 
                 if (!$component->status) {
-                    $teacher->notes = $component->notes;
+                    $teacher->reason_id = $component->reason_id;
                 } else {
-                    $teacher->notes = null;
+                    $teacher->reason_id = null;
                 }
             },
         );
 
-        $this->reset(['code_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description', 'position', 'order']);
+        $this->reset(['code_id', 'reason_id', 'name', 'email', 'category', 'status', 'image', 'logo', 'description', 'position', 'order']);
         $this->unsetModel();
         $this->unsetRecordId();
         $this->drawer = false;
+    }
+
+    public function saveReason(): void
+    {
+        $this->validate([
+            'reason' => ['required', 'string'],
+            'color' => ['required'],
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            Reason::create([
+                'reason' => $this->reason,
+                'css' => $this->color,
+                'code' => $this->colorsSearchable->firstWhere('id', $this->color)['code'],
+            ]);
+
+            DB::commit();
+
+            $this->success('Reason created successfully', position: 'toast-bottom');
+            $this->reset('reason', 'color');
+            $this->reasons = collect(Reason::all());
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->error('Error creating reason', position: 'toast-bottom');
+            Log::channel('debug')->error($e->getMessage());
+        }
+    }
+
+    public function deleteReason($id): void
+    {
+        try {
+            DB::beginTransaction();
+
+            Reason::query()->where('id', $id)->delete();
+
+            DB::commit();
+
+            $this->success('Reason deleted successfully', position: 'toast-bottom');
+            $this->reasons = Reason::all();
+        } catch (\Exception $th) {
+            DB::rollBack();
+            $this->error('Error deleting Reason', position: 'toast-bottom');
+            Log::channel('debug')->error($th->getMessage());
+        }
     }
 
     public function changeStatus(): void
@@ -117,16 +215,16 @@ new #[Title('Teachers')] class extends Component {
                 $teacher->status = !$teacher->status;
 
                 if (!$teacher->status) {
-                    $teacher->notes = $this->notes;
+                    $teacher->reason_id = $this->reason_id;
                 } else {
-                    $teacher->notes = null;
+                    $teacher->reason_id = null;
                 }
                 $teacher->save();
             }
 
             DB::commit();
             $this->success('Status Berhasil Diubah.', position: 'toast-bottom');
-            $this->reset('selected', 'modalAlertWarning', 'notes');
+            $this->reset('selected', 'modalAlertWarning', 'reason_id');
         } catch (\Exception $th) {
             DB::rollBack();
             $this->error('Status Gagal Diubah.', position: 'toast-bottom');
@@ -186,7 +284,7 @@ new #[Title('Teachers')] class extends Component {
             ['key' => 'image', 'label' => 'Image'],
             ['key' => 'logo', 'label' => 'Maskot'],
             ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'notes', 'label' => 'Notes'],
+            ['key' => 'reason_id', 'label' => 'reason_id'],
         ];
     }
 
@@ -210,7 +308,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.status = true;
             $wire.description = '';
             $wire.position = '';
-            $wire.notes = '';
+            $wire.reason_id = null;
             $wire.getLast();
             document.getElementById('previewImage').src = '/' + $wire.oldImage;
             document.getElementById('previewImage2').src = '/' + $wire.oldLogo;
@@ -234,8 +332,15 @@ new #[Title('Teachers')] class extends Component {
             $wire.description = teacher.description;
             $wire.position = teacher.position;
             $wire.order = teacher.order;
-            $wire.notes = teacher.notes;
+            $wire.reason_id = teacher.reson_id;
             $wire.drawer = true;
+            $wire.$refresh();
+        })
+
+        $js('reason', () => {
+            $wire.drawerReason = true;
+            $wire.reason = '';
+            $wire.color = null;
             $wire.$refresh();
         })
     </script>
@@ -246,6 +351,7 @@ new #[Title('Teachers')] class extends Component {
     <x-header title="Teachers" separator>
         <x-slot:actions>
             @can('teacher-create')
+                <x-button label="Reason Management" @click="$js.reason" responsive icon="o-cog" />
                 <x-button label="Create" @click="$js.create" responsive icon="o-plus" />
             @endcan
         </x-slot:actions>
@@ -275,8 +381,8 @@ new #[Title('Teachers')] class extends Component {
                     <span class="text-red-500">Tidak aktif</span>
                 @endif
             @endscope
-            @scope('cell_notes', $data)
-                {{ $data->notes ?? '-' }}
+            @scope('cell_reason_id', $data)
+                {{ $data->reason_id ?? '-' }}
             @endscope
             @scope('actions', $data)
                 <x-button icon="o-pencil" class="btn-sm" wire:click="$js.detail({{ $data }})" />
@@ -319,7 +425,7 @@ new #[Title('Teachers')] class extends Component {
                 </div>
             </div>
             <div>
-                <x-textarea label="Notes" wire:model='notes' rows="3" hint="Please provide a reason for deactivating this teacher" />
+                <x-textarea label="reason_id" wire:model='reason_id' rows="3" hint="Please provide a reason for deactivating this teacher" />
             </div>
             <x-slot:actions>
                 <x-button label="Tidak" @click="$wire.modalAlertWarning = false" />
@@ -330,6 +436,7 @@ new #[Title('Teachers')] class extends Component {
 
 
 
+    @include('livewire.back-end.teacher-page.create-color')
     <!-- MODAL UPLOAD FILE -->
     {{-- @include('livewire.modals.modal-upload-file') --}}
 </div>
