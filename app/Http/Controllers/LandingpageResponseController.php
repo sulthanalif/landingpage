@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Facility;
 use App\Models\Question;
 use App\Models\TuitionFee;
+use App\Models\SubActivity;
 use App\Models\WhyChooseUs;
 use Illuminate\Http\Request;
 use App\Models\Accreditation;
@@ -47,6 +48,18 @@ class LandingpageResponseController extends Controller
             return $this->errorResponse($th);
         }
     }
+
+    public function getSubActivity($id)
+    {
+        try {
+            $subActivity = SubActivity::where('id', $id)->where('status', true)->first();
+
+            return $this->successResponse(data: compact('subActivity'));
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+    }
+
 
     public function teachers()
     {
