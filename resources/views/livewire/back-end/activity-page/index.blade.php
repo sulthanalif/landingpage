@@ -156,7 +156,7 @@ new #[Title('Activities')] class extends Component {
         });
 
         $js('detail', (activity) => {
-            previewImage.src = 'storage/' + activity.image;
+            previewImage.src = '/storage/' + activity.image;
             $wire.recordId = activity.id;
             $wire.label = activity.label;
             // $wire.date = activity.date;
