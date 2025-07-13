@@ -56,7 +56,28 @@
                 <x-toggle label="Status" wire:model="status" hint="if checked, status will be active" />
             </div>
             <div x-show="showNotes">
-                <x-textarea label="Notes" wire:model="notes" rows="3" />
+                <x-choices
+                label="Reason"
+                wire:model="reason_id"
+                :options="$reasons"
+                search-function="searchReason"
+                placeholder="Search ..."
+                single
+                clearable
+                searchable >
+                    @scope('item', $reason)
+                        <x-list-item :item="$reason" value='reason'>
+                            <x-slot:actions>
+                                <div class="w-8 h-8 rounded-full border-4 {{ $reason['css'] }}"></div>
+                            </x-slot:actions>
+                        </x-list-item>
+                    @endscope
+
+                    {{-- Selection slot--}}
+                    @scope('selection', $reason)
+                        <div class="w-full px-2 py-1 rounded border-4 {{ $reason['css'] }}">{{ $reason['reason'] }}</div>
+                    @endscope
+                </x-choices>
             </div>
         </div>
 

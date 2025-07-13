@@ -20,7 +20,7 @@ class Teacher extends Model
         'image',
         'description',
         'status',
-        'reson_id',
+        'reason_id',
     ];
 
     public function reason(): BelongsTo

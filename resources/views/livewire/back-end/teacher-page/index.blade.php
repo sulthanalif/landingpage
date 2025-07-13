@@ -50,7 +50,7 @@ new #[Title('Teachers')] class extends Component {
     public string $oldImage = 'img/upload.png';
     public string $oldLogo = 'img/upload.png';
 
-    public Collection $reasonsSearchable;
+    public Collection $colorsSearchable;
 
     public string $reason = '';
     public ?string $color = null;
@@ -62,7 +62,6 @@ new #[Title('Teachers')] class extends Component {
     {
         $this->getLast();
         $this->searchColor();
-        $this->searchReason();
         $this->reasons = collect(Reason::all());
     }
 
@@ -99,7 +98,7 @@ new #[Title('Teachers')] class extends Component {
     {
         $selectedOptions = Reason::where('id', $this->reason_id)->get();
 
-        $this->reasonsSearchable = Reason::query()
+        $this->reasons = Reason::query()
             ->where('reason', 'like', '%'.$value.'%')
             ->get()
             ->merge($selectedOptions);
@@ -262,6 +261,7 @@ new #[Title('Teachers')] class extends Component {
     public function datas(): LengthAwarePaginator
     {
         return Teacher::query()
+            ->withAggregate('reason', 'reason')
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('code_id', 'like', "%{$this->search}%")
@@ -284,8 +284,19 @@ new #[Title('Teachers')] class extends Component {
             ['key' => 'image', 'label' => 'Image'],
             ['key' => 'logo', 'label' => 'Maskot'],
             ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'reason_id', 'label' => 'reason_id'],
+            ['key' => 'reason_reason', 'label' => 'Reason'],
         ];
+    }
+
+    public function rowDecoration(): array
+    {
+        return Reason::get()->map(function ($reason) {
+            return [
+                $reason->css => function ($data) use ($reason) {
+                    return $data->reason_id == $reason->id && !$data->status;
+                }
+            ];
+        })->collapse()->toArray();
     }
 
     public function with(): array
@@ -293,6 +304,7 @@ new #[Title('Teachers')] class extends Component {
         return [
             'datas' => $this->datas(),
             'headers' => $this->headers(),
+            'rowDecoration' => $this->rowDecoration(),
         ];
     }
 }; ?>
@@ -332,7 +344,7 @@ new #[Title('Teachers')] class extends Component {
             $wire.description = teacher.description;
             $wire.position = teacher.position;
             $wire.order = teacher.order;
-            $wire.reason_id = teacher.reson_id;
+            $wire.reason_id = teacher.reason_id;
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -365,9 +377,7 @@ new #[Title('Teachers')] class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
              with-pagination wire:model.live="selected"
-             selectable :row-decoration="[
-                'bg-error/20' => fn($data) => !$data->status,
-             ]">
+             selectable :row-decoration="$rowDecoration" no-hover>
             @scope('cell_image', $data)
                 <img src="{{ asset('storage/' . $data['image']) }}" alt="" style="width: 100px; height: auto">
             @endscope
@@ -378,11 +388,11 @@ new #[Title('Teachers')] class extends Component {
                 @if ($data['status'])
                     <span class="text-green-500">Aktif</span>
                 @else
-                    <span class="text-red-500">Tidak aktif</span>
+                    <span class="text-white">Tidak aktif</span>
                 @endif
             @endscope
-            @scope('cell_reason_id', $data)
-                {{ $data->reason_id ?? '-' }}
+            @scope('cell_reason_reason', $data)
+                {{ $data->reason?->reason ?? '-' }}
             @endscope
             @scope('actions', $data)
                 <x-button icon="o-pencil" class="btn-sm" wire:click="$js.detail({{ $data }})" />
@@ -425,7 +435,29 @@ new #[Title('Teachers')] class extends Component {
                 </div>
             </div>
             <div>
-                <x-textarea label="reason_id" wire:model='reason_id' rows="3" hint="Please provide a reason for deactivating this teacher" />
+                <x-choices
+                label="Reason"
+                wire:model="reason_id"
+                :options="$reasons"
+                search-function="searchReason"
+                placeholder="Search ..."
+                hint="Please provide a reason for deactivating this teacher"
+                single
+                clearable
+                searchable >
+                    @scope('item', $reason)
+                        <x-list-item :item="$reason" value='reason'>
+                            <x-slot:actions>
+                                <div class="w-8 h-8 rounded-full border-4 {{ $reason['css'] }}"></div>
+                            </x-slot:actions>
+                        </x-list-item>
+                    @endscope
+
+                    {{-- Selection slot--}}
+                    @scope('selection', $reason)
+                        <div class="w-full px-2 py-1 rounded border-4 {{ $reason['css'] }}">{{ $reason['reason'] }}</div>
+                    @endscope
+                </x-choices>
             </div>
             <x-slot:actions>
                 <x-button label="Tidak" @click="$wire.modalAlertWarning = false" />

@@ -203,6 +203,10 @@ class UserSeeder extends Seeder
             'career-create',
             'career-edit',
             'career-delete',
+            'teacher-page',
+            'teacher-create',
+            'teacher-edit',
+            'teacher-delete',
         ];
         $hrd->givePermissionTo($hrdPermissions);
 

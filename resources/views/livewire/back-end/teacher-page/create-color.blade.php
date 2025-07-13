@@ -30,9 +30,12 @@
 
     <x-table :headers="[
         ['key' => 'reason', 'label' => 'Reason'],
-        ['key' => 'css', 'label' => 'Css'],
+        ['key' => 'css', 'label' => 'Color'],
         ['key' => 'code', 'label' => 'Code']
     ]" :rows="$reasons" show-empty-text>
+    @scope('cell_css', $data)
+        <div class="w-8 h-8 rounded-full border-4 {{ $data->css }}"></div>
+    @endscope
     @scope('actions', $data)
         <x-button class="btn-sm bg-error" icon="o-trash" wire:click="deleteReason({{ $data->id }})" spinner="deleteReason({{ $data->id }})" />
     @endscope

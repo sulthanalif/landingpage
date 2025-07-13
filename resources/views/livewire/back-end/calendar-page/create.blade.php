@@ -86,9 +86,12 @@
 
     <x-table :headers="[
         ['key' => 'name', 'label' => 'Name'],
-        ['key' => 'css', 'label' => 'css'],
+        ['key' => 'css', 'label' => 'Color'],
         ['key' => 'code', 'label' => 'Code']
     ]" :rows="$colors" >
+    @scope('cell_css', $data)
+        <div class="w-8 h-8 rounded-full border-4 {{ $data['css'] }}"></div>
+    @endscope
     @scope('actions', $data)
         <x-button class="btn-sm bg-error" icon="o-trash" wire:click="deleteColor({{ $data['id'] }})" spinner="deleteColor{{ $data['id'] }}" />
     @endscope
