@@ -20,12 +20,13 @@ class CareerController extends Controller
     public function getData()
     {
         try {
-            $now = now();
+            // $now = now();
 
-            $careers = Career::where('start_date', '<=', $now)
-                ->where('end_date', '>=', $now)
-                ->latest()
-                ->get();
+            $careers = Career::latest()
+                ->get()
+                ->filter(function($career) {
+                    return $career->is_active;
+                });
 
             return $this->successResponse(data: compact('careers'));
         } catch (\Throwable $th) {
