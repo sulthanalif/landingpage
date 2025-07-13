@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../Components/Layout";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import useApi from "../Hooks/response";
+import ActivityItem from "../Components/Pages/ActivityItem";
 
 const DetailStory = ({ id }) => {
     const styleRefs = useRef([]);
     const scriptRefs = useRef([]);
+    const videoRef = useRef(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
@@ -64,12 +66,27 @@ const DetailStory = ({ id }) => {
 
     const { data, loading, error, get: getData } = useApi(`/activity/${id}`);
 
-    console.log(data);
-    
-    const post = data?.post;
+    const activity = data?.activity;
 
     const handleRefresh = () => {
         getData();
+    };
+
+    const convertToEmbedUrl = (url) => {
+        try {
+            const ytMatch = url.match(
+                /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/
+            );
+
+            if (ytMatch && ytMatch[1]) {
+                return `https://www.youtube.com/embed/${ytMatch[1]}`;
+            }
+
+            // Fallback to original if not YouTube
+            return url;
+        } catch (e) {
+            return url;
+        }
     };
 
     if (!isLoaded || loading) {
@@ -110,7 +127,7 @@ const DetailStory = ({ id }) => {
                                         <li>
                                             <Link href="/story">Story</Link>
                                         </li>
-                                        <li>{post?.title || "Detail Story"}</li>
+                                        <li>{activity?.title || "Detail Story"}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -123,11 +140,11 @@ const DetailStory = ({ id }) => {
                 <div className="container">
                     <div className="row">
                         {/* Blog Content */}
-                        <div className="col-lg-8">
-                            {/* {post ? (
+                        <div className="col-lg-12">
+                            {activity ? (
                                 <div className="blog_content">
                                     <div className="blog_title">
-                                        {post.title}
+                                        {activity.title}
                                     </div>
                                     <div className="blog_meta">
                                         <ul>
@@ -135,7 +152,7 @@ const DetailStory = ({ id }) => {
                                                 Post on{" "}
                                                 <a href="#">
                                                     {new Date(
-                                                        post.updated_at
+                                                        activity.date
                                                     ).toLocaleDateString(
                                                         "en-US",
                                                         {
@@ -146,39 +163,68 @@ const DetailStory = ({ id }) => {
                                                     )}
                                                 </a>
                                             </li>
-                                            {post.category && (
-                                                <li>
-                                                    In{" "}
-                                                    <Link href={`/news?categoryId=${encodeURIComponent(post.category.id)}`}>
-                                                        {post.category.name}
-                                                    </Link>
-                                                </li>
-                                            )}
                                         </ul>
                                     </div>
                                     <div className="blog_image">
                                         <img
                                             src={
-                                                post.image
-                                                    ? `/storage/${post.image}`
+                                                activity.image
+                                                    ? `/storage/${activity.image}`
                                                     : "/landing/images/event_1.jpg"
                                             }
-                                            alt={post.title}
+                                            alt={activity.title}
                                             loading="lazy"
                                         />
                                     </div>
                                     <div
                                         className="blog_text mt-3"
                                         dangerouslySetInnerHTML={{
-                                            __html: post.body,
+                                            __html: activity.description,
                                         }}
                                     />
+                                    <div className="blog_text mt-3">
+                                        Below is a gallery of activities {activity.title} :
+                                    </div>
+                                    <div className="blog_image row">
+                                        {activity.library.length > 0 ? (
+                                            activity.library.map(
+                                                (item, index) => (
+                                                    <ActivityItem key={index} activity={item} />
+                                                )
+                                            )
+                                        ) : (
+                                            <div className="alert alert-warning">
+                                                No image found
+                                            </div>
+                                        )}
+                                        {activity.videos && (
+                                            activity.videos.map(
+                                                (item, index) => {
+                                                    const embedUrl = convertToEmbedUrl(item.url);
+
+                                                    return (
+                                                        <div className="col-lg-4 course_col" key={index}>
+                                                            <iframe
+                                                                src={embedUrl}
+                                                                title={item.label}
+                                                                width="100%"
+                                                                height="350"
+                                                                frameBorder="0"
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                allowFullScreen
+                                                            ></iframe>
+                                                        </div>
+                                                    );
+                                                }
+                                            )
+                                        )}
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="alert alert-warning">
-                                    Post not found
+                                    Activity not found
                                 </div>
-                            )} */}
+                            )}
 
                             <div className="blog_extra d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
                                 <div className="blog_social ml-lg-auto">

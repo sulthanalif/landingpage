@@ -14,7 +14,7 @@ const ActivityItem = ({ activity }) => {
 
     return (
         <>
-            <div className="col-lg-4 course_col" key={activity.id}>
+            <div className="col-lg-4 course_col mr-auto mb-4" key={activity.id}>
                 <div
                     className="course feature trans_400"
                     onClick={handlePreview}
@@ -31,8 +31,8 @@ const ActivityItem = ({ activity }) => {
                         ) : (
                             <img
                                 src={
-                                    activity.file
-                                        ? `/storage/${activity.file}`
+                                    activity.path
+                                        ? `/storage/${activity.path}`
                                         : "/img/logo.png"
                                 }
                                 alt={activity.title}
@@ -100,7 +100,7 @@ const ActivityItem = ({ activity }) => {
                             />
                         ) : (
                             <img
-                                src={`/storage/${activity.file}`}
+                                src={`/storage/${activity.path}`}
                                 alt={activity.title}
                                 style={{ maxWidth: "100%", maxHeight: "80vh" }}
                             />

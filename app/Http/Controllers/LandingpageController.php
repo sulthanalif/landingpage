@@ -31,9 +31,9 @@ class LandingpageController extends Controller
         return Inertia::render('Story');
     }
 
-    public function detailStory()
+    public function detailStory($id)
     {
-        return Inertia::render('DetailStory');
+        return Inertia::render('DetailStory', ['id' => $id]);
     }
 
     public function teacher()
