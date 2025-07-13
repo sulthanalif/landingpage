@@ -2,17 +2,8 @@ import { Link } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
 import useApi from "../Hooks/response";
-import ActivityItem from "../Components/Pages/ActivityItem";
 
 const Story = () => {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const {
-        data: activities,
-        loading,
-        error,
-        get: getActivities,
-    } = useApi("activities");
-
     useEffect(() => {
         const addCacheBuster = (url) => {
             return `${url}?v=${Date.now()}`;
@@ -80,47 +71,58 @@ const Story = () => {
         };
     }, []);
 
-    const activityDatas = activities && activities.activities ? activities.activities : [];
+    const limitText = (html, limit = 150) => {
+        if (!html) return "";
 
-    const groupedActivities = activityDatas.reduce((groups, activity) => {
-        const category = activity.category || "Uncategorized";
-        if (!groups[category]) {
-            groups[category] = [];
-        }
-        groups[category].push(activity);
-        return groups;
-    }, {});
+        const sanitizedHtml = html.replace(/<img[^>]*>/g, "");
 
-    const sortedCategories = Object.keys(groupedActivities).sort((a, b) => {
-        const order = [];
-        const indexA = order.indexOf(a);
-        const indexB = order.indexOf(b);
+        const tempElement = document.createElement("div");
+        tempElement.innerHTML = sanitizedHtml;
+        const textContent =
+            tempElement.textContent || tempElement.innerText || "";
 
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        return indexA - indexB;
-    });
-
-    const datas = {
-        grouped: groupedActivities,
-        sorted: sortedCategories,
+        return textContent.length > limit
+            ? textContent.substring(0, limit) + "..."
+            : textContent;
     };
 
-    const handleRefresh = () => {
+    const { data: activities, loading, error, get: getActivities } = useApi("activities");
+
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState("");
+    const [displayedPosts, setDisplayedPosts] = useState([]);
+
+    useEffect(() => {
         getActivities();
+    }, []);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const activityId = params.get("activityId");
+
+        if (activityId) {
+            setSelectedActivity(activityId);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!selectedActivity) {
+            setDisplayedPosts(activities?.activities || []);
+        } else {
+            const selected = activities?.activities?.find(
+                (activity) => String(activity.id) === String(selectedActivity)
+            );
+            setDisplayedPosts(selected?.sub_activities || []);
+        }
+    }, [selectedActivity, activities]);
+
+    const handleActivityChange = (e) => {
+        setSelectedActivity(e.target.value);
     };
 
-    if (!isLoaded) {
-        return (
-            <Layout>
-                <div className="preloader">
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="sr-only">Loading...</span>
-                    </div>
-                </div>
-            </Layout>
-        );
-    }
+    const handleActivityClick = (activityId) => {
+        setSelectedActivity(String(activityId));
+    };
 
     return (
         <Layout>
@@ -171,6 +173,24 @@ const Story = () => {
                         </div>
                     </div>
 
+                    <div className="row mt-5">
+                        <div className="col-lg-3 text-secondary">
+                            <select
+                                name="category"
+                                className="form-control text-secondary"
+                                value={selectedActivity}
+                                onChange={handleActivityChange}
+                            >
+                                <option value="">All</option>
+                                {activities?.activities?.map((activity) => (
+                                    <option key={activity.id} value={activity.id}>
+                                        {activity.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
                     {loading ? (
                         <div className="col-lg-12 text-center py-5">
                             <div
@@ -184,31 +204,94 @@ const Story = () => {
                         <div className="col-lg-12 text-center py-5">
                             <div className="alert alert-danger">{error}</div>
                         </div>
-                    ) : activities && activities.activities.length > 0 ? (
-                        sortedCategories.map((category) => (
-                            <div key={category} className="col-12 mb-5">
-                                <h3 className="category-title">
-                                    # {category}
-                                </h3>
-                                <div className="row courses_row">
-                                    {groupedActivities[category]
-                                        .sort((a, b) => {
-                                            const nameA = (a.name || "").toString();
-                                            const nameB = (b.name || "").toString();
-                                            return nameA.localeCompare(nameB);
-                                        })
-                                        .map((activity) => (
-                                            <ActivityItem key={activity.id} activity={activity} />
-                                        ))}
-                                </div>
+                    ) : displayedPosts.length > 0 ? (
+                        <>
+                            <div className="row courses_row">
+                                {displayedPosts.map((post) => (
+                                    <div key={post.id} className="blog_post trans_200 col-lg-4 col-md-6 mb-4">
+                                        <div className="blog_post_image">
+                                            <img
+                                                src={
+                                                    post.image
+                                                        ? `/storage/${post.image}`
+                                                        : "/img/logo.png"
+                                                }
+                                                alt={post.title || post.label}
+                                                className="img-fluid"
+                                                style={{ width: "100%", height: "250px", objectFit: "cover" }}
+                                            />
+                                        </div>
+                                        <div className="blog_post_body">
+                                            <div className="blog_post_title">
+                                                {post.label && (
+                                                    <a
+                                                        href="/story"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            handleActivityClick(
+                                                                post.id
+                                                            );
+                                                        }}
+                                                        style={{
+                                                            cursor: "pointer",
+                                                        }}
+                                                    >
+                                                        {post.label}
+                                                    </a>
+                                                )}
+
+                                                {post.title && (
+                                                    <Link href={`/story/${post.id}`}>
+                                                        {post.title}
+                                                    </Link>
+                                                )}
+                                            </div>
+                                            {post.title && (
+                                                <div className="blog_post_meta">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="#">
+                                                                {new Date(
+                                                                    post.date
+                                                                ).toLocaleDateString(
+                                                                    "en-US",
+                                                                    {
+                                                                        month: "long",
+                                                                        day: "numeric",
+                                                                        year: "numeric",
+                                                                    }
+                                                                )}
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
+                                            <div className="blog_post_text">
+                                                <p
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: limitText(post.description),
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))
+
+                            {selectedActivity && (
+                                <div className="text-center mt-3">
+                                    <button className="btn btn-outline-secondary" onClick={() => setSelectedActivity("")}>
+                                        Back to All Activities
+                                    </button>
+                                </div>
+                            )}
+                        </>
                     ) : (
-                        <div className="col-lg-12 course_col">
+                        <div className="col-lg-12 course_col mt-4">
                             <div className="course">
                                 <div className="course_body">
                                     <h3 className="course_title text-center">
-                                        No activity found
+                                        No activities or sub-activities found.
                                     </h3>
                                 </div>
                             </div>

@@ -24,7 +24,7 @@ class LandingpageResponseController extends Controller
     {
         try {
             $posts = Post::with(['category:id,name', 'user:name'])->where('status', true)->latest()->paginate(5);
-            $activities = Activity::latest()->where('status', true)->latest()->limit(10)->get();
+            $activities = Activity::where('status', true)->latest()->limit(10)->get();
             $faqs = Question::where('status', true)->get();
             $wcus = WhyChooseUs::where('status', true)->get();
 
@@ -49,17 +49,21 @@ class LandingpageResponseController extends Controller
         }
     }
 
-    public function getSubActivity($id)
+    public function detailActivity($id)
     {
         try {
-            $subActivity = SubActivity::where('id', $id)->where('status', true)->first();
+            $activity = Activity::with(['subActivities' => function($query) {
+                $query->where('status', true);
+            }])
+            ->where('status', true)
+            ->where('id', $id)
+            ->first();
 
-            return $this->successResponse(data: compact('subActivity'));
+            return $this->successResponse(data: compact('activity'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }
     }
-
 
     public function teachers()
     {

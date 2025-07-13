@@ -1,0 +1,246 @@
+import React, { useEffect, useRef, useState } from "react";
+import Layout from "../Components/Layout";
+import { Link } from "@inertiajs/react";
+import useApi from "../Hooks/response";
+
+const DetailStory = ({ id }) => {
+    const styleRefs = useRef([]);
+    const scriptRefs = useRef([]);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        const addFile = (type, attributes, target) => {
+            const file = document.createElement(type);
+            Object.entries(attributes).forEach(([key, value]) => {
+                file[key] = value;
+            });
+            target.appendChild(file);
+            return file;
+        };
+
+        styleRefs.current = [
+            addFile(
+                "link",
+                { rel: "stylesheet", href: "/landing/styles/blog_single.css" },
+                document.head
+            ),
+            addFile(
+                "link",
+                {
+                    rel: "stylesheet",
+                    href: "/landing/styles/blog_single_responsive.css",
+                },
+                document.head
+            ),
+        ];
+
+        scriptRefs.current = [
+            addFile(
+                "script",
+                { src: "/landing/js/blog_single.js", async: true },
+                document.body
+            ),
+            addFile(
+                "script",
+                {
+                    src: "/landing/plugins/colorbox/jquery.colorbox-min.js",
+                    async: true,
+                },
+                document.body
+            ),
+        ];
+
+        setIsLoaded(true);
+
+        return () => {
+            styleRefs.current.forEach(
+                (file) => file && file.parentNode.removeChild(file)
+            );
+            scriptRefs.current.forEach(
+                (file) => file && file.parentNode.removeChild(file)
+            );
+        };
+    }, []);
+
+    const { data, loading, error, get: getData } = useApi(`/activity/${id}`);
+
+    console.log(data);
+    
+    const post = data?.post;
+
+    const handleRefresh = () => {
+        getData();
+    };
+
+    if (!isLoaded || loading) {
+        return (
+            <Layout>
+                <div className="preloader">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </Layout>
+        );
+    }
+
+    if (error) {
+        return (
+            <Layout>
+                <div className="alert alert-danger">
+                    Failed to load news data.
+                    <button onClick={handleRefresh}>Try again</button>
+                </div>
+            </Layout>
+        );
+    }
+
+    return (
+        <Layout>
+            <div className="home">
+                <div className="breadcrumbs_container">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">
+                                <div className="breadcrumbs">
+                                    <ul>
+                                        <li>
+                                            <Link href="/">Home</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/story">Story</Link>
+                                        </li>
+                                        <li>{post?.title || "Detail Story"}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="blog">
+                <div className="container">
+                    <div className="row">
+                        {/* Blog Content */}
+                        <div className="col-lg-8">
+                            {/* {post ? (
+                                <div className="blog_content">
+                                    <div className="blog_title">
+                                        {post.title}
+                                    </div>
+                                    <div className="blog_meta">
+                                        <ul>
+                                            <li>
+                                                Post on{" "}
+                                                <a href="#">
+                                                    {new Date(
+                                                        post.updated_at
+                                                    ).toLocaleDateString(
+                                                        "en-US",
+                                                        {
+                                                            month: "long",
+                                                            day: "numeric",
+                                                            year: "numeric",
+                                                        }
+                                                    )}
+                                                </a>
+                                            </li>
+                                            {post.category && (
+                                                <li>
+                                                    In{" "}
+                                                    <Link href={`/news?categoryId=${encodeURIComponent(post.category.id)}`}>
+                                                        {post.category.name}
+                                                    </Link>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                    <div className="blog_image">
+                                        <img
+                                            src={
+                                                post.image
+                                                    ? `/storage/${post.image}`
+                                                    : "/landing/images/event_1.jpg"
+                                            }
+                                            alt={post.title}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <div
+                                        className="blog_text mt-3"
+                                        dangerouslySetInnerHTML={{
+                                            __html: post.body,
+                                        }}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="alert alert-warning">
+                                    Post not found
+                                </div>
+                            )} */}
+
+                            <div className="blog_extra d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+                                <div className="blog_social ml-lg-auto">
+                                    <span>Follow Us: </span>
+                                    <ul>
+                                        <li>
+                                            <a
+                                                href="https://www.facebook.com/pages/category/Community/Lia-Stephanie-School-115071265257740/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <i
+                                                    className="fa fa-facebook"
+                                                    aria-hidden="true"
+                                                />
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://www.instagram.com/liastephanieschool/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <i
+                                                    className="fa fa-instagram"
+                                                    aria-hidden="true"
+                                                />
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://wa.me/+6281310602139"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <i
+                                                    className="fa fa-whatsapp"
+                                                    aria-hidden="true"
+                                                />
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://lsgs.quintal.id/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <i
+                                                    className="fa fa-leanpub"
+                                                    aria-hidden="true"
+                                                />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Layout>
+    );
+};
+
+export default DetailStory;

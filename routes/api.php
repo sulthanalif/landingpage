@@ -14,7 +14,7 @@ use App\Http\Controllers\LandingpageResponseController;
 
 Route::get('/getDataHome', [LandingpageResponseController::class, 'getDataHome']);
 Route::get('/activities', [LandingpageResponseController::class, 'activities']);
-Route::get('/activities/{id}', [LandingpageResponseController::class, 'getSubActivity']);
+Route::get('/activity/{id}', [LandingpageResponseController::class, 'detailActivity']);
 Route::get('/teachers', [LandingpageResponseController::class, 'teachers']);
 Route::get('/tuition-fees', [LandingpageResponseController::class, 'tableFees']);
 Route::get('/calendars', [LandingpageResponseController::class, 'calendars']);

@@ -1,7 +1,6 @@
 import { Link } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 import useApi from "../../Hooks/response";
-import ActivityItem from "../../Components/Pages/ActivityItem";
 
 const Activity = () => {
     const {
@@ -34,8 +33,6 @@ const Activity = () => {
     const handleRefresh = () => {
         getDatas();
     };
-
-    const isVideo = activities.file?.match(/\.(mp4|webm|ogg)$/i);
 
     const initActivitySlider = () => {
         if ($(".feature_slider").length) {
@@ -148,37 +145,30 @@ const Activity = () => {
                                 <div className="owl-carousel owl-theme feature_slider">
                                     {activities.map((activity) => (
                                         <div className="owl-item" key={activity.id}>
-                                            <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                                                <div className="card-body text-center p-4">
-                                                    <div className="feature-image mb-4">
-                                                        {isVideo ? (
-                                                            <video
-                                                                src={`/storage/${activity.file}`}
-                                                                alt={activity.title}
-                                                                style={{ width: "auto", height: "250px", objectFit: "cover" }}
-                                                                muted
-                                                            />
-                                                        ) : (
+                                            <Link href={`/story?activityId=${encodeURIComponent(activity.id)}`}>
+                                                <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                                                    <div className="card-body text-center p-4">
+                                                        <div className="feature-image mb-4">
                                                             <img
                                                                 src={
-                                                                    activity.file
-                                                                        ? `/storage/${activity.file}`
+                                                                    activity.image
+                                                                        ? `/storage/${activity.image}`
                                                                         : "/img/logo.png"
                                                                 }
-                                                                alt={activity.title}
+                                                                alt={activity.label}
                                                                 loading="lazy"
                                                                 style={{ width: "auto", height: "250px", objectFit: "cover" }}
                                                             />
-                                                        )}
+                                                        </div>
+                                                        <h3 className="feature-title h5 mb-3">
+                                                            {activity.label}
+                                                        </h3>
+                                                        <p className="feature-text mb-0">
+                                                            {activity.description}
+                                                        </p>
                                                     </div>
-                                                    <h3 className="feature-title h5 mb-3">
-                                                        {activity.title}
-                                                    </h3>
-                                                    <p className="feature-text mb-0">
-                                                        {activity.description}
-                                                    </p>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         </div>
                                     ))}
                                 </div>
