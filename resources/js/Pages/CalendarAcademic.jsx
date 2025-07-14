@@ -208,7 +208,7 @@ const CalendarAcademic = () => {
                                 <h5 className="font-italic text-muted">Note: Tentative Schedule - We reserve the right to change or alter herein schedule as needed</h5>
                             </div>
                             <div className="col-lg-12 feature_col">
-                                <div className="feature_content">
+                                <div className="feature_content notranslate">
                                     <FullCalendar
                                         plugins={[
                                             dayGridPlugin,
