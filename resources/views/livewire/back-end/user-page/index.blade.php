@@ -273,11 +273,11 @@ new #[Title('Users')] class extends Component {
                         $path = $component->uploadImage($component->image, 'users');
                         $user->image = $path;
                     }
-                    if ($component->bse_id) {
-                        $user->bse->create([
-                            'bse_id' => $component->bse_id,
-                        ]);
-                    }
+                    // if ($component->bse_id) {
+                    //     $user->bse->create([
+                    //         'bse_id' => $component->bse_id,
+                    //     ]);
+                    // }
                 },
 
                 afterSave: function ($user, $component) {
@@ -304,11 +304,11 @@ new #[Title('Users')] class extends Component {
                         $path = $component->uploadImage($component->image, 'users');
                         $user->image = $path;
                     }
-                    if ($component->bse_id) {
-                        $user->bse->update([
-                            'bse_id' => $component->bse_id,
-                        ]);
-                    }
+                    // if ($component->bse_id) {
+                    //     $user->bse->update([
+                    //         'bse_id' => $component->bse_id,
+                    //     ]);
+                    // }
                 },
 
                 afterSave: function ($user, $component) {
