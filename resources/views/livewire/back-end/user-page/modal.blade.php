@@ -23,12 +23,12 @@
             <div class="my-3"></div>
             <x-password label="Password"  type="password" wire:model="password" inline hint="{{ $this->recordId == '' ? '' : 'Isi password jika ingin diubah' }}" />
             <div class="my-3"></div>
-            <x-select label="Role" icon="o-user" :options="$roles" @change="$wire.selectedRole" wire:model="role" placeholder="Select Role" placeholder-value="0" inline />
+            <x-select label="Role" icon="o-user" :options="$roles" wire:model="role" placeholder="Select Role" placeholder-value="0" inline />
 
-            @if ($showID)
+            {{-- @if ($showID)
             <div class="my-3"></div>
             <x-input label="BSE ID" icon="o-user" type="text" wire:model="bse_id" inline />
-            @endif
+            @endif --}}
         </div>
         </div>
         <x-slot:actions>
