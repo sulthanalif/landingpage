@@ -286,7 +286,8 @@ const Footer = () => {
                 <>
                     <footer
                         ref={footerRef}
-                        className={`footer-sticky position-fixed ${visible ? "" : "d-none"}`}
+                        className={`footer-sticky ${visible ? "footer-visible" : "footer-hidden"
+                            }`}
                     >
                         <div
                             className="copyright d-flex flex-lg-row flex-row align-items-center justify-content-center pt-3"

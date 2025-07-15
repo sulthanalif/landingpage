@@ -52,7 +52,7 @@ const Header = () => {
 
     return (
         <>
-            <header className={`header ${visible ? "show" : "hide"}`}>
+            <header className={`header ${visible ? "show scrolled" : "hide"}`}>
                 {/* Top Bar */}
                 <div className="top_bar">
                     <div className="top_bar_container">
@@ -109,14 +109,14 @@ const Header = () => {
                     <div className="container">
                         <div className="row">
                             <div className="col">
-                                <div className="header_content d-flex flex-row align-items-center justify-content-start">
+                                <div className="header_content d-flex flex-row align-items-center justify-content-start px-5">
                                     <div className="logo_container">
                                         <Link href="/">
                                             <img
                                                 src="/img/logo-panjang.png"
                                                 className="img-fluid"
                                                 style={{
-                                                    maxWidth: "150px",
+                                                    maxWidth: "180px",
                                                     maxHeight: "auto",
                                                 }}
                                                 alt="logo"
@@ -193,7 +193,7 @@ const Header = () => {
                                                         }
                                                         href="/admission"
                                                     >
-                                                        Our Guidelines
+                                                        Admission Guidelines
                                                     </Link>
                                                 </div>
                                             </li>

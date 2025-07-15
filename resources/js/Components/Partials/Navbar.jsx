@@ -41,7 +41,7 @@ const Navbar = ({ isActive, closeMenu }) => {
                                     Teacher
                                 </Link>
                                 <Link className="dropdown-item" href="/admission">
-                                    Our Guidelines
+                                    Admission Guidelines
                                 </Link>
                             </div>
                         </li>
