@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             ['name' => 'admin'],
             ['name' => 'marketing'],
             ['name' => 'hrd'],
+            ['name' => 'kepala-sekolah']
         ];
 
         foreach ($roles as $role) {

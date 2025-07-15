@@ -11,12 +11,24 @@ use App\Models\Category;
 use App\Models\Question;
 use App\Models\Register;
 use App\Models\TuitionFee;
+use App\Exports\ExportDatas;
 use Livewire\Volt\Component;
 use App\Models\CareerRegister;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Facades\Excel;
 
 new #[Title('Dashboard')] class extends Component {
+
+    public bool $exportTable = false;
+    public $optionsExport = [
+        ['id' => 'siswa', 'name' => 'Siswa Baru'],
+        ['id' => 'karir', 'name' => 'Pelamar']
+    ];
+
+    public ?string $data = 'siswa';
+    public string $start_date = '';
+    public string $end_date = '';
 
     public array $chart = [];
     public array $chartRegCareer = [];
@@ -41,6 +53,114 @@ new #[Title('Dashboard')] class extends Component {
         $this->year = now()->year;
         $this->chart = $this->chartStudentRegistrations();
         $this->chartRegCareer = $this->chartCareerRegistrations();
+
+        if (auth()->user()->getRoleNames()->first() == 'hrd') {
+            $this->data = 'karir';
+        }
+    }
+
+    public function export()
+    {
+        $this->validate([
+            'data' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required|after_or_equal:start_date'
+        ]);
+
+        if ($this->data == 'siswa') {
+            $datas = Register::where(function ($query) {
+                $query->where('created_at', '>=', $this->start_date)
+                    ->where('created_at', '<=', $this->end_date);
+            })->get()->map(function ($item) {
+                return [
+                    'LEVEL' => $item->level,
+                    'NAME' => $item->name,
+                    'GENDER' => $item->gender,
+                    'RELIGION' => $item->religion,
+                    'PLACE_OF_BIRTH' => $item->place_of_birth,
+                    'DATE_OF_BIRTH' => $item->date_of_birth,
+                    'PHONE' => $item->phone,
+                    'EMAIL' => $item->email,
+                    'PREVIOUS_SCHOOL' => $item->previous_school,
+                    'HOBBI' => $item->hobbi,
+                    'ACHIEVEMENT' => $item->achievement,
+                    'FATHER_NAME' => $item->father_name,
+                    'PLACE_OF_BIRTH_FATHER' => $item->place_of_birth_father,
+                    'DATE_OF_BIRTH_FATHER' => $item->date_of_birth_father,
+                    'MOTHER_NAME' => $item->mother_name,
+                    'PLACE_OF_BIRTH_MOTHER' => $item->place_of_birth_mother,
+                    'DATE_OF_BIRTH_MOTHER' => $item->date_of_birth_mother,
+                    'NUMBER_OF_SIBLINGS' => $item->number_of_siblings,
+                    'PHONE_PARENT' => $item->phone_parent,
+                    'EMAIL_PARENT' => $item->email_parent,
+                    'FATHER_ADDRESS' => $item->father_address,
+                    'MOTHER_ADDRESS' => $item->mother_address,
+                    'STUDENT_RESIDENCE_STATUS' => $item->student_residence_status,
+                    'SUBMIT_AT' => $item->created_at,
+                ];
+            });
+
+            $headers = [
+                'LEVEL',
+                'NAME',
+                'GENDER',
+                'RELIGION',
+                'PLACE_OF_BIRTH',
+                'DATE_OF_BIRTH',
+                'PHONE',
+                'EMAIL',
+                'PREVIOUS_SCHOOL',
+                'HOBBI',
+                'ACHIEVEMENT',
+                'FATHER_NAME',
+                'PLACE_OF_BIRTH_FATHER',
+                'DATE_OF_BIRTH_FATHER',
+                'MOTHER_NAME',
+                'PLACE_OF_BIRTH_MOTHER',
+                'DATE_OF_BIRTH_MOTHER',
+                'NUMBER_OF_SIBLINGS',
+                'PHONE_PARENT',
+                'EMAIL_PARENT',
+                'FATHER_ADDRESS',
+                'MOTHER_ADDRESS',
+                'STUDENT_RESIDENCE_STATUS',
+                'SUBMIT_AT',
+            ];
+
+            $title = 'Data Siswa';
+        } else {
+            $datas = CareerRegister::where(function ($query) {
+                $query->where('created_at', '>=', $this->start_date)
+                    ->where('created_at', '<=', $this->end_date);
+            })->get()->map(function ($item) {
+                return [
+                    'CAREER' => $item->career->title,
+                    'NAME' => $item->name,
+                    'EMAIL' => $item->email,
+                    'LOCATION' => $item->location,
+                    'BIRTH_DATE' => $item->birth_date,
+                    'DESCRIPTION' => $item->description,
+                    'CV' => $item->cv,
+                    'PHONE_NUMBER' => $item->phone_number,
+                    'SUBMIT_AT' => $item->created_at,
+                ];
+            });
+
+            $headers = [
+                'CAREER',
+                'NAME',
+                'EMAIL',
+                'LOCATION',
+                'BIRTH_DATE',
+                'DESCRIPTION',
+                'CV',
+                'PHONE_NUMBER',
+                'SUBMIT_AT',
+            ];
+            $title = 'Data Pelamar';
+        }
+
+        return Excel::download(new ExportDatas($datas, $title, $headers), $title.' '. $this->start_date.' '. $this->end_date . '.xlsx');
     }
 
     public function selectYear(string $year): void
@@ -148,7 +268,7 @@ new #[Title('Dashboard')] class extends Component {
             'November',
             'Desember',
         ];
-        
+
         $colors = [];
 
         if ($this->level) {
@@ -172,7 +292,7 @@ new #[Title('Dashboard')] class extends Component {
                 ],
             ];
         } else {
-            
+
             $datasets = [];
 
             foreach($this->levels as $level) {
@@ -193,7 +313,7 @@ new #[Title('Dashboard')] class extends Component {
                 ];
             }
         }
-        
+
         $chart = [];
         $chart['type'] = 'line';
         $chart['data'] = [
@@ -260,7 +380,7 @@ new #[Title('Dashboard')] class extends Component {
                 ],
             ];
         } else {
-            
+
             $datasets = [];
 
             foreach($this->careers as $career) {
@@ -281,7 +401,7 @@ new #[Title('Dashboard')] class extends Component {
                 ];
             }
         }
-        
+
         $chart = [];
         $chart['type'] = 'line';
         $chart['data'] = [
@@ -319,11 +439,23 @@ new #[Title('Dashboard')] class extends Component {
     }
 }; ?>
 
+@script
+    <script>
+        $js('export', () => {
+            $wire.start_date = '';
+            $wire.end_date = '';
+            // $wire.data = 'siswa';
+            $wire.exportTable = true;
+        })
+    </script>
+@endscript
+
 <div>
     <!-- HEADER -->
     <x-header title="Dashboard" separator>
         <x-slot:actions>
-            <x-select label="Year" wire:model="year" :options="$years" @change-selection="$wire.selecYear($event.detail.value)" />
+            <x-select label="Year" wire:model="year" :options="$years" @change-selection="$wire.selecYear($event.detail.value)" inline />
+            <x-button label="Export"  @click="$js.export" class="btn-primary" />
         </x-slot:actions>
     </x-header>
     <div class="py-4 rounded-b-xl grid md:grid-cols-4 gap-5">
@@ -346,7 +478,7 @@ new #[Title('Dashboard')] class extends Component {
                         single
                         searchable />
                     </div>
-        
+
                 </x-slot:menu>
                 <div class="flex justify-center">
                     <div class="mt-5 w-[950px]">
@@ -355,7 +487,7 @@ new #[Title('Dashboard')] class extends Component {
                 </div>
             </x-card>
         @endcan
-        
+
         @can('chart-career-registrations')
             <x-card title="Statistik Pendaftaran Karir">
                 <x-slot:menu>
@@ -369,7 +501,7 @@ new #[Title('Dashboard')] class extends Component {
                         single
                         searchable />
                     </div>
-        
+
                 </x-slot:menu>
                 <div class="flex justify-center">
                     <div class="mt-5 w-[950px]">
@@ -378,7 +510,7 @@ new #[Title('Dashboard')] class extends Component {
                 </div>
             </x-card>
         @endcan
-        {{-- @can('chart-careers')
+        @can('chart-careers')
         <x-card title="Diagram Karir Tersedia">
             <x-slot:menu>
                 <div class="w-[300px]">
@@ -391,7 +523,7 @@ new #[Title('Dashboard')] class extends Component {
                     single
                     searchable />
                 </div>
-    
+
             </x-slot:menu>
             <div class="flex justify-center">
                 <div class="mt-5 w-[950px]">
@@ -399,6 +531,25 @@ new #[Title('Dashboard')] class extends Component {
                 </div>
             </div>
         </x-card>
-        @endcan --}}
+        @endcan
     </div>
+
+
+    <x-drawer title="Export" wire:model='exportTable' right separator with-close-button close-on-escape class="w-full lg:w-1/2 sm:w-1/2">
+        <x-form wire:submit='export'>
+            @hasrole('super-admin|admin|kepala-sekolah')
+            <x-select label="Data" wire:model="data" :options="$optionsExport" />
+            @endhasrole
+            <x-datepicker label="Start Date" wire:model="start_date" icon="o-calendar" :config="[
+                'altFormat' => 'd F Y'
+            ]" />
+            <x-datepicker label="End Date" wire:model="end_date" icon="o-calendar" :config="[
+                'altFormat' => 'd F Y'
+            ]" />
+
+            <x-slot:actions>
+                <x-button label="Export" type="submit" class="btn-primary" spinner='export' />
+            </x-slot:actions>
+        </x-form>
+    </x-drawer>
 </div>
