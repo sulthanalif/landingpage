@@ -14,30 +14,31 @@ const Header = () => {
         setIsNavbarActive(false);
     };
 
-    const [visible, setVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [timeoutId, setTimeoutId] = useState(null);
+    const [headerClass, setHeaderClass] = useState('');
 
     const controlNavbar = () => {
         const currentScrollY = window.scrollY;
 
-        if (currentScrollY > lastScrollY) {
-            // Scroll ke bawah
-            setVisible(false);
+        if (currentScrollY === 0) {
+            setHeaderClass(''); // di paling atas: hilangkan semua class
+        } else if (currentScrollY > lastScrollY) {
+            // scroll ke bawah
+            setHeaderClass('hide');
         } else {
-            // Scroll ke atas
-            setVisible(true);
+            // scroll ke atas
+            setHeaderClass('show scrolled');
         }
 
         setLastScrollY(currentScrollY);
 
-        // Reset navbar muncul jika user berhenti scroll
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
+        if (timeoutId) clearTimeout(timeoutId);
         const id = setTimeout(() => {
-            setVisible(true);
-        }, 150); // 150ms setelah scroll berhenti
+            if (window.scrollY > 0) {
+                setHeaderClass('show scrolled');
+            }
+        }, 150);
         setTimeoutId(id);
     };
 
@@ -52,7 +53,7 @@ const Header = () => {
 
     return (
         <>
-            <header className={`header ${visible ? "show" : "hide"}`}>
+            <header className={`header ${headerClass}`}>
                 {/* Top Bar */}
                 <div className="top_bar">
                     <div className="top_bar_container">
@@ -361,7 +362,7 @@ const LanguageSwitcher = () => {
             </a>
 
             |
-            
+
             {/* Tombol Bahasa */}
             <div className="dropdown position-relative ml-1">
                 <button
