@@ -24,6 +24,8 @@ $(document).ready(function()
 	*/
 
 	var header = $('.header');
+	var topBar = $('.top_bar');
+	var menuBar = $('.header_container');
 	var menuActive = false;
 	var menu = $('.menu');
 	var burger = $('.hamburger');
@@ -55,11 +57,15 @@ $(document).ready(function()
 	{
 		if($(window).scrollTop() > 100)
 		{
-			header.addClass('scrolled');
+			// header.addClass('scrolled');
+			topBar.addClass('top_bar_scrolled');
+			menuBar.addClass('header_container_scrolled');
 		}
 		else
 		{
-			header.removeClass('scrolled');
+			// header.removeClass('scrolled');
+			topBar.removeClass('top_bar_scrolled');
+			menuBar.removeClass('header_container_scrolled');
 		}
 	}
 
