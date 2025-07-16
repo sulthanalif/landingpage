@@ -52,7 +52,7 @@ const Header = () => {
 
     return (
         <>
-            <header className={`header ${visible ? "show scrolled" : "hide"}`}>
+            <header className={`header ${visible ? "show" : "hide"}`}>
                 {/* Top Bar */}
                 <div className="top_bar">
                     <div className="top_bar_container">

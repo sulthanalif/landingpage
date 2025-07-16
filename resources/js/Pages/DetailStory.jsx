@@ -136,7 +136,7 @@ const DetailStory = ({ id }) => {
                 </div>
             </div>
 
-            <div className="blog">
+            <div className="blog pt-5">
                 <div className="container">
                     <div className="row">
                         {/* Blog Content */}
@@ -174,6 +174,11 @@ const DetailStory = ({ id }) => {
                                             }
                                             alt={activity.title}
                                             loading="lazy"
+                                            style={{
+                                                maxHeight: "400px",
+                                                width: "auto",
+                                                objectFit: "cover",
+                                            }}
                                         />
                                     </div>
                                     <div

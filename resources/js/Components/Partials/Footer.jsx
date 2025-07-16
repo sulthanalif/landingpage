@@ -290,18 +290,51 @@ const Footer = () => {
                             }`}
                     >
                         <div
-                            className="copyright d-flex flex-lg-row flex-row align-items-center justify-content-center pt-3"
+                            className="copyright d-flex align-items-center justify-content-between px-4"
                             style={{
                                 backgroundImage:
-                                    "url(/img/banner-resize.png)",
+                                    "url(/img/footer-sticky2.png)",
                                 transform: "translateY(0%)",
                                 opacity: 1,
                                 transition:
                                     "transform 0.3s ease-in-out, opacity 0.3s ease-in-out",
+                                height: "60px",
                             }}
                         >
-                            <div className="cr_text">
-                                Copyright © All rights reserved.
+                            {/* Logo di kiri */}
+                            <div className="d-none d-md-block" style={{ flex: "0 0 auto", paddingLeft: "50px", paddingTop: "10px" }}>
+                                <img
+                                    src="/img/logo-panjang.png"
+                                    alt="logo"
+                                    style={{
+                                        height: "70px", // Ukuran diperbesar
+                                        objectFit: "contain",
+                                        filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))" // Jika perlu efek kontras
+                                    }}
+                                />
+                            </div>
+
+                            {/* Teks di tengah */}
+                            <div
+                                className="cr_text text-center mx-auto"
+                                style={{
+                                    flex: "1",
+                                    fontSize: "14px",
+                                    color: "#fff",
+                                    fontWeight: "500",
+                                    paddingTop: "10px",
+                                }}
+                            >
+                                <span className="ml-5 ml-md-0">Copyright © All rights reserved.</span>
+                            </div>
+
+                            {/* Spacer kanan (untuk penyeimbang layout tengah) */}
+                            <div className="d-none d-md-block" style={{ flex: "0 0 auto", width: "55px", visibility: "hidden" }}>
+                                <img
+                                    src="/img/logo-panjang.png"
+                                    alt=""
+                                    style={{ height: "70px" }}
+                                />
                             </div>
                         </div>
                     </footer>

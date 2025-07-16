@@ -254,7 +254,7 @@ section {
     transform: translateY(0);
 }
 .header.scrolled {
-    top: -10px;
+    top: -40px;
 }
 
 .header.hide {
@@ -310,6 +310,9 @@ section {
     background: #14bdee;
 }
 .header.scrolled .top_bar {
+}
+.top_bar_scrolled {
+    visibility: hidden;
 }
 .top_bar_container {
     width: 100%;
@@ -427,6 +430,10 @@ section {
 }
 .header.scrolled .header_content {
     height: 75px;
+}
+.header_container_scrolled {
+    height: 75px;
+    top: -40px;
 }
 
 /*********************************
@@ -2048,7 +2055,7 @@ section {
     padding-bottom: 30px;
     border-top: solid 1px #353a49;
     background-size: cover;
-    background-position: center;
+    background-repeat: no-repeat;
 }
 .cr_list li {
     display: inline-block;

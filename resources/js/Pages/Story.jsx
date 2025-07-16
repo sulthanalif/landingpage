@@ -208,7 +208,7 @@ const Story = () => {
                         <>
                             <div className="row courses_row">
                                 {displayedPosts.map((post) => (
-                                    <div key={post.id} className="blog_post trans_200 col-lg-2 col-md-4 mb-4">
+                                    <div key={post.id} className="blog_post trans_200 col-lg-4 col-md-6 mb-4">
                                         <div className="blog_post_image">
                                             <img
                                                 src={
