@@ -107,11 +107,7 @@ const Teacher = () => {
                                     </h2>
                                     <div className="section_subtitle">
                                         <p>
-                                            Discover our team of certified and
-                                            experienced teachers dedicated to
-                                            unlocking every student's potential
-                                            through personalized guidance and
-                                            innovative teaching methods.
+                                            Meet our certified and experienced teachers, committed to fostering student growth through personalized instruction and innovative educational approaches.
                                         </p>
                                     </div>
                                 </div>

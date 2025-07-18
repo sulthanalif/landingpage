@@ -100,11 +100,11 @@ const SchoolProgram = () => {
                                     <div className="elements_accordions">
                                         <div className="accordion_container">
                                             <div className="accordion d-flex flex-row align-items-center active">
-                                                <div>Lia Stephanie Catholic School</div>
+                                                <div>Lia Stephanie Catholic School : National - Pearson Edexcel Programme</div>
                                             </div>
                                             <div className="accordion_panel">
                                                 <ul>
-                                                    <li>Uses the National Curriculum (Curriculum 2013 and Merdeka Curriculum).</li>
+                                                    <li>Uses the National Curriculum (Merdeka Curriculum).</li>
                                                     <li>Emphasis on a scientific approach, critical thinking skills, and character building.</li>
                                                     <li>Daily "spiritual breakfast" program at the primary level for faith formation.</li>
                                                     <li>Development of public speaking skills is a priority at the junior high level.</li>
@@ -114,7 +114,7 @@ const SchoolProgram = () => {
                                         <div className="accordion_container">
                                             <div className="accordion d-flex flex-row align-items-center">
                                                 <div>
-                                                    Lia Stephanie Global School
+                                                    Lia Stephanie Program International Baccalaureate School
                                                 </div>
                                             </div>
                                             <div className="accordion_panel">
