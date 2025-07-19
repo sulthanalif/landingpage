@@ -215,7 +215,7 @@ const OurGoal = () => {
                                     />
                                 </div>
                                 <div className="about_item_title">
-                                    <p>Nasional Edexcel Programme</p>
+                                    <p>Lia Stephanie School (Edexcel Program)</p>
                                     <small className="font-italic">
                                         Academically Challenging British
                                         Curriculum for Global Citizens
@@ -291,8 +291,7 @@ const OurGoal = () => {
                                 </div>
                                 <div className="about_item_title">
                                     <p>
-                                        International Baccalaureate (IB)
-                                        Programme
+                                        Lia Stephanie School (IB Program)
                                     </p>
                                     <small className="font-italic">
                                         A Holistic Education that Develops
@@ -310,20 +309,19 @@ const OurGoal = () => {
                                     <ul>
                                         <li>
                                             <strong>
-                                                Primary Years Programme
-                                                (PYP)
+                                                From early learning and PYP programs student are taught with IB method Inquiry base and problem based learning
                                             </strong>
                                             – Ages 3-12 years
                                         </li>
                                         <li>
                                             <strong>
-                                                Middle Years Programme (MYP)
+                                                Students will be given Cambridge enhancement materials, taught with IB approach to enhance their emphaty, critical thinking and problem solving skills
                                             </strong>
                                             – Ages 11-16 years
                                         </li>
                                         <li>
                                             <strong>
-                                                Diploma Programme (DP)
+                                                Selected teacher with IB or Cambridge certification or International school experience to enhance a full English environment
                                             </strong>
                                             – Ages 16-19 years
                                         </li>
