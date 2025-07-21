@@ -190,13 +190,13 @@ new #[Title('Dashboard')] class extends Component {
         [
             'title' => 'Post',
             'value' => Post::where('status', 1)->count(),
-            'role' => 'marketing, admin, super-admin',
+            'can' => 'post-page',
             'icon' => 'paper-airplane',
         ],
         [
             'title' => 'Categories',
             'value' => Category::where('status', 1)->count(),
-            'role' => 'marketing, admin, super-admin',
+            'can' => 'category-page',
             'icon' => 'tag',
         ],
         [
@@ -204,49 +204,49 @@ new #[Title('Dashboard')] class extends Component {
             'value' => MailBox::when(!in_array(auth()->user()->getRoleNames()->first(), ['admin', 'super-admin']), function ($query) {
                 $query->where('to', auth()->user()->getRoleNames()->first());
             })->count(),
-            'role' => 'marketing, admin, hrd, super-admin',
+            'can' => 'mail-page',
             'icon' => 'envelope',
         ],
         [
             'title' => 'Activities',
             'value' => Activity::where('status', true)->count(),
-            'role' => 'admin, super-admin',
+            'can' => 'activity-page',
             'icon' => 'camera',
         ],
         [
             'title' => 'Questions',
             'value' => Question::where('status', true)->count(),
-            'role' => 'admin, super-admin',
+            'can' => 'question-page',
             'icon' => 'question-mark-circle',
         ],
         [
             'title' => 'Students Registrations',
             'value' => Register::count(),
-            'role' => 'admin, super-admin',
+            'can' => 'enrollment-page',
             'icon' => 'user-plus',
         ],
         [
             'title' => 'Users',
             'value' => User::where('status', true)->count(),
-            'role' => 'super-admin',
+            'can' => 'user-page',
             'icon' => 'users',
         ],
         [
             'title' => 'Campaign',
             'value' => Campaign::where('status', 1)->count(),
-            'role' => 'super-admin, marketing',
+            'can' => 'campaign-page',
             'icon' => 'megaphone',
         ],
         [
             'title' => 'Careers',
             'value' => Career::count(),
-            'role' => 'super-admin, admin, hrd',
+            'can' => 'career-page',
             'icon' => 'briefcase',
         ],
         [
             'title' => 'Teachers',
             'value' => Teacher::where('status', 1)->count(),
-            'role' => 'super-admin, admin, hrd',
+            'can' => 'teacher-page',
             'icon' => 'users',
         ]
        ];
@@ -460,9 +460,9 @@ new #[Title('Dashboard')] class extends Component {
     </x-header>
     <div class="py-4 rounded-b-xl grid md:grid-cols-4 gap-5">
             @foreach ($stats as $stat)
-                @if(in_array(auth()->user()->getRoleNames()->first(), explode(', ', $stat['role'])))
+                @can($stat['can'])
                     <x-stat title="{{ $stat['title'] }}" value="{{ $stat['value'] }}" icon="o-{{ $stat['icon'] }}" />
-                @endif
+                @endcan
             @endforeach
     </div>
     <div class="grid gap-4">
