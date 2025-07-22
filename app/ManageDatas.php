@@ -4,9 +4,14 @@ namespace App;
 
 use Exception;
 use Throwable;
+use Illuminate\Support\Str;
+// use Intervention\Image\Facades\Image;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
 
 trait ManageDatas
 {
@@ -131,13 +136,42 @@ trait ManageDatas
         }
     }
 
-    private function uploadImage($image, $folder = null): string
+    /**
+     * Upload image dan convert ke WebP.
+     *
+     * @param UploadedFile $image
+     * @param string|null $folder
+     * @param int $quality
+     * @return string path relatif ke public storage
+     */
+    public function uploadImage(UploadedFile $image, ?string $folder = null, int $quality = 75): string
     {
-        return $image->store('images/'. $folder, 'public');
+        $folder = trim($folder ?? '', '/');
+        $filename = Str::uuid() . '.webp';
+        $path = $folder ? "images/{$folder}/{$filename}" : "images/{$filename}";
+
+        // Buat manager-nya
+        $manager = new ImageManager(new Driver());
+
+        // Baca dan resize/encode ke WebP
+        $encoded = $manager->read($image->getRealPath())
+            ->toWebp(quality: $quality);
+
+        Storage::disk('public')->put($path, (string) $encoded);
+
+        return $path;
     }
 
-    private function deleteImage($image): void
+    /**
+     * Hapus image dari disk public.
+     *
+     * @param string $path
+     * @return void
+     */
+    public function deleteImage(string $path): void
     {
-        Storage::disk('public')->delete($image);
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
     }
 }

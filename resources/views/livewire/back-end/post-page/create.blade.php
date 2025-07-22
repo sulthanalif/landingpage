@@ -121,11 +121,9 @@ new #[Title('Form Post')] class extends Component {
                 $post->status = $component->status;
                 $post->published_at = $component->published_at;
                 if ($component->image) {
-                    if (Storage::disk('public')->exists($component->image)) {
-                        Storage::disk('public')->delete($component->image);
-                    }
+                    $this->deleteImage($component->image);
 
-                    $post->image = $component->image->store(path: 'images/post', options: 'public');
+                    $post->image = $this->uploadImage($component->image, 'post');
                 }
             },
             toast: false,
@@ -142,9 +140,7 @@ new #[Title('Form Post')] class extends Component {
 
         $this->deleteData(
             beforeDelete: function ($post, $component) {
-                if (Storage::disk('public')->exists($component->oldImage)) {
-                    Storage::disk('public')->delete($component->oldImage);
-                }
+                $this->deleteImage($component->oldImage);
             },
             afterDelete: function ($post, $component) {
                 $this->success('Post berhasil dihapus', position: 'toast-bottom', redirectTo: route('post'));

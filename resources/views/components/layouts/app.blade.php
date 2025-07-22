@@ -99,9 +99,9 @@
 
                                 <x-menu-item title="Profile" icon="o-user-circle" link="{{ route('profile') }}"
                                     wire:navigate />
-                                @can('log-viewer')
+                                {{-- @can('log-viewer')
                                     <x-menu-item title="Log View" icon="o-bug-ant" link="{{ url('/log-viewer') }}" />
-                                @endcan
+                                @endcan --}}
                                 <x-menu-item title="Logout" icon="o-power" no-wire-navigate
                                     link="{{ route('logout') }}" />
                             </x-dropdown>

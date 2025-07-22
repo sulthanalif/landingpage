@@ -130,18 +130,12 @@ new #[Title('Teachers')] class extends Component {
 
             beforeSave: function ($teacher, $component) {
                 if ($component->image) {
-                    if (Storage::disk('public')->exists($component->image)) {
-                        Storage::disk('public')->delete($component->image);
-                    }
-
-                    $teacher->image = $component->image->store(path: 'images', options: 'public');
+                    $this->deleteImage($component->image);
+                    $teacher->image = $this->uploadImage($component->image, 'teachers');
                 }
                 if ($component->logo) {
-                    if (Storage::disk('public')->exists($component->logo)) {
-                        Storage::disk('public')->delete($component->logo);
-                    }
-
-                    $teacher->logo = $component->logo->store(path: 'images', options: 'public');
+                    $this->deleteImage($component->logo);
+                    $teacher->logo = $this->uploadImage($component->logo, 'teachers');
                 }
 
                 if (!$component->status) {
@@ -240,10 +234,10 @@ new #[Title('Teachers')] class extends Component {
                 beforeDelete: function ($id, $component) {
                     $teacher = Teacher::find($id);
                     if ($teacher->image) {
-                        Storage::disk('public')->delete($teacher->image);
+                        $this->deleteImage($teacher->image);
                     }
                     if ($teacher->logo) {
-                        Storage::disk('public')->delete($teacher->logo);
+                        $this->deleteImage($teacher->logo);
                     }
                 },
             );
@@ -379,10 +373,10 @@ new #[Title('Teachers')] class extends Component {
              with-pagination wire:model.live="selected"
              selectable :row-decoration="$rowDecoration" no-hover>
             @scope('cell_image', $data)
-                <img src="{{ asset('storage/' . $data['image']) }}" alt="" style="width: 100px; height: auto">
+                <img src="{{ asset('storage/' . $data['image']) }}" alt="" width="100" height="auto" loading="lazy">
             @endscope
             @scope('cell_logo', $data)
-                <img src="{{ asset('storage/' . $data['logo']) }}" alt="" style="width: 100px; height: auto">
+                <img src="{{ asset('storage/' . $data['logo']) }}" alt="" width="100" height="auto" loading="lazy">
             @endscope
             @scope('cell_status', $data)
                 @if ($data['status'])
