@@ -141,14 +141,12 @@ const Teacher = () => {
                                         <div className="teacher-grid mt-3">
                                             {groupedTeachers[category]
                                                 .sort((a, b) =>
-                                                    a.name.localeCompare(b.name)
+                                                    a.order - b.order
                                                 )
                                                 .map((teacher) => (
-                                                    <>
-                                                        <TeacherItem
-                                                            teacher={teacher}
-                                                        />
-                                                    </>
+                                                    <TeacherItem key={teacher.id}
+                                                        teacher={teacher}
+                                                    />
                                                 ))}
                                         </div>
                                     </div>

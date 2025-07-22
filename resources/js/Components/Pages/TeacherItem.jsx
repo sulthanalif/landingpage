@@ -23,6 +23,7 @@ const TeacherItem = ({ teacher }) => {
                 data-toggle="modal"
                 data-target={`#teacher-${teacher.id}`}
                 aria-label={`View details about ${teacher.name}`}
+                key={teacher.id}
             >
                 <div className="teacher-card">
                     <div className="teacher-photo-container">
