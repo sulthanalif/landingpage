@@ -260,7 +260,8 @@ new #[Title('Teachers')] class extends Component {
                 $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('code_id', 'like', "%{$this->search}%")
                     ->orWhere('email', 'like', "%{$this->search}%")
-                    ->orWhere('category', 'like', "%{$this->search}%");
+                    ->orWhere('category', 'like', "%{$this->search}%")
+                    ->orWhere('position', 'like', "%{$this->search}%");
             })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
