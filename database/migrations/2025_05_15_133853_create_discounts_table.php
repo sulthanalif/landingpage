@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('percentage', 4, 2);
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->string('name')->index();
+            $table->decimal('percentage', 4, 2)->index();
+            $table->date('start_date')->index();
+            $table->date('end_date')->index();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

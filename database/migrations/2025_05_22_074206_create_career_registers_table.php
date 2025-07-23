@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('career_registers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('career_id')->constrained()->onDelete('cascade');
-            $table->string('name');
-            $table->string('email');
-            $table->string('location');
-            $table->date('birth_date');
+            $table->foreignId('career_id')->index()->constrained()->onDelete('cascade');
+            $table->string('name')->index();
+            $table->string('email')->index();
+            $table->string('location')->index();
+            $table->date('birth_date')->index();
             $table->text('description');
             $table->string('cv');
-            $table->string('phone_number');
+            $table->string('phone_number')->index();
             $table->timestamps();
         });
     }

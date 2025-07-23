@@ -192,6 +192,11 @@ new #[Title('Calendars')] class extends Component {
         $this->modalAlertWarning = false;
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return Calendar::query()

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payment_registers', function (Blueprint $table) {
             $table->id();
             $table->string('key', 20)->unique();
-            $table->foreignId('register_id')->constrained()->onDelete('cascade');
+            $table->foreignId('register_id')->index()->constrained()->onDelete('cascade');
             $table->decimal('discount_biduk', 4, 2);
             $table->decimal('discount_lscs', 4, 2);
             $table->decimal('amount', 10, 2);

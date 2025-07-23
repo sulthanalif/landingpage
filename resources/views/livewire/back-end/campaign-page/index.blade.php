@@ -55,6 +55,11 @@ new #[Title('Campaign')] class extends Component {
         $this->redirect(route('voucher-claims'), navigate: true);
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return Campaign::query()

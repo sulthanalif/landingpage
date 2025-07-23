@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::create('careers', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
-            $table->string('title');
+            $table->string('title')->index();
             $table->text('description');
             $table->text('requirement');
-            $table->enum('level', ['fresh_graduate', 'experienced']);
-            $table->enum('employment_type', ['full_time', 'part_time', 'contract', 'freelance', 'internship']);
-            $table->string('location');
-            $table->decimal('salary_min', 10, 2)->nullable();
-            $table->decimal('salary_max', 10, 2)->nullable();
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
+            $table->enum('level', ['fresh_graduate', 'experienced'])->index();
+            $table->enum('employment_type', ['full_time', 'part_time', 'contract', 'freelance', 'internship'])->index();
+            $table->string('location')->index();
+            $table->decimal('salary_min', 10, 2)->index()->nullable();
+            $table->decimal('salary_max', 10, 2)->index()->nullable();
+            $table->date('start_date')->index();
+            $table->date('end_date')->index()->nullable();
             $table->timestamps();
         });
     }

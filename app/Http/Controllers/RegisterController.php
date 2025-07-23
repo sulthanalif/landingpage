@@ -221,7 +221,8 @@ class RegisterController extends Controller
             ]);
 
             if ($request->vouchers) {
-                foreach ($request->vouchers as  $voucher) {
+                $voucher = $request->vouchers;
+                // foreach ($request->vouchers as  $voucher) {
                     // return response()->json($voucher['code']);
                     $idVoucher = Voucher::where('code', $voucher['code'])->first();
                     if (!$idVoucher) return response()->json(['message' => 'Voucher not found'], 404);
@@ -240,7 +241,7 @@ class RegisterController extends Controller
                     $register->voucherClaim()->create([
                         'voucher_id' => $idVoucher->id
                     ]);
-                }
+                // }
             }
 
             DB::commit();

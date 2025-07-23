@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
-            $table->string('level');
-            $table->string('name');
-            $table->string('gender');
-            $table->string('religion');
-            $table->string('place_of_birth');
-            $table->date('date_of_birth');
-            $table->integer('phone');
-            $table->string('email');
-            $table->string('previous_school');
-            $table->string('hobbi');
-            $table->string('achievement');
-            $table->string('father_name');
-            $table->string('place_of_birth_father');
+            $table->string('level')->index();
+            $table->string('name')->index();
+            $table->string('gender')->index();
+            $table->string('religion')->index();
+            $table->string('place_of_birth')->index();
+            $table->date('date_of_birth')->index();
+            $table->integer('phone')->index();
+            $table->string('email')->index();
+            $table->string('previous_school')->index();
+            $table->string('hobbi')->index();
+            $table->string('achievement')->index();
+            $table->string('father_name')->index();
+            $table->string('place_of_birth_father')->index();
             $table->date('date_of_birth_father');
             $table->string('mother_name');
             $table->string('place_of_birth_mother');

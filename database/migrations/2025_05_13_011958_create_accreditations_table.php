@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('accreditations', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('description');
+            $table->string('title')->index();
+            $table->string('description')->index();
             $table->string('file');
             $table->boolean('status')->default(true);
             $table->timestamps();

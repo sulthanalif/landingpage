@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('extracurriculars', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->index();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->boolean('status')->default(true);

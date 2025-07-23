@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reasons', function (Blueprint $table) {
             $table->id();
-            $table->string('reason');
+            $table->string('reason')->index();
             $table->string('css');
             $table->string('code');
             $table->timestamps();
@@ -22,16 +22,16 @@ return new class extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->string('code_id')->unique();
-            $table->string('name');
+            $table->string('name')->index();
             $table->string('email')->unique();
-            $table->string('category');
-            $table->string('position');
-            $table->integer('order')->default(0);
+            $table->string('category')->index();
+            $table->string('position')->index();
+            $table->integer('order')->index()->default(0);
             $table->string('logo')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('status')->default(true);
-            $table->foreignId('reason_id')->nullable()->constrained('reasons')->onDelete('cascade');
+            $table->foreignId('reason_id')->index()->nullable()->constrained('reasons')->onDelete('cascade');
             $table->timestamps();
         });
     }

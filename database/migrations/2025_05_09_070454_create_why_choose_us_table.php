@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('why_choose_us', function (Blueprint $table) {
             $table->id();
-            $table->string('icon');
-            $table->string('title');
+            $table->string('icon')->index();
+            $table->string('title')->index();
             $table->text('description');
             $table->boolean('status')->default(true);
             $table->timestamps();

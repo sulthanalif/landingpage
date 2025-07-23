@@ -396,7 +396,7 @@ new #[Title('Form Campaign')] class extends Component {
                     @if ($this->id)
                         <x-button label="Export Voucher" icon="o-arrow-down-tray" wire:click="exportVoucher" spinner="exportVoucher" />
                     @endif
-                    <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+                    <x-input placeholder="Search..." wire:model.live.debounce.500ms="search" clearable icon="o-magnifying-glass" />
                 </x-slot:menu>
                 <div class="h-64 overflow-y-auto ">
                     <div class="max-h-60 overflow-y-auto">

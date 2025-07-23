@@ -49,6 +49,11 @@ new class extends Component {
         $this->success('Title saved successfully', position: 'toast-bottom');
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return DynamicTable::query()
@@ -101,7 +106,7 @@ new class extends Component {
                 </div>
             </x-form>
         </div>
-        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+        <x-input placeholder="Search..." wire:model.live.debounce.500ms="search" clearable icon="o-magnifying-glass" />
     </div>
 
     <!-- TABLE  -->

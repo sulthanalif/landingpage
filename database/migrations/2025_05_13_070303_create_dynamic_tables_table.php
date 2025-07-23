@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dynamic_tables', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
-            $table->string('name');
+            $table->string('name')->index();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
@@ -22,9 +22,9 @@ return new class extends Migration
         Schema::create('dynamic_table_columns', function (Blueprint $table) {
             $table->id();
             $table->foreignId('table_id')->constrained('dynamic_tables')->onDelete('cascade');
-            $table->string('name');
-            $table->string('label');
-            $table->string('type')->default('text');
+            $table->string('name')->index();
+            $table->string('label')->index();
+            $table->string('type')->index()->default('text');
             $table->integer('order')->default(0);
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->index();
             $table->string('css')->nullable();
             $table->string('code')->nullable();
             $table->timestamps();
@@ -21,11 +21,11 @@ return new class extends Migration
 
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
-            $table->string('label');
-            $table->string('description')->nullable();
-            $table->foreignId('color_id')->constrained('colors')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->string('label')->index();
+            $table->string('description')->index()->nullable();
+            $table->foreignId('color_id')->index()->constrained('colors')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->date('start_date')->index();
+            $table->date('end_date')->index();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
@@ -36,6 +36,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('colors');
         Schema::dropIfExists('calendars');
     }
 };

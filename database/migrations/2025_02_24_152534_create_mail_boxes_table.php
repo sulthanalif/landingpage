@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('mail_boxes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('phone')->nullable();
-            $table->enum('to', ['hrd', 'marketing', 'information'])->default('information');
-            $table->string('subject');
+            $table->string('name')->index();
+            $table->string('email')->index();
+            $table->string('phone')->index()->nullable();
+            $table->enum('to', ['hrd', 'marketing', 'information'])->default('information')->index();
+            $table->string('subject')->index();
             $table->text('message');
             $table->softDeletes();
             $table->timestamps();

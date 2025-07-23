@@ -66,6 +66,11 @@ new #[Title('Career Registration')] class extends Component {
         return Response::download($file);
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         $search = is_string($this->search) ? $this->search : '';
@@ -146,7 +151,7 @@ new #[Title('Career Registration')] class extends Component {
             @endscope
             </x-choices>
         </div>
-        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+        <x-input placeholder="Search..." wire:model.live.debounce.500ms="search" clearable icon="o-magnifying-glass" />
     </div>
 
     <!-- TABLE  -->

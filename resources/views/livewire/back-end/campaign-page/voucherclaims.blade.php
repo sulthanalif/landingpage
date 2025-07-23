@@ -27,6 +27,11 @@ new class extends Component {
         $this->redirect(route('campaign'), navigate: true);
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return VoucherClaim::with('register', 'voucher')
@@ -73,7 +78,7 @@ new class extends Component {
     </x-header>
 
     <div class="flex justify-end items-center gap-5">
-        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+        <x-input placeholder="Search..." wire:model.live.debounce.500ms="search" clearable icon="o-magnifying-glass" />
     </div>
 
     <x-card class="mt-5">

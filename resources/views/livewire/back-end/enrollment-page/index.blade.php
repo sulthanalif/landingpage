@@ -30,6 +30,11 @@ new class extends Component {
         $this->redirect(route('enrollment.detail', $register), navigate: true);
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return Register::query()

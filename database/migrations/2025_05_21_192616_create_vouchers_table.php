@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('campaign_id')->constrained()->onDelete('cascade');
-            $table->decimal('percentage', 4, 2);
+            $table->foreignId('campaign_id')->index()->constrained()->onDelete('cascade');
+            $table->decimal('percentage', 4, 2)->index();
             $table->string('code', 50)->unique();
             $table->boolean('status')->default(true);
             $table->boolean('is_claimed')->default(false);

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->string('name')->index();
+            $table->date('start_date')->index();
+            $table->date('end_date')->index();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

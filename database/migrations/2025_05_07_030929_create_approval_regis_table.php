@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('approval_regis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('register_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('register_id')->index()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->index()->constrained()->onDelete('cascade');
             $table->boolean('status')->default(false);
             $table->boolean('is_reject')->default(false);
             $table->text('note')->nullable();

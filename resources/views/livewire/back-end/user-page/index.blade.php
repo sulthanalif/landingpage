@@ -328,6 +328,11 @@ new #[Title('Users')] class extends Component {
         return [['key' => 'id', 'label' => '', 'class' => 'w-1'], ['key' => 'name', 'label' => 'Nama', 'class' => 'w-64'], ['key' => 'roles.0.name', 'label' => 'Role', 'class' => 'w-40', 'sortable' => false], ['key' => 'email', 'label' => 'E-mail'], ['key' => 'created_at', 'label' => 'Dibuat pada']];
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return User::query()
@@ -365,7 +370,7 @@ new #[Title('Users')] class extends Component {
     <!-- HEADER -->
     <x-header title="Data User" separator>
         <x-slot:middle class="!justify-end">
-            <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+            <x-input placeholder="Search..." wire:model.live.debounce.500ms="search" clearable icon="o-magnifying-glass" />
         </x-slot:middle>
         <x-slot:actions>
             @can('user-create')

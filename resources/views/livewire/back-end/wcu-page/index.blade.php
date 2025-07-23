@@ -68,6 +68,11 @@ new #[Title('Why Choose Us')] class extends Component {
         $this->drawer = false;
     }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
     public function datas(): LengthAwarePaginator
     {
         return WhyChooseUs::query()
@@ -154,7 +159,7 @@ new #[Title('Why Choose Us')] class extends Component {
     </x-header>
 
     <div class="flex justify-end items-center gap-5">
-        <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+        <x-input placeholder="Search..." wire:model.live.debounce.500ms="search" clearable icon="o-magnifying-glass" />
     </div>
 
     <!-- TABLE  -->
