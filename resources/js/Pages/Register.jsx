@@ -50,6 +50,7 @@ const Register = () => {
             gender: "",
             religion: "",
             is_biduk: false,
+            feeder: false,
             place_of_birth: "",
             date_of_birth: "",
             phone: "",
@@ -214,27 +215,46 @@ const Register = () => {
             }
 
             // 2. Hitung biaya terlebih dahulu
-            const feeResponse = await getFeeCalculation({
-                level: data.level,
-                table_id: data.table_id,
-                is_biduk: data.is_biduk ? 1 : 0,
-                cildren: childrenDiscount,
-                voucher_code: data.voucher_code,
-            });
+            let feeData;
+            try {
+                const feeResponse = await getFeeCalculation({
+                    level: data.level,
+                    table_id: data.table_id,
+                    is_biduk: data.is_biduk ? 1 : 0,
+                    cildren: childrenDiscount,
+                    voucher_code: data.voucher_code,
+                });
 
-            if (feeResponse.error) {
-                setModalTitle("Fee Calculation Failed");
-                setModalMessage(
-                    feeResponse.error.response?.data?.message ||
-                        feeResponse.error.message ||
-                        "Failed to calculate payment amount. Please try again."
-                );
+                feeData = feeResponse;
+
+                if (!feeData || feeData.amount == null || feeData.total == null) {
+                    throw new Error("Fee calculation result is invalid");
+                }
+
+            } catch (error) {
+                const status = error.response?.status;
+                const message = error.response?.data?.message || error.message;
+
+                setModalTitle("Registration Failed");
+
+                if (status === 404 && message) {
+                    setModalMessage(message || "Failed to calculate payment amount. Please try again.");
+                } else {
+                    setModalMessage("Voucher code is invalid or not applicable. Please check the voucher code and try again.");
+                }
+
                 setIsSuccess(false);
                 setShowModal(true);
-                return;
-            }
 
-            const feeData = feeResponse;
+                // Scroll ke voucher field kalau error tentang voucher
+                if (message?.toLowerCase().includes("voucher")) {
+                    document.getElementById('voucher_code')?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                    });
+                }
+                return; // stop proses karena fee gagal
+            }
 
             if (!feeData || feeData.amount == null || feeData.total == null) {
                 throw new Error("Fee calculation result is invalid");
@@ -254,13 +274,13 @@ const Register = () => {
                     : "",
                 father_date_of_birth: data.father_date_of_birth
                     ? new Date(data.father_date_of_birth)
-                          .toISOString()
-                          .split("T")[0]
+                        .toISOString()
+                        .split("T")[0]
                     : "",
                 mother_date_of_birth: data.mother_date_of_birth
                     ? new Date(data.mother_date_of_birth)
-                          .toISOString()
-                          .split("T")[0]
+                        .toISOString()
+                        .split("T")[0]
                     : "",
             };
 
@@ -270,48 +290,7 @@ const Register = () => {
 
                 setModalTitle("Registration Successful");
                 setModalMessage(`
-                    <p>Your registration has been submitted successfully. This is a summary of the registration:</p>
-                    <ul>
-                        <li><strong>Name:</strong> ${data.name || "-"}</li>
-                        <li><strong>Email:</strong> ${data.email || "-"}</li>
-                        <li><strong>Phone:</strong> ${data.phone || "-"}</li>
-                        <li><strong>Amount:</strong> Rp ${
-                            feeData?.amount != null
-                                ? feeData.amount.toLocaleString("id-ID")
-                                : "0"
-                        }</li>
-                        <li><strong>Discounts:</strong>
-                            <ul>
-                                <li>Biduk: ${
-                                    feeData?.discount?.biduk != null
-                                        ? `${parseFloat(
-                                              feeData.discount.biduk
-                                          ).toFixed(2)}%`
-                                        : "0%"
-                                }</li>
-                                <li>LSCS: ${
-                                    feeData?.discount?.lscs != null
-                                        ? `${parseFloat(
-                                              feeData.discount.lscs
-                                          ).toFixed(2)}%`
-                                        : "0%"
-                                }</li>
-                                <li>Voucher: ${
-                                    feeData?.discount?.voucher != null
-                                        ? `${parseFloat(
-                                              feeData.discount.voucher
-                                          ).toFixed(2)}%`
-                                        : "0%"
-                                }</li>
-                            </ul>
-                        </li>
-                        <li><strong>Total Payment:</strong> Rp ${
-                            feeData?.total != null
-                                ? feeData.total.toLocaleString("id-ID")
-                                : "0"
-                        }</li>
-                    </ul>
-                    <p>We will contact you soon.</p>
+                    <p>Your registration has been submitted successfully. Please contact admin for simulation.</p>
                     `);
                 setIsSuccess(true);
                 setShowModal(true);
@@ -320,8 +299,8 @@ const Register = () => {
                 setModalTitle("Registration Failed");
                 setModalMessage(
                     error.response?.data?.message ||
-                        error.message ||
-                        "Failed to submit registration. Please try again."
+                    error.message ||
+                    "Failed to submit registration. Please try again."
                 );
                 setIsSuccess(false);
                 setShowModal(true);
@@ -347,8 +326,8 @@ const Register = () => {
             } else {
                 setModalMessage(
                     error.response?.data?.message ||
-                        error.message ||
-                        "Something went wrong."
+                    error.message ||
+                    "Something went wrong."
                 );
                 setIsSuccess(false);
                 setShowModal(true);
@@ -416,11 +395,10 @@ const Register = () => {
                                 {tabs.map((tab, index) => (
                                     <li key={index} className="nav-item">
                                         <span
-                                            className={`nav-link ${
-                                                activeTab === index
-                                                    ? "active"
-                                                    : "disabled"
-                                            }`}
+                                            className={`nav-link ${activeTab === index
+                                                ? "active"
+                                                : "disabled"
+                                                }`}
                                             style={{ cursor: "not-allowed" }}
                                         >
                                             {tab}
@@ -447,11 +425,10 @@ const Register = () => {
                                                                 </span>
                                                             </label>
                                                             <select
-                                                                className={`form-control ${
-                                                                    errors.table_id
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.table_id
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="table_id"
                                                                 value={
                                                                     data.table_id
@@ -517,11 +494,10 @@ const Register = () => {
                                                                 </span>
                                                             </label>
                                                             <select
-                                                                className={`form-control ${
-                                                                    errors.level
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.level
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="level"
                                                                 value={
                                                                     data.level
@@ -540,11 +516,11 @@ const Register = () => {
                                                                     disabled
                                                                 >
                                                                     {levels.length >
-                                                                    0
+                                                                        0
                                                                         ? "---Select Registered Level---"
                                                                         : data.table_id
-                                                                        ? "No levels available"
-                                                                        : "---Select Program First---"}
+                                                                            ? "No levels available"
+                                                                            : "---Select Program First---"}
                                                                 </option>
                                                                 {levels.map(
                                                                     (
@@ -584,11 +560,10 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className={`form-control ${
-                                                            errors.name
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
+                                                        className={`form-control ${errors.name
+                                                            ? "is-invalid"
+                                                            : "text-secondary"
+                                                            }`}
                                                         id="name"
                                                         value={data.name}
                                                         onChange={(e) =>
@@ -616,11 +591,10 @@ const Register = () => {
                                                                 </span>
                                                             </label>
                                                             <select
-                                                                className={`form-control ${
-                                                                    errors.gender
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.gender
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="gender"
                                                                 value={
                                                                     data.gender
@@ -666,11 +640,10 @@ const Register = () => {
                                                                 </span>
                                                             </label>
                                                             <select
-                                                                className={`form-control ${
-                                                                    errors.religion
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.religion
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="religion"
                                                                 value={
                                                                     data.religion
@@ -718,32 +691,61 @@ const Register = () => {
                                                     </div>
                                                 </div>
 
-                                                {data.religion ===
-                                                    "Catholic" && (
-                                                    <div className="form-check ml-4">
-                                                        <input
-                                                            className="form-check-input"
-                                                            type="checkbox"
-                                                            id="is_biduk"
-                                                            checked={
-                                                                data.is_biduk
-                                                            }
-                                                            onChange={(e) =>
-                                                                setData(
-                                                                    "is_biduk",
-                                                                    e.target
-                                                                        .checked
-                                                                )
-                                                            }
-                                                        />
-                                                        <label
-                                                            className="form-check-label"
-                                                            htmlFor="is_biduk"
-                                                        >
-                                                            Is a Biduk
-                                                        </label>
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <div className="form-check ml-4">
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="checkbox"
+                                                                id="feeder"
+                                                                checked={
+                                                                    data.feeder
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "feeder",
+                                                                        e.target
+                                                                            .checked
+                                                                    )
+                                                                }
+                                                            />
+                                                            <label
+                                                                className="form-check-label"
+                                                                htmlFor="feeder"
+                                                            >
+                                                                Previous School at Lia Stephanie
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                )}
+                                                    {data.religion ===
+                                                        "Catholic" && (
+                                                            <div className="col-lg-6">
+                                                                <div className="form-check ml-4">
+                                                                    <input
+                                                                        className="form-check-input"
+                                                                        type="checkbox"
+                                                                        id="is_biduk"
+                                                                        checked={
+                                                                            data.is_biduk
+                                                                        }
+                                                                        onChange={(e) =>
+                                                                            setData(
+                                                                                "is_biduk",
+                                                                                e.target
+                                                                                    .checked
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    <label
+                                                                        className="form-check-label"
+                                                                        htmlFor="is_biduk"
+                                                                    >
+                                                                        Is a Biduk
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                </div>
 
                                                 <div className="row">
                                                     <div className="col-lg-6">
@@ -756,11 +758,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className={`form-control ${
-                                                                    errors.place_of_birth
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.place_of_birth
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="place_of_birth"
                                                                 value={
                                                                     data.place_of_birth
@@ -793,11 +794,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="date"
-                                                                className={`form-control ${
-                                                                    errors.date_of_birth
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.date_of_birth
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="date_of_birth"
                                                                 value={
                                                                     data.date_of_birth
@@ -834,11 +834,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="number"
-                                                                className={`form-control ${
-                                                                    errors.phone
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.phone
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="phone"
                                                                 value={
                                                                     data.phone
@@ -871,11 +870,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="email"
-                                                                className={`form-control ${
-                                                                    errors.email
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.email
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="email"
                                                                 value={
                                                                     data.email
@@ -909,11 +907,10 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className={`form-control ${
-                                                            errors.previous_school
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
+                                                        className={`form-control ${errors.previous_school
+                                                            ? "is-invalid"
+                                                            : "text-secondary"
+                                                            }`}
                                                         id="previous_school"
                                                         value={
                                                             data.previous_school
@@ -995,11 +992,10 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className={`form-control ${
-                                                            errors.father_name
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
+                                                        className={`form-control ${errors.father_name
+                                                            ? "is-invalid"
+                                                            : "text-secondary"
+                                                            }`}
                                                         id="father_name"
                                                         value={data.father_name}
                                                         onChange={(e) =>
@@ -1028,11 +1024,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className={`form-control ${
-                                                                    errors.place_of_birth_father
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.place_of_birth_father
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="place_of_birth_father"
                                                                 value={
                                                                     data.place_of_birth_father
@@ -1065,11 +1060,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="date"
-                                                                className={`form-control ${
-                                                                    errors.date_of_birth_father
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.date_of_birth_father
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="date_of_birth_father"
                                                                 value={
                                                                     data.date_of_birth_father
@@ -1103,11 +1097,10 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className={`form-control ${
-                                                            errors.mother_name
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
+                                                        className={`form-control ${errors.mother_name
+                                                            ? "is-invalid"
+                                                            : "text-secondary"
+                                                            }`}
                                                         id="mother_name"
                                                         value={data.mother_name}
                                                         onChange={(e) =>
@@ -1136,11 +1129,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className={`form-control ${
-                                                                    errors.place_of_birth_mother
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.place_of_birth_mother
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="place_of_birth_mother"
                                                                 value={
                                                                     data.place_of_birth_mother
@@ -1173,11 +1165,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="date"
-                                                                className={`form-control ${
-                                                                    errors.date_of_birth_mother
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.date_of_birth_mother
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="date_of_birth_mother"
                                                                 value={
                                                                     data.date_of_birth_mother
@@ -1211,11 +1202,10 @@ const Register = () => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className={`form-control ${
-                                                            errors.number_of_siblings
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
+                                                        className={`form-control ${errors.number_of_siblings
+                                                            ? "is-invalid"
+                                                            : "text-secondary"
+                                                            }`}
                                                         id="number_of_siblings"
                                                         value={
                                                             data.number_of_siblings
@@ -1249,11 +1239,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className={`form-control ${
-                                                                    errors.phone_parent
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.phone_parent
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="phone_parent"
                                                                 value={
                                                                     data.phone_parent
@@ -1283,11 +1272,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className={`form-control ${
-                                                                    errors.email_parent
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.email_parent
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="email_parent"
                                                                 value={
                                                                     data.email_parent
@@ -1326,11 +1314,10 @@ const Register = () => {
                                                         </span>
                                                     </label>
                                                     <textarea
-                                                        className={`form-control ${
-                                                            errors.father_address
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
+                                                        className={`form-control ${errors.father_address
+                                                            ? "is-invalid"
+                                                            : "text-secondary"
+                                                            }`}
                                                         id="father_address"
                                                         rows={2}
                                                         value={
@@ -1395,11 +1382,10 @@ const Register = () => {
                                                             </span>
                                                         </label>
                                                         <textarea
-                                                            className={`form-control ${
-                                                                errors.mother_address
-                                                                    ? "is-invalid"
-                                                                    : "text-secondary"
-                                                            }`}
+                                                            className={`form-control ${errors.mother_address
+                                                                ? "is-invalid"
+                                                                : "text-secondary"
+                                                                }`}
                                                             id="mother_address"
                                                             rows={2}
                                                             value={
@@ -1437,11 +1423,10 @@ const Register = () => {
                                                         </span>
                                                     </label>
                                                     <select
-                                                        className={`form-control ${
-                                                            errors.student_residence_status
-                                                                ? "is-invalid"
-                                                                : "text-secondary"
-                                                        }`}
+                                                        className={`form-control ${errors.student_residence_status
+                                                            ? "is-invalid"
+                                                            : "text-secondary"
+                                                            }`}
                                                         id="student_residence_status"
                                                         value={
                                                             data.student_residence_status
@@ -1499,45 +1484,44 @@ const Register = () => {
 
                                                 {data.student_residence_status ===
                                                     "Other" && (
-                                                    <div className="form-group">
-                                                        <label htmlFor="student_address">
-                                                            Student Address{" "}
-                                                            <span className="text-danger">
-                                                                *
-                                                            </span>
-                                                        </label>
-                                                        <textarea
-                                                            className={`form-control ${
-                                                                errors.student_address
+                                                        <div className="form-group">
+                                                            <label htmlFor="student_address">
+                                                                Student Address{" "}
+                                                                <span className="text-danger">
+                                                                    *
+                                                                </span>
+                                                            </label>
+                                                            <textarea
+                                                                className={`form-control ${errors.student_address
                                                                     ? "is-invalid"
                                                                     : "text-secondary"
-                                                            }`}
-                                                            id="student_address"
-                                                            rows={2}
-                                                            value={
-                                                                data.student_address
-                                                            }
-                                                            onChange={(e) =>
-                                                                setData(
-                                                                    "student_address",
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            required={
-                                                                data.student_residence_status ===
-                                                                "Other"
-                                                            }
-                                                        />
-                                                        {errors.student_address && (
-                                                            <div className="invalid-feedback">
-                                                                {
-                                                                    errors.student_address
+                                                                    }`}
+                                                                id="student_address"
+                                                                rows={2}
+                                                                value={
+                                                                    data.student_address
                                                                 }
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "student_address",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                required={
+                                                                    data.student_residence_status ===
+                                                                    "Other"
+                                                                }
+                                                            />
+                                                            {errors.student_address && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.student_address
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
 
                                                 <div className="row">
                                                     <div className="col-lg-6">
@@ -1548,11 +1532,10 @@ const Register = () => {
                                                             </label>
                                                             <input
                                                                 type="voucher_code"
-                                                                className={`form-control ${
-                                                                    errors.voucher_code
-                                                                        ? "is-invalid"
-                                                                        : "text-secondary"
-                                                                }`}
+                                                                className={`form-control ${errors.voucher_code
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
                                                                 id="voucher_code"
                                                                 value={
                                                                     data.voucher_code
@@ -1619,11 +1602,10 @@ const Register = () => {
                                                                     <div className="col-md-5">
                                                                         <input
                                                                             type="text"
-                                                                            className={`form-control ${
-                                                                                errors.children
-                                                                                    ? "is-invalid"
-                                                                                    : "text-secondary"
-                                                                            }`}
+                                                                            className={`form-control ${errors.children
+                                                                                ? "is-invalid"
+                                                                                : "text-secondary"
+                                                                                }`}
                                                                             placeholder="Child's Name"
                                                                             value={
                                                                                 child.name
@@ -1644,11 +1626,10 @@ const Register = () => {
                                                                     <div className="col-md-5">
                                                                         <input
                                                                             type="text"
-                                                                            className={`form-control ${
-                                                                                errors.children
-                                                                                    ? "is-invalid"
-                                                                                    : "text-secondary"
-                                                                            }`}
+                                                                            className={`form-control ${errors.children
+                                                                                ? "is-invalid"
+                                                                                : "text-secondary"
+                                                                                }`}
                                                                             placeholder="Class/Level"
                                                                             value={
                                                                                 child.class_level
@@ -1671,18 +1652,18 @@ const Register = () => {
                                                                             .children
                                                                             .length >
                                                                             1 && (
-                                                                            <button
-                                                                                type="button"
-                                                                                className="btn btn-danger"
-                                                                                onClick={() =>
-                                                                                    removeChild(
-                                                                                        index
-                                                                                    )
-                                                                                }
-                                                                            >
-                                                                                Remove
-                                                                            </button>
-                                                                        )}
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className="btn btn-danger"
+                                                                                    onClick={() =>
+                                                                                        removeChild(
+                                                                                            index
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    Remove
+                                                                                </button>
+                                                                            )}
                                                                     </div>
                                                                 </div>
                                                             )
@@ -1785,9 +1766,8 @@ const Register = () => {
                             <div className="modal-footer">
                                 <button
                                     type="button"
-                                    className={`btn ${
-                                        isSuccess ? "btn-success" : "btn-danger"
-                                    }`}
+                                    className={`btn ${isSuccess ? "btn-success" : "btn-danger"
+                                        }`}
                                     onClick={handleCloseModal}
                                 >
                                     OK

@@ -136,7 +136,7 @@ const Story = () => {
                                         <li>
                                             <Link href="/">Home</Link>
                                         </li>
-                                        <li>Story</li>
+                                        <li>Activity</li>
                                     </ul>
                                 </div>
                             </div>
