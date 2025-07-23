@@ -174,7 +174,7 @@ const Header = () => {
                                                         }
                                                         href="/story"
                                                     >
-                                                        Our Stories
+                                                        Our Activities
                                                     </Link>
                                                     <Link
                                                         className={

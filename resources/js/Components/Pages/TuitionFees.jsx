@@ -47,13 +47,13 @@ const TuitionFees = () => {
                                     .replace(/\s+/g, "_");
                                 transformedRow[key] =
                                     row[
-                                        Object.keys(row).find(
-                                            (k) =>
-                                                k
-                                                    .toLowerCase()
-                                                    .replace(/\s+/g, "_") ===
-                                                key
-                                        )
+                                    Object.keys(row).find(
+                                        (k) =>
+                                            k
+                                                .toLowerCase()
+                                                .replace(/\s+/g, "_") ===
+                                            key
+                                    )
                                     ];
                             });
                             return transformedRow;
@@ -104,11 +104,14 @@ const TuitionFees = () => {
                             fosters the academic, emotional, and character
                             development of students.
                         </p>
-                        <h3 className="text-center py-4">
+                        <h3 className="text-center pt-4 pb-2">
                             <strong>
                                 {tuitionFees.title}
                             </strong>
                         </h3>
+                        <p className="text-center">
+                            Notes : Not Included  Event, Early bird, Catholic Church member, Sibling and Feeder discount. Please contact admin for simulation.
+                        </p>
                     </div>
                 </div>
             </div>

@@ -35,7 +35,7 @@ const Navbar = ({ isActive, closeMenu }) => {
                                     About Us
                                 </Link>
                                 <Link className="dropdown-item" href="/story">
-                                    Our Stories
+                                    Our Activities
                                 </Link>
                                 <Link className="dropdown-item" href="/teacher">
                                     Teacher

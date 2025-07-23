@@ -100,7 +100,7 @@ const News = () => {
                                                 src={
                                                     posts.data[0]?.image
                                                         ? "/storage/" +
-                                                          posts.data[0].image
+                                                        posts.data[0].image
                                                         : "/img/logo.png"
                                                 }
                                                 alt={posts.data[0]?.title}
@@ -214,13 +214,16 @@ const News = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-lg-12 text-center">
-                                <div className="courses_button trans_200">
-                                    <Link href="/news">view all news</Link>
+
+                        {posts.data.length > 4 && (
+                            <div className="row">
+                                <div className="col-lg-12 text-center">
+                                    <div className="courses_button trans_200">
+                                        <Link href="/news">view all news</Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </>
                 ) : (
                     <div className="row news_row">

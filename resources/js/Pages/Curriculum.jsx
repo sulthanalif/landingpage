@@ -57,8 +57,6 @@ const Curriculum = () => {
                 <SchoolProgram />
 
                 <OurGoal />
-
-                <AdvantageSection />
             </Layout>
         </>
     );
@@ -385,98 +383,5 @@ const OurGoal = () => {
         </>
     );
 };
-
-const AdvantageSection = () => {
-    const { data: facilities, get: getFacilities } = useApi("facilities");
-
-    useEffect(() => {
-        getFacilities();
-    }, []);
-
-    return (
-        <div className="feature">
-            <div
-                className="feature_background"
-                style={{
-                    backgroundImage:
-                        "url(/landing/images/courses_background.jpg)",
-                }}
-            />
-            <div className="container">
-                <div className="row">
-                    <div className="col">
-                        <div className="section_title_container text-center">
-                            <h2 className="section_title">
-                                School Facilities
-                            </h2>
-                            <div className="section_subtitle">
-                                <p>
-                                    To support optimal teaching and learning processes, Lia Stephanie School provides various adequate facilities, including
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="row mt-5">
-                    {facilities?.facilities.map((facility) => (
-                        <div className="col-lg-4 pb-3" key={facility.id}>
-                            <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                                <div className="card-body text-center p-4">
-                                    <div className="feature-image mb-4">
-                                        <img
-                                            src={facility.image ? `storage/${facility.image}` : "/landing/images/facilities/icon_classroom.png"}
-                                            alt={facility.title}
-                                            loading="lazy"
-                                            className="img-fluid"
-                                            style={{ height: "200px" }}
-                                        />
-                                    </div>
-                                    <h3 className="feature-title h5 mb-3">
-                                        {facility.title}
-                                    </h3>
-                                    <p className="feature-text mb-0">
-                                        {facility.description}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="row features_row my-5">
-                    <div className="col-lg-6 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
-                            <div className="card-body text-center p-4">
-                                <h3 className="feature-title h5 mb-3">
-                                    Flagship Programs
-                                </h3>
-                                <ul className="feature-text mb-0 text-justify feature_list_circle">
-                                    <li>Comprehensive and competency-based curriculum.</li>
-                                    <li>Diverse extracurricular programs, such as sports, arts, and science clubs.</li>
-                                    <li>Character and leadership development activities.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-6 pb-3">
-                        <div className="card feature-card h-100 border-0 shadow-sm mx-2 py-3">
-                            <div className="card-body text-center p-4">
-                                <h3 className="feature-title h5 mb-3">
-                                    Advantages
-                                </h3>
-                                <ul className="feature-text mb-0 text-justify feature_list_circle">
-                                    <li>Conducive and supportive learning environment.</li>
-                                    <li>Qualified and experienced teachers.</li>
-                                    <li>Focus on student character and skill development.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
 
 export default Curriculum;

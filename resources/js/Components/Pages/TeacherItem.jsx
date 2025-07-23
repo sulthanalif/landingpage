@@ -39,7 +39,7 @@ const TeacherItem = ({ teacher }) => {
                         />
                     </div>
                     <div className="teacher-info">
-                        <h3 className="teacher-name text-capitalize">
+                        <h3 className="teacher-name">
                             {teacher.name}
                         </h3>
                         <p
