@@ -43,7 +43,8 @@ new class extends Component {
     {
         $options = collect([
             ['id' => 'Biduk', 'name' => 'Biduk'],
-            ['id' => 'Cildren', 'name' => 'Cildren'],
+            ['id' => 'Sibling', 'name' => 'Sibling'],
+            ['id' => 'Feeder', 'name' => 'Feeder'],
         ]);
 
         $selectedOption = $options->firstWhere('id', $this->name);

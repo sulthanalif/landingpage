@@ -19,7 +19,7 @@
                 ['id' => 'Management', 'name' => 'Management'],
                 ['id' => 'Educational personel', 'name' => 'Educational personel'],
                 ['id' => 'Staff', 'name' => 'Staff'],
-                // ['id' => 'Non-staff', 'name' => 'Non-staff'],
+                ['id' => 'Expatriate for IB Curricula', 'name' => 'Expatriate for IB Curricula'],
             ]" wire:model="category" />
         </div>
 

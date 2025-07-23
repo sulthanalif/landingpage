@@ -54,6 +54,7 @@ class RegisterController extends Controller
             $is_biduk = $request->input('is_biduk');
             $voucher_code = $request->input('voucher_code');
             $cildren = $request->input('cildren');
+            $feeder = $request->input('feeder');
 
             $table = TuitionFee::getAllTable()
                 ->firstWhere('table.id', (int) $table_id);
@@ -96,6 +97,7 @@ class RegisterController extends Controller
 
             $discount_biduk = 0;
             $discount_cildren = 0;
+            $discount_feeder = 0;
             $discount_voucher = null;
             if ($is_biduk) {
                 $discount_biduk = Discount::where('name', 'Biduk')->where('status', true)->first()->percentage;
@@ -104,9 +106,14 @@ class RegisterController extends Controller
             }
 
             if ($cildren > 0) {
-                $discount_cildren = Discount::where('name', 'Cildren')->where('status', true)->first()->percentage;
+                $discount_cildren = Discount::where('name', 'Sibling')->where('status', true)->first()->percentage;
 
                 if (!$discount_cildren) return response()->json(['message' => 'Discount LSCS not found'], 404);
+            }
+            if ($feeder > 0) {
+                $discount_feeder = Discount::where('name', 'Feeder')->where('status', true)->first()->percentage;
+
+                if (!$discount_feeder) return response()->json(['message' => 'Discount Feeder not found'], 404);
             }
 
 
@@ -125,10 +132,11 @@ class RegisterController extends Controller
             }
 
             $a = ($total * ($discount_biduk / 100));
-            $b = ($total * (($discount_cildren / 100)  * $cildren));
+            $b = ($total * ($discount_cildren / 100));
             $c = $voucher_code ? ($total * ($discount_voucher->percentage / 100)) : 0;
+            $d = ($total * ($discount_feeder / 100));
 
-            $total_discount = $total - $a - $b - $c;
+            $total_discount = $total - $a - $b - $c - $d;
 
             return $this->successResponse(data: [
                 'program' => $table['table']['name'],
@@ -137,6 +145,7 @@ class RegisterController extends Controller
                 'discount' => [
                     'biduk' => $discount_biduk ?? 0,
                     'lscs' => $discount_cildren ?? 0,
+                    'feeder' => $discount_feeder ?? 0,
                     'voucher' => $voucher_code ? [
                         'code' => $discount_voucher?->code,
                         'campaign_name' => $discount_voucher?->campaign->name,
