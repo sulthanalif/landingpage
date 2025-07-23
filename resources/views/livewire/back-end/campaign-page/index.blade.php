@@ -55,7 +55,11 @@ new #[Title('Campaign')] class extends Component {
         $this->redirect(route('voucher-claims'), navigate: true);
     }
 
-    public function updatedSearch(): void
+      public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }  
+   public function updatedSearch(): void
     {
         $this->resetPage();
     }

@@ -98,7 +98,11 @@ new #[Title('Sub Activities')] class extends Component {
     }
 
 
-    public function updatedSearch(): void
+      public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }  
+   public function updatedSearch(): void
     {
         $this->resetPage();
     }

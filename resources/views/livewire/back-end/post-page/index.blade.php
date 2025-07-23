@@ -33,7 +33,11 @@ new #[Title('Posts')] class extends Component {
         $this->redirect(route('post.form', ['url_slug' => $slug]), navigate: true);
     }
 
-    public function updatedSearch(): void
+      public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }  
+   public function updatedSearch(): void
     {
         $this->resetPage();
     }

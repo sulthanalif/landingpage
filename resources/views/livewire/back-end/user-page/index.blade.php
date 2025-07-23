@@ -328,7 +328,11 @@ new #[Title('Users')] class extends Component {
         return [['key' => 'id', 'label' => '', 'class' => 'w-1'], ['key' => 'name', 'label' => 'Nama', 'class' => 'w-64'], ['key' => 'roles.0.name', 'label' => 'Role', 'class' => 'w-40', 'sortable' => false], ['key' => 'email', 'label' => 'E-mail'], ['key' => 'created_at', 'label' => 'Dibuat pada']];
     }
 
-    public function updatedSearch(): void
+      public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }  
+   public function updatedSearch(): void
     {
         $this->resetPage();
     }

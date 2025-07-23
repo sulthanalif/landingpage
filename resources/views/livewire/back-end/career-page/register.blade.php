@@ -66,7 +66,11 @@ new #[Title('Career Registration')] class extends Component {
         return Response::download($file);
     }
 
-    public function updatedSearch(): void
+      public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }  
+   public function updatedSearch(): void
     {
         $this->resetPage();
     }

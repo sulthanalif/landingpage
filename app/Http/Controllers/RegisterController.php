@@ -210,6 +210,7 @@ class RegisterController extends Controller
             'total' => 'required|numeric',
             'discount_biduk' => 'nullable|numeric',
             'discount_lscs' => 'nullable|numeric',
+            'discount_feeder' => 'nullable|numeric',
             'vouchers' => 'nullable|array'
         ]);
 
@@ -226,6 +227,7 @@ class RegisterController extends Controller
                 'amount' => $request->amount,
                 'discount_biduk' => $request->discount_biduk,
                 'discount_lscs' => $request->discount_lscs,
+                'discount_feeder' => $request->discount_feeder,
                 'total' => $request->total
             ]);
 

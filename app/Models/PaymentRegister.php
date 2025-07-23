@@ -15,6 +15,7 @@ class PaymentRegister extends Model
         'register_id',
         'discount_biduk',
         'discount_lscs',
+        'discount_feeder',
         'amount',
         'total',
         'status',

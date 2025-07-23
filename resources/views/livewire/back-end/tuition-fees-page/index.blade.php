@@ -49,7 +49,11 @@ new class extends Component {
         $this->success('Title saved successfully', position: 'toast-bottom');
     }
 
-    public function updatedSearch(): void
+      public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }  
+   public function updatedSearch(): void
     {
         $this->resetPage();
     }
