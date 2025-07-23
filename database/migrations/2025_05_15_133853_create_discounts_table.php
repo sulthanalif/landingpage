@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->index();
             $table->decimal('percentage', 4, 2)->index();
-            $table->date('start_date')->index();
-            $table->date('end_date')->index();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

@@ -61,26 +61,12 @@ new class extends Component {
         $this->setModel(new Discount());
 
 
-        $exists = Discount::query()
-            ->when($this->recordId, fn ($q) => $q->where('id', '!=', $this->recordId))
-            ->where('name', $this->name)
-            ->where(function ($q) {
-                $q->where('start_date', '<=', $this->end_date)
-                ->where('end_date', '>=', $this->start_date);
-            })
-            ->exists();
-
-        if ($exists) {
-            return $this->error('Periode discount dengan nama yang sama sudah ada.', position: 'toast-bottom');
-
-        }
-
         $this->saveOrUpdate(
             validationRules: [
                 'name' => 'required|string|max:255',
                 'percentage' => 'required|numeric',
-                'start_date' => 'required|date|before_or_equal:end_date',
-                'end_date' => 'required|date|after_or_equal:start_date',
+                // 'start_date' => 'required|date|before_or_equal:end_date',
+                // 'end_date' => 'required|date|after_or_equal:start_date',
                 'status' => 'required|boolean',
             ],
         );
@@ -124,10 +110,10 @@ new class extends Component {
     public function headers(): array
     {
         return [
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'percentage', 'label' => 'Percentage'],
-            ['key' => 'start_date', 'label' => 'Start Date'],
-            ['key' => 'end_date', 'label' => 'End Date'],
+            ['key' => 'name', 'label' => 'Name', 'class' => 'w-64'],
+            ['key' => 'percentage', 'label' => 'Percentage', 'class' => 'w-64'],
+            // ['key' => 'start_date', 'label' => 'Start Date'],
+            // ['key' => 'end_date', 'label' => 'End Date'],
             ['key' => 'status', 'label' => 'Status'],
             ['key' => 'created_at', 'label' => 'Created At'],
         ];
@@ -156,24 +142,24 @@ new class extends Component {
 
 @script
     <script>
-        $js('create', () => {
-            $wire.recordId = null;
-            $wire.name = '';
-            $wire.percentage = '';
-            $wire.start_date = '';
-            $wire.end_date = '';
-            $wire.status = true;
-            $wire.drawer = true;
-            $wire.$refresh();
-        })
+        // $js('create', () => {
+        //     $wire.recordId = null;
+        //     $wire.name = '';
+        //     $wire.percentage = '';
+        //     $wire.start_date = '';
+        //     $wire.end_date = '';
+        //     $wire.status = true;
+        //     $wire.drawer = true;
+        //     $wire.$refresh();
+        // })
 
         $js('detail', (discount) => {
             $wire.recordId = discount.id;
             $wire.name = discount.name;
             $wire.percentage = window.formatDiscount(discount.percentage);
-            $wire.start_date = discount.start_date;
-            $wire.end_date = discount.end_date;
-            $wire.status = discount.status;
+            // $wire.start_date = discount.start_date;
+            // $wire.end_date = discount.end_date;
+            $wire.status = discount.status == 1;
             $wire.drawer = true;
             $wire.$refresh();
         })
@@ -185,7 +171,7 @@ new class extends Component {
     <x-header title="Discounts" separator>
         <x-slot:actions>
             @can('discount-create')
-                <x-button label="Create" @click="$js.create" responsive icon="o-plus" />
+                {{-- <x-button label="Create" @click="$js.create" responsive icon="o-plus" /> --}}
             @endcan
         </x-slot:actions>
     </x-header>

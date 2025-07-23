@@ -10,6 +10,7 @@ use App\Models\TuitionFee;
 use Illuminate\Support\Str;
 use App\Models\VoucherClaim;
 use Illuminate\Http\Request;
+use App\Models\ApprovalRegis;
 use App\Models\PaymentRegister;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -182,6 +183,7 @@ class RegisterController extends Controller
         // return response()->json($request->vouchers);
 
         $validate = $request->validate([
+            'table_id' => 'required',
             'level' => 'required',
             'name' => 'required|string|max:50',
             'gender' => 'required|in:Male,Female',
@@ -229,6 +231,14 @@ class RegisterController extends Controller
                 'discount_lscs' => $request->discount_lscs,
                 'discount_feeder' => $request->discount_feeder,
                 'total' => $request->total
+            ]);
+
+            ApprovalRegis::create([
+                'user_id' => 1,
+                'register_id' => $register->id,
+                'status' => true,
+                'is_reject' => false,
+                'note' => '$this->note',
             ]);
 
             if ($request->vouchers) {

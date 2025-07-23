@@ -18,4 +18,9 @@ class PaymentRegisterVoucher extends Model
     {
         return $this->belongsTo(PaymentRegister::class);
     }
+
+    public function voucher(): BelongsTo
+    {
+        return $this->belongsTo(Voucher::class);
+    }
 }

@@ -103,39 +103,21 @@ new class extends Component {
     <!-- HEADER -->
     <x-header title="Detail Student" separator>
         <x-slot:actions>
-                <x-button label="Action" class="btn-primary" responsive  @click="$js.action" />
+                {{-- <x-button label="Action" class="btn-primary" responsive  @click="$js.action" /> --}}
                 <x-button label="Back" responsive icon="o-arrow-left" link="{{ route('enrollment') }}" />
         </x-slot:actions>
     </x-header>
 
     <x-card>
-        <div class="mb-4">
-            <table class="table-auto w-full [&>tbody>tr>td]:py-2">
-                <tbody>
-                    <tr class="border-b">
-                        <td class="font-bold">Status</td>
-                        <td>{{ match (true) {
-                            $register->approvalRegis?->status == 1 && $register->approvalRegis?->is_reject == 0 => 'Approved',
-                            $register->approvalRegis?->status == 0 && $register->approvalRegis?->is_reject == 1 => 'Rejected',
-                            default => 'Pending',
-                        } }}</td>
-                    </tr>
-                    <tr class="border-b">
-                        <td class="font-bold">Action By</td>
-                        <td>{{ $register->approvalRegis->user->name ?? '-' }}</td>
-                    </tr>
-                    <tr class="border-b">
-                        <td class="font-bold">Action Date</td>
-                        <td>{{ $register->approvalRegis?->created_at ?? '-' }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
         <x-tabs wire:model="selectedTab" >
             <x-tab name="student-tab" label="Student Personal Data">
                 <div class="p-4">
                     <table class="table-auto w-full [&>tbody>tr>td]:py-2">
                         <tbody>
+                            <tr class="border-b">
+                                <td class="font-bold">Program</td>
+                                <td>{{ $register->program_name }}</td>
+                            </tr>
                             <tr class="border-b">
                                 <td class="font-bold">Level</td>
                                 <td>{{ $register->level }}</td>
@@ -243,6 +225,38 @@ new class extends Component {
                             <tr class="border-b">
                                 <td class="font-bold">Student Residence Status</td>
                                 <td>{{ $register->student_residence_status }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </x-tab>
+            <x-tab name="payment" label="Student Payment Data" >
+                <div class="p-4">
+                    <table class="table-auto w-full [&>tbody>tr>td]:py-2">
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="font-bold">Amount</td>
+                                <td>Rp.{{ number_format($register->paymentRegister->amount ?? 0, 0, ',', '.') }}</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="font-bold">Discount Biduk ({{ number_format($register->paymentRegister->discount_biduk ?? 0, 0, ',', '.') }}%)</td>
+                                <td>Rp.{{ number_format(($register->paymentRegister->amount * $register->paymentRegister->discount_biduk) / 100, 0, ',', '.') }} </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="font-bold">Discount LSCS ({{ number_format($register->paymentRegister->discount_lscs ?? 0, 0, ',', '.') }}%)</td>
+                                <td>Rp.{{ number_format(($register->paymentRegister->amount * $register->paymentRegister->discount_lscs) / 100, 0, ',', '.') }}</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="font-bold">Discount Feeder ({{ number_format($register->paymentRegister->discount_feeder ?? 0, 0, ',', '.') }}%)</td>
+                                <td>Rp.{{ number_format(($register->paymentRegister->amount * $register->paymentRegister->discount_feeder) / 100, 0, ',', '.') }}</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="font-bold">Voucher {{ $register->paymentRegister?->vouchers()->exists() ? '('.number_format($register->paymentRegister->vouchers->first()->voucher->percentage, 0, ',', '.').'%)' : '' }}</td>
+                                <td>{{ $register->paymentRegister?->vouchers()->exists() ? 'Rp.'.  number_format(($register->paymentRegister->vouchers->first()->voucher->percentage * $register->paymentRegister->amount) / 100, 0, ',', '.') : '-' }}</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="font-bold">Total Payment</td>
+                                <td>Rp.{{ number_format($register->paymentRegister->total, 0, ',', '.') }}</td>
                             </tr>
                         </tbody>
                     </table>

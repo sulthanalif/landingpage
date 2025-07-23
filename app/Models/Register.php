@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\DynamicTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Register extends Model
 {
@@ -13,6 +15,7 @@ class Register extends Model
     protected $table = 'registers';
 
     protected $fillable = [
+        'table_id',
         'level',
         'name',
         'gender',
@@ -37,6 +40,20 @@ class Register extends Model
         'mother_address',
         'student_residence_status'
     ];
+
+    protected $appends = [
+        'program_name'
+    ];
+
+    public function table(): BelongsTo
+    {
+        return $this->belongsTo(DynamicTable::class, 'table_id', 'id');
+    }
+
+    public function getProgramNameAttribute()
+    {
+        return DynamicTable::find($this->table_id)->name ?? '';
+    }
 
     public function approvalRegis(): HasOne
     {

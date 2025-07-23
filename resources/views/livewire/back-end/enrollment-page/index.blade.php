@@ -42,12 +42,16 @@ new class extends Component {
     public function datas(): LengthAwarePaginator
     {
         return Register::query()
-            ->withAggregate('approvalRegis', 'status')
+            // ->withAggregate('approvalRegis', 'status')
+            ->withAggregate('table', 'name')
             ->where(function ($query) {
                 $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('email', 'like', "%{$this->search}%")
                     ->orWhere('level', 'like', "%{$this->search}%")
-                    ->orWhere('phone', 'like', "%{$this->search}%");
+                    ->orWhere('phone', 'like', "%{$this->search}%")
+                    ->orWhereHas('table',function ($query) {
+                        $query->where('name', 'like', "%{$this->search}%");
+                    });
             })
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
@@ -56,15 +60,16 @@ new class extends Component {
     public function headers(): array
     {
         return [
+            ['key' => 'table_name', 'label' => 'Program'],
             ['key' => 'level', 'label' => 'Level'],
             ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'gender', 'label' => 'Gender'],
-            ['key' => 'religion', 'label' => 'Religion'],
-            ['key' => 'place_of_birth', 'label' => 'Place of Birth'],
-            ['key' => 'date_of_birth', 'label' => 'Date of Birth'],
+            // // ['key' => 'gender', 'label' => 'Gender'],
+            // // ['key' => 'religion', 'label' => 'Religion'],
+            // // ['key' => 'place_of_birth', 'label' => 'Place of Birth'],
+            // ['key' => 'date_of_birth', 'label' => 'Date of Birth'],
             ['key' => 'phone', 'label' => 'Phone'],
             ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'status', 'label' => 'Status']
+            // ['key' => 'status', 'label' => 'Status']
         ];
     }
 
@@ -94,7 +99,7 @@ new class extends Component {
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
              with-pagination @row-click="$wire.detail($event.detail)">
-            @scope('cell_status', $data)
+            {{-- @scope('cell_status', $data)
                 @if ($data->approvalRegis)
                     @if ($data->approvalRegis->status == 1 && $data->approvalRegis->is_reject == 0)
                         <span class="text-green-500">Approved</span>
@@ -104,7 +109,7 @@ new class extends Component {
                 @else
                     <span class="text-yellow-500">Pending</span>
                 @endif
-            @endscope
+            @endscope --}}
             {{-- @scope('actions', $data)
                 <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
             @endscope --}}
