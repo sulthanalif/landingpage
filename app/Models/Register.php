@@ -38,7 +38,8 @@ class Register extends Model
         'email_parent',
         'father_address',
         'mother_address',
-        'student_residence_status'
+        'student_residence_status',
+        'referral_by',
     ];
 
     protected $appends = [

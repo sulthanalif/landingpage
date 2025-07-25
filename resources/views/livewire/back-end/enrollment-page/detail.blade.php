@@ -235,6 +235,10 @@ new class extends Component {
                     <table class="table-auto w-full [&>tbody>tr>td]:py-2">
                         <tbody>
                             <tr class="border-b">
+                                <td class="font-bold w-[600px]">Referral By</td>
+                                <td>{{ $register->referral_by }}</td>
+                            </tr>
+                            <tr class="border-b">
                                 <td class="font-bold">Amount</td>
                                 <td>Rp.{{ number_format($register->paymentRegister->amount ?? 0, 0, ',', '.') }}</td>
                             </tr>

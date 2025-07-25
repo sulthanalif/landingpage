@@ -207,6 +207,7 @@ class RegisterController extends Controller
             'father_address' => 'required|string|max:255',
             'mother_address' => 'required|string|max:255',
             'student_residence_status' => 'required',
+            'referral_by' => 'nullable|string|max:255',
 
             'amount' => 'required|numeric',
             'total' => 'required|numeric',
