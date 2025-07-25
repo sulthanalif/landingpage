@@ -69,7 +69,7 @@ new #[Title('Career Registration')] class extends Component {
       public function updatedPerPage(): void
     {
         $this->resetPage();
-    }  
+    }
    public function updatedSearch(): void
     {
         $this->resetPage();
@@ -138,20 +138,19 @@ new #[Title('Career Registration')] class extends Component {
     </x-header>
 
     <div class="flex justify-end items-center gap-5">
-        <div class="w-60">
+        <div class="w-[300px]">
             <x-choices
             wire:model.live="career_id"
             :options="$careers"
             placeholder="Search Career ..."
             search-function="searchCareer"
+            option-label="title"
+            width="max-w-90"
             single
             searchable
             clearable>
-            @scope('item', $data)
-                <x-list-item :item="$data" value="title" />
-            @endscope
             @scope('selection', $data)
-                {{ $data->title }}
+            {{ strlen($data['title']) > 23 ? substr($data['title'], 0, 23) . '...' : $data['title'] }}
             @endscope
             </x-choices>
         </div>
@@ -182,7 +181,7 @@ new #[Title('Career Registration')] class extends Component {
         wire:model="myModal"
         title="Detail"
         {{-- subtitle="" --}}
-        box-class="w-full h-fit max-w-[800px]"
+        box-class="w-full h-fit max-w-[900px]"
         without-trap-focus
     >
         <div wire:loading.remove='model'>
@@ -207,17 +206,17 @@ new #[Title('Career Registration')] class extends Component {
 
                 </div>
                 <div class="space-y-2 text-sm text-gray-700">
-                    <div class="flex">
-                        <span class="w-40 font-semibold">Location</span>
-                        <span>: {{ $model['location'] ?? '' }}</span>
+                    <div class="flex items-start">
+                        <span class="w-40 font-semibold shrink-0">Location</span>
+                        <span class="break-words">: {{ $model['location'] ?? '-' }}</span>
                     </div>
-                    <div class="flex">
-                        <span class="w-40 font-semibold">Birth Date</span>
-                        <span>: {{ $model ? \Carbon\Carbon::parse($model['birth_date'] ?? '')->format('d F Y') : '' }}</span>
+                    <div class="flex items-start">
+                        <span class="w-40 font-semibold shrink-0">Birth Date</span>
+                        <span>: {{ $model && isset($model['birth_date']) ? \Carbon\Carbon::parse($model['birth_date'])->format('d F Y') : '-' }}</span>
                     </div>
-                    <div class="flex">
-                        <span class="w-40 font-semibold">Career Register</span>
-                        <span>: {{ $career_title ?? '' }}</span>
+                    <div class="flex items-start">
+                        <span class="w-40 font-semibold shrink-0">Career Register</span>
+                        <span class="break-words">: {{ $career_title ?: '-' }}</span>
                     </div>
                 </div>
             </div>
