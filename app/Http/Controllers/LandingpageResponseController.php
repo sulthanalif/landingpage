@@ -121,7 +121,7 @@ class LandingpageResponseController extends Controller
     public function accreditations()
     {
         try {
-            $accreditations = Accreditation::where('status', true)->get();
+            $accreditations = Accreditation::where('status', true)->orderBy('order', 'asc')->get();
 
             return $this->successResponse(data: compact('accreditations'));
         } catch (\Throwable $th) {

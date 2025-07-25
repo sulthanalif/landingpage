@@ -24,13 +24,14 @@ new #[Title('Accreditation')] class extends Component {
 
     //table
     public array $selected = [];
-    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
+    public array $sortBy = ['column' => 'order', 'direction' => 'asc'];
     public int $perPage = 10;
 
     //var
     public string $title = '';
     public string $description = '';
     public ?UploadedFile $file = null;
+    public int $order = 0;
     public bool $status = true;
     public array $varAccreditation = ['recordId', 'title', 'description', 'file', 'status'];
 
@@ -45,6 +46,22 @@ new #[Title('Accreditation')] class extends Component {
         }
     }
 
+    public function mount()
+    {
+        $this->getOrder();
+    }
+
+    public function getOrder()
+    {
+        $acre = Accreditation::query()
+            ->orderBy('order', 'desc')
+            ->first();
+
+        $count = $acre ? (int)$acre->order + 1 : 1;
+
+        $this->order = $count;
+    }
+
     public function save(): void
     {
         $this->setModel(new Accreditation());
@@ -53,6 +70,7 @@ new #[Title('Accreditation')] class extends Component {
             validationRules: [
                 'title' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string', 'max:255'],
+                'order' => ['required', 'numeric', 'min:1'],
                 'file' => [$this->recordId ? 'nullable' : 'required', 'mimes:jpeg,png,jpg', 'max:2048'],
                 'status' => ['required', 'boolean'],
             ],
@@ -97,7 +115,7 @@ new #[Title('Accreditation')] class extends Component {
       public function updatedPerPage(): void
     {
         $this->resetPage();
-    }  
+    }
    public function updatedSearch(): void
     {
         $this->resetPage();
@@ -117,6 +135,7 @@ new #[Title('Accreditation')] class extends Component {
     public function headers(): array
     {
         return [
+            ['key' => 'order', 'label' => 'Order'],
             ['key' => 'title', 'label' => 'Title'],
             ['key' => 'description', 'label' => 'Description'],
             ['key' => 'status', 'label' => 'Status'],
@@ -139,6 +158,7 @@ new #[Title('Accreditation')] class extends Component {
             $wire.recordId = null;
             $wire.title = '';
             $wire.description = '';
+            $wire.getOrder();
             $wire.file = null;
             $wire.status = true;
             $wire.drawer = true;
@@ -149,7 +169,8 @@ new #[Title('Accreditation')] class extends Component {
             $wire.title = accreditation.title;
             $wire.description = accreditation.description;
             $wire.file = null;
-            $wire.status = accreditation.status;
+            $wire.order = accreditation.order;
+            $wire.status = accreditation.status == 1;
             $wire.drawer = true;
             $wire.$refresh();
         })

@@ -251,7 +251,7 @@ new class extends Component {
                                 <td>Rp.{{ number_format(($register->paymentRegister->amount * $register->paymentRegister->discount_feeder) / 100, 0, ',', '.') }}</td>
                             </tr>
                             <tr class="border-b">
-                                <td class="font-bold">Voucher {{ $register->paymentRegister?->vouchers()->exists() ? '('.number_format($register->paymentRegister->vouchers->first()->voucher->percentage, 0, ',', '.').'%)' : '' }}</td>
+                                <td class="font-bold">Voucher {{ $register->paymentRegister?->vouchers()->exists() ? $register->paymentRegister->vouchers->first()->voucher->campaign->name.'-'.$register->paymentRegister->vouchers->first()->voucher->code.'('.number_format($register->paymentRegister->vouchers->first()->voucher->percentage, 0, ',', '.').'%)' : '' }}</td>
                                 <td>{{ $register->paymentRegister?->vouchers()->exists() ? 'Rp.'.  number_format(($register->paymentRegister->vouchers->first()->voucher->percentage * $register->paymentRegister->amount) / 100, 0, ',', '.') : '-' }}</td>
                             </tr>
                             <tr class="border-b">

@@ -12,6 +12,7 @@ class Accreditation extends Model
         'title',
         'description',
         'file',
+        'order',
         'status',
     ];
 }

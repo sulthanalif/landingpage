@@ -20,6 +20,10 @@
             @endif
         </div>
 
+        <div>
+            <x-input label="Order to" type="number" wire:model="order" required/>
+        </div>
+
         <div class="my-3">
             <x-toggle label="Status" wire:model="status" />
         </div>
