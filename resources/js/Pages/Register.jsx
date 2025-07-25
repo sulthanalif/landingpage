@@ -221,6 +221,7 @@ const Register = () => {
                     level: data.level,
                     table_id: data.table_id,
                     is_biduk: data.is_biduk ? 1 : 0,
+                    feeder: data.feeder ? 1 : 0,
                     cildren: childrenDiscount,
                     voucher_code: data.voucher_code,
                 });
@@ -265,6 +266,7 @@ const Register = () => {
                 ...data,
                 amount: feeData.amount,
                 discount_biduk: feeData.discount.biduk,
+                discount_feeder: feeData.discount.feeder,
                 discount_lscs: feeData.discount.lscs,
                 vouchers: feeData.discount.voucher,
                 total: feeData.total,
