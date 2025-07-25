@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\DB;
 new #[Title('Form Campaign')] class extends Component {
     use Toast, WithPagination, ManageDatas, WithFileUploads;
 
+    public bool $modalAlertDelete = false;
+
     public string $search = '';
 
     public string $name = '';
@@ -98,7 +100,6 @@ new #[Title('Form Campaign')] class extends Component {
         $this->name = $budgetPeriod->name;
         $this->start_date = $budgetPeriod->start_date;
         $this->end_date = $budgetPeriod->end_date;
-        // $this->budget = $budgetPeriod->budget;
         $this->status = $budgetPeriod->status;
 
         $this->voucherOrder = $budgetPeriod->vouchers()
@@ -107,50 +108,67 @@ new #[Title('Form Campaign')] class extends Component {
             ->get()
             ->map(function ($voucher) {
                 return [
+                    // [MODIFIKASI] Tambahkan id voucher di sini
+                    'id' => $voucher->id,
                     'code' => $voucher->code,
                     'percentage' => $this->formatPercentage($voucher->percentage),
                     'is_claimed' => $voucher->is_claimed,
                 ];
             })
-            // ->groupBy('is_claimed', 'desc')
             ->values()
             ->toArray();
 
-        $vouchers = $budgetPeriod->vouchers()
-            ->where('status', true)
-            ->where('is_claimed', false)
-            // ->where('is_locked', false)
-            ->get()
-            ->groupBy('percentage')
-            ->map(function ($group, $percentage) {
-                return [
-                    'percentage' => $this->formatPercentage($percentage),
-                    'qty' => $group->count(),
-                ];
-            })
-            ->values()
-            ->toArray();
+            $vouchers = $budgetPeriod->vouchers()
+                ->where('status', true)
+                ->get()
+                ->groupBy('percentage')
+                ->map(function ($group, $percentage) {
+                    $totalVouchers = $group->count();
+                    $claimedVouchers = $group->where('is_claimed', true)->count();
+
+                    return [
+                        'percentage' => $this->formatPercentage($percentage),
+                        'qty' => $totalVouchers,
+                        'is_claimed' => $claimedVouchers > 0,
+                        // 'used' => $claimedVouchers,
+                        'remaining' => $totalVouchers - $claimedVouchers
+                    ];
+                })
+                ->values()
+                ->toArray();
 
         $this->vouchers = $vouchers;
         $this->countTotalNominal();
+    }
+
+    public function deleteSingleVoucher(int $voucherId): void
+    {
+        try {
+            $voucher = Voucher::findOrFail($voucherId);
+
+            // Pencegahan: jangan hapus jika voucher sudah diklaim
+            if ($voucher->is_claimed) {
+                $this->error('Voucher ini sudah diklaim dan tidak bisa dihapus.', position: 'toast-bottom');
+                return;
+            }
+
+            $voucher->delete();
+
+            // Refresh data di halaman setelah hapus
+            $this->edit();
+
+            $this->success('Voucher berhasil dihapus.', position: 'toast-bottom');
+
+        } catch (\Throwable $th) {
+            \Log::channel('debug')->error("message: '{$th->getMessage()}', file: '{$th->getFile()}', line: {$th->getLine()}");
+            $this->error('Gagal menghapus voucher.', position: 'toast-bottom');
+        }
     }
 
     public function back(): void
     {
         $this->redirect(route('campaign'), navigate: true);
     }
-
-    // public function searchDealer(string $value = '')
-    // {
-    //     $selectedOption = Dealer::where('id', $this->dealer_searchable_id)->get();
-
-    //     $this->dealersSearchable = Dealer::query()
-    //         ->where('name', 'like', "%{$value}%")
-    //         ->orWhere('code', 'like', "%{$value}%")
-    //         ->orderBy('name')
-    //         ->get()
-    //         ->merge($selectedOption);
-    // }
 
     public function countTotalNominal(): void
     {
@@ -161,7 +179,7 @@ new #[Title('Form Campaign')] class extends Component {
 
     public function addVoucher(): void
     {
-        $this->vouchers[] = ['percentage' => '', 'qty' => ''];
+        $this->vouchers[] = ['percentage' => '', 'qty' => '', 'used' => '', 'is_claimed' => false];
     }
 
     public function deleteVoucher(int $index): void
@@ -188,6 +206,26 @@ new #[Title('Form Campaign')] class extends Component {
         if ($vouchers->isEmpty()) {
             $this->warning('Voucher Tidak Boleh Kosong!', position: 'toast-bottom');
             return;
+        }
+
+        // Check if new voucher quantities are less than claimed vouchers
+        if ($this->id) {
+            $campaign = Campaign::findOrFail($this->id);
+
+            foreach ($vouchers as $voucher) {
+                $percentage = (float) $voucher['percentage'];
+                $newQty = (int) $voucher['qty'];
+
+                $claimedCount = $campaign->vouchers()
+                    ->where('percentage', $percentage)
+                    ->where('is_claimed', true)
+                    ->count();
+
+                if ($newQty < $claimedCount) {
+                    $this->error("Jumlah voucher {$percentage}% tidak boleh kurang dari jumlah yang sudah diklaim ({$claimedCount})", position: 'toast-bottom');
+                    return;
+                }
+            }
         }
 
         // Validasi overlap tanggal
@@ -224,10 +262,15 @@ new #[Title('Form Campaign')] class extends Component {
                     ->get()
                     ->groupBy(fn ($item) => number_format((float) $item->percentage, 2)); // Normalize key
 
-                $newVoucherData = $vouchers->mapWithKeys(function ($item) {
+                // Combine vouchers with same percentage and sum their quantities
+                $newVoucherData = $vouchers->reduce(function ($carry, $item) {
                     $key = number_format((float) $item['percentage'], 2); // Normalize key
-                    return [$key => (int) $item['qty']];
-                });
+                    if (!isset($carry[$key])) {
+                        $carry[$key] = 0;
+                    }
+                    $carry[$key] += (int) $item['qty'];
+                    return $carry;
+                }, []);
 
                 foreach ($newVoucherData as $percentageKey => $newQty) {
                     $percentage = (float) $percentageKey;
@@ -250,7 +293,7 @@ new #[Title('Form Campaign')] class extends Component {
                 }
 
                 // Hapus voucher lama yang persentasenya tidak ada di input baru
-                $incomingPercentages = $newVoucherData->keys()->toArray();
+                $incomingPercentages = array_keys($newVoucherData);
                 $vouchersToRemove = $existingVouchers
                     ->filter(fn ($_v, $key) => !in_array($key, $incomingPercentages))
                     ->flatten();
@@ -284,6 +327,33 @@ new #[Title('Form Campaign')] class extends Component {
             DB::rollBack();
             \Log::channel('debug')->error("message: '{$th->getMessage()}', file: '{$th->getFile()}', line: {$th->getLine()}");
             $this->error('Terjadi kesalahan saat menyimpan data.', position: 'toast-bottom');
+        }
+    }
+
+    public function deleteCampaign(): void
+    {
+        try{
+            DB::beginTransaction();
+
+            $campaign = Campaign::findOrFail($this->id);
+
+            // Check if campaign has any claimed vouchers
+            $hasClaimedVouchers = $campaign->vouchers()->where('is_claimed', true)->exists();
+
+            if ($hasClaimedVouchers) {
+                $this->error('Tidak dapat menghapus campaign karena voucher sudah ada yang terpakai!.', position: 'toast-bottom');
+                return;
+            }
+
+            $campaign->delete();
+
+            DB::commit();
+
+            $this->success('Campaign berhasil dihapus.', position: 'toast-bottom', redirectTo: route('campaign'));
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $this->error('Terjadi kesalahan saat menghapus data.', position: 'toast-bottom');
+            \Log::channel('debug')->error("message: '{$th->getMessage()}', file: '{$th->getFile()}', line: {$th->getLine()}");
         }
     }
 
@@ -331,16 +401,26 @@ new #[Title('Form Campaign')] class extends Component {
                         <tr class="">
                             <th class="px-4 py-2 border-b">Discount Voucher (%)</th>
                             <th class="px-2 py-2 border-b">Jumlah Voucher</th>
+                            <th class="px-2 py-2 border-b">Sisa Voucher</th>
                         </tr>
                     </thead>
                     <tbody >
                         @forelse ($vouchers as $index => $voucher)
                             <tr>
                                 <td class="px-4 py-2 ">
+                                    @if($this->id)
+                                    <x-input
+                                        class="w-full"
+                                        wire:model.live="vouchers.{{ $index }}.percentage"
+                                        readonly
+                                    />
+                                    @else
                                     <x-input
                                         class="w-full"
                                         wire:model.live="vouchers.{{ $index }}.percentage"
                                     />
+
+                                    @endif
                                 </td>
                                 <td class="px-2 py-2 ">
                                     <x-input
@@ -350,12 +430,23 @@ new #[Title('Form Campaign')] class extends Component {
                                         @change="$wire.countTotalNominal()"
                                     />
                                 </td>
+                                <td class="px-2 py-2 ">
+                                    <x-input
+                                        type="number"
+                                        class="w-full"
+                                        wire:model.live="vouchers.{{ $index }}.remaining"
+                                        @change="$wire.countTotalNominal()"
+                                        readonly
+                                    />
+                                </td>
                                 <td class="px-4 py-2  text-right">
+                                    @if(!$voucher['is_claimed'])
                                     <x-button
                                         icon="o-trash"
                                         @click="$wire.deleteVoucher({{ $index }})"
                                         spinner="deleteVoucher({{ $index }})"
                                     />
+                                    @endif
                                 </td>
                             </tr>
                         @empty
@@ -405,6 +496,7 @@ new #[Title('Form Campaign')] class extends Component {
                                 <tr class="">
                                     <th class="px-4 py-2 border-b">Kode Voucher</th>
                                     <th class="px-4 py-2 border-b">Discount (%)</th>
+                                    <th class="px-4 py-2 border-b">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -416,10 +508,21 @@ new #[Title('Form Campaign')] class extends Component {
                                         <td class="px-4 py-2">
                                             {{ $voucher['percentage'] }}%
                                         </td>
+                                        <td class="px-4 py-2">
+                                            @if (!$voucher['is_claimed'])
+                                                <x-button
+                                                    icon="o-trash"
+                                                    class="btn-error btn-sm"
+                                                    wire:click="deleteSingleVoucher({{ $voucher['id'] }})"
+                                                    {{-- wire:confirm="Anda yakin ingin menghapus voucher ini?" --}}
+                                                    spinner="deleteSingleVoucher({{ $voucher['id'] }})"
+                                                />
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="2" class="px-4 py-4 text-center text-gray-500">
+                                        <td colspan="3" class="px-4 py-4 text-center text-gray-500">
                                             <x-icon name="o-cube" label="It is empty." />
                                         </td>
                                     </tr>
@@ -431,8 +534,24 @@ new #[Title('Form Campaign')] class extends Component {
             </x-card>
         </div>
         <x-slot:actions>
+            @if($this->id)
+                <x-button label="Delete" class="btn-error" @click="$wire.modalAlertDelete = true" />
+            @endif
             <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
         </x-slot:actions>
     </x-form>
-
+    <x-modal wire:model="modalAlertDelete">
+        <x-form wire:submit="deleteCampaign" class="relative" no-separator>
+            <div class="flex justify-center items-center">
+                    <div class="mb-5 rounded-lg w-full text-center">
+                    <x-icon name="c-shield-exclamation" class="w-16 h-16 text-red-700 mx-auto mb-4" />
+                    <p class="text-center">Apakah anda yakin untuk menghapus campaign ini?</p>
+                </div>
+            </div>
+            <x-slot:actions>
+                <x-button label="Tidak" @click="$wire.modalAlertDelete = false" />
+                <x-button label="Ya" class="btn-primary" type="submit" spinner="delete" />
+            </x-slot:actions>
+        </x-form>
+    </x-modal>
 </div>

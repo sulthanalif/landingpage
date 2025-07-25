@@ -33,6 +33,7 @@ new class extends Component {
     public $end_date;
 
     public bool $is_period = false;
+    public bool $is_salary = false;
 
     public array $varCareer = ['recordId', 'slug', 'title', 'description', 'is_period', 'requirement', 'level', 'employment_type', 'location', 'salary_min', 'salary_max', 'start_date', 'end_date'];
 
@@ -55,6 +56,10 @@ new class extends Component {
 
             if ($this->end_date) {
                 $this->is_period = true;
+            }
+
+            if($this->salary_min || $this->salary_max) {
+                $this->is_salary = true;
             }
         } else {
             $this->formCreate = true;
@@ -115,8 +120,6 @@ new class extends Component {
             'level' => 'required|in:fresh_graduate,experienced',
             'employment_type' => 'required|in:full_time,part_time,contract,freelance,internship',
             'location' => 'required|string|max:255',
-            'salary_min' => 'nullable|numeric',
-            'salary_max' => 'nullable|numeric',
         ];
 
         if($this->end_date) {
@@ -128,6 +131,11 @@ new class extends Component {
             }
         } else {
             $rules['start_date'] = 'nullable|date';
+        }
+
+        if($this->is_salary == 1) {
+            $rules['salary_min'] = 'required|numeric|min:1';
+            $rules['salary_max'] = 'nullable|numeric';
         }
 
 
@@ -143,6 +151,14 @@ new class extends Component {
                     }
                 } else {
                     $career->end_date = null;
+                }
+
+                if($component->is_salary) {
+                    $career->salary_min = $component->salary_min;
+                    $career->salary_max = $component->salary_max;
+                } else {
+                    $career->salary_min = 0;
+                    $career->salary_max = 0;
                 }
             },
         );
@@ -202,9 +218,15 @@ new class extends Component {
                 searchable required />
             </div>
 
-            <div class="grid grid-cols-2 gap-5">
-                <x-input label="Salary Min" type="number" wire:model="salary_min" />
-                <x-input label="Salary Max" type="number" wire:model="salary_max" />
+
+            <div  x-data="{ show: false }" x-effect="show = $wire.is_salary">
+                <div class="grid grid-cols-2 gap-5" x-show="show">
+                    <x-input  label="Salary Min" type="number" wire:model="salary_min" />
+                    <x-input  label="Salary Max" type="number" wire:model="salary_max" />
+                </div>
+            </div>
+            <div class="mb-4">
+                <x-toggle label="Is Salary?" wire:model="is_salary" />
             </div>
 
             <div class="grid grid-cols-2 gap-5" x-data="{ show: false }" x-effect="show = $wire.is_period">
