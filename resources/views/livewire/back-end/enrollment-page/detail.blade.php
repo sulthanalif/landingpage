@@ -115,6 +115,10 @@ new class extends Component {
                     <table class="table-auto w-full [&>tbody>tr>td]:py-2">
                         <tbody>
                             <tr class="border-b">
+                                <td class="font-bold">Date</td>
+                                <td>{{ \Carbon\Carbon::parse($register->created_at)->locale('id')->translatedFormat('l, d F Y H:i') }}</td>
+                            </tr>
+                            <tr class="border-b">
                                 <td class="font-bold">Program</td>
                                 <td>{{ $register->program_name }}</td>
                             </tr>

@@ -33,7 +33,7 @@ new class extends Component {
       public function updatedPerPage(): void
     {
         $this->resetPage();
-    }  
+    }
    public function updatedSearch(): void
     {
         $this->resetPage();
@@ -60,6 +60,7 @@ new class extends Component {
     public function headers(): array
     {
         return [
+            ['key' => 'created_at', 'label' => 'Date'],
             ['key' => 'table_name', 'label' => 'Program'],
             ['key' => 'level', 'label' => 'Level'],
             ['key' => 'name', 'label' => 'Name'],
@@ -69,7 +70,6 @@ new class extends Component {
             // ['key' => 'date_of_birth', 'label' => 'Date of Birth'],
             ['key' => 'phone', 'label' => 'Phone'],
             ['key' => 'email', 'label' => 'Email'],
-            // ['key' => 'status', 'label' => 'Status']
         ];
     }
 
@@ -110,9 +110,9 @@ new class extends Component {
                     <span class="text-yellow-500">Pending</span>
                 @endif
             @endscope --}}
-            {{-- @scope('actions', $data)
-                <x-button class="btn-primary btn-sm btn-ghost"><x-icon name="o-pencil" color="primary" @click="$wire.detail({{ $data['id'] }})" /></x-button>
-            @endscope --}}
+            @scope('cell_created_at', $data)
+            {{ \Carbon\Carbon::parse($data->created_at)->locale('id')->translatedFormat('d F Y H:i') }}
+            @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
             </x-slot:empty>
