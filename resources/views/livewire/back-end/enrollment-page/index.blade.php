@@ -49,6 +49,7 @@ new class extends Component {
                     ->orWhere('email', 'like', "%{$this->search}%")
                     ->orWhere('level', 'like', "%{$this->search}%")
                     ->orWhere('phone', 'like', "%{$this->search}%")
+                    ->orWhere('referral_by', 'like', "%{$this->search}%")
                     ->orWhereHas('table',function ($query) {
                         $query->where('name', 'like', "%{$this->search}%");
                     });
@@ -67,9 +68,9 @@ new class extends Component {
             // // ['key' => 'gender', 'label' => 'Gender'],
             // // ['key' => 'religion', 'label' => 'Religion'],
             // // ['key' => 'place_of_birth', 'label' => 'Place of Birth'],
-            // ['key' => 'date_of_birth', 'label' => 'Date of Birth'],
             ['key' => 'phone', 'label' => 'Phone'],
             ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'referral_by', 'label' => 'Referral By'],
         ];
     }
 
@@ -112,6 +113,9 @@ new class extends Component {
             @endscope --}}
             @scope('cell_created_at', $data)
             {{ \Carbon\Carbon::parse($data->created_at)->locale('id')->translatedFormat('d F Y H:i') }}
+            @endscope
+            @scope('cell_referral_by', $data)
+            {{ $data->referral_by ?? '-' }}
             @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
