@@ -83,6 +83,7 @@ const Register = () => {
             amount: "",
             discount_biduk: "",
             discount_lscs: "",
+            referral_by: "",
             vouchers: "",
             total: "",
         });
@@ -1560,6 +1561,38 @@ const Register = () => {
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="referral_by">
+                                                                Referral By
+                                                            </label>
+                                                            <input
+                                                                type="referral_by"
+                                                                className={`form-control ${errors.referral_by
+                                                                    ? "is-invalid"
+                                                                    : "text-secondary"
+                                                                    }`}
+                                                                id="referral_by"
+                                                                value={
+                                                                    data.referral_by
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "referral_by",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            />
+                                                            {errors.referral_by && (
+                                                                <div className="invalid-feedback">
+                                                                    {
+                                                                        errors.referral_by
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-lg-6">
                                                         <div className="form-check ml-4">
                                                             <input
                                                                 className="form-check-input"
@@ -1601,7 +1634,7 @@ const Register = () => {
                                                                     key={index}
                                                                     className="row mb-2"
                                                                 >
-                                                                    <div className="col-md-5">
+                                                                    <div className="col-md-6">
                                                                         <input
                                                                             type="text"
                                                                             className={`form-control ${errors.children
@@ -1625,7 +1658,7 @@ const Register = () => {
                                                                             }
                                                                         />
                                                                     </div>
-                                                                    <div className="col-md-5">
+                                                                    <div className="col-md-4">
                                                                         <input
                                                                             type="text"
                                                                             className={`form-control ${errors.children
@@ -1672,7 +1705,7 @@ const Register = () => {
                                                         )}
                                                         <button
                                                             type="button"
-                                                            className="btn btn-secondary mt-2"
+                                                            className="btn btn-success mt-2"
                                                             onClick={addChild}
                                                         >
                                                             Add Another Child
@@ -1699,7 +1732,7 @@ const Register = () => {
                                     {activeTab > 0 && (
                                         <button
                                             type="button"
-                                            className="btn btn-secondary"
+                                            className="btn btn-primary"
                                             onClick={prevTab}
                                             disabled={processing}
                                         >
@@ -1719,7 +1752,7 @@ const Register = () => {
                                     ) : (
                                         <button
                                             type="button"
-                                            className="btn btn-primary ms-auto"
+                                            className="btn btn-success ms-auto"
                                             onClick={nextTab}
                                             disabled={processing}
                                         >

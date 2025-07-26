@@ -78,7 +78,7 @@ const CareerItem = ({ career }) => {
     const handleCloseModal = () => {
         setShowModal(false);
         if (isSuccess) {
-            window.location.href = "/careers";
+            window.location.href = "/career";
         }
     };
 
