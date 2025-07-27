@@ -82,7 +82,12 @@ const SchoolProgram = () => {
                                 </h2>
                                 <div className="section_subtitle">
                                     <p className="font-italic">
-                                        Lia Stephanie School offers comprehensive education levels from Pre-School, Primary School (SD), Junior High School (SMP), to Senior High School (SMA). There are two main tracks in its educational system
+                                        Lia Stephanie School offers
+                                        comprehensive education levels from
+                                        Pre-School, Primary School (SD), Junior
+                                        High School (SMP), to Senior High School
+                                        (SMA). There are two main tracks in its
+                                        educational system
                                     </p>
                                 </div>
                             </div>
@@ -98,28 +103,75 @@ const SchoolProgram = () => {
                                     <div className="elements_accordions">
                                         <div className="accordion_container">
                                             <div className="accordion d-flex flex-row align-items-center active">
-                                                <div>Lia Stephanie Catholic School : National - Pearson Edexcel Programme</div>
+                                                <div>
+                                                    Lia Stephanie Catholic
+                                                    School : National - Pearson
+                                                    Edexcel Programme
+                                                </div>
                                             </div>
                                             <div className="accordion_panel">
                                                 <ul>
-                                                    <li>Uses the National Curriculum (Merdeka Curriculum).</li>
-                                                    <li>Emphasis on a scientific approach, critical thinking skills, and character building.</li>
-                                                    <li>Daily "spiritual breakfast" program at the primary level for faith formation.</li>
-                                                    <li>Development of public speaking skills is a priority at the junior high level.</li>
+                                                    <li>
+                                                        Uses the National
+                                                        Curriculum (Merdeka
+                                                        Curriculum).
+                                                    </li>
+                                                    <li>
+                                                        Emphasis on a scientific
+                                                        approach, critical
+                                                        thinking skills, and
+                                                        character building.
+                                                    </li>
+                                                    <li>
+                                                        Daily "spiritual
+                                                        breakfast" program at
+                                                        the primary level for
+                                                        faith formation.
+                                                    </li>
+                                                    <li>
+                                                        Development of public
+                                                        speaking skills is a
+                                                        priority at the junior
+                                                        high level.
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
                                         <div className="accordion_container">
                                             <div className="accordion d-flex flex-row align-items-center">
                                                 <div>
-                                                    Lia Stephanie Program International Baccalaureate School
+                                                    Lia Stephanie Program
+                                                    International Baccalaureate
+                                                    School
                                                 </div>
                                             </div>
                                             <div className="accordion_panel">
                                                 <ul>
-                                                    <li>For Pre-School and Primary School levels, it implements the International Baccalaureate (IB) Primary Years Programme (PYP).</li>
-                                                    <li>Still integrates the National Curriculum (Curriculum 2013) with English as the language of instruction for certain subjects such as Science, Mathematics, Religion, and Social Sciences.</li>
-                                                    <li>Creates a full English-speaking environment at the Pre-School level.</li>
+                                                    <li>
+                                                        For Senior Year School
+                                                        level (SYP), it
+                                                        implements the
+                                                        International
+                                                        Baccalaureatte ( IB )
+                                                        Diploma Programme.
+                                                    </li>
+                                                    <li>
+                                                        Still integrates the
+                                                        National Curriculum
+                                                        (Curriculum 2013) with
+                                                        English as the language
+                                                        of instruction for
+                                                        certain subjects such as
+                                                        Science, Mathematics,
+                                                        Religion, and Social
+                                                        Sciences.
+                                                    </li>
+                                                    <li>
+                                                        Creates a full
+                                                        English-speaking
+                                                        environment at the
+                                                        Pre-School level.
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -134,7 +186,8 @@ const SchoolProgram = () => {
                                 <div
                                     className="feature_video_background"
                                     style={{
-                                        backgroundImage: "url(/img/logo-content.png)",
+                                        backgroundImage:
+                                            "url(/img/logo-content.png)",
                                     }}
                                 />
                             </div>
