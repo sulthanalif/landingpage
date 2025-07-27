@@ -1204,7 +1204,7 @@ const Register = () => {
                                                         </span>
                                                     </label>
                                                     <input
-                                                        type="text"
+                                                        type="number"
                                                         className={`form-control ${errors.number_of_siblings
                                                             ? "is-invalid"
                                                             : "text-secondary"
