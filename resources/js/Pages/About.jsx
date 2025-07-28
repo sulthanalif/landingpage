@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../Components/Layout";
 import { Link } from "@inertiajs/react";
 import useApi from "../Hooks/response";
@@ -325,9 +325,67 @@ const CoreValueSection = () => {
 
 const AdvantageSection = () => {
     const { data: facilities, get: getFacilities } = useApi("facilities");
+    const [carouselInitialized, setCarouselInitialized] = useState(false);
 
     useEffect(() => {
         getFacilities();
+    }, []);
+
+    useEffect(() => {
+        if (facilities?.facilities?.length > 0 && !carouselInitialized) {
+            initActivitySlider();
+            setCarouselInitialized(true);
+        }
+    }, [facilities, carouselInitialized]);
+
+    const initActivitySlider = () => {
+        if (typeof $ !== 'undefined' && $(".feature_slider").length) {
+            $(".feature_slider").trigger("destroy.owl.carousel");
+
+            const activitySlider = $(".feature_slider").owlCarousel({
+                loop: facilities.facilities.length > 4,
+                autoplay: facilities.facilities.length > 4,
+                autoplayTimeout: 2000,
+                dots: false,
+                smartSpeed: 1200,
+                center: facilities.facilities.length === 1,
+                responsive: {
+                    0: {
+                        items: 1,
+                    },
+                    576: {
+                        items: 2,
+                    },
+                    992: {
+                        items: 3,
+                    },
+                    1200: {
+                        items: 4,
+                    },
+                },
+            });
+
+            $(".feature_slider_prev")
+                .off("click")
+                .on("click", function () {
+                    activitySlider.trigger("prev.owl.carousel");
+                });
+
+            $(".feature_slider_next")
+                .off("click")
+                .on("click", function () {
+                    activitySlider.trigger("next.owl.carousel");
+                });
+        }
+    };
+
+    useEffect(() => {
+        return () => {
+            if (typeof $ !== 'undefined' && $(".feature_slider").length) {
+                $(".feature_slider").trigger("destroy.owl.carousel");
+                $(".feature_slider_prev, .feature_slider_next").off("click");
+            }
+        };
     }, []);
 
     return (
@@ -355,31 +413,49 @@ const AdvantageSection = () => {
                     </div>
                 </div>
 
-                <div className="row mt-5">
-                    {facilities?.facilities.map((facility) => (
-                        <div className="col-lg-4 pb-3" key={facility.id}>
-                            <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                                <div className="card-body text-center p-4">
-                                    <div className="feature-image mb-4">
-                                        <img
-                                            src={facility.image ? `storage/${facility.image}` : "/landing/images/facilities/icon_classroom.png"}
-                                            alt={facility.title}
-                                            loading="lazy"
-                                            className="img-fluid"
-                                            style={{ height: "200px" }}
-                                        />
+                {facilities?.facilities?.length > 0 ? (
+                    <div className="feature_slider-container position-relative">
+                        <div className="owl-carousel owl-theme feature_slider">
+                            {facilities.facilities.map((facility) => (
+                                <div className="owl-item" key={facility.id}>
+                                    <div className="card feature-card h-100 border-0 shadow-sm mx-2">
+                                        <div className="card-body text-center p-4">
+                                            <div className="feature-image mb-4">
+                                                <img
+                                                    src={facility.image ? `storage/${facility.image}` : "/landing/images/facilities/icon_classroom.png"}
+                                                    alt={facility.title}
+                                                    loading="lazy"
+                                                    style={{
+                                                        width: "auto",
+                                                        height: "200px",
+                                                        objectFit: "cover"
+                                                    }}
+                                                />
+                                            </div>
+                                            <h3 className="feature-title h5 mb-3">
+                                                {facility.title}
+                                            </h3>
+                                            <p className="feature-text mb-0">
+                                                {facility.description}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <h3 className="feature-title h5 mb-3">
-                                        {facility.title}
-                                    </h3>
-                                    <p className="feature-text mb-0">
-                                        {facility.description}
-                                    </p>
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
+
+                        {facilities.facilities.length > 4 && (
+                            <>
+                                <div className="feature_slider_nav feature_slider_prev d-none d-lg-block">
+                                    <i className="fa fa-angle-left" aria-hidden="true" />
+                                </div>
+                                <div className="feature_slider_nav feature_slider_next d-none d-lg-block">
+                                    <i className="fa fa-angle-right" aria-hidden="true" />
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ) : null}
 
                 <div className="row features_row my-5">
                     <div className="col-lg-6 pb-3">

@@ -141,11 +141,22 @@ const Activity = () => {
                         </div>
                     ) : activities && activities.length > 0 ? (
                         <>
-                            <div className={`feature_slider-container position-relative ${activities.length === 1 ? 'single-item' : ''}`}>
+                            <div
+                                className={`feature_slider-container position-relative ${
+                                    activities.length === 1 ? "single-item" : ""
+                                }`}
+                            >
                                 <div className="owl-carousel owl-theme feature_slider">
                                     {activities.map((activity) => (
-                                        <div className="owl-item" key={activity.id}>
-                                            <Link href={`/story?activityId=${encodeURIComponent(activity.id)}`}>
+                                        <div
+                                            className="owl-item"
+                                            key={activity.id}
+                                        >
+                                            <Link
+                                                href={`/story?activityId=${encodeURIComponent(
+                                                    activity.id
+                                                )}`}
+                                            >
                                                 <div className="card feature-card h-100 border-0 shadow-sm mx-2">
                                                     <div className="card-body text-center p-4">
                                                         <div className="feature-image mb-4">
@@ -155,16 +166,25 @@ const Activity = () => {
                                                                         ? `/storage/${activity.image}`
                                                                         : "/img/logo.png"
                                                                 }
-                                                                alt={activity.label}
+                                                                alt={
+                                                                    activity.label
+                                                                }
                                                                 loading="lazy"
-                                                                style={{ width: "auto", height: "250px", objectFit: "cover" }}
+                                                                style={{
+                                                                    width: "auto",
+                                                                    height: "250px",
+                                                                    objectFit:
+                                                                        "cover",
+                                                                }}
                                                             />
                                                         </div>
                                                         <h3 className="feature-title h5 mb-3">
                                                             {activity.label}
                                                         </h3>
                                                         <p className="feature-text mb-0">
-                                                            {activity.description}
+                                                            {
+                                                                activity.description
+                                                            }
                                                         </p>
                                                     </div>
                                                 </div>
@@ -190,15 +210,17 @@ const Activity = () => {
                                     </>
                                 )}
                             </div>
-                            <div className="row">
-                                <div className="col-lg-12 text-center">
-                                    <div className="courses_button trans_200">
-                                        <Link href="/story">
-                                            view all activities
-                                        </Link>
+                            {activities.length > 4 && (
+                                <div className="row">
+                                    <div className="col-lg-12 text-center">
+                                        <div className="courses_button trans_200">
+                                            <Link href="/story">
+                                                view all activities
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </>
                     ) : (
                         <div className="row">

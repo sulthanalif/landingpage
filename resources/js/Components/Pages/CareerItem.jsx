@@ -85,73 +85,82 @@ const CareerItem = ({ career }) => {
     return (
         <>
             <div className="col-lg-4 feature_col">
-                <div className="feature text-center trans_400 px-3 py-4">
+                <div className="feature text-center trans_400 px-3 py-4 h-100 d-flex flex-column">
                     <a
                         type="button"
                         data-toggle="modal"
                         data-target={`#career-${career.id}`}
                         aria-label={`View details about ${career.name}`}
+                        className="text-decoration-none flex-grow-1"
                     >
-                        <div className="feature_icon">
+                        <div className="feature_icon mb-3">
                             <img
                                 src="/landing/images/icon_briefcase.png"
                                 alt=""
                                 style={{ height: "50px" }}
                             />
                         </div>
-                        <h3 className="feature_title mt-3">{career.title}</h3>
-                        <div className="d-flex flex-row row bd-highlight m-2">
-                            <div className="p-1 bd-highlight">
-                                <span className="p-2 badge badge-secondary font-weight-bold">
-                                    {career.level == "fresh_graduate"
-                                        ? "Fresh Graduate"
-                                        : "Experienced"}
-                                </span>
-                            </div>
-                            <div className="p-1 bd-highlight">
-                                <span className="p-2 badge badge-secondary font-weight-bold">
-                                    {career?.employment_type === "full_time"
-                                        ? "Full Time"
-                                        : career?.employment_type ===
-                                            "part_time"
-                                            ? "Part Time"
-                                            : career?.employment_type === "contract"
-                                                ? "Contract"
-                                                : career?.employment_type ===
-                                                    "freelance"
-                                                    ? "Freelance"
-                                                    : "Internship"}
-                                </span>
-                            </div>
-                            <div className="p-1 bd-highlight">
-                                <span className="p-2 badge badge-secondary font-weight-bold">
-                                    {career.location}
-                                </span>
-                            </div>
-                            <div className="p-1 bd-highlight">
-                                <span className="p-2 badge badge-secondary font-weight-bold">
-                                    {new Intl.NumberFormat("id-ID", {
-                                        style: "currency",
-                                        currency: "IDR",
-                                        minimumFractionDigits: 0,
-                                        maximumFractionDigits: 0,
-                                    }).format(career.salary_min)}
-                                    -
-                                    {new Intl.NumberFormat("id-ID", {
-                                        style: "currency",
-                                        currency: "IDR",
-                                        minimumFractionDigits: 0,
-                                        maximumFractionDigits: 0,
-                                    }).format(career.salary_max)}
-                                </span>
-                            </div>
+                        <h3
+                            className="feature_title mb-3"
+                            title={career.title}
+                            style={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: '2',
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                minHeight: '48px'
+                            }}
+                        >
+                            {career.title}
+                        </h3>
+                        <div className="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                            <span className="badge badge-secondary font-weight-bold m-1">
+                                {career.level == "fresh_graduate"
+                                    ? "Fresh Graduate"
+                                    : "Experienced"}
+                            </span>
+                            <span className="badge badge-secondary font-weight-bold m-1">
+                                {career?.employment_type === "full_time"
+                                    ? "Full Time"
+                                    : career?.employment_type === "part_time"
+                                    ? "Part Time"
+                                    : career?.employment_type === "contract"
+                                    ? "Contract"
+                                    : career?.employment_type === "freelance"
+                                    ? "Freelance"
+                                    : "Internship"}
+                            </span>
+                            <span
+                                className="badge badge-secondary font-weight-bold text-truncate m-1"
+                                title={career.location}
+                            >
+                                {career.location.length > 20
+                                    ? career.location.substring(0, 20) + "..."
+                                    : career.location}
+                            </span>
+                            <span className="badge badge-secondary font-weight-bold small m-1">
+                                {new Intl.NumberFormat("id-ID", {
+                                    style: "currency",
+                                    currency: "IDR",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                }).format(career.salary_min)}
+                                -
+                                {new Intl.NumberFormat("id-ID", {
+                                    style: "currency",
+                                    currency: "IDR",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                }).format(career.salary_max)}
+                            </span>
                         </div>
                     </a>
-                    <div className="card-footer text-right">
+                    <div className="mt-auto">
                         <button
                             type="button"
-                            className="btn btn-sm btn-primary"
-                            data-toggle="modal"
+                            className="btn btn-primary w-100"
+                            data-toggle="modal" 
                             data-target={`#apply-${career.id}`}
                         >
                             Apply Job
@@ -195,7 +204,7 @@ const CareerItem = ({ career }) => {
                                         <span className="p-2 badge badge-secondary">
                                             <h5 className="text-light">
                                                 {career.level ==
-                                                    "fresh_graduate"
+                                                "fresh_graduate"
                                                     ? "Fresh Graduate"
                                                     : "Experienced"}
                                             </h5>
@@ -205,15 +214,15 @@ const CareerItem = ({ career }) => {
                                         <span className="p-2 badge badge-secondary">
                                             <h5 className="text-light">
                                                 {career?.employment_type ===
-                                                    "full_time"
+                                                "full_time"
                                                     ? "Full Time"
                                                     : career?.employment_type ===
-                                                        "part_time"
-                                                        ? "Part Time"
-                                                        : career?.employment_type ===
-                                                            "contract"
-                                                            ? "Contract"
-                                                            : "Freelance"}
+                                                      "part_time"
+                                                    ? "Part Time"
+                                                    : career?.employment_type ===
+                                                      "contract"
+                                                    ? "Contract"
+                                                    : "Freelance"}
                                             </h5>
                                         </span>
                                     </div>
@@ -344,10 +353,11 @@ const CareerItem = ({ career }) => {
                                         <span className="text-danger">*</span>
                                     </label>
                                     <textarea
-                                        className={`form-control ${errors.description
+                                        className={`form-control ${
+                                            errors.description
                                                 ? "is-invalid"
                                                 : "text-secondary"
-                                            }`}
+                                        }`}
                                         id="description"
                                         rows={3}
                                         value={data.description}
@@ -377,10 +387,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="text"
-                                                className={`form-control ${errors.name
+                                                className={`form-control ${
+                                                    errors.name
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="name"
                                                 value={data.name}
                                                 onChange={(e) =>
@@ -408,10 +419,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="date"
-                                                className={`form-control ${errors.birth_date
+                                                className={`form-control ${
+                                                    errors.birth_date
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="birth_date"
                                                 value={data.birth_date}
                                                 onChange={(e) =>
@@ -442,10 +454,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="email"
-                                                className={`form-control ${errors.email
+                                                className={`form-control ${
+                                                    errors.email
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="email"
                                                 value={data.email}
                                                 onChange={(e) =>
@@ -473,10 +486,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="number"
-                                                className={`form-control ${errors.phone_number
+                                                className={`form-control ${
+                                                    errors.phone_number
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="phone_number"
                                                 value={data.phone_number}
                                                 onChange={(e) =>
@@ -507,10 +521,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="text"
-                                                className={`form-control ${errors.location
+                                                className={`form-control ${
+                                                    errors.location
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="location"
                                                 value={data.location}
                                                 onChange={(e) =>
@@ -647,8 +662,9 @@ const CareerItem = ({ career }) => {
                         <div className="modal-footer">
                             <button
                                 type="button"
-                                className={`btn ${isSuccess ? "btn-success" : "btn-danger"
-                                    }`}
+                                className={`btn ${
+                                    isSuccess ? "btn-success" : "btn-danger"
+                                }`}
                                 onClick={handleCloseModal}
                             >
                                 OK

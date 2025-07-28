@@ -162,7 +162,7 @@ new #[Title('Career Registration')] class extends Component {
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
             with-pagination @row-click="$js.detail($event.detail)">
             @scope('cell_created_at', $data)
-                <p>{{ \Carbon\Carbon::parse($data['created_at'] ?? '')->translatedFormat('d F Y H:i') }}</p>
+                <p>{{ \Carbon\Carbon::parse($data['created_at'] ?? '')->locale('id')->translatedFormat('d F Y H:i') }}</p>
             @endscope
             {{--  @scope('cell_status', $data)
                 @if ($data['status'])
@@ -189,7 +189,7 @@ new #[Title('Career Registration')] class extends Component {
                 <div class="space-y-2 text-sm text-gray-700">
                     <div class="flex">
                         <span class="w-40 font-semibold">Date</span>
-                        <span>: {{ $model ? \Carbon\Carbon::parse($model['created_at'] ?? '')->format('d F Y') : '' }}</span>
+                        <span>: {{ $model ? \Carbon\Carbon::parse($model['created_at'] ?? '')->locale('id')->translatedFormat('d F Y H:i') : '' }}</span>
                     </div>
                     <div class="flex">
                         <span class="w-40 font-semibold">Name</span>
@@ -212,7 +212,7 @@ new #[Title('Career Registration')] class extends Component {
                     </div>
                     <div class="flex items-start">
                         <span class="w-40 font-semibold shrink-0">Birth Date</span>
-                        <span>: {{ $model && isset($model['birth_date']) ? \Carbon\Carbon::parse($model['birth_date'])->format('d F Y') : '-' }}</span>
+                        <span>: {{ $model && isset($model['birth_date']) ? \Carbon\Carbon::parse($model['birth_date'])->locale('id')->translatedFormat('d F Y') : '-' }}</span>
                     </div>
                     <div class="flex items-start">
                         <span class="w-40 font-semibold shrink-0">Career Register</span>
