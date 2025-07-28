@@ -343,8 +343,8 @@ const AdvantageSection = () => {
             $(".feature_slider").trigger("destroy.owl.carousel");
 
             const activitySlider = $(".feature_slider").owlCarousel({
-                loop: facilities.facilities.length > 4,
-                autoplay: facilities.facilities.length > 4,
+                loop: facilities.facilities.length > 3,
+                autoplay: facilities.facilities.length > 3,
                 autoplayTimeout: 2000,
                 dots: false,
                 smartSpeed: 1200,
@@ -358,9 +358,6 @@ const AdvantageSection = () => {
                     },
                     992: {
                         items: 3,
-                    },
-                    1200: {
-                        items: 4,
                     },
                 },
             });
@@ -414,20 +411,20 @@ const AdvantageSection = () => {
                 </div>
 
                 {facilities?.facilities?.length > 0 ? (
-                    <div className="feature_slider-container position-relative">
+                    <div className="feature_slider-container position-relative w-100 px-5">
                         <div className="owl-carousel owl-theme feature_slider">
                             {facilities.facilities.map((facility) => (
                                 <div className="owl-item" key={facility.id}>
                                     <div className="card feature-card h-100 border-0 shadow-sm mx-2">
-                                        <div className="card-body text-center p-4">
+                                        <div className="card-body text-center p-4 px-4">
                                             <div className="feature-image mb-4">
                                                 <img
                                                     src={facility.image ? `storage/${facility.image}` : "/landing/images/facilities/icon_classroom.png"}
                                                     alt={facility.title}
                                                     loading="lazy"
                                                     style={{
-                                                        width: "auto",
-                                                        height: "200px",
+                                                        width: "100%",
+                                                        height: "250px",
                                                         objectFit: "cover"
                                                     }}
                                                 />
@@ -435,7 +432,7 @@ const AdvantageSection = () => {
                                             <h3 className="feature-title h5 mb-3">
                                                 {facility.title}
                                             </h3>
-                                            <p className="feature-text mb-0">
+                                            <p className="feature-text mb-0 text-justify">
                                                 {facility.description}
                                             </p>
                                         </div>
@@ -444,7 +441,7 @@ const AdvantageSection = () => {
                             ))}
                         </div>
 
-                        {facilities.facilities.length > 4 && (
+                        {facilities.facilities.length > 3 && (
                             <>
                                 <div className="feature_slider_nav feature_slider_prev d-none d-lg-block">
                                     <i className="fa fa-angle-left" aria-hidden="true" />
