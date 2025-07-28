@@ -104,12 +104,12 @@ const CareerItem = ({ career }) => {
                             className="feature_title mb-3"
                             title={career.title}
                             style={{
-                                display: '-webkit-box',
-                                WebkitLineClamp: '2',
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                minHeight: '48px'
+                                display: "-webkit-box",
+                                WebkitLineClamp: "2",
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                minHeight: "48px",
                             }}
                         >
                             {career.title}
@@ -139,28 +139,34 @@ const CareerItem = ({ career }) => {
                                     ? career.location.substring(0, 20) + "..."
                                     : career.location}
                             </span>
-                            <span className="badge badge-secondary font-weight-bold small m-1">
-                                {new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                    minimumFractionDigits: 0,
-                                    maximumFractionDigits: 0,
-                                }).format(career.salary_min)}
-                                -
-                                {new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                    minimumFractionDigits: 0,
-                                    maximumFractionDigits: 0,
-                                }).format(career.salary_max)}
-                            </span>
+                            {career.salary_min > 0 && (
+                                <span className="badge badge-secondary font-weight-bold small m-1">
+                                    {new Intl.NumberFormat("id-ID", {
+                                        style: "currency",
+                                        currency: "IDR",
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0,
+                                    }).format(career.salary_min)}
+                                    {career.salary_max > 0 && (
+                                        <>
+                                            -
+                                            {new Intl.NumberFormat("id-ID", {
+                                                style: "currency",
+                                                currency: "IDR",
+                                                minimumFractionDigits: 0,
+                                                maximumFractionDigits: 0,
+                                            }).format(career.salary_max)}
+                                        </>
+                                    )}
+                                </span>
+                            )}
                         </div>
                     </a>
                     <div className="mt-auto">
                         <button
                             type="button"
                             className="btn btn-primary w-100"
-                            data-toggle="modal" 
+                            data-toggle="modal"
                             data-target={`#apply-${career.id}`}
                         >
                             Apply Job
@@ -233,31 +239,37 @@ const CareerItem = ({ career }) => {
                                             </h5>
                                         </span>
                                     </div>
-                                    <div className="p-1 bd-highlight">
-                                        <span className="p-2 badge badge-secondary">
-                                            <h5 className="text-light">
-                                                {new Intl.NumberFormat(
-                                                    "id-ID",
-                                                    {
-                                                        style: "currency",
-                                                        currency: "IDR",
-                                                        minimumFractionDigits: 0,
-                                                        maximumFractionDigits: 0,
-                                                    }
-                                                ).format(career.salary_min)}
-                                                -
-                                                {new Intl.NumberFormat(
-                                                    "id-ID",
-                                                    {
-                                                        style: "currency",
-                                                        currency: "IDR",
-                                                        minimumFractionDigits: 0,
-                                                        maximumFractionDigits: 0,
-                                                    }
-                                                ).format(career.salary_max)}
-                                            </h5>
-                                        </span>
-                                    </div>
+                                    {career.salary_min > 0 && (
+                                        <div className="p-1 bd-highlight">
+                                            <span className="p-2 badge badge-secondary">
+                                                <h5 className="text-light">
+                                                    {new Intl.NumberFormat(
+                                                        "id-ID",
+                                                        {
+                                                            style: "currency",
+                                                            currency: "IDR",
+                                                            minimumFractionDigits: 0,
+                                                            maximumFractionDigits: 0,
+                                                        }
+                                                    ).format(career.salary_min)}
+                                                    {career.salary_max > 0 && (
+                                                        <>
+                                                            {" - "}
+                                                            {new Intl.NumberFormat(
+                                                                "id-ID",
+                                                                {
+                                                                    style: "currency",
+                                                                    currency: "IDR",
+                                                                    minimumFractionDigits: 0,
+                                                                    maximumFractionDigits: 0,
+                                                                }
+                                                            ).format(career.salary_max)}
+                                                        </>
+                                                    )}
+                                                </h5>
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="d-flex flex-row row bd-highlight mb-2">
                                     <div className="p-2 bd-highlight">

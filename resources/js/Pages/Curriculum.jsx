@@ -157,8 +157,7 @@ const SchoolProgram = () => {
                                                     </li>
                                                     <li>
                                                         Still integrates the
-                                                        National Curriculum
-                                                        (Curriculum 2013) with
+                                                        National Curriculum with
                                                         English as the language
                                                         of instruction for
                                                         certain subjects such as

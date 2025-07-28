@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.owl-carousel .owl-stage-outer {
+          touch-action: pan-y;
+      }
