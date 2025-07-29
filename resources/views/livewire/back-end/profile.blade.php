@@ -85,8 +85,28 @@ new class extends Component {
             'newEmail' => 'required|email|unique:users,email',
         ]);
 
-        $this->warning('Belum seting Email.', position: 'toast-bottom');
-        $this->reset(['email']);
+        try {
+            DB::beginTransaction();
+            
+            $user = Auth::user();
+            $user->email = $this->newEmail;
+            $user->save();
+
+            DB::commit();
+
+            // Success message
+            $this->success('Email updated successfully');
+
+            // Logout the user
+            Auth::logout();
+            
+            // Redirect to login page
+            return redirect()->route('login');
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $this->error('Failed to update email: ' . $th->getMessage());
+        }
     }
 
     public function savePassword(): void
@@ -152,22 +172,7 @@ new class extends Component {
                     </x-form>
                 </div>
             </x-tab>
-            @role('User BSE')
-                <x-tab name="bse-tab" label="BSE" icon="o-user">
-                    <div class="mt-4">
-                        <div class="flex flex-wrap justify-center">
-                            <div class="w-full lg:w-1/2">
-                                <x-input label="BSE ID" wire:model="bse_id" inline readonly />
-                                <div class="my-3"></div>
-                                <x-input label="Kode Dealer" wire:model="dealer_code" inline readonly />
-                                <div class="my-3"></div>
-                                <x-input label="Dealer" wire:model="dealer_name" inline
-                                    hint="Bila ada kesalahan silahkan hubungi admin" readonly />
-                            </div>
-                        </div>
-                    </div>
-                </x-tab>
-            @endrole
+            @hasrole('super-admin')
             <x-tab name="email-tab" label="Ganti Email" icon="o-envelope">
                 <div class="mt-4 w-50">
                     <x-form wire:submit="saveEmail">
@@ -183,6 +188,7 @@ new class extends Component {
                     </x-form>
                 </div>
             </x-tab>
+            @endhasrole
             <x-tab name="password-tab" label="Ganti Password" icon="o-key">
                 <div class="mt-4">
                     <x-form wire:submit="savePassword">
