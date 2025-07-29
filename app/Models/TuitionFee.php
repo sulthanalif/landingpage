@@ -79,6 +79,31 @@ class TuitionFee extends DynamicTableRow
     }
 
     /**
+     * Get all active tables with their columns and rows
+     */
+    public static function getAllTableActive()
+    {
+        $tables = DynamicTable::where('status', true)
+            ->with(['columns'])
+            ->get();
+
+        return $tables->map(function ($table) {
+            $rows = self::where('table_id', $table->id)
+                ->with(['values.column'])
+                ->get()
+                ->map(function ($row) {
+                    return $row->formatted_values;
+                });
+
+            return [
+                'table' => $table->only(['id', 'name', 'slug']),
+                'columns' => $table->columns->map(fn ($col) => $col->only(['id', 'label', 'name',  'order'])),
+                'rows' => $rows,
+            ];
+        });
+    }
+
+    /**
      * Get all unique levels from the first column of each table
      */
     public static function getAllLevel($name = null)
