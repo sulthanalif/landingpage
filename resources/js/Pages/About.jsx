@@ -598,7 +598,7 @@ const AdvantageSection = () => {
                                                     {facility.description}
                                                 </p>
                                                 {facility.description.length >
-                                                    150 && (
+                                                    80 && (
                                                     <button
                                                         // Panggil handler dengan ID yang sesuai
                                                         onClick={() =>

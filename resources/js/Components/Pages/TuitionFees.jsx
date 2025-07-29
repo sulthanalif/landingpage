@@ -93,16 +93,7 @@ const TuitionFees = () => {
                 <div className="about_item">
                     <div className="about_item_text">
                         <p>
-                            At Lia Stephanie, we understand that choosing an
-                            education is a significant decision for every
-                            family. Therefore, we are committed to providing
-                            transparency and flexibility in our fee structure,
-                            so you can plan your child's education carefully.
-                            <br />
-                            The listed fees reflect the quality of education,
-                            adequate facilities, and a learning environment that
-                            fosters the academic, emotional, and character
-                            development of students.
+                            At Lia Stephanie, we understand that choosing an education is a significant decision for every family. Therefore, we commited to providing transparency and flexibilty structure, so you can plan your child's education carefully. <strong>Please contact Admision or Info to get the Tuition fees structure completly</strong>
                         </p>
                         <h3 className="text-center pt-4 pb-2">
                             <strong>

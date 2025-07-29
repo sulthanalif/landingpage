@@ -170,7 +170,7 @@ $(document).ready(function()
 					
 					if(panel.css('max-height') == "0px")
 					{
-						panel.css('max-height', panel.prop('scrollHeight') + "px");
+						panel.css('max-height', 200 + "px");
 					}
 					else
 					{
