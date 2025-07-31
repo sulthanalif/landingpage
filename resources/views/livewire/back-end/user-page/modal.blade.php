@@ -1,5 +1,5 @@
 {{--  modal --}}
-<x-modal wire:model="myModal" class="backdrop-blur">
+<x-modal wire:model="myModal" >
     <x-form wire:submit="save" class="relative" no-separator>
         <div class="">
             <h1>{{ $this->recordId == null ? 'Create User' : 'Detail User' }}</h1>

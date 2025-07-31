@@ -23,12 +23,21 @@ class LandingpageResponseController extends Controller
     public function getDataHome()
     {
         try {
-            $posts = Post::with(['category:id,name', 'user:name'])->where('status', true)->latest()->paginate(5);
+            $posts = Post::with(['category:id,name', 'user:name'])
+                ->where('status', true)
+                ->where('published_at', '<=', date('Y-m-d'))
+                ->latest()
+                ->paginate(5);
+            $upcomings = Post::with(['category:id,name', 'user:name'])
+                ->where('status', true)
+                ->where('published_at', '>', date('Y-m-d'))
+                ->latest()
+                ->paginate(5);
             $activities = Activity::where('status', true)->latest()->limit(10)->get();
             $faqs = Question::where('status', true)->get();
             $wcus = WhyChooseUs::where('status', true)->get();
 
-            return $this->successResponse(data: compact('posts', 'activities', 'faqs', 'wcus'));
+            return $this->successResponse(data: compact('posts', 'upcomings', 'activities', 'faqs', 'wcus'));
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }
