@@ -95,7 +95,7 @@ const Footer = () => {
                                                                     target="_blank"
                                                                 >
                                                                     <i
-                                                                        className="fa fa-facebook"
+                                                                        className="fa-brands fa-facebook"
                                                                         aria-hidden="true"
                                                                     />
                                                                 </a>
@@ -106,7 +106,7 @@ const Footer = () => {
                                                                     target="_blank"
                                                                 >
                                                                     <i
-                                                                        className="fa fa-instagram"
+                                                                        className="fa-brands fa-instagram"
                                                                         aria-hidden="true"
                                                                     />
                                                                 </a>
@@ -117,18 +117,18 @@ const Footer = () => {
                                                                     target="_blank"
                                                                 >
                                                                     <i
-                                                                        className="fa fa-whatsapp"
+                                                                        className="fa-brands fa-whatsapp"
                                                                         aria-hidden="true"
                                                                     />
                                                                 </a>
                                                             </li>
                                                             <li>
                                                                 <a
-                                                                    href="https://lsgs.quintal.id/"
+                                                                    href="https://www.tiktok.com/@lia.stephanie1?_t=ZS-8yUUdR5HfHc&_r=1"
                                                                     target="_blank"
                                                                 >
                                                                     <i
-                                                                        className="fa fa-leanpub"
+                                                                        className="fa-brands fa-tiktok"
                                                                         aria-hidden="true"
                                                                     />
                                                                 </a>

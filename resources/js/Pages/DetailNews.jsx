@@ -129,6 +129,9 @@ const DetailNews = ({ slug }) => {
                                     <div className="blog_title">
                                         {post.title}
                                     </div>
+                                    <div className="blog_sub_title">
+                                        {post.sub_title || "No subtitle"}
+                                    </div>
                                     <div className="blog_meta">
                                         <ul>
                                             <li>
@@ -191,7 +194,7 @@ const DetailNews = ({ slug }) => {
                                                 rel="noopener noreferrer"
                                             >
                                                 <i
-                                                    className="fa fa-facebook"
+                                                    className="fa-brands fa-facebook"
                                                     aria-hidden="true"
                                                 />
                                             </a>
@@ -203,7 +206,7 @@ const DetailNews = ({ slug }) => {
                                                 rel="noopener noreferrer"
                                             >
                                                 <i
-                                                    className="fa fa-instagram"
+                                                    className="fa-brands fa-instagram"
                                                     aria-hidden="true"
                                                 />
                                             </a>
@@ -215,19 +218,19 @@ const DetailNews = ({ slug }) => {
                                                 rel="noopener noreferrer"
                                             >
                                                 <i
-                                                    className="fa fa-whatsapp"
+                                                    className="fa-brands fa-whatsapp"
                                                     aria-hidden="true"
                                                 />
                                             </a>
                                         </li>
                                         <li>
                                             <a
-                                                href="https://lsgs.quintal.id/"
+                                                href="https://www.tiktok.com/@lia.stephanie1?_t=ZS-8yUUdR5HfHc&_r=1"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
                                                 <i
-                                                    className="fa fa-leanpub"
+                                                    className="fa-brands fa-tiktok"
                                                     aria-hidden="true"
                                                 />
                                             </a>

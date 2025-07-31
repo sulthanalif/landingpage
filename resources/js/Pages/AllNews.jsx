@@ -198,7 +198,7 @@ const AllNews = () => {
                                         key={post.id}
                                         className="blog_post trans_200 col-lg-4 col-md-6"
                                     >
-                                        <div className="blog_post_image">
+                                        <div className="blog_post_image" style={{ position: "relative" }}>
                                             <img
                                                 src={
                                                     post.image
@@ -213,6 +213,23 @@ const AllNews = () => {
                                                     objectFit: "cover",
                                                 }}
                                             />
+                                            {new Date(post.published_at) > new Date() && (
+                                                <span
+                                                    style={{
+                                                        position: "absolute",
+                                                        top: "15px",
+                                                        left: "10px",
+                                                        backgroundColor: "#14bdee",
+                                                        color: "#fff",
+                                                        padding: "5px 10px",
+                                                        borderRadius: "5px",
+                                                        fontWeight: "bold",
+                                                        fontSize: "14px",
+                                                    }}
+                                                >
+                                                    Upcoming Event
+                                                </span>
+                                            )}
                                         </div>
 
                                         {/* Konten Post */}

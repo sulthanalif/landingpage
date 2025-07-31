@@ -82,7 +82,7 @@ const Header = () => {
                                             </li>
                                             <li className="notranslate">
                                                 <i
-                                                    className="fa fa-envelope-o"
+                                                    className="fa-regular fa-envelope"
                                                     aria-hidden="true"
                                                 />
                                                 <a
@@ -357,7 +357,7 @@ const LanguageSwitcher = () => {
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                <i className="fa fa-leanpub mr-2" />
+                <i className="fa-brands fa-leanpub mr-2" />
                 Login
             </a>
 

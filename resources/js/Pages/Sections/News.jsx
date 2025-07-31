@@ -42,6 +42,13 @@ const News = () => {
 
     const posts = datas?.posts;
 
+    const upcomings = datas?.upcomings;
+
+    const slicedUpcomings = upcomings?.data?.slice(0, 3) ?? [];
+    const slicedPosts = posts?.data?.slice(0, 2) ?? [];
+
+    const viewAll = slicedUpcomings.length + slicedPosts.length;
+
     const handleRefresh = () => {
         getDatas();
     };
@@ -88,22 +95,22 @@ const News = () => {
                     <div className="col-lg-12 news_col text-center py-5">
                         <div className="alert alert-danger">{error}</div>
                     </div>
-                ) : posts && posts.data.length > 0 ? (
+                ) : posts && posts.data.length > 0 || upcomings && upcomings.data.length > 0 ? (
                     <>
                         {" "}
                         <div className="row news_row">
                             <div className="col-lg-7 news_col">
                                 <div className="news_post_large_container">
                                     <div className="news_post_large">
-                                        <div className="news_post_image">
+                                        <div className="news_post_image" style={{ position: "relative" }}>
                                             <img
                                                 src={
-                                                    posts.data[0]?.image
+                                                    upcomings.data[0]?.image
                                                         ? "/storage/" +
-                                                        posts.data[0].image
+                                                        upcomings.data[0].image
                                                         : "/img/logo.png"
                                                 }
-                                                alt={posts.data[0]?.title}
+                                                alt={upcomings.data[0]?.title}
                                                 loading="lazy"
                                                 style={{
                                                     maxHeight: "300px",
@@ -111,20 +118,37 @@ const News = () => {
                                                     objectFit: "cover",
                                                 }}
                                             />
+                                            {new Date(upcomings.data[0]?.published_at) > new Date() && (
+                                                <span
+                                                    style={{
+                                                        position: "absolute",
+                                                        top: "10px",
+                                                        left: "10px",
+                                                        backgroundColor: "#14bdee",
+                                                        color: "#fff",
+                                                        padding: "5px 10px",
+                                                        borderRadius: "5px",
+                                                        fontWeight: "bold",
+                                                        fontSize: "14px",
+                                                    }}
+                                                >
+                                                    Upcoming Event
+                                                </span>
+                                            )}
                                         </div>
                                         <div className="news_post_large_title">
                                             <Link
-                                                href={`/news/${posts.data[0]?.slug}`}
+                                                href={`/news/${upcomings.data[0]?.slug}`}
                                             >
-                                                {posts.data[0]?.title}
+                                                {upcomings.data[0]?.title}
                                             </Link>
                                         </div>
                                         <div className="news_post_meta">
                                             <ul>
                                                 <li>
-                                                    <Link href={`/news?categoryId=${encodeURIComponent(posts.data[0]?.category.id)}`}>
+                                                    <Link href={`/news?categoryId=${encodeURIComponent(upcomings.data[0]?.category.id)}`}>
                                                         {
-                                                            posts.data[0]
+                                                            upcomings.data[0]
                                                                 ?.category.name
                                                         }
                                                     </Link>
@@ -132,7 +156,7 @@ const News = () => {
                                                 <li>
                                                     <a href="#">
                                                         {new Date(
-                                                            posts.data[0]?.updated_at
+                                                            upcomings.data[0]?.updated_at
                                                         ).toLocaleDateString(
                                                             "en-US",
                                                             {
@@ -149,14 +173,14 @@ const News = () => {
                                             <p
                                                 dangerouslySetInnerHTML={{
                                                     __html: limitTextFirst(
-                                                        posts.data[0]?.body
+                                                        upcomings.data[0]?.body
                                                     ),
                                                 }}
                                             />
                                         </div>
                                         <div className="news_post_link">
                                             <Link
-                                                href={`/news/${posts.data[0]?.slug}`}
+                                                href={`/news/${upcomings.data[0]?.slug}`}
                                             >
                                                 Read More
                                             </Link>
@@ -166,8 +190,58 @@ const News = () => {
                             </div>
 
                             <div className="col-lg-5 news_col">
+                                <h3>Upcoming Events</h3>
+                                <hr className="py-2" />
                                 <div className="news_posts_small">
-                                    {posts.data.slice(1).map((post) => (
+                                    {upcomings.data.slice(1, 3).map((upcoming) => (
+                                        <div
+                                            key={upcoming.id}
+                                            className="news_post_small"
+                                        >
+                                            <div className="news_post_small_title">
+                                                <a href={`/news/${upcoming.slug}`}>
+                                                    {upcoming.title}
+                                                </a>
+                                            </div>
+                                            <div className="news_post_meta">
+                                                <ul>
+                                                    <li>
+                                                        <a href={`/news?categoryId=${encodeURIComponent(upcoming.category.id)}`}>
+                                                            {upcoming.category.name}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            {new Date(
+                                                                upcoming.updated_at
+                                                            ).toLocaleDateString(
+                                                                "en-US",
+                                                                {
+                                                                    month: "long",
+                                                                    day: "numeric",
+                                                                    year: "numeric",
+                                                                }
+                                                            )}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="news_post_text">
+                                                <p
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: limitText(
+                                                            upcoming.body
+                                                        ),
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <h3 className="mt-5">Latest News</h3>
+                                <hr className="py-2" />
+                                <div className="news_posts_small">
+                                    {posts.data.slice(0, 2).map((post) => (
                                         <div
                                             key={post.id}
                                             className="news_post_small"
@@ -180,7 +254,7 @@ const News = () => {
                                             <div className="news_post_meta">
                                                 <ul>
                                                     <li>
-                                                        <a href="#">
+                                                        <a href={`/news?categoryId=${encodeURIComponent(post.category.id)}`}>
                                                             {post.category.name}
                                                         </a>
                                                     </li>
@@ -215,7 +289,7 @@ const News = () => {
                             </div>
                         </div>
 
-                        {posts.data.length > 4 && (
+                        {viewAll > 4 && (
                             <div className="row">
                                 <div className="col-lg-12 text-center">
                                     <div className="courses_button trans_200">
