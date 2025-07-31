@@ -87,7 +87,7 @@ new class extends Component {
 
         try {
             DB::beginTransaction();
-            
+
             $user = Auth::user();
             $user->email = $this->newEmail;
             $user->save();
@@ -99,7 +99,7 @@ new class extends Component {
 
             // Logout the user
             Auth::logout();
-            
+
             // Redirect to login page
             return redirect()->route('login');
 
@@ -149,7 +149,7 @@ new class extends Component {
                             <div class="w-full lg:w-1/2 flex justify-center">
                                 <x-file wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp"
                                     crop-after-change change-text="Change" crop-text="Crop" crop-title-text="Crop image"
-                                    crop-cancel-text="Cancel" crop-save-text="Crop" :crop-config="$config">
+                                    crop-cancel-text="Cancel" crop-save-text="Crop" hint="format:jpeg,png,jpg,webp. max:2mb" :crop-config="$config">
                                     <img src="{{ asset($this->oldImage) }}" class="h-40 rounded-lg" />
                                 </x-file>
                             </div>

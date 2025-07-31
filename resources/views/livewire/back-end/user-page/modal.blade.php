@@ -9,7 +9,7 @@
             <div class="w-full lg:w-1/2 sm:w-1/2 flex justify-center">
                 <x-file wire:model="image" accept="image/png, image/jpeg, image/jpg, image/webp"
                     crop-after-change change-text="Change" crop-text="Crop" crop-title-text="Crop image"
-                    crop-cancel-text="Cancel" crop-save-text="Crop" :crop-config="$config">
+                    crop-cancel-text="Cancel" crop-save-text="Crop" hint="format:jpeg,png,jpg,webp. max:2mb" :crop-config="$config">
                     <img src="{{ asset($oldImage) }}"
                         class="h-40 rounded-lg" />
                 </x-file>
