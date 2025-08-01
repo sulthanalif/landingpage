@@ -113,8 +113,6 @@ const News = () => {
                                                 alt={upcomings.data[0]?.title}
                                                 loading="lazy"
                                                 style={{
-                                                    maxHeight: "300px",
-                                                    maxWidth: "690px",
                                                     objectFit: "cover",
                                                 }}
                                             />
@@ -122,14 +120,14 @@ const News = () => {
                                                 <span
                                                     style={{
                                                         position: "absolute",
-                                                        top: "10px",
-                                                        left: "10px",
+                                                        right: "10px",
+                                                        bottom: "10px",
                                                         backgroundColor: "#14bdee",
                                                         color: "#fff",
-                                                        padding: "5px 10px",
+                                                        padding: "3px 6px",
                                                         borderRadius: "5px",
                                                         fontWeight: "bold",
-                                                        fontSize: "14px",
+                                                        fontSize: "11px",
                                                     }}
                                                 >
                                                     Upcoming Event
