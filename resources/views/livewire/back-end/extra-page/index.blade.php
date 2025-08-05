@@ -16,7 +16,7 @@ new #[Title('Extracurricular')] class extends Component {
 
     public array $config = [
         'guides' => false,
-        'aspectRatio' => 4/3, // Set to landscape ratio (4:3)
+        'aspectRatio' => 4 / 3, // Set to landscape ratio (4:3)
         'viewMode' => 1,
         'responsive' => true,
         'dragMode' => 'move',
@@ -62,7 +62,7 @@ new #[Title('Extracurricular')] class extends Component {
 
                     $extra->image = $component->image->store(path: 'images/extra', options: 'public');
                 }
-            }
+            },
         );
 
         $this->unsetModel();
@@ -74,19 +74,26 @@ new #[Title('Extracurricular')] class extends Component {
         $this->setModel(new Extracurricular());
 
         $this->deleteData(
-            beforeDelete: function ($post, $component) {
-                $this->deleteImage($component->image);
+            beforeDelete: function ($id, $component) {
+                $extra = Extracurricular::find($id);
+                if ($extra->image) {
+                    Storage::disk('public')->delete($extra->image);
+                }
             },
         );
+
         $this->unsetModel();
+        $this->reset($this->varExtra);
+        $this->unsetRecordId();
+        $this->modalAlertDelete = false;
+        $this->drawer = false;
     }
 
-
-      public function updatedPerPage(): void
+    public function updatedPerPage(): void
     {
         $this->resetPage();
-    }  
-   public function updatedSearch(): void
+    }
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
@@ -103,13 +110,7 @@ new #[Title('Extracurricular')] class extends Component {
 
     public function headers(): array
     {
-        return [
-            ['key' => 'image', 'label' => 'Image'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'description', 'label' => 'Description'],
-            ['key' => 'status', 'label' => 'Status'],
-            ['key' => 'created_at', 'label' => 'Created At'],
-        ];
+        return [['key' => 'image', 'label' => 'Image'], ['key' => 'name', 'label' => 'Name'], ['key' => 'description', 'label' => 'Description'], ['key' => 'status', 'label' => 'Status'], ['key' => 'created_at', 'label' => 'Created At']];
     }
 
     public function with(): array
@@ -163,7 +164,7 @@ new #[Title('Extracurricular')] class extends Component {
     <!-- TABLE  -->
     <x-card class="mt-5">
         <x-table :headers="$headers" :rows="$datas" :sort-by="$sortBy" per-page="perPage" :per-page-values="[5, 10, 50]"
-             with-pagination @row-click="$js.detail($event.detail)">
+            with-pagination @row-click="$js.detail($event.detail)">
             @scope('cell_image', $data)
                 <img src="{{ asset('storage/' . $data['image']) }}" alt="" style="width: 100px; height: auto">
             @endscope
