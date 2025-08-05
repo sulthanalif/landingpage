@@ -69,6 +69,18 @@ new #[Title('Extracurricular')] class extends Component {
         $this->drawer = false;
     }
 
+    public function delete(): void
+    {
+        $this->setModel(new Extracurricular());
+
+        $this->deleteData(
+            beforeDelete: function ($post, $component) {
+                $this->deleteImage($component->image);
+            },
+        );
+        $this->unsetModel();
+    }
+
 
       public function updatedPerPage(): void
     {
