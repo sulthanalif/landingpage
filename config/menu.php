@@ -121,4 +121,11 @@ return [
         'icon' => 'o-user-plus',
         'link' => 'enrollment'
     ],
+    // [
+    //     'type' => 'item',
+    //     'can' => 'career-page',
+    //     'title' => 'Career Registration',
+    //     'icon' => 'o-user-plus',
+    //     'link' => 'career.register.superadmin',
+    // ],
 ];

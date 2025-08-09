@@ -39,3 +39,11 @@
         @endif
     @endif
 @endforeach
+
+@hasrole('super-admin')
+<x-menu-item
+    title="Career Registration"
+    icon="o-user-plus"
+    link="{{ route('career.register.superadmin') }}"
+/>
+@endhasrole

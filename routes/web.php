@@ -91,4 +91,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
             Volt::route('/permission', 'back-end.options.permission-page.index')->middleware('can:permission-page')->name('permission');
         });
     });
+
+    Volt::route('/career/register', 'back-end.career-page.register')->middleware('can:career-page')->name('career.register.superadmin');
 });

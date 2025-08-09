@@ -71,7 +71,7 @@ class CareerController extends Controller
 
             DB::commit();
 
-            Notification::route('mail', 'hrd@mail.com')->notify(new \App\Notifications\CareerNotification($careerRegister->toArray(), $career->toArray()));
+            Notification::route('mail', 'hrd@lscs.sch.id')->notify(new \App\Notifications\CareerNotification($careerRegister->toArray(), $career->toArray()));
             return $this->successResponse(data: compact('careerRegister'));
         } catch (\Exception $e) {
             DB::rollBack();

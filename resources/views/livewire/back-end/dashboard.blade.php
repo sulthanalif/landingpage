@@ -481,7 +481,7 @@ new #[Title('Dashboard')] class extends Component {
 
                 </x-slot:menu>
                 <div class="flex justify-center">
-                    <div class="mt-5 w-[950px]">
+                    <div class="mt-5 w-[950px] h-[500px]">
                         <x-chart wire:model="chart" />
                     </div>
                 </div>
@@ -504,7 +504,7 @@ new #[Title('Dashboard')] class extends Component {
 
                 </x-slot:menu>
                 <div class="flex justify-center">
-                    <div class="mt-5 w-[950px]">
+                    <div class="mt-5 w-[950px] h-[500px]">
                         <x-chart wire:model="chartRegCareer" />
                     </div>
                 </div>
@@ -526,7 +526,7 @@ new #[Title('Dashboard')] class extends Component {
 
             </x-slot:menu>
             <div class="flex justify-center">
-                <div class="mt-5 w-[950px]">
+                <div class="mt-5 w-[950px] h-[500px]">
                     <x-chart wire:model="chartRegCareer" />
                 </div>
             </div>

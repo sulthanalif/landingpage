@@ -133,7 +133,9 @@ new #[Title('Career Registration')] class extends Component {
     <!-- HEADER -->
     <x-header title="Career Registration" separator>
         <x-slot:actions>
+            @if(request()->is('admin/master/career/register'))
             <x-button label="Back" @click="$wire.back" responsive icon="o-arrow-left" spinner="back" />
+            @endif
         </x-slot:actions>
     </x-header>
 

@@ -5,3 +5,10 @@
 .owl-carousel .owl-stage-outer {
           touch-action: pan-y;
       }
+
+
+.chart-fixed-size {
+    width: 950px !important;
+    height: 500px !important;
+
+}
