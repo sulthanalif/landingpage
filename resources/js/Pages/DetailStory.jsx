@@ -74,17 +74,19 @@ const DetailStory = ({ id }) => {
 
     const convertToEmbedUrl = (url) => {
         try {
+            // Regex untuk URL YouTube standar dan YouTube Shorts
             const ytMatch = url.match(
-                /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/
+                /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([\w-]{11})/
             );
 
             if (ytMatch && ytMatch[1]) {
                 return `https://www.youtube.com/embed/${ytMatch[1]}`;
             }
 
-            // Fallback to original if not YouTube
+            // Mengembalikan URL asli jika tidak cocok
             return url;
         } catch (e) {
+            console.error("Error converting URL:", e);
             return url;
         }
     };
