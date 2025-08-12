@@ -124,13 +124,13 @@ new class extends Component {
 
         if($this->end_date) {
             if ($this->is_period) {
-                $rules['start_date'] = 'nullable|date';
+                $rules['start_date'] = 'required|date';
                 $rules['end_date'] = 'nullable|date|after_or_equal:start_date';
             } else {
-                $rules['start_date'] = 'nullable|date';
+                $rules['start_date'] = 'required|date';
             }
         } else {
-            $rules['start_date'] = 'nullable|date';
+            $rules['start_date'] = 'required|date';
         }
 
         if($this->is_salary == 1) {
