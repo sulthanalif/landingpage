@@ -88,7 +88,8 @@ new #[Title('Career Registration')] class extends Component {
             })
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('created_at', 'like', "%{$search}%");
             })
             ->orderBy($this->sortBy['column'] ?? 'id', $this->sortBy['direction'] ?? 'asc')
             ->paginate($this->perPage ?? 10);
