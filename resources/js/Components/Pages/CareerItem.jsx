@@ -24,10 +24,8 @@ const CareerItem = ({ career }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const applyResponse = await postApply(data);
-
             setModalTitle("Success");
             setModalMessage("Your application has been sent successfully!");
             setIsSuccess(true);
@@ -35,25 +33,19 @@ const CareerItem = ({ career }) => {
             reset();
         } catch (error) {
             setModalTitle("Application Failed to Send");
-
             const errors = error.response?.data?.errors;
             if (errors) {
-                let errorMessage = `
-                <p>Please check the following errors:</p>
-                <ul>
-                    ${Object.entries(errors)
-                        .map(
-                            ([field, message]) =>
-                                `<li><strong>${field}:</strong> ${message}</li>`
-                        )
-                        .join("")}
-                </ul>
-            `;
-
+                let errorMessage = `<p>Please check the following errors:</p><ul>${Object.entries(
+                    errors
+                )
+                    .map(
+                        ([field, message]) =>
+                            `<li><strong>${field}:</strong> ${message}</li>`
+                    )
+                    .join("")}</ul>`;
                 setModalMessage(errorMessage);
                 setIsSuccess(false);
                 setShowModal(true);
-
                 const firstErrorField = Object.keys(errors)[0];
                 const errorElement = document.getElementById(firstErrorField);
                 if (errorElement) {
@@ -66,8 +58,8 @@ const CareerItem = ({ career }) => {
             } else {
                 setModalMessage(
                     error.response?.data?.message ||
-                    error.message ||
-                    "Something went wrong."
+                        error.message ||
+                        "Something went wrong."
                 );
                 setIsSuccess(false);
                 setShowModal(true);
@@ -124,12 +116,12 @@ const CareerItem = ({ career }) => {
                                 {career?.employment_type === "full_time"
                                     ? "Full Time"
                                     : career?.employment_type === "part_time"
-                                        ? "Part Time"
-                                        : career?.employment_type === "contract"
-                                            ? "Contract"
-                                            : career?.employment_type === "freelance"
-                                                ? "Freelance"
-                                                : "Internship"}
+                                    ? "Part Time"
+                                    : career?.employment_type === "contract"
+                                    ? "Contract"
+                                    : career?.employment_type === "freelance"
+                                    ? "Freelance"
+                                    : "Internship"}
                             </span>
                             <span
                                 className="badge badge-secondary font-weight-bold text-truncate m-1"
@@ -210,7 +202,7 @@ const CareerItem = ({ career }) => {
                                         <span className="p-2 badge badge-secondary">
                                             <h5 className="text-light">
                                                 {career.level ==
-                                                    "fresh_graduate"
+                                                "fresh_graduate"
                                                     ? "Fresh Graduate"
                                                     : "Experienced"}
                                             </h5>
@@ -220,15 +212,15 @@ const CareerItem = ({ career }) => {
                                         <span className="p-2 badge badge-secondary">
                                             <h5 className="text-light">
                                                 {career?.employment_type ===
-                                                    "full_time"
+                                                "full_time"
                                                     ? "Full Time"
                                                     : career?.employment_type ===
-                                                        "part_time"
-                                                        ? "Part Time"
-                                                        : career?.employment_type ===
-                                                            "contract"
-                                                            ? "Contract"
-                                                            : "Freelance"}
+                                                      "part_time"
+                                                    ? "Part Time"
+                                                    : career?.employment_type ===
+                                                      "contract"
+                                                    ? "Contract"
+                                                    : "Freelance"}
                                             </h5>
                                         </span>
                                     </div>
@@ -259,11 +251,14 @@ const CareerItem = ({ career }) => {
                                                                 "id-ID",
                                                                 {
                                                                     style: "currency",
-                                                                    currency: "IDR",
+                                                                    currency:
+                                                                        "IDR",
                                                                     minimumFractionDigits: 0,
                                                                     maximumFractionDigits: 0,
                                                                 }
-                                                            ).format(career.salary_max)}
+                                                            ).format(
+                                                                career.salary_max
+                                                            )}
                                                         </>
                                                     )}
                                                 </h5>
@@ -365,10 +360,11 @@ const CareerItem = ({ career }) => {
                                         <span className="text-danger">*</span>
                                     </label>
                                     <textarea
-                                        className={`form-control ${errors.description
+                                        className={`form-control ${
+                                            errors.description
                                                 ? "is-invalid"
                                                 : "text-secondary"
-                                            }`}
+                                        }`}
                                         id="description"
                                         rows={3}
                                         value={data.description}
@@ -398,10 +394,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="text"
-                                                className={`form-control ${errors.name
+                                                className={`form-control ${
+                                                    errors.name
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="name"
                                                 value={data.name}
                                                 onChange={(e) =>
@@ -429,10 +426,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="date"
-                                                className={`form-control ${errors.birth_date
+                                                className={`form-control ${
+                                                    errors.birth_date
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="birth_date"
                                                 value={data.birth_date}
                                                 onChange={(e) =>
@@ -443,9 +441,11 @@ const CareerItem = ({ career }) => {
                                                 }
                                                 required
                                                 min={"1900-01-01"}
-                                                max={new Date()
-                                                    .toISOString()
-                                                    .split("T")[0]}
+                                                max={
+                                                    new Date()
+                                                        .toISOString()
+                                                        .split("T")[0]
+                                                }
                                             />
                                             {errors.birth_date && (
                                                 <div className="invalid-feedback">
@@ -467,10 +467,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="email"
-                                                className={`form-control ${errors.email
+                                                className={`form-control ${
+                                                    errors.email
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="email"
                                                 value={data.email}
                                                 onChange={(e) =>
@@ -498,10 +499,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="number"
-                                                className={`form-control ${errors.phone_number
+                                                className={`form-control ${
+                                                    errors.phone_number
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="phone_number"
                                                 value={data.phone_number}
                                                 onChange={(e) =>
@@ -532,10 +534,11 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <input
                                                 type="text"
-                                                className={`form-control ${errors.location
+                                                className={`form-control ${
+                                                    errors.location
                                                         ? "is-invalid"
                                                         : "text-secondary"
-                                                    }`}
+                                                }`}
                                                 id="location"
                                                 value={data.location}
                                                 onChange={(e) =>
@@ -555,7 +558,9 @@ const CareerItem = ({ career }) => {
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="form-group">
-                                            <label htmlFor="cv-upload">
+                                            <label
+                                                htmlFor={`cv-upload-${career.id}`}
+                                            >
                                                 Upload Resume{" "}
                                                 <span className="text-danger">
                                                     *
@@ -563,20 +568,20 @@ const CareerItem = ({ career }) => {
                                             </label>
                                             <div className="file-upload-wrapper">
                                                 <label
-                                                    htmlFor="cv-upload"
+                                                    htmlFor={`cv-upload-${career.id}`}
                                                     className="file-upload-button btn-primary"
                                                 >
                                                     Choose File
                                                 </label>
                                                 <span
                                                     className="file-upload-filename"
-                                                    id="file-name"
+                                                    id={`file-name-${career.id}`}
                                                 >
                                                     No file selected
                                                 </span>
                                                 <input
                                                     type="file"
-                                                    id="cv-upload"
+                                                    id={`cv-upload-${career.id}`}
                                                     name="cv"
                                                     className="file-upload-input"
                                                     accept="application/pdf"
@@ -585,7 +590,7 @@ const CareerItem = ({ career }) => {
                                                             e.target.files?.[0];
                                                         const fileNameSpan =
                                                             document.getElementById(
-                                                                "file-name"
+                                                                `file-name-${career.id}`
                                                             );
 
                                                         if (!file) {
@@ -609,7 +614,7 @@ const CareerItem = ({ career }) => {
 
                                                         fileNameSpan.textContent =
                                                             file.name;
-                                                        setData("cv", file); // Simpan file sebagai File object
+                                                        setData("cv", file);
                                                     }}
                                                     required
                                                     hidden
@@ -672,8 +677,9 @@ const CareerItem = ({ career }) => {
                         <div className="modal-footer">
                             <button
                                 type="button"
-                                className={`btn ${isSuccess ? "btn-success" : "btn-danger"
-                                    }`}
+                                className={`btn ${
+                                    isSuccess ? "btn-success" : "btn-danger"
+                                }`}
                                 onClick={handleCloseModal}
                             >
                                 OK
