@@ -196,7 +196,7 @@ new #[Title('Calendars')] class extends Component {
       public function updatedPerPage(): void
     {
         $this->resetPage();
-    }  
+    }
    public function updatedSearch(): void
     {
         $this->resetPage();
@@ -288,7 +288,7 @@ new #[Title('Calendars')] class extends Component {
                 <x-button @click="$js.flip" class="btn-primary" responsive
                     icon="o-calendar" />
             </div>
-            @can('category-create')
+            @can('calendar-create')
                 <x-button label="Create" @click="$js.create" responsive icon="o-plus" />
             @endcan
         </x-slot:actions>
@@ -321,7 +321,9 @@ new #[Title('Calendars')] class extends Component {
                 @endif
             @endscope
             @scope('actions', $data)
+            @can('calendar-edit')
             <x-button icon="o-pencil" class="btn-sm" wire:click="$js.detail({{ $data }})" />
+            @endcan
             @endscope
             <x-slot:empty>
                 <x-icon name="o-cube" label="It is empty." />
@@ -329,7 +331,7 @@ new #[Title('Calendars')] class extends Component {
         </x-table>
         @if ($this->selected)
             <div class="flex justify-end items-center gap-2">
-                @can('category-delete')
+                @can('calendar-delete')
                     <div class="mt-3 flex justify-end">
                         <x-button label="Hapus" icon="o-trash" wire:click="modalAlertDelete = true" spinner
                             class="text-red-500" wire:loading.attr="disabled" />
